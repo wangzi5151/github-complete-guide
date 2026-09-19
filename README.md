@@ -14,7 +14,7 @@
 
 > 面向中文开发者的 GitHub 完全指南：从 Git/GitHub 入门，到 Actions、AI、DevOps、开源协作，包含 100+ 篇教程与 30 个实战练习。
 
-⭐ **如果这个项目帮助了你，欢迎 [Star](https://github.com/wangzi5151/chinese-use-github-helper) 支持！**
+⭐ **如果这个项目帮助了你，欢迎 [Star](https://github.com/wangzi5151/github-complete-guide) 支持！**
 
 ---
 
@@ -223,16 +223,16 @@
 
 ```bash
 # 使用 HTTPS（推荐国内用户）
-git clone https://github.com/wangzi5151/chinese-use-github-helper.git
+git clone https://github.com/wangzi5151/github-complete-guide.git
 
 # 使用 SSH
-git clone git@github.com:wangzi5151/chinese-use-github-helper.git
+git clone git@github.com:wangzi5151/github-complete-guide.git
 
 # 使用 GitHub CLI
-gh repo clone wangzi5151/chinese-use-github-helper
+gh repo clone wangzi5151/github-complete-guide
 
 # 国内加速克隆（如果上述方式较慢）
-git clone https://ghproxy.com/https://github.com/wangzi5151/chinese-use-github-helper.git
+git clone https://ghproxy.com/https://github.com/wangzi5151/github-complete-guide.git
 ```
 
 - [国内网络加速方案](docs/Q-china-acceleration.md)
@@ -250,7 +250,7 @@ git clone https://ghproxy.com/https://github.com/wangzi5151/chinese-use-github-h
 
 ## 💬 反馈
 
-如果你有任何问题或建议，请在 [Issues](https://github.com/wangzi5151/chinese-use-github-helper/issues) 中提出。
+如果你有任何问题或建议，请在 [Issues](https://github.com/wangzi5151/github-complete-guide/issues) 中提出。
 
 ---
 

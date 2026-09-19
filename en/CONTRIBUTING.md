@@ -8,7 +8,7 @@ Thank you for your interest in this project! We welcome contributions of all kin
 
 If you find a bug or have a suggestion for improvement:
 
-1. Search the existing [Issues](https://github.com/wangzi5151/chinese-use-github-helper/issues)
+1. Search the existing [Issues](https://github.com/wangzi5151/github-complete-guide/issues)
 2. If you don't find one, create a new Issue
 3. Describe the problem with a clear title
 4. Provide detailed steps to reproduce it
@@ -115,4 +115,4 @@ Contributions will be licensed under the [MIT License](LICENSE).
 
 ## Questions?
 
-If you have any questions, please ask in [Issues](https://github.com/wangzi5151/chinese-use-github-helper/issues).
+If you have any questions, please ask in [Issues](https://github.com/wangzi5151/github-complete-guide/issues).

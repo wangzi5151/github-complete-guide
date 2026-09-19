@@ -249,6 +249,6 @@ gh pr create --title "New feature" --body "Description"
 
 If the above didn't solve your problem, you can:
 
-1. Search [GitHub Discussions](https://github.com/wangzi5151/chinese-use-github-helper/discussions)
-2. Submit [Issue](https://github.com/wangzi5151/chinese-use-github-helper/issues)
+1. Search [GitHub Discussions](https://github.com/wangzi5151/github-complete-guide/discussions)
+2. Submit [Issue](https://github.com/wangzi5151/github-complete-guide/issues)
 3. Search [Stack Overflow](https://stackoverflow.com/questions/tagged/git)

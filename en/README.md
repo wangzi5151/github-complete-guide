@@ -14,7 +14,7 @@
 
 > A comprehensive GitHub guide for developers: from Git/GitHub basics, to Actions, AI, DevOps, and Open Source collaboration. Includes 100+ tutorials and 30 hands-on exercises.
 
-⭐ **If this project helps you, please [Star](https://github.com/wangzi5151/chinese-use-github-helper) to support!**
+⭐ **If this project helps you, please [Star](https://github.com/wangzi5151/github-complete-guide) to support!**
 
 ---
 
@@ -215,13 +215,13 @@
 
 ```bash
 # Using HTTPS (Recommended)
-git clone https://github.com/wangzi5151/chinese-use-github-helper.git
+git clone https://github.com/wangzi5151/github-complete-guide.git
 
 # Using SSH
-git clone git@github.com:wangzi5151/chinese-use-github-helper.git
+git clone git@github.com:wangzi5151/github-complete-guide.git
 
 # Using GitHub CLI
-gh repo clone wangzi5151/chinese-use-github-helper
+gh repo clone wangzi5151/github-complete-guide
 ```
 
 ---
@@ -236,7 +236,7 @@ This project is licensed under the [MIT License](../LICENSE). Feel free to use a
 
 ## 💬 Feedback
 
-If you have any questions or suggestions, please open an [Issue](https://github.com/wangzi5151/chinese-use-github-helper/issues).
+If you have any questions or suggestions, please open an [Issue](https://github.com/wangzi5151/github-complete-guide/issues).
 
 ---
 
