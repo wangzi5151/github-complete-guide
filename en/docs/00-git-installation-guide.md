@@ -483,9 +483,9 @@ git config --global --edit
 
 ## 2.10 Chapter Summary
 
-This chapter详细介绍 Git 的安装和配置方法，包括：
+This chapter provides a detailed introduction to Git installation and configuration methods, including:
 
-- Windows、macOS、Linux installation methods
+- Windows, macOS, Linux installation methods
 - Initial configuration steps
 - Advanced configuration options
 - Common issue solutions

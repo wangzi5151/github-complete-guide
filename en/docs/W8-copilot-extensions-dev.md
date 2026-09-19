@@ -1,28 +1,28 @@
-# GitHub Copilot Extensions 开发
+# GitHub Copilot Extensions Development
 
-## 什么是 Copilot Extension？
+## What is a Copilot Extension?
 
-Copilot Extension 让你可以构建自定义的 AI 助手，集成到 Copilot 的工作流中。
+Copilot Extensions allow you to build custom AI assistants that integrate into Copilot's workflow.
 
-## 架构概览
+## Architecture Overview
 
 ```
-用户 → GitHub Copilot → 你的 Extension API → 外部服务
+User → GitHub Copilot → Your Extension API → External Service
 ```
 
-## 创建 Extension
+## Creating an Extension
 
-### 1. 注册 GitHub App
+### 1. Register a GitHub App
 
 ```bash
-# 访问 https://github.com/settings/apps/new
-# 配置：
-# - GitHub Copilot: 发送回复 → 开启
-# - Webhook URL: 你的 API 地址
-# - 权限: 代码搜索、仓库读取
+# Visit https://github.com/settings/apps/new
+# Configure:
+# - GitHub Copilot: Send replies → Enable
+# - Webhook URL: Your API address
+# - Permissions: Code search, repository read
 ```
 
-### 2. 创建 API 服务
+### 2. Create an API Service
 
 ```python
 # app.py
@@ -36,7 +36,7 @@ GITHUB_SECRET = "your-webhook-secret"
 
 @app.route("/copilot", methods=["POST"])
 def copilot_handler():
-    # 验证签名
+    # Verify signature
     signature = request.headers["X-Hub-Signature-256"]
     expected = "sha256=" + hmac.new(
         GITHUB_SECRET.encode(),
@@ -49,11 +49,11 @@ def copilot_handler():
     
     payload = request.json
     
-    # 处理请求
+    # Handle request
     prompt = payload.get("prompt", "")
     context = payload.get("context", {})
     
-    # 生成回复
+    # Generate response
     response = generate_response(prompt, context)
     
     return jsonify({
@@ -65,21 +65,21 @@ def copilot_handler():
     })
 
 def generate_response(prompt, context):
-    """你的 AI 逻辑"""
-    # 这里可以调用任何外部 API
-    # 例如：数据库查询、API 调用、文档搜索等
-    return f"根据你的需求：{prompt}"
+    """Your AI logic"""
+    # You can call any external API here
+    # For example: database queries, API calls, document search, etc.
+    return f"Based on your request: {prompt}"
 
 if __name__ == "__main__":
     app.run(port=8080)
 ```
 
-### 3. 配置 Extension
+### 3. Configure the Extension
 
 ```json
 {
   "name": "my-extension",
-  "description": "自定义 Copilot Extension",
+  "description": "Custom Copilot Extension",
   "hooks": {
     "copilot": "/copilot"
   },
@@ -90,19 +90,19 @@ if __name__ == "__main__":
 }
 ```
 
-## 使用场景
+## Use Cases
 
-### 1. 内部文档搜索
+### 1. Internal Document Search
 
 ```python
 @app.route("/copilot", methods=["POST"])
 def search_docs():
     prompt = request.json["prompt"]
     
-    # 搜索内部文档
+    # Search internal documents
     results = search_internal_docs(prompt)
     
-    # 返回相关文档片段
+    # Return relevant document snippets
     return jsonify({
         "choices": [{
             "message": {
@@ -112,17 +112,17 @@ def search_docs():
     })
 ```
 
-### 2. 数据库查询
+### 2. Database Query
 
 ```python
 @app.route("/copilot", methods=["POST"])
 def query_database():
     prompt = request.json["prompt"]
     
-    # 解析自然语言查询
+    # Parse natural language query
     sql = natural_to_sql(prompt)
     
-    # 执行查询
+    # Execute query
     results = db.execute(sql)
     
     return jsonify({
@@ -134,26 +134,26 @@ def query_database():
     })
 ```
 
-### 3. API 集成
+### 3. API Integration
 
 ```python
 @app.route("/copilot", methods=["POST"])
 def integrate_api():
     prompt = request.json["prompt"]
     
-    # 调用外部 API
-    if "天气" in prompt:
+    # Call external API
+    if "weather" in prompt:
         city = extract_city(prompt)
         weather = get_weather(city)
         return format_weather(weather)
     
-    if "汇率" in prompt:
+    if "exchange rate" in prompt:
         currencies = extract_currencies(prompt)
         rate = get_exchange_rate(currencies)
         return format_rate(rate)
 ```
 
-### 4. CI/CD 操作
+### 4. CI/CD Operations
 
 ```python
 @app.route("/copilot", methods=["POST"])
@@ -161,20 +161,20 @@ def cicd_operations():
     prompt = request.json["prompt"]
     context = request.json["context"]
     
-    if "部署" in prompt:
-        # 触发部署
+    if "deploy" in prompt:
+        # Trigger deployment
         deployment = trigger_deployment(context["repo"])
-        return f"已触发部署：{deployment.url}"
+        return f"Deployment triggered: {deployment.url}"
     
-    if "回滚" in prompt:
-        # 执行回滚
+    if "rollback" in prompt:
+        # Execute rollback
         rollback = execute_rollback(context["repo"])
-        return f"已回滚到版本：{rollback.version}"
+        return f"Rolled back to version: {rollback.version}"
 ```
 
-## 部署
+## Deployment
 
-### 使用 Vercel
+### Deploy with Vercel
 
 ```json
 // vercel.json
@@ -195,7 +195,7 @@ def cicd_operations():
 }
 ```
 
-### 使用 Docker
+### Deploy with Docker
 
 ```dockerfile
 FROM python:3.11-slim
@@ -212,20 +212,20 @@ EXPOSE 8080
 CMD ["python", "app.py"]
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **快速响应**：保持响应时间 < 3 秒
-2. **清晰输出**：使用 Markdown 格式化输出
-3. **错误处理**：提供有用的错误信息
-4. **日志记录**：记录请求和响应以便调试
-5. **速率限制**：防止 API 滥用
+1. **Fast Response**: Keep response time < 3 seconds
+2. **Clear Output**: Use Markdown to format output
+3. **Error Handling**: Provide useful error messages
+4. **Logging**: Log requests and responses for debugging
+5. **Rate Limiting**: Prevent API abuse
 
-## 相关资源
+## Related Resources
 
-- [Copilot Extensions 文档](https://docs.github.com/en/copilot/extensions)
-- [GitHub App 创建](https://docs.github.com/en/apps/creating-github-apps)
-- [Webhook 开发](https://docs.github.com/en/webhooks)
+- [Copilot Extensions Documentation](https://docs.github.com/en/copilot/extensions)
+- [GitHub App Creation](https://docs.github.com/en/apps/creating-github-apps)
+- [Webhook Development](https://docs.github.com/en/webhooks)
 
 ---
 
-**上一篇：[GitHub Copilot 进阶功能](W7-copilot-advanced.md) | 下一篇：[GitHub Actions 高级用法](W9-actions-advanced.md)**
+**Previous: [GitHub Copilot Advanced Features](W7-copilot-advanced.md) | Next: [GitHub Actions Advanced Usage](W9-actions-advanced.md)**

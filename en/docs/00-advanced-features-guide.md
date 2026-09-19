@@ -1,42 +1,42 @@
-# 第八章：GitHub 高级功能
+# Chapter 8: GitHub Advanced Features
 
 ## 8.1 GitHub Copilot
 
-### 什么是 GitHub Copilot？
+### What is GitHub Copilot?
 
-GitHub Copilot 是一个 AI 编程助手，可以帮助你编写代码、生成测试、编写文档等。
+GitHub Copilot is an AI programming assistant that can help you write code, generate tests, write documentation, and more.
 
-### 功能矩阵
+### Feature Matrix
 
-| 功能 | Free | Pro | Business | Enterprise |
+| Feature | Free | Pro | Business | Enterprise |
 |------|------|-----|----------|------------|
-| 代码补全 | ✅ 有限 | ✅ | ✅ | ✅ |
-| Copilot Chat | ✅ 有限 | ✅ | ✅ | ✅ |
-| Agent 模式 | ❌ | ✅ | ✅ | ✅ |
+| Code Completion | ✅ Limited | ✅ | ✅ | ✅ |
+| Copilot Chat | ✅ Limited | ✅ | ✅ | ✅ |
+| Agent Mode | ❌ | ✅ | ✅ | ✅ |
 | Extensions | ❌ | ✅ | ✅ | ✅ |
 
-### 使用方法
+### How to Use
 
-**安装扩展：**
+**Install the Extension:**
 
-1. 打开 VS Code
-2. 点击扩展图标
-3. 搜索 "GitHub Copilot"
-4. 点击 **Install**
+1. Open VS Code
+2. Click the Extensions icon
+3. Search for "GitHub Copilot"
+4. Click **Install**
 
-**基本使用：**
+**Basic Usage:**
 
-1. 编写注释或函数签名
-2. Copilot 自动建议代码
-3. 按 `Tab` 接受建议
+1. Write a comment or function signature
+2. Copilot automatically suggests code
+3. Press `Tab` to accept the suggestion
 
-**示例：**
+**Example:**
 
 ```javascript
-// 编写注释
-// 计算两个数的和
+// Write a comment
+// Calculate the sum of two numbers
 
-// Copilot 会自动生成代码
+// Copilot will automatically generate the code
 function add(a, b) {
   return a + b;
 }
@@ -44,68 +44,68 @@ function add(a, b) {
 
 ### Copilot Chat
 
-在 VS Code 中按 `Ctrl+I` 打开 Copilot Chat：
+Press `Ctrl+I` in VS Code to open Copilot Chat:
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Copilot Chat                                │
 │                                             │
-│  [输入问题或指令]                             │
+│  [Enter a question or instruction]           │
 │                                             │
-│  例如：                                      │
-│  - "解释这段代码的作用"                       │
-│  - "帮我写一个单元测试"                       │
-│  - "如何优化这段代码"                         │
-│  - "修复这个 bug"                             │
+│  Examples:                                   │
+│  - "Explain what this code does"             │
+│  - "Help me write a unit test"               │
+│  - "How to optimize this code"               │
+│  - "Fix this bug"                            │
 └─────────────────────────────────────────────┘
 ```
 
-### Agent 模式
+### Agent Mode
 
-Agent 模式可以执行多步骤任务：
+Agent mode can execute multi-step tasks:
 
 ```bash
-# 让 Agent 创建完整的项目结构
-"创建一个 Express API 项目，包含用户认证、数据库连接和 Docker 配置"
+# Let Agent create a complete project structure
+"Create an Express API project with user authentication, database connection, and Docker configuration"
 
-# 让 Agent 修复 CI/CD
-"查看 GitHub Actions 失败日志并修复工作流"
+# Let Agent fix CI/CD
+"Check the GitHub Actions failure logs and fix the workflow"
 
-# 让 Agent 重构代码
-"将这个函数重构为更清晰的结构，添加错误处理"
+# Let Agent refactor code
+"Refactor this function into a clearer structure, add error handling"
 ```
 
 ### Copilot Extensions
 
-Extensions 让 Copilot 可以调用外部服务：
+Extensions allow Copilot to call external services:
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Copilot Extensions                          │
 │                                             │
-│  @github     - GitHub 平台操作               │
-│  @terminal   - 终端命令辅助                  │
-│  @workspace  - 项目工作区搜索                │
-│  @docker     - Docker 配置辅助               │
-│  @kubernetes - K8s YAML 生成                 │
+│  @github     - GitHub platform operations    │
+│  @terminal   - Terminal command assistance    │
+│  @workspace  - Project workspace search       │
+│  @docker     - Docker configuration help      │
+│  @kubernetes - K8s YAML generation            │
 └─────────────────────────────────────────────┘
 ```
 
 ## 8.2 GitHub Codespaces
 
-### 什么是 Codespaces？
+### What are Codespaces?
 
-Codespaces 是 GitHub 提供的云端开发环境，让你可以在浏览器中直接编写代码。
+Codespaces is a cloud development environment provided by GitHub that lets you write code directly in your browser.
 
-### 启用 Codespaces
+### Enabling Codespaces
 
-**第 1 步：** 打开仓库页面
+**Step 1:** Open the repository page
 
-**第 2 步：** 点击 **Code** 按钮
+**Step 2:** Click the **Code** button
 
-**第 3 步：** 选择 **Codespaces** 标签
+**Step 3:** Select the **Codespaces** tab
 
-**第 4 步：** 点击 **Create codespace on main**
+**Step 4:** Click **Create codespace on main**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -122,9 +122,9 @@ Codespaces 是 GitHub 提供的云端开发环境，让你可以在浏览器中�
 └─────────────────────────────────────────────┘
 ```
 
-### 配置 Codespaces
+### Configuring Codespaces
 
-创建 `.devcontainer/devcontainer.json`：
+Create `.devcontainer/devcontainer.json`:
 
 ```json
 {
@@ -143,38 +143,38 @@ Codespaces 是 GitHub 提供的云端开发环境，让你可以在浏览器中�
 }
 ```
 
-### 使用 Codespaces
+### Using Codespaces
 
-1. 浏览器中打开 Codespace
-2. 像本地 VS Code 一样使用
-3. 自动同步代码
-4. 支持终端、调试、扩展
+1. Open Codespace in the browser
+2. Use it like local VS Code
+3. Code syncs automatically
+4. Supports terminal, debugging, and extensions
 
 ## 8.3 GitHub Models
 
-### 什么是 GitHub Models？
+### What are GitHub Models?
 
-GitHub Models 是 GitHub 提供的 AI 模型平台，让你可以直接在 GitHub 上使用各种 AI 模型。
+GitHub Models is an AI model platform provided by GitHub that allows you to use various AI models directly on GitHub.
 
-### 支持的模型
+### Supported Models
 
-| 模型 | 提供商 | 用途 |
+| Model | Provider | Use Case |
 |------|--------|------|
-| GPT-4o | OpenAI | 通用对话、代码生成 |
-| GPT-4o-mini | OpenAI | 轻量级任务 |
-| Claude 3.5 Sonnet | Anthropic | 代码分析、对话 |
-| Llama 3.1 | Meta | 开源通用模型 |
-| Mistral | Mistral AI | 欧洲开源模型 |
+| GPT-4o | OpenAI | General conversation, code generation |
+| GPT-4o-mini | OpenAI | Lightweight tasks |
+| Claude 3.5 Sonnet | Anthropic | Code analysis, conversation |
+| Llama 3.1 | Meta | Open-source general-purpose model |
+| Mistral | Mistral AI | European open-source model |
 
-### 使用方法
+### How to Use
 
-**通过 API 使用：**
+**Using via API:**
 
 ```bash
-# 设置 API Key
+# Set API Key
 export GITHUB_TOKEN="your-github-token"
 
-# 调用 GPT-4o
+# Call GPT-4o
 curl -X POST "https://models.inference.ai.azure.com/chat/completions" \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Content-Type: application/json" \
@@ -186,7 +186,7 @@ curl -X POST "https://models.inference.ai.azure.com/chat/completions" \
   }'
 ```
 
-**使用 Python SDK：**
+**Using the Python SDK:**
 
 ```python
 from openai import OpenAI
@@ -207,7 +207,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-### 在 GitHub Actions 中使用
+### Using in GitHub Actions
 
 ```yaml
 name: AI Code Review
@@ -247,23 +247,23 @@ jobs:
 
 ### Secret Scanning Push Protection
 
-在推送时阻止包含敏感信息的提交：
+Block commits containing sensitive information during push:
 
-1. 进入 **Settings** → **Code security and analysis**
-2. 启用 **Push protection**
+1. Go to **Settings** → **Code security and analysis**
+2. Enable **Push protection**
 
 ### Code Scanning
 
-使用 CodeQL 分析代码中的安全漏洞：
+Use CodeQL to analyze code for security vulnerabilities:
 
-1. 进入 **Security** → **Code scanning**
-2. 点击 **Set up**
-3. 选择 CodeQL
-4. 配置扫描选项
+1. Go to **Security** → **Code scanning**
+2. Click **Set up**
+3. Select CodeQL
+4. Configure scanning options
 
 ### Dependency Review
 
-在 PR 中审查依赖的安全漏洞：
+Review dependencies for security vulnerabilities in PRs:
 
 ```yaml
 # .github/workflows/dependency-review.yml
@@ -293,11 +293,11 @@ jobs:
 ### REST API
 
 ```bash
-# 获取仓库信息
+# Get repository information
 curl -H "Authorization: token $GITHUB_TOKEN" \
   "https://api.github.com/repos/owner/repo"
 
-# 创建 Issue
+# Create an Issue
 curl -X POST \
   -H "Authorization: token $GITHUB_TOKEN" \
   -H "Content-Type: application/json" \
@@ -325,33 +325,33 @@ query {
 }
 ```
 
-### 使用 GitHub CLI
+### Using GitHub CLI
 
 ```bash
-# 列出仓库
+# List repositories
 gh repo list
 
-# 创建 Issue
+# Create an Issue
 gh issue create --title "Bug" --body "Description"
 
-# 创建 PR
+# Create a PR
 gh pr create --title "Feature" --body "Description"
 
-# 查看 PR
+# View a PR
 gh pr view 123
 ```
 
 ## 8.6 GitHub Webhooks
 
-### 什么是 Webhooks？
+### What are Webhooks?
 
-Webhooks 允许你在 GitHub 上发生事件时，自动向外部服务发送通知。
+Webhooks allow you to automatically send notifications to external services when events occur on GitHub.
 
-### 创建 Webhook
+### Creating a Webhook
 
-1. 进入仓库 **Settings** → **Webhooks**
-2. 点击 **Add webhook**
-3. 配置：
+1. Go to repository **Settings** → **Webhooks**
+2. Click **Add webhook**
+3. Configure:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -370,12 +370,12 @@ Webhooks 允许你在 GitHub 上发生事件时，自动向外部服务发送通
 └─────────────────────────────────────────────┘
 ```
 
-### 处理 Webhook
+### Processing a Webhook
 
 ```javascript
 const crypto = require('crypto');
 
-// 验证 Webhook 签名
+// Verify Webhook signature
 function verifyWebhook(payload, signature, secret) {
   const hmac = crypto.createHmac('sha256', secret);
   const digest = hmac.update(payload).digest('hex');
@@ -385,7 +385,7 @@ function verifyWebhook(payload, signature, secret) {
   );
 }
 
-// 处理 Webhook
+// Process Webhook
 app.post('/webhook', (req, res) => {
   const signature = req.headers['x-hub-signature-256'];
   
@@ -411,27 +411,27 @@ app.post('/webhook', (req, res) => {
 
 ## 8.7 GitHub Projects
 
-### 什么是 Projects？
+### What are Projects?
 
-GitHub Projects 是一个项目管理工具，提供看板、表格、路线图等视图。
+GitHub Projects is a project management tool that provides Kanban boards, tables, roadmaps, and other views.
 
-### 创建项目
+### Creating a Project
 
 ```bash
-# 使用 CLI 创建项目
+# Create a project using CLI
 gh project create --title "My Project" --owner your-org
 ```
 
-### 项目视图
+### Project Views
 
-| 视图 | 说明 |
+| View | Description |
 |------|------|
-| **Board** | 看板视图，类似 Trello |
-| **Table** | 表格视图，类似 Excel |
-| **Roadmap** | 路线图视图，时间线 |
-| **Calendar** | 日历视图 |
+| **Board** | Kanban view, similar to Trello |
+| **Table** | Table view, similar to Excel |
+| **Roadmap** | Roadmap view, timeline |
+| **Calendar** | Calendar view |
 
-### 自动化
+### Automation
 
 ```yaml
 # .github/workflows/project-automation.yml
@@ -456,35 +456,35 @@ jobs:
 
 ## 8.8 GitHub Packages
 
-### 什么是 Packages？
+### What are Packages?
 
-GitHub Packages 是一个包管理服务，可以发布和管理包。
+GitHub Packages is a package management service for publishing and managing packages.
 
-### 支持的包管理器
+### Supported Package Managers
 
-| 包管理器 | 语言 |
+| Package Manager | Language |
 |----------|------|
 | npm | JavaScript |
 | NuGet | .NET |
 | RubyGems | Ruby |
 | Maven | Java |
-| Docker | 容器 |
+| Docker | Containers |
 
-### 发布 npm 包
+### Publishing npm Packages
 
-**第 1 步：** 配置 `.npmrc`
+**Step 1:** Configure `.npmrc`
 
 ```
 registry=https://npm.pkg.github.com
 ```
 
-**第 2 步：** 发布
+**Step 2:** Publish
 
 ```bash
 npm publish
 ```
 
-### 使用 GitHub Actions 发布
+### Publishing with GitHub Actions
 
 ```yaml
 name: Publish Package
@@ -514,23 +514,23 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## 8.9 本章小结
+## 8.9 Chapter Summary
 
-本章详细介绍了 GitHub 的高级功能，包括：
+This chapter covered GitHub's advanced features in detail, including:
 
-- GitHub Copilot：AI 编程助手
-- GitHub Codespaces：云端开发环境
-- GitHub Models：AI 模型平台
-- GitHub Advanced Security：安全功能
-- GitHub API：自动化接口
-- GitHub Webhooks：事件通知
-- GitHub Projects：项目管理
-- GitHub Packages：包管理
+- GitHub Copilot: AI programming assistant
+- GitHub Codespaces: Cloud development environment
+- GitHub Models: AI model platform
+- GitHub Advanced Security: Security features
+- GitHub API: Automation interface
+- GitHub Webhooks: Event notifications
+- GitHub Projects: Project management
+- GitHub Packages: Package management
 
-**关键要点：**
-- 这些高级功能可以大大提高开发效率
-- 根据项目需求选择合适的功能
-- 持续学习新功能
+**Key Takeaways:**
+- These advanced features can significantly improve development efficiency
+- Choose the right features based on project needs
+- Continue learning new features
 
-**下一步：**
-[中国开发者专区 →](Q-china-acceleration.md)
+**Next:**
+[China Developer Zone →](Q-china-acceleration.md)

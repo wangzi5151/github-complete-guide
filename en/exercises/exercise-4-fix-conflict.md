@@ -1,78 +1,78 @@
-# 练习 4：修复 Merge Conflict
+# Exercise 4: Fix Merge Conflict
 
-## 目标
+## Goal
 
-学会识别和解决 Git 合并冲突。
+Learn to identify and resolve Git merge conflicts.
 
-## 步骤
+## Steps
 
-### 1. 创建练习仓库
+### 1. Create a Practice Repository
 
 ```bash
 mkdir conflict-practice
 cd conflict-practice
 git init
 
-# 创建初始文件
+# Create initial file
 echo "Hello World" > greeting.txt
 git add greeting.txt
 git commit -m "Initial commit"
 
-git remote add origin git@github.com:你的用户名/conflict-practice.git
+git remote add origin git@github.com:your-username/conflict-practice.git
 git push -u origin main
 ```
 
-### 2. 模拟冲突场景
+### 2. Simulate a Conflict Scenario
 
 ```bash
-# 创建两个分支
+# Create two branches
 git checkout -b alice-branch
 git checkout main
 git checkout -b bob-branch
 
-# Alice 的修改
+# Alice's changes
 git checkout alice-branch
 echo "Hello Alice" > greeting.txt
 git add greeting.txt
-git commit -m "Alice: 修改问候语"
+git commit -m "Alice: modify greeting"
 
-# Bob 的修改
+# Bob's changes
 git checkout bob-branch
 echo "Hello Bob" > greeting.txt
 git add greeting.txt
-git commit -m "Bob: 修改问候语"
+git commit -m "Bob: modify greeting"
 
-# 推送分支
+# Push branches
 git push -u origin alice-branch
 git push -u origin bob-branch
 ```
 
-### 3. 创建冲突的 PR
+### 3. Create a Conflicting PR
 
-在 GitHub 上：
-1. 从 `alice-branch` 创建 PR 到 `main`
-2. 合并 PR
-3. 从 `bob-branch` 创建 PR 到 `main`
+On GitHub:
+1. Create a PR from `alice-branch` to `main`
+2. Merge the PR
+3. Create a PR from `bob-branch` to `main`
 
-这时会发现 PR 有冲突。
+You will now see that the PR has a conflict.
 
-### 4. 解决冲突
+### 4. Resolve the Conflict
 
-#### 方法一：本地解决
+#### Method 1: Resolve Locally
 
 ```bash
-# 更新 main 分支
+# Update main branch
 git checkout main
 git pull
 
-# 尝试合并 bob-branch
+# Attempt to merge bob-branch
 git merge bob-branch
-# 这里会产生冲突
+# This will produce a conflict
 
-# 查看冲突文件
+# View conflicted files
 git status
 
-# 打开 greeting.txt，你会看到：
+# Open greeting.txt, you will see:
 # <<<<<<< HEAD
 # Hello Alice
 # =======
@@ -80,99 +80,99 @@ git status
 # >>>>>>> bob-branch
 ```
 
-#### 方法二：编辑文件解决
+#### Method 2: Edit the File Manually
 
-打开 `greeting.txt`，选择保留的内容：
+Open `greeting.txt` and choose the content to keep:
 
 ```text
 Hello Alice and Bob
 ```
 
-#### 方法三：使用工具解决
+#### Method 3: Use a Tool to Resolve
 
 ```bash
-# 使用 VS Code
+# Use VS Code
 code greeting.txt
 
-# 在 VS Code 中，冲突会高亮显示
-# 可以使用 "Accept Current"、"Accept Incoming"、"Accept Both" 按钮
+# In VS Code, conflicts will be highlighted
+# You can use "Accept Current", "Accept Incoming", "Accept Both" buttons
 ```
 
-### 5. 完成合并
+### 5. Complete the Merge
 
 ```bash
-# 标记为已解决
+# Mark as resolved
 git add greeting.txt
 
-# 完成提交
-git commit -m "解决 Alice 和 Bob 的合并冲突"
+# Complete the commit
+git commit -m "Resolve merge conflict between Alice and Bob"
 
-# 推送到远程
+# Push to remote
 git push
 ```
 
-### 6. 在 PR 中解决
+### 6. Resolve in a PR
 
-如果在 PR 中发现冲突：
+If a conflict is found in a PR:
 
 ```bash
-# 在本地解决
+# Resolve locally
 git checkout bob-branch
 git merge main
-# 解决冲突
+# Resolve the conflict
 git add greeting.txt
-git commit -m "解决与 main 分支的冲突"
+git commit -m "Resolve conflict with main branch"
 git push
 ```
 
-PR 会自动更新。
+The PR will update automatically.
 
-## 冲突标记详解
+## Conflict Markers Explained
 
 ```text
-<<<<<<< HEAD (当前分支的内容)
-这是当前分支的修改
+<<<<<<< HEAD (content from current branch)
+This is the modification from the current branch
 =======
-这是要合并的分支的内容
+This is the content from the branch being merged
 >>>>>>> branch-name
 ```
 
-## 高级技巧
+## Advanced Tips
 
-### 使用 rebase 避免冲突
+### Use rebase to Avoid Conflicts
 
 ```bash
-# 在功能分支上
+# On the feature branch
 git checkout alice-branch
 git rebase main
-# 解决冲突后
+# After resolving conflicts
 git rebase --continue
 ```
 
-### 放弃合并
+### Abort a Merge
 
 ```bash
-# 放弃 merge
+# Abort merge
 git merge --abort
 
-# 放弃 rebase
+# Abort rebase
 git rebase --abort
 ```
 
-### 预防冲突
+### Preventing Conflicts
 
-1. **频繁同步**：定期从 main 拉取
-2. **小步提交**：减少冲突范围
-3. **沟通协作**：避免同时修改同一文件
+1. **Sync frequently**: Pull from main regularly
+2. **Small commits**: Reduce the scope of conflicts
+3. **Communication and collaboration**: Avoid modifying the same file at the same time
 
-## 知识点
+## Key Takeaways
 
-- 冲突标记的含义
-- 手动解决冲突的方法
-- 使用工具解决冲突
-- `git merge --abort` 放弃合并
-- `git rebase` 避免冲突
+- Understanding conflict markers
+- Manually resolving conflicts
+- Using tools to resolve conflicts
+- `git merge --abort` to abort a merge
+- `git rebase` to avoid conflicts
 
-## 下一步
+## Next Step
 
-[练习 5：使用 GitHub Pages 部署网站 →](exercise-5-github-pages.md)
+[Exercise 5: Deploy a Website with GitHub Pages →](exercise-5-github-pages.md)

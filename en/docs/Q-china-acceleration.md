@@ -1,6 +1,6 @@
 # GitHub Domestic Acceleration Guide
 
-> This chapter will详细介绍 various acceleration methods for domestic developers to access GitHub, including modifying Hosts file, using acceleration proxy, configuring Git proxy, using domestic mirrors, SSH connection optimization, etc.
+> This chapter will explain in detail various acceleration methods for domestic developers to access GitHub, including modifying Hosts file, using acceleration proxy, configuring Git proxy, using domestic mirrors, SSH connection optimization, etc.
 
 ---
 
@@ -45,7 +45,7 @@ Due to network reasons, domestic access to GitHub is sometimes slow, main reason
 
 **Unstable Connection**:
 - Network fluctuations cause connection interruptions
-- Long operations容易 fail
+- Long operations tend to fail
 - Solution: Use SSH connection or configure retry mechanism
 
 ### Acceleration Effect Comparison

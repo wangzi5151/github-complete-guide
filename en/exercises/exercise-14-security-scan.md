@@ -1,14 +1,14 @@
-# 练习 14：安全扫描实战
+# Exercise 14: Security Scan Practice
 
-## 学习目标
+## Learning Objectives
 
-- 配置 CodeQL 代码扫描
-- 使用 Trivy 扫描容器漏洞
-- 配置 Dependabot 自动更新
+- Configure CodeQL code scanning
+- Use Trivy to scan container vulnerabilities
+- Configure Dependabot automatic updates
 
-## 步骤
+## Steps
 
-### 步骤 1：CodeQL 分析
+### Step 1: CodeQL Analysis
 
 ```yaml
 # .github/workflows/codeql.yml
@@ -43,7 +43,7 @@ jobs:
       uses: github/codeql-action/analyze@v3
 ```
 
-### 步骤 2：Dependabot 配置
+### Step 2: Dependabot Configuration
 
 ```yaml
 # .github/dependabot.yml
@@ -59,7 +59,7 @@ updates:
       interval: "weekly"
 ```
 
-### 步骤 3：容器扫描
+### Step 3: Container Scanning
 
 ```yaml
 # .github/workflows/container-scan.yml
@@ -92,20 +92,20 @@ jobs:
         sarif_file: 'trivy-results.sarif'
 ```
 
-## 实战任务
+## Hands-on Tasks
 
-1. 配置 CodeQL 代码扫描
-2. 配置 Dependabot 自动更新
-3. 创建容器安全扫描工作流
-4. 查看扫描结果
+1. Configure CodeQL code scanning
+2. Configure Dependabot automatic updates
+3. Create a container security scanning workflow
+4. Review scan results
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 能够配置 CodeQL 分析
-- [ ] 能够配置 Dependabot
-- [ ] 能够运行容器扫描
-- [ ] 能够解读扫描结果
+- [ ] Able to configure CodeQL analysis
+- [ ] Able to configure Dependabot
+- [ ] Able to run container scanning
+- [ ] Able to interpret scan results
 
-## 下一步
+## Next Steps
 
-继续 [练习 15：发布管理实战](exercise-15-release-management.md)
+Continue to [Exercise 15: Release Management Practice](exercise-15-release-management.md)

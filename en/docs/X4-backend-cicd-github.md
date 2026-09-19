@@ -1,43 +1,43 @@
-# 后端开发者的 GitHub CI/CD 指南
+# GitHub CI/CD Guide for Backend Developers
 
-> 本文档为后端开发者提供完整的 GitHub CI/CD 实践指南，涵盖主流后端语言的自动化流水线搭建、容器化部署、数据库迁移、API 测试、性能测试等核心环节，帮助后端团队构建稳定可靠的持续集成和持续部署体系。
-
----
-
-## 目录
-
-1. [后端项目 GitHub 仓库结构](#1-后端项目-github-仓库结构)
-2. [Java/Spring Boot 项目的 GitHub Actions](#2-javaspring-boot-项目的-github-actions)
-3. [Python/Django/Flask 项目的 GitHub Actions](#3-pythondjangoflask-项目的-github-actions)
-4. [Go 项目的 GitHub Actions](#4-go-项目的-github-actions)
-5. [Node.js/Nest.js 项目的 GitHub Actions](#5-nodejsnestjs-项目的-github-actions)
-6. [Rust 项目的 GitHub Actions](#6-rust-项目的-github-actions)
-7. [数据库迁移自动化](#7-数据库迁移自动化)
-8. [API 测试自动化](#8-api-测试自动化)
-9. [容器化部署](#9-容器化部署)
-10. [Kubernetes 部署自动化](#10-kubernetes-部署自动化)
-11. [后端代码质量检查](#11-后端代码质量检查)
-12. [性能测试自动化](#12-性能测试自动化)
-13. [多环境部署策略](#13-多环境部署策略)
-14. [国内服务器部署方案](#14-国内服务器部署方案)
+> This document provides a comprehensive GitHub CI/CD practice guide for backend developers, covering automated pipeline setup for mainstream backend languages, containerized deployment, database migration, API testing, performance testing, and other core aspects, helping backend teams build a stable and reliable continuous integration and continuous deployment system.
 
 ---
 
-## 1. 后端项目 GitHub 仓库结构
+## Table of Contents
 
-### 1.1 标准后端项目目录结构
+1. [Backend Project GitHub Repository Structure](#1-backend-project-github-repository-structure)
+2. [GitHub Actions for Java/Spring Boot Projects](#2-github-actions-for-javaspring-boot-projects)
+3. [GitHub Actions for Python/Django/Flask Projects](#3-github-actions-for-pythondjangoflask-projects)
+4. [GitHub Actions for Go Projects](#4-github-actions-for-go-projects)
+5. [GitHub Actions for Node.js/Nest.js Projects](#5-github-actions-for-nodejsnestjs-projects)
+6. [GitHub Actions for Rust Projects](#6-github-actions-for-rust-projects)
+7. [Database Migration Automation](#7-database-migration-automation)
+8. [API Testing Automation](#8-api-testing-automation)
+9. [Containerized Deployment](#9-containerized-deployment)
+10. [Kubernetes Deployment Automation](#10-kubernetes-deployment-automation)
+11. [Backend Code Quality Checks](#11-backend-code-quality-checks)
+12. [Performance Testing Automation](#12-performance-testing-automation)
+13. [Multi-Environment Deployment Strategy](#13-multi-environment-deployment-strategy)
+14. [Domestic Server Deployment Solutions](#14-domestic-server-deployment-solutions)
 
-一个规范的后端项目仓库应具备清晰的分层结构，便于团队协作、自动化构建和部署。以下是不同语言的推荐目录结构：
+---
 
-**Java/Spring Boot 项目结构：**
+## 1. Backend Project GitHub Repository Structure
+
+### 1.1 Standard Backend Project Directory Structure
+
+A well-structured backend project repository should have a clear layered architecture to facilitate team collaboration, automated building, and deployment. Below are recommended directory structures for different languages:
+
+**Java/Spring Boot Project Structure:**
 
 ```
 my-spring-app/
 ├── .github/
 │   ├── workflows/
-│   │   ├── ci.yml                    # 持续集成
-│   │   ├── deploy.yml                # 部署流水线
-│   │   └── release.yml               # 发布流水线
+│   │   ├── ci.yml                    # Continuous Integration
+│   │   ├── deploy.yml                # Deployment Pipeline
+│   │   └── release.yml               # Release Pipeline
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
@@ -47,26 +47,26 @@ my-spring-app/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/example/app/
-│   │   │   ├── controller/           # 控制器层
-│   │   │   ├── service/              # 服务层
-│   │   │   ├── repository/           # 数据访问层
-│   │   │   ├── model/                # 实体类
-│   │   │   ├── dto/                  # 数据传输对象
-│   │   │   ├── config/               # 配置类
-│   │   │   ├── exception/            # 异常处理
-│   │   │   ├── util/                 # 工具类
+│   │   │   ├── controller/           # Controller Layer
+│   │   │   ├── service/              # Service Layer
+│   │   │   ├── repository/           # Data Access Layer
+│   │   │   ├── model/                # Entity Classes
+│   │   │   ├── dto/                  # Data Transfer Objects
+│   │   │   ├── config/               # Configuration Classes
+│   │   │   ├── exception/            # Exception Handling
+│   │   │   ├── util/                 # Utility Classes
 │   │   │   └── Application.java
 │   │   └── resources/
 │   │       ├── application.yml
 │   │       ├── application-dev.yml
 │   │       ├── application-prod.yml
-│   │       ├── db/migration/         # 数据库迁移脚本
+│   │       ├── db/migration/         # Database Migration Scripts
 │   │       └── static/
 │   └── test/
 │       ├── java/com/example/app/
 │       │   ├── controller/
 │       │   ├── service/
-│       │   └── integration/          # 集成测试
+│       │   └── integration/          # Integration Tests
 │       └── resources/
 │           └── application-test.yml
 ├── docker/
@@ -74,19 +74,19 @@ my-spring-app/
 │   ├── docker-compose.yml
 │   └── docker-compose.test.yml
 ├── docs/
-│   ├── api/                          # API 文档
-│   └── architecture/                 # 架构文档
+│   ├── api/                          # API Documentation
+│   └── architecture/                 # Architecture Documentation
 ├── scripts/
 │   ├── build.sh
 │   ├── deploy.sh
 │   └── migration.sh
-├── pom.xml                           # Maven 配置
+├── pom.xml                           # Maven Configuration
 ├── .gitignore
 ├── README.md
 └── CHANGELOG.md
 ```
 
-**Python/Django 项目结构：**
+**Python/Django Project Structure:**
 
 ```
 my-django-app/
@@ -128,7 +128,7 @@ my-django-app/
 └── README.md
 ```
 
-**Go 项目结构（遵循 golang-standards/project-layout）：**
+**Go Project Structure (following golang-standards/project-layout):**
 
 ```
 my-go-app/
@@ -136,21 +136,21 @@ my-go-app/
 │   └── workflows/
 ├── cmd/
 │   └── server/
-│       └── main.go                   # 应用入口
+│       └── main.go                   # Application Entry Point
 ├── internal/
-│   ├── handler/                      # HTTP 处理器
-│   ├── service/                      # 业务逻辑
-│   ├── repository/                   # 数据访问
-│   ├── model/                        # 数据模型
-│   ├── middleware/                    # 中间件
-│   └── config/                       # 配置
-├── pkg/                              # 可复用的公共库
+│   ├── handler/                      # HTTP Handlers
+│   ├── service/                      # Business Logic
+│   ├── repository/                   # Data Access
+│   ├── model/                        # Data Models
+│   ├── middleware/                    # Middleware
+│   └── config/                       # Configuration
+├── pkg/                              # Reusable Public Libraries
 │   ├── logger/
 │   ├── database/
 │   └── response/
 ├── api/
-│   └── openapi/                      # OpenAPI 规范
-├── migrations/                       # 数据库迁移
+│   └── openapi/                      # OpenAPI Specification
+├── migrations/                       # Database Migrations
 ├── deployments/
 │   ├── docker/
 │   └── k8s/
@@ -165,94 +165,94 @@ my-go-app/
 └── README.md
 ```
 
-### 1.2 后端项目 `.github` 目录配置
+### 1.2 Backend Project `.github` Directory Configuration
 
-**CODEOWNERS 文件：**
+**CODEOWNERS File:**
 
 ```
-# 后端项目代码所有者
+# Backend project code owners
 *                           @backend-team
 
-# API 接口变更需要架构师审批
+# API interface changes require architect approval
 /api/                       @architect-zhang
 /src/controller/            @architect-zhang
 
-# 数据库迁移需要 DBA 审批
+# Database migrations require DBA approval
 /src/main/resources/db/     @dba-team
 /migrations/                @dba-team
 
-# 配置文件变更需要运维审批
+# Configuration file changes require DevOps approval
 /docker/                    @devops-team
 /.github/                   @devops-team
 /deployments/               @devops-team
 
-# 安全相关代码需要安全团队审批
+# Security-related code requires security team approval
 /src/**/security/           @security-team
 /src/**/auth/               @security-team
 ```
 
-**Pull Request 模板：**
+**Pull Request Template:**
 
 ```markdown
-## 变更说明
+## Change Description
 
-### 变更类型
-- [ ] 新功能 (feat)
-- [ ] Bug 修复 (fix)
-- [ ] 重构 (refactor)
-- [ ] 性能优化 (perf)
-- [ ] 文档更新 (docs)
-- [ ] 测试 (test)
-- [ ] 构建/CI (chore)
+### Change Type
+- [ ] New Feature (feat)
+- [ ] Bug Fix (fix)
+- [ ] Refactor (refactor)
+- [ ] Performance Optimization (perf)
+- [ ] Documentation Update (docs)
+- [ ] Test (test)
+- [ ] Build/CI (chore)
 
-### 变更描述
-<!-- 请描述你的变更内容 -->
+### Change Description
+<!-- Please describe your changes -->
 
-### 数据库变更
-- [ ] 包含数据库迁移
-- [ ] 无数据库变更
+### Database Changes
+- [ ] Includes database migration
+- [ ] No database changes
 
-### API 变更
-- [ ] 包含 API 变更（请更新 API 文档）
-- [ ] 无 API 变更
+### API Changes
+- [ ] Includes API changes (please update API documentation)
+- [ ] No API changes
 
-### 测试
-- [ ] 已添加单元测试
-- [ ] 已添加集成测试
-- [ ] 已添加 API 测试
-- [ ] 手动测试通过
+### Testing
+- [ ] Unit tests added
+- [ ] Integration tests added
+- [ ] API tests added
+- [ ] Manual testing passed
 
-### 部署注意事项
-<!-- 是否有特殊的部署要求？ -->
+### Deployment Notes
+<!-- Are there any special deployment requirements? -->
 
-### 关联 Issue
-<!-- 请关联相关的 Issue 编号 -->
+### Related Issues
+<!-- Please link related issue numbers -->
 ```
 
-### 1.3 后端项目分支管理策略
+### 1.3 Backend Project Branch Management Strategy
 
-后端项目通常需要更严格的分支管理，特别是涉及数据库迁移和多环境部署时：
+Backend projects typically require stricter branch management, especially when involving database migrations and multi-environment deployment:
 
 ```
-main (生产) ← release/v1.2.0 ← develop (开发) ← feature/user-auth
-                                 ↑
-                                 hotfix/critical-bug
+main (production) ← release/v1.2.0 ← develop (development) ← feature/user-auth
+                                  ↑
+                                  hotfix/critical-bug
 ```
 
-**环境与分支对应关系：**
+**Environment-Branch Mapping:**
 
-| 环境 | 分支 | 触发方式 | 用途 |
+| Environment | Branch | Trigger | Purpose |
 |------|------|---------|------|
-| development | develop | 自动部署 | 日常开发测试 |
-| staging | release/* | 自动部署 | 预发布验证 |
-| production | main | 手动审批 | 生产环境 |
-| hotfix | hotfix/* | 手动部署 | 紧急修复 |
+| development | develop | Auto Deploy | Daily development testing |
+| staging | release/* | Auto Deploy | Pre-release verification |
+| production | main | Manual Approval | Production environment |
+| hotfix | hotfix/* | Manual Deploy | Emergency fixes |
 
 ---
 
-## 2. Java/Spring Boot 项目的 GitHub Actions
+## 2. GitHub Actions for Java/Spring Boot Projects
 
-### 2.1 完整的 Spring Boot CI 流水线
+### 2.1 Complete Spring Boot CI Pipeline
 
 ```yaml
 # .github/workflows/spring-boot-ci.yml
@@ -270,22 +270,22 @@ env:
 
 jobs:
   code-quality:
-    name: 代码质量检查
+    name: Code Quality Check
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # SonarQube 需要完整历史
+          fetch-depth: 0  # SonarQube needs full history
 
-      - name: 设置 JDK
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Gradle 构建缓存
+      - name: Gradle Build Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -295,18 +295,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: 编译检查
+      - name: Compile Check
         run: ./gradlew compileJava compileTestJava
 
-      - name: Checkstyle 检查
+      - name: Checkstyle Check
         run: ./gradlew checkstyleMain checkstyleTest
         continue-on-error: true
 
-      - name: SpotBugs 静态分析
+      - name: SpotBugs Static Analysis
         run: ./gradlew spotbugsMain
         continue-on-error: true
 
-      - name: SonarQube 分析
+      - name: SonarQube Analysis
         if: github.event_name == 'pull_request'
         run: ./gradlew sonarqube
         env:
@@ -314,7 +314,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   test:
-    name: 自动化测试
+    name: Automated Testing
     runs-on: ubuntu-latest
     needs: code-quality
     services:
@@ -351,7 +351,7 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: 运行单元测试
+      - name: Run Unit Tests
         run: ./gradlew test
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
@@ -360,14 +360,14 @@ jobs:
           SPRING_REDIS_HOST: localhost
           SPRING_REDIS_PORT: 6379
 
-      - name: 生成测试报告
+      - name: Generate Test Report
         if: always()
         run: ./gradlew jacocoTestReport
 
-      - name: 检查代码覆盖率
+      - name: Check Code Coverage
         run: ./gradlew jacocoTestCoverageVerification
 
-      - name: 上传测试报告
+      - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -375,22 +375,22 @@ jobs:
           path: build/reports/tests/
           retention-days: 30
 
-      - name: 上传覆盖率报告
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: build/reports/jacoco/
 
-      - name: 发布测试结果
+      - name: Publish Test Results
         if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: 单元测试结果
+          name: Unit Test Results
           path: '**/build/test-results/test/TEST-*.xml'
           reporter: java-junit
 
   integration-test:
-    name: 集成测试
+    name: Integration Test
     runs-on: ubuntu-latest
     needs: test
     services:
@@ -412,13 +412,13 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: 运行集成测试
+      - name: Run Integration Tests
         run: ./gradlew integrationTest
         env:
           SPRING_PROFILES_ACTIVE: integration-test
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/integrationdb
 
-      - name: 上传集成测试报告
+      - name: Upload Integration Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -426,7 +426,7 @@ jobs:
           path: build/reports/tests/integrationTest/
 
   build:
-    name: 构建与打包
+    name: Build and Package
     runs-on: ubuntu-latest
     needs: [test, integration-test]
     steps:
@@ -438,18 +438,18 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: 构建可执行 JAR
+      - name: Build Executable JAR
         run: ./gradlew bootJar
 
-      - name: 构建 Docker 镜像
+      - name: Build Docker Image
         run: |
           docker build -t myapp:${{ github.sha }} .
           docker tag myapp:${{ github.sha }} myapp:latest
 
-      - name: 保存 Docker 镜像
+      - name: Save Docker Image
         run: docker save myapp:${{ github.sha }} | gzip > myapp-image.tar.gz
 
-      - name: 上传构建产物
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
@@ -459,35 +459,35 @@ jobs:
           retention-days: 7
 
   security-scan:
-    name: 安全扫描
+    name: Security Scan
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/checkout@v4
 
-      - name: 下载构建产物
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
 
-      - name: OWASP 依赖检查
+      - name: OWASP Dependency Check
         run: ./gradlew dependencyCheckAnalyze
         continue-on-error: true
 
-      - name: Trivy 容器扫描
+      - name: Trivy Container Scan
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: myapp:${{ github.sha }}
           format: 'sarif'
           output: 'trivy-results.sarif'
 
-      - name: 上传扫描结果
+      - name: Upload Scan Results
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
 ```
 
-### 2.2 Spring Boot 项目发布流程
+### 2.2 Spring Boot Project Release Process
 
 ```yaml
 # .github/workflows/spring-boot-release.yml
@@ -513,15 +513,15 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: 构建
+      - name: Build
         run: ./gradlew bootJar
 
-      - name: 发布到 GitHub Packages
+      - name: Publish to GitHub Packages
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 创建 GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: build/libs/*.jar
@@ -530,9 +530,9 @@ jobs:
 
 ---
 
-## 3. Python/Django/Flask 项目的 GitHub Actions
+## 3. GitHub Actions for Python/Django/Flask Projects
 
-### 3.1 Django 项目 CI 流水线
+### 3.1 Django Project CI Pipeline
 
 ```yaml
 # .github/workflows/django-ci.yml
@@ -550,37 +550,37 @@ env:
 
 jobs:
   lint:
-    name: 代码检查
+    name: Code Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
 
-      - name: 安装依赖
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/testing.txt
 
-      - name: Ruff 代码检查
+      - name: Ruff Code Check
         run: ruff check .
 
-      - name: Ruff 格式检查
+      - name: Ruff Format Check
         run: ruff format --check .
 
-      - name: MyPy 类型检查
+      - name: MyPy Type Check
         run: mypy .
         continue-on-error: true
 
-      - name: Django 系统检查
+      - name: Django System Check
         run: python manage.py check --deploy
 
   test:
-    name: 自动化测试
+    name: Automated Testing
     runs-on: ubuntu-latest
     needs: lint
     services:
@@ -611,16 +611,16 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
 
-      - name: 安装依赖
+      - name: Install Dependencies
         run: pip install -r requirements/testing.txt
 
-      - name: 数据库迁移
+      - name: Database Migration
         run: python manage.py migrate
         env:
           DATABASE_URL: postgres://testuser:testpass@localhost:5432/testdb
           REDIS_URL: redis://localhost:6379/0
 
-      - name: 运行测试
+      - name: Run Tests
         run: |
           pytest --cov=. --cov-report=xml --cov-report=html --junitxml=test-results.xml
         env:
@@ -628,7 +628,7 @@ jobs:
           REDIS_URL: redis://localhost:6379/0
           DJANGO_SETTINGS_MODULE: myproject.settings.testing
 
-      - name: 上传测试结果
+      - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -637,24 +637,24 @@ jobs:
             test-results.xml
             htmlcov/
 
-      - name: 上传覆盖率到 Codecov
+      - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
-    name: 构建镜像
+    name: Build Image
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: actions/checkout@v4
 
-      - name: 构建 Docker 镜像
+      - name: Build Docker Image
         run: |
           docker build -t mydjangoapp:${{ github.sha }} .
 
-      - name: 运行安全扫描
+      - name: Run Security Scan
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: mydjangoapp:${{ github.sha }}
@@ -663,7 +663,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 ```
 
-### 3.2 Flask/FastAPI 项目 CI 流水线
+### 3.2 Flask/FastAPI Project CI Pipeline
 
 ```yaml
 # .github/workflows/fastapi-ci.yml
@@ -695,30 +695,30 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: 安装依赖
+      - name: Install Dependencies
         run: |
           pip install uv
           uv pip install -r requirements.txt --system
 
-      - name: 代码检查
+      - name: Code Check
         run: |
           ruff check src/
           ruff format --check src/
 
-      - name: 运行测试
+      - name: Run Tests
         run: |
           pytest tests/ -v --cov=src --cov-report=xml
         env:
           DATABASE_URL: postgresql://testuser:testpass@localhost:5432/testdb
           TESTING: true
 
-      - name: 上传覆盖率
+      - name: Upload Coverage
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
 ```
 
-### 3.3 Python 项目依赖管理
+### 3.3 Python Project Dependency Management
 
 ```yaml
 # .github/workflows/python-dependencies.yml
@@ -739,31 +739,31 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 检查依赖更新
+      - name: Check Dependency Updates
         run: |
           pip install pip-audit safety
           pip-audit
           safety check -r requirements/production.txt
 
-      - name: 创建依赖更新 PR
+      - name: Create Dependency Update PR
         uses: peter-evans/create-pull-request@v5
         with:
-          title: 'chore(deps): 更新 Python 依赖'
+          title: 'chore(deps): Update Python Dependencies'
           body: |
-            自动检查并更新的依赖变更。
+            Automatically checked and updated dependency changes.
 
-            请在合并前确认：
-            - [ ] 所有测试通过
-            - [ ] 没有破坏性变更
+            Please confirm before merging:
+            - [ ] All tests pass
+            - [ ] No breaking changes
           branch: chore/update-dependencies
           labels: dependencies, automated
 ```
 
 ---
 
-## 4. Go 项目的 GitHub Actions
+## 4. GitHub Actions for Go Projects
 
-### 4.1 Go 项目完整 CI 流水线
+### 4.1 Go Project Complete CI Pipeline
 
 ```yaml
 # .github/workflows/go-ci.yml
@@ -780,12 +780,12 @@ env:
 
 jobs:
   lint:
-    name: 代码检查
+    name: Code Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 Go
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
@@ -800,13 +800,13 @@ jobs:
       - name: go vet
         run: go vet ./...
 
-      - name: 检查 go mod tidy
+      - name: Check go mod tidy
         run: |
           go mod tidy
           git diff --exit-code go.mod go.sum
 
   test:
-    name: 单元测试
+    name: Unit Tests
     runs-on: ubuntu-latest
     needs: lint
     services:
@@ -837,22 +837,22 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           cache: true
 
-      - name: 运行测试
+      - name: Run Tests
         run: |
           go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
         env:
           DATABASE_URL: postgres://testuser:testpass@localhost:5432/testdb?sslmode=disable
           REDIS_URL: redis://localhost:6379
 
-      - name: 生成覆盖率报告
+      - name: Generate Coverage Report
         run: go tool cover -html=coverage.out -o coverage.html
 
-      - name: 上传覆盖率
+      - name: Upload Coverage
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage.out
 
-      - name: 上传测试报告
+      - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -860,7 +860,7 @@ jobs:
           path: coverage.html
 
   build:
-    name: 构建
+    name: Build
     runs-on: ubuntu-latest
     needs: test
     strategy:
@@ -875,7 +875,7 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           cache: true
 
-      - name: 构建二进制文件
+      - name: Build Binary
         run: |
           CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
             go build -ldflags="-s -w -X main.version=${{ github.sha }}" \
@@ -884,14 +884,14 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
 
-      - name: 上传构建产物
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
           path: bin/
 
   security:
-    name: 安全扫描
+    name: Security Scan
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -901,18 +901,18 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: govulncheck 漏洞检查
+      - name: govulncheck Vulnerability Check
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
           govulncheck ./...
 
-      - name: gosec 安全扫描
+      - name: gosec Security Scan
         uses: securego/gosec@master
         with:
           args: ./...
 
   benchmark:
-    name: 性能基准测试
+    name: Performance Benchmark
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -923,20 +923,20 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           cache: true
 
-      - name: 运行基准测试
+      - name: Run Benchmark Tests
         run: go test -bench=. -benchmem ./... | tee benchmark.txt
 
-      - name: 存储基准结果
+      - name: Store Benchmark Results
         uses: actions/cache@v4
         with:
           path: ./benchmark.txt
           key: ${{ runner.os }}-benchmark-${{ github.sha }}
 
-      - name: 比较基准结果
+      - name: Compare Benchmark Results
         if: github.event_name == 'pull_request'
         run: |
           go install golang.org/x/perf/cmd/benchstat@latest
-          # 获取基准分支的结果进行比较
+          # Get base branch results for comparison
           git stash
           git checkout ${{ github.base_ref }}
           go test -bench=. -benchmem ./... > benchmark-base.txt || true
@@ -945,7 +945,7 @@ jobs:
           benchstat benchmark-base.txt benchmark.txt || true
 ```
 
-### 4.2 Go 项目 Makefile
+### 4.2 Go Project Makefile
 
 ```makefile
 # Makefile
@@ -996,9 +996,9 @@ migrate-create:
 
 ---
 
-## 5. Node.js/Nest.js 项目的 GitHub Actions
+## 5. GitHub Actions for Node.js/Nest.js Projects
 
-### 5.1 NestJS 项目 CI 流水线
+### 5.1 NestJS Project CI Pipeline
 
 ```yaml
 # .github/workflows/nestjs-ci.yml
@@ -1016,7 +1016,7 @@ env:
 
 jobs:
   lint:
-    name: 代码检查
+    name: Code Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -1035,14 +1035,14 @@ jobs:
       - name: ESLint
         run: pnpm lint
 
-      - name: TypeScript 类型检查
+      - name: TypeScript Type Check
         run: pnpm tsc --noEmit
 
-      - name: 格式检查
+      - name: Format Check
         run: pnpm format:check
 
   test:
-    name: 自动化测试
+    name: Automated Testing
     runs-on: ubuntu-latest
     needs: lint
     services:
@@ -1079,7 +1079,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 单元测试
+      - name: Unit Tests
         run: pnpm test:cov
         env:
           DATABASE_HOST: localhost
@@ -1090,7 +1090,7 @@ jobs:
           REDIS_HOST: localhost
           REDIS_PORT: 6379
 
-      - name: E2E 测试
+      - name: E2E Tests
         run: pnpm test:e2e
         env:
           DATABASE_HOST: localhost
@@ -1101,20 +1101,20 @@ jobs:
           REDIS_HOST: localhost
           REDIS_PORT: 6379
 
-      - name: 上传测试报告
+      - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: coverage/
 
-      - name: 上传覆盖率
+      - name: Upload Coverage
         uses: codecov/codecov-action@v4
         with:
           directory: ./coverage
 
   build:
-    name: 构建
+    name: Build
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -1131,22 +1131,22 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 构建
+      - name: Build
         run: pnpm build
 
-      - name: 验证构建产物
+      - name: Verify Build Artifacts
         run: |
           ls -la dist/
           node -e "require('./dist/main.js')"
 
-      - name: 上传构建产物
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
           path: dist/
 
   api-test:
-    name: API 测试
+    name: API Test
     runs-on: ubuntu-latest
     needs: build
     services:
@@ -1170,7 +1170,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 启动应用
+      - name: Start Application
         run: |
           pnpm build
           pnpm start:prod &
@@ -1182,7 +1182,7 @@ jobs:
           DATABASE_PASSWORD: testpass
           DATABASE_NAME: testdb
 
-      - name: 运行 API 测试
+      - name: Run API Tests
         run: |
           npm install -g newman
           newman run test/api/postman_collection.json \
@@ -1190,7 +1190,7 @@ jobs:
             --reporters cli,junit \
             --reporter-junit-export api-test-results.xml
 
-      - name: 上传 API 测试结果
+      - name: Upload API Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -1198,7 +1198,7 @@ jobs:
           path: api-test-results.xml
 ```
 
-### 5.2 Express/Fastify 项目 CI
+### 5.2 Express/Fastify Project CI
 
 ```yaml
 # .github/workflows/express-ci.yml
@@ -1233,9 +1233,9 @@ jobs:
 
 ---
 
-## 6. Rust 项目的 GitHub Actions
+## 6. GitHub Actions for Rust Projects
 
-### 6.1 Rust 项目完整 CI 流水线
+### 6.1 Rust Project Complete CI Pipeline
 
 ```yaml
 # .github/workflows/rust-ci.yml
@@ -1253,17 +1253,17 @@ env:
 
 jobs:
   check:
-    name: 代码检查
+    name: Code Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 Rust
+      - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
 
-      - name: Cargo 缓存
+      - name: Cargo Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -1274,19 +1274,19 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: 格式检查
+      - name: Format Check
         run: cargo fmt --all -- --check
 
-      - name: Clippy 静态分析
+      - name: Clippy Static Analysis
         run: cargo clippy --all-targets --all-features -- -D warnings
 
-      - name: 检查文档
+      - name: Check Documentation
         run: cargo doc --no-deps --document-private-items
         env:
           RUSTDOCFLAGS: "-D warnings"
 
   test:
-    name: 测试
+    name: Test
     runs-on: ubuntu-latest
     needs: check
     services:
@@ -1316,31 +1316,31 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: 运行测试
+      - name: Run Tests
         run: cargo test --all-features --verbose
         env:
           DATABASE_URL: postgres://testuser:testpass@localhost:5432/testdb
           RUST_LOG: debug
 
-      - name: 运行集成测试
+      - name: Run Integration Tests
         run: cargo test --all-features --test '*'
         env:
           DATABASE_URL: postgres://testuser:testpass@localhost:5432/testdb
 
-      - name: 代码覆盖率
+      - name: Code Coverage
         run: |
           cargo install cargo-tarpaulin
           cargo tarpaulin --all-features --out xml
         env:
           DATABASE_URL: postgres://testuser:testpass@localhost:5432/testdb
 
-      - name: 上传覆盖率
+      - name: Upload Coverage
         uses: codecov/codecov-action@v4
         with:
           file: ./cobertura.xml
 
   build:
-    name: 构建
+    name: Build
     runs-on: ${{ matrix.os }}
     needs: test
     strategy:
@@ -1365,33 +1365,33 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: 构建
+      - name: Build
         run: cargo build --release
 
-      - name: 上传构建产物
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: binary-${{ matrix.artifact }}
           path: target/release/myapp*
 
   security:
-    name: 安全审计
+    name: Security Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cargo 审计
+      - name: Cargo Audit
         uses: actions-rs/audit-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 依赖漏洞检查
+      - name: Dependency Vulnerability Check
         run: |
           cargo install cargo-audit
           cargo audit
 
   benchmark:
-    name: 性能基准测试
+    name: Performance Benchmark
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -1399,17 +1399,17 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: 运行基准测试
+      - name: Run Benchmark Tests
         run: cargo bench --all-features -- --output-format bencher | tee output.txt
 
-      - name: 存储基准结果
+      - name: Store Benchmark Results
         uses: actions/cache@v4
         with:
           path: output.txt
           key: ${{ runner.os }}-bench-${{ github.sha }}
 ```
 
-### 6.2 Rust 项目发布流程
+### 6.2 Rust Project Release Process
 
 ```yaml
 # .github/workflows/rust-release.yml
@@ -1431,27 +1431,27 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: 构建
+      - name: Build
         run: cargo build --release
 
-      - name: 打包
+      - name: Package
         run: |
           cd target/release
           tar czf myapp-${{ github.ref_name }}-${{ runner.os }}.tar.gz myapp*
         if: runner.os != 'Windows'
 
-      - name: 打包 (Windows)
+      - name: Package (Windows)
         if: runner.os == 'Windows'
         run: |
           Compress-Archive -Path target/release/myapp.exe -DestinationPath myapp-${{ github.ref_name }}-Windows.zip
 
-      - name: 发布到 crates.io
+      - name: Publish to crates.io
         if: runner.os == 'ubuntu-latest'
         run: cargo publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
-      - name: 创建 GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -1461,9 +1461,9 @@ jobs:
 
 ---
 
-## 7. 数据库迁移自动化
+## 7. Database Migration Automation
 
-### 7.1 Flyway 数据库迁移
+### 7.1 Flyway Database Migration
 
 ```yaml
 # .github/workflows/db-migration.yml
@@ -1478,7 +1478,7 @@ on:
 
 jobs:
   validate-migration:
-    name: 验证迁移脚本
+    name: Validate Migration Scripts
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -1493,26 +1493,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 安装 Flyway
+      - name: Install Flyway
         run: |
           wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/10.4.0/flyway-commandline-10.4.0-linux-x64.tar.gz | tar xz
           echo "$PWD/flyway-10.4.0" >> $GITHUB_PATH
 
-      - name: 验证迁移脚本
+      - name: Validate Migration Scripts
         run: |
           flyway -url=jdbc:postgresql://localhost:5432/migrationdb \
             -user=testuser -password=testpass \
             -locations=filesystem:src/main/resources/db/migration \
             validate
 
-      - name: 执行迁移
+      - name: Execute Migration
         run: |
           flyway -url=jdbc:postgresql://localhost:5432/migrationdb \
             -user=testuser -password=testpass \
             -locations=filesystem:src/main/resources/db/migration \
             migrate
 
-      - name: 检查迁移状态
+      - name: Check Migration Status
         run: |
           flyway -url=jdbc:postgresql://localhost:5432/migrationdb \
             -user=testuser -password=testpass \
@@ -1520,7 +1520,7 @@ jobs:
             info
 
   deploy-migration:
-    name: 部署迁移
+    name: Deploy Migration
     needs: validate-migration
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -1528,7 +1528,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 执行生产迁移
+      - name: Execute Production Migration
         run: |
           flyway -url=${{ secrets.PROD_DATABASE_URL }} \
             -user=${{ secrets.PROD_DATABASE_USER }} \
@@ -1536,16 +1536,16 @@ jobs:
             -locations=filesystem:src/main/resources/db/migration \
             migrate
 
-      - name: 通知迁移结果
+      - name: Notify Migration Result
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {
-              "text": "数据库迁移已执行完成\n分支: ${{ github.ref }}\n提交: ${{ github.sha }}"
+              "text": "Database migration completed successfully\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}"
             }
 ```
 
-### 7.2 Liquibase 数据库迁移
+### 7.2 Liquibase Database Migration
 
 ```yaml
 # .github/workflows/liquibase-migration.yml
@@ -1573,7 +1573,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 验证变更日志
+      - name: Validate Changelog
         uses: liquibase/liquibase-github-action@v4
         with:
           operation: validate
@@ -1582,7 +1582,7 @@ jobs:
           username: testuser
           password: testpass
 
-      - name: 执行迁移
+      - name: Execute Migration
         uses: liquibase/liquibase-github-action@v4
         with:
           operation: update
@@ -1591,7 +1591,7 @@ jobs:
           username: testuser
           password: testpass
 
-      - name: 生成迁移报告
+      - name: Generate Migration Report
         uses: liquibase/liquibase-github-action@v4
         with:
           operation: status
@@ -1601,7 +1601,7 @@ jobs:
           password: testpass
 ```
 
-### 7.3 Python Alembic 迁移
+### 7.3 Python Alembic Migration
 
 ```yaml
 # .github/workflows/alembic-migration.yml
@@ -1633,30 +1633,30 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 安装依赖
+      - name: Install Dependencies
         run: pip install -r requirements.txt alembic
 
-      - name: 验证迁移
+      - name: Validate Migration
         run: alembic check
         env:
           DATABASE_URL: postgresql://testuser:testpass@localhost:5432/testdb
 
-      - name: 执行迁移
+      - name: Execute Migration
         run: alembic upgrade head
         env:
           DATABASE_URL: postgresql://testuser:testpass@localhost:5432/testdb
 
-      - name: 生成迁移脚本
+      - name: Generate Migration Script
         run: alembic history > migration-history.txt
 
-      - name: 上传迁移记录
+      - name: Upload Migration Record
         uses: actions/upload-artifact@v4
         with:
           name: migration-history
           path: migration-history.txt
 ```
 
-### 7.4 Go migrate 迁移
+### 7.4 Go migrate Migration
 
 ```yaml
 # .github/workflows/go-migrate.yml
@@ -1684,32 +1684,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 安装 golang-migrate
+      - name: Install golang-migrate
         run: |
           curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xz
           sudo mv migrate /usr/local/bin/
 
-      - name: 验证迁移文件
+      - name: Validate Migration Files
         run: migrate -path migrations -database postgres://testuser:testpass@localhost:5432/testdb?sslmode=disable validate
 
-      - name: 执行迁移
+      - name: Execute Migration
         run: migrate -path migrations -database postgres://testuser:testpass@localhost:5432/testdb?sslmode=disable up
 
-      - name: 检查迁移版本
+      - name: Check Migration Version
         run: migrate -path migrations -database postgres://testuser:testpass@localhost:5432/testdb?sslmode=disable version
 
-      - name: 生成迁移差异
+      - name: Generate Migration Diff
         if: failure()
         run: |
-          echo "迁移失败，请检查迁移脚本"
+          echo "Migration failed, please check migration scripts"
           migrate -path migrations -database postgres://testuser:testpass@localhost:5432/testdb?sslmode=disable version
 ```
 
 ---
 
-## 8. API 测试自动化
+## 8. API Testing Automation
 
-### 8.1 Postman/Newman API 测试
+### 8.1 Postman/Newman API Testing
 
 ```yaml
 # .github/workflows/api-test.yml
@@ -1737,13 +1737,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 启动应用
+      - name: Start Application
         run: |
-          # 根据项目类型启动应用
+          # Start application based on project type
           docker-compose -f docker-compose.test.yml up -d
           sleep 30
 
-      - name: 运行 Newman API 测试
+      - name: Run Newman API Tests
         uses: anthropics/newman-action@v1
         with:
           collection: test/api/collection.json
@@ -1752,7 +1752,7 @@ jobs:
           reporter-junit-export: api-test-results.xml
           reporter-htmlextra-export: api-test-report.html
 
-      - name: 上传测试报告
+      - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -1761,16 +1761,16 @@ jobs:
             api-test-results.xml
             api-test-report.html
 
-      - name: 发布测试结果
+      - name: Publish Test Results
         if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: API 测试结果
+          name: API Test Results
           path: api-test-results.xml
           reporter: java-junit
 ```
 
-### 8.2 REST Assured (Java) API 测试
+### 8.2 REST Assured (Java) API Testing
 
 ```java
 // src/test/java/com/example/api/UserApiTest.java
@@ -1805,8 +1805,8 @@ class UserApiTest {
             .contentType(ContentType.JSON)
             .body("""
                 {
-                    "name": "张三",
-                    "email": "zhangsan@example.com",
+                    "name": "John Doe",
+                    "email": "john@example.com",
                     "password": "securePassword123"
                 }
                 """)
@@ -1814,8 +1814,8 @@ class UserApiTest {
             .post("/users")
         .then()
             .statusCode(201)
-            .body("name", equalTo("张三"))
-            .body("email", equalTo("zhangsan@example.com"))
+            .body("name", equalTo("John Doe"))
+            .body("email", equalTo("john@example.com"))
             .body("id", notNullValue());
     }
 
@@ -1828,7 +1828,7 @@ class UserApiTest {
             .get("/users/{id}")
         .then()
             .statusCode(200)
-            .body("name", equalTo("张三"));
+            .body("name", equalTo("John Doe"));
     }
 
     @Test
@@ -1840,7 +1840,7 @@ class UserApiTest {
             .get("/users/{id}")
         .then()
             .statusCode(404)
-            .body("message", equalTo("用户不存在"));
+            .body("message", equalTo("User not found"));
     }
 
     @Test
@@ -1863,7 +1863,7 @@ class UserApiTest {
 }
 ```
 
-### 8.3 pytest API 测试 (Python)
+### 8.3 pytest API Testing (Python)
 
 ```python
 # tests/api/test_users.py
@@ -1889,31 +1889,31 @@ class TestUserAPI:
     @pytest.mark.asyncio
     async def test_create_user(self, client, auth_headers):
         response = await client.post("/api/v1/users", json={
-            "name": "张三",
-            "email": "zhangsan@example.com",
+            "name": "John Doe",
+            "email": "john@example.com",
             "password": "securePassword123"
         }, headers=auth_headers)
 
         assert response.status_code == 201
         data = response.json()
-        assert data["name"] == "张三"
-        assert data["email"] == "zhangsan@example.com"
+        assert data["name"] == "John Doe"
+        assert data["email"] == "john@example.com"
         assert "id" in data
 
     @pytest.mark.asyncio
     async def test_get_user(self, client, auth_headers):
-        # 创建用户
+        # Create user
         create_response = await client.post("/api/v1/users", json={
-            "name": "李四",
-            "email": "lisi@example.com",
+            "name": "Jane Smith",
+            "email": "jane@example.com",
             "password": "securePassword123"
         }, headers=auth_headers)
         user_id = create_response.json()["id"]
 
-        # 获取用户
+        # Get user
         response = await client.get(f"/api/v1/users/{user_id}", headers=auth_headers)
         assert response.status_code == 200
-        assert response.json()["name"] == "李四"
+        assert response.json()["name"] == "Jane Smith"
 
     @pytest.mark.asyncio
     async def test_user_not_found(self, client, auth_headers):
@@ -1936,41 +1936,41 @@ class TestUserAPI:
 
     @pytest.mark.asyncio
     async def test_update_user(self, client, auth_headers):
-        # 创建用户
+        # Create user
         create_response = await client.post("/api/v1/users", json={
-            "name": "王五",
-            "email": "wangwu@example.com",
+            "name": "Bob Wilson",
+            "email": "bob@example.com",
             "password": "securePassword123"
         }, headers=auth_headers)
         user_id = create_response.json()["id"]
 
-        # 更新用户
+        # Update user
         response = await client.put(f"/api/v1/users/{user_id}", json={
-            "name": "王五（已更新）"
+            "name": "Bob Wilson (Updated)"
         }, headers=auth_headers)
         assert response.status_code == 200
-        assert response.json()["name"] == "王五（已更新）"
+        assert response.json()["name"] == "Bob Wilson (Updated)"
 
     @pytest.mark.asyncio
     async def test_delete_user(self, client, auth_headers):
-        # 创建用户
+        # Create user
         create_response = await client.post("/api/v1/users", json={
-            "name": "赵六",
-            "email": "zhaoliu@example.com",
+            "name": "Alice Brown",
+            "email": "alice@example.com",
             "password": "securePassword123"
         }, headers=auth_headers)
         user_id = create_response.json()["id"]
 
-        # 删除用户
+        # Delete user
         response = await client.delete(f"/api/v1/users/{user_id}", headers=auth_headers)
         assert response.status_code == 204
 
-        # 验证已删除
+        # Verify deletion
         response = await client.get(f"/api/v1/users/{user_id}", headers=auth_headers)
         assert response.status_code == 404
 ```
 
-### 8.4 Go API 测试
+### 8.4 Go API Testing
 
 ```go
 // tests/api/user_test.go
@@ -1991,8 +1991,8 @@ func TestCreateUser(t *testing.T) {
     app := setupTestApp()
 
     body := map[string]string{
-        "name":     "张三",
-        "email":    "zhangsan@example.com",
+        "name":     "John Doe",
+        "email":    "john@example.com",
         "password": "securePassword123",
     }
     jsonBody, _ := json.Marshal(body)
@@ -2006,17 +2006,17 @@ func TestCreateUser(t *testing.T) {
 
     var result map[string]interface{}
     json.NewDecoder(resp.Body).Decode(&result)
-    assert.Equal(t, "张三", result["name"])
+    assert.Equal(t, "John Doe", result["name"])
     assert.NotNil(t, result["id"])
 }
 
 func TestGetUser(t *testing.T) {
     app := setupTestApp()
 
-    // 创建用户
+    // Create user
     createBody := map[string]string{
-        "name":     "李四",
-        "email":    "lisi@example.com",
+        "name":     "Jane Smith",
+        "email":    "jane@example.com",
         "password": "securePassword123",
     }
     jsonBody, _ := json.Marshal(createBody)
@@ -2028,7 +2028,7 @@ func TestGetUser(t *testing.T) {
     json.NewDecoder(createResp.Body).Decode(&created)
     userID := created["id"]
 
-    // 获取用户
+    // Get user
     req := httptest.NewRequest(http.MethodGet, "/api/v1/users/"+fmt.Sprintf("%v", userID), nil)
     resp, err := app.Test(req)
 
@@ -2037,7 +2037,7 @@ func TestGetUser(t *testing.T) {
 
     var user map[string]interface{}
     json.NewDecoder(resp.Body).Decode(&user)
-    assert.Equal(t, "李四", user["name"])
+    assert.Equal(t, "Jane Smith", user["name"])
 }
 
 func TestUserNotFound(t *testing.T) {
@@ -2053,15 +2053,15 @@ func TestUserNotFound(t *testing.T) {
 
 ---
 
-## 9. 容器化部署
+## 9. Containerized Deployment
 
-### 9.1 多阶段 Docker 构建
+### 9.1 Multi-Stage Docker Build
 
-**Java/Spring Boot Dockerfile：**
+**Java/Spring Boot Dockerfile:**
 
 ```dockerfile
 # docker/Dockerfile
-# 构建阶段
+# Build stage
 FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
@@ -2072,7 +2072,7 @@ RUN ./gradlew dependencies --no-daemon
 COPY src/ src/
 RUN ./gradlew bootJar --no-daemon
 
-# 运行阶段
+# Runtime stage
 FROM eclipse-temurin:21-jre-alpine AS runtime
 WORKDIR /app
 
@@ -2092,7 +2092,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
 ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
 ```
 
-**Python/Django Dockerfile：**
+**Python/Django Dockerfile:**
 
 ```dockerfile
 # docker/Dockerfile
@@ -2130,7 +2130,7 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
 CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
 ```
 
-**Go Dockerfile：**
+**Go Dockerfile:**
 
 ```dockerfile
 # docker/Dockerfile
@@ -2163,7 +2163,7 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
 ENTRYPOINT ["./server"]
 ```
 
-**Node.js/NestJS Dockerfile：**
+**Node.js/NestJS Dockerfile:**
 
 ```dockerfile
 # docker/Dockerfile
@@ -2201,7 +2201,7 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
 CMD ["node", "dist/main.js"]
 ```
 
-**Rust Dockerfile：**
+**Rust Dockerfile:**
 
 ```dockerfile
 # docker/Dockerfile
@@ -2238,7 +2238,7 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
 ENTRYPOINT ["./myapp"]
 ```
 
-### 9.2 Docker Compose 配置
+### 9.2 Docker Compose Configuration
 
 ```yaml
 # docker/docker-compose.yml
@@ -2316,7 +2316,7 @@ networks:
     driver: bridge
 ```
 
-### 9.3 GitHub Actions Docker 构建与推送
+### 9.3 GitHub Actions Docker Build and Push
 
 ```yaml
 # .github/workflows/docker-build.yml
@@ -2342,10 +2342,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 Docker Buildx
+      - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 登录 GitHub Container Registry
+      - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
@@ -2353,7 +2353,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 提取元数据
+      - name: Extract Metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -2365,7 +2365,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      - name: 构建并推送 Docker 镜像
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -2376,14 +2376,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: 运行 Trivy 安全扫描
+      - name: Run Trivy Security Scan
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: 'sarif'
           output: 'trivy-results.sarif'
 
-      - name: 上传扫描结果
+      - name: Upload Scan Results
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
@@ -2392,9 +2392,9 @@ jobs:
 
 ---
 
-## 10. Kubernetes 部署自动化
+## 10. Kubernetes Deployment Automation
 
-### 10.1 Kubernetes 清单文件
+### 10.1 Kubernetes Manifest Files
 
 ```yaml
 # deployments/k8s/deployment.yaml
@@ -2522,7 +2522,7 @@ spec:
           averageUtilization: 80
 ```
 
-### 10.2 GitHub Actions Kubernetes 部署
+### 10.2 GitHub Actions Kubernetes Deployment
 
 ```yaml
 # .github/workflows/k8s-deploy.yml
@@ -2544,68 +2544,68 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 设置 kubectl
+      - name: Setup kubectl
         uses: azure/setup-kubectl@v3
 
-      - name: 配置 kubeconfig
+      - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
 
-      - name: 登录容器仓库
+      - name: Login to Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 更新镜像版本
+      - name: Update Image Version
         run: |
           kubectl set image deployment/myapp \
             myapp=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
             -n production
 
-      - name: 等待部署完成
+      - name: Wait for Deployment to Complete
         run: |
           kubectl rollout status deployment/myapp -n production --timeout=300s
 
-      - name: 验证部署
+      - name: Verify Deployment
         run: |
           kubectl get pods -n production -l app=myapp
           kubectl get svc -n production
 
-      - name: 回滚（部署失败时）
+      - name: Rollback (on Deployment Failure)
         if: failure()
         run: |
           kubectl rollout undo deployment/myapp -n production
 
   smoke-test:
-    name: 冒烟测试
+    name: Smoke Test
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: 健康检查
+      - name: Health Check
         run: |
           for i in {1..10}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://api.example.com/health)
             if [ "$STATUS" = "200" ]; then
-              echo "健康检查通过"
+              echo "Health check passed"
               exit 0
             fi
-            echo "等待服务就绪... ($i/10)"
+            echo "Waiting for service to be ready... ($i/10)"
             sleep 10
           done
-          echo "健康检查失败"
+          echo "Health check failed"
           exit 1
 
-      - name: API 冒烟测试
+      - name: API Smoke Test
         run: |
-          # 基本 API 测试
+          # Basic API test
           curl -f https://api.example.com/api/v1/health
           curl -f https://api.example.com/api/v1/version
 ```
 
-### 10.3 Kustomize 多环境管理
+### 10.3 Kustomize Multi-Environment Management
 
 ```yaml
 # deployments/k8s/base/kustomization.yaml
@@ -2656,9 +2656,9 @@ replicas:
 
 ---
 
-## 11. 后端代码质量检查
+## 11. Backend Code Quality Checks
 
-### 11.1 SonarQube 集成
+### 11.1 SonarQube Integration
 
 ```yaml
 # .github/workflows/sonarqube.yml
@@ -2678,21 +2678,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: SonarQube 扫描
+      - name: SonarQube Scan
         uses: sonarqube-quality-gate-action@master
         with:
           scanMetadataReportFile: target/sonar/report-task.txt
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: SonarQube 质量门禁
+      - name: SonarQube Quality Gate
         uses: sonarqube-quality-gate-action@master
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
 
-**sonar-project.properties 配置：**
+**sonar-project.properties Configuration:**
 
 ```properties
 # sonar-project.properties
@@ -2714,7 +2714,7 @@ sonar.qualitygate.timeout=300
 sonar.exclusions=**/generated/**,**/test/**
 ```
 
-### 11.2 Codecov 集成
+### 11.2 Codecov Integration
 
 ```yaml
 # .github/workflows/codecov.yml
@@ -2728,12 +2728,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 运行测试并生成覆盖率
+      - name: Run Tests and Generate Coverage
         run: |
-          # 根据项目类型运行测试
+          # Run tests based on project type
           ./gradlew test jacocoTestReport
 
-      - name: 上传到 Codecov
+      - name: Upload to Codecov
         uses: codecov/codecov-action@v4
         with:
           files: build/reports/jacoco/test/jacocoTestReport.xml
@@ -2741,7 +2741,7 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
-      - name: Codecov 覆盖率检查
+      - name: Codecov Coverage Check
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -2749,7 +2749,7 @@ jobs:
           name: codecov-umbrella
 ```
 
-### 11.3 代码质量报告集成
+### 11.3 Code Quality Report Integration
 
 ```yaml
 # .github/workflows/quality-report.yml
@@ -2763,38 +2763,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 运行测试和检查
+      - name: Run Tests and Checks
         run: |
           ./gradlew test jacocoTestReport checkstyleMain
 
-      - name: 生成质量报告
+      - name: Generate Quality Report
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
 
-            // 读取测试结果
+            // Read test results
             const testResults = fs.readFileSync('build/reports/tests/test/index.html', 'utf8');
 
-            // 读取覆盖率
+            // Read coverage
             const coverage = fs.readFileSync('build/reports/jacoco/test/jacocoTestReport.csv', 'utf8');
 
-            // 读取 Checkstyle 结果
-            let checkstyle = '无 Checkstyle 结果';
+            // Read Checkstyle results
+            let checkstyle = 'No Checkstyle results';
             try {
               checkstyle = fs.readFileSync('build/reports/checkstyle/main.xml', 'utf8');
             } catch (e) {}
 
-            let report = `## 📊 代码质量报告\n\n`;
-            report += `### 测试结果\n`;
-            report += `详见 [测试报告](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n\n`;
+            let report = `## 📊 Code Quality Report\n\n`;
+            report += `### Test Results\n`;
+            report += `See [Test Report](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n\n`;
 
-            report += `### 代码覆盖率\n`;
+            report += `### Code Coverage\n`;
             const lines = coverage.split('\n');
             if (lines.length > 1) {
               const headers = lines[0].split(',');
               const values = lines[1].split(',');
-              report += `| 指标 | 覆盖率 |\n|------|--------|\n`;
+              report += `| Metric | Coverage |\n|------|--------|\n`;
               for (let i = 0; i < headers.length; i++) {
                 if (headers[i].includes('COVERED') || headers[i].includes('MISSED')) {
                   report += `| ${headers[i]} | ${values[i]} |\n`;
@@ -2812,9 +2812,9 @@ jobs:
 
 ---
 
-## 12. 性能测试自动化
+## 12. Performance Testing Automation
 
-### 12.1 JMeter 性能测试
+### 12.1 JMeter Performance Testing
 
 ```yaml
 # .github/workflows/performance-test.yml
@@ -2822,14 +2822,14 @@ name: Performance Test
 
 on:
   schedule:
-    - cron: '0 2 * * 0'  # 每周日凌晨2点
+    - cron: '0 2 * * 0'  # Every Sunday at 2 AM
   workflow_dispatch:
     inputs:
       threads:
-        description: '并发线程数'
+        description: 'Concurrent thread count'
         default: '100'
       duration:
-        description: '测试持续时间（秒）'
+        description: 'Test duration (seconds)'
         default: '300'
 
 jobs:
@@ -2838,13 +2838,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 安装 JMeter
+      - name: Install JMeter
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
           tar xzf apache-jmeter-5.6.3.tgz
           echo "$PWD/apache-jmeter-5.6.3/bin" >> $GITHUB_PATH
 
-      - name: 运行性能测试
+      - name: Run Performance Test
         run: |
           THREADS=${{ github.event.inputs.threads || '100' }}
           DURATION=${{ github.event.inputs.duration || '300' }}
@@ -2855,35 +2855,35 @@ jobs:
             -l results.jtl \
             -e -o report/
 
-      - name: 上传测试报告
+      - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: performance-report
           path: report/
 
-      - name: 分析结果
+      - name: Analyze Results
         run: |
-          # 提取关键指标
+          # Extract key metrics
           TOTAL=$(grep -c "true" results.jtl || echo 0)
           SUCCESS=$(grep -c "true,true" results.jtl || echo 0)
           ERROR_RATE=$(echo "scale=2; ($TOTAL - $SUCCESS) * 100 / $TOTAL" | bc)
 
-          echo "## 🚀 性能测试报告" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Performance Test Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 指标 | 值 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
-          echo "| 总请求数 | $TOTAL |" >> $GITHUB_STEP_SUMMARY
-          echo "| 成功请求数 | $SUCCESS |" >> $GITHUB_STEP_SUMMARY
-          echo "| 错误率 | ${ERROR_RATE}% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Total Requests | $TOTAL |" >> $GITHUB_STEP_SUMMARY
+          echo "| Successful Requests | $SUCCESS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Error Rate | ${ERROR_RATE}% |" >> $GITHUB_STEP_SUMMARY
 
           if (( $(echo "$ERROR_RATE > 5" | bc -l) )); then
-            echo "::error::错误率 ${ERROR_RATE}% 超过阈值 5%"
+            echo "::error::Error rate ${ERROR_RATE}% exceeds threshold 5%"
             exit 1
           fi
 ```
 
-### 12.2 k6 性能测试
+### 12.2 k6 Performance Testing
 
 ```javascript
 // test/performance/load-test.js
@@ -2896,22 +2896,22 @@ const latency = new Trend('latency');
 
 export const options = {
   stages: [
-    { duration: '2m', target: 100 },   // 升压到 100 用户
-    { duration: '5m', target: 100 },   // 保持 100 用户
-    { duration: '2m', target: 200 },   // 升压到 200 用户
-    { duration: '5m', target: 200 },   // 保持 200 用户
-    { duration: '2m', target: 0 },     // 降到 0
+    { duration: '2m', target: 100 },   // Ramp up to 100 users
+    { duration: '5m', target: 100 },   // Maintain 100 users
+    { duration: '2m', target: 200 },   // Ramp up to 200 users
+    { duration: '5m', target: 200 },   // Maintain 200 users
+    { duration: '2m', target: 0 },     // Ramp down to 0
   ],
   thresholds: {
-    http_req_duration: ['p(95)<500'],  // 95% 请求 < 500ms
-    errors: ['rate<0.05'],             // 错误率 < 5%
+    http_req_duration: ['p(95)<500'],  // 95% of requests < 500ms
+    errors: ['rate<0.05'],             // Error rate < 5%
   },
 };
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 
 export default function () {
-  // 测试用户登录
+  // Test user login
   const loginRes = http.post(`${BASE_URL}/api/v1/auth/login`, JSON.stringify({
     username: 'testuser',
     password: 'testpass',
@@ -2926,7 +2926,7 @@ export default function () {
 
   const token = loginRes.json('token');
 
-  // 测试获取用户列表
+  // Test get user list
   const usersRes = http.get(`${BASE_URL}/api/v1/users`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -2938,7 +2938,7 @@ export default function () {
 
   latency.add(usersRes.timings.duration);
 
-  // 测试创建用户
+  // Test create user
   const createRes = http.post(`${BASE_URL}/api/v1/users`, JSON.stringify({
     name: `User ${Date.now()}`,
     email: `user${Date.now()}@example.com`,
@@ -2980,20 +2980,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 安装 k6
+      - name: Install k6
         run: |
           sudo gpg -k
           sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update && sudo apt-get install k6
 
-      - name: 运行 k6 测试
+      - name: Run k6 Test
         run: |
           k6 run test/performance/load-test.js \
             --out json=results.json \
             --summary-export=summary.json
 
-      - name: 上传测试结果
+      - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -3002,25 +3002,25 @@ jobs:
             results.json
             summary.json
 
-      - name: 性能报告
+      - name: Performance Report
         if: always()
         run: |
-          echo "## 🚀 k6 性能测试报告" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 k6 Performance Test Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           cat summary.json | jq -r '
-            "| 指标 | 值 |\n|------|-----|\n" +
-            "| 总请求数 | " + .metrics.http_reqs.values.count + " |\n" +
-            "| 平均响应时间 | " + (.metrics.http_req_duration.values.avg | tostring) + "ms |\n" +
-            "| P95 响应时间 | " + (.metrics.http_req_duration.values["p(95)"] | tostring) + "ms |\n" +
-            "| 错误率 | " + ((.metrics.http_req_failed.values.rate * 100) | tostring) + "% |"
+            "| Metric | Value |\n|------|-----|\n" +
+            "| Total Requests | " + .metrics.http_reqs.values.count + " |\n" +
+            "| Average Response Time | " + (.metrics.http_req_duration.values.avg | tostring) + "ms |\n" +
+            "| P95 Response Time | " + (.metrics.http_req_duration.values["p(95)"] | tostring) + "ms |\n" +
+            "| Error Rate | " + ((.metrics.http_req_failed.values.rate * 100) | tostring) + "% |"
           ' >> $GITHUB_STEP_SUMMARY
 ```
 
 ---
 
-## 13. 多环境部署策略
+## 13. Multi-Environment Deployment Strategy
 
-### 13.1 环境配置管理
+### 13.1 Environment Configuration Management
 
 ```yaml
 # .github/workflows/multi-env-deploy.yml
@@ -3038,19 +3038,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 构建 Docker 镜像
+      - name: Build Docker Image
         run: |
           docker build -t myapp:${{ github.sha }} .
           docker tag myapp:${{ github.sha }} myapp:latest
 
-      - name: 推送镜像
+      - name: Push Image
         run: |
           echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
           docker push myapp:${{ github.sha }}
           docker push myapp:latest
 
   deploy-dev:
-    name: 部署到开发环境
+    name: Deploy to Development
     needs: build
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
@@ -3060,18 +3060,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 部署到开发环境
+      - name: Deploy to Development
         run: |
           kubectl config use-context dev-cluster
           kubectl set image deployment/myapp myapp=myapp:${{ github.sha }} -n development
           kubectl rollout status deployment/myapp -n development
 
-      - name: 运行冒烟测试
+      - name: Run Smoke Test
         run: |
           curl -f https://dev.example.com/health
 
   deploy-staging:
-    name: 部署到预发布环境
+    name: Deploy to Staging
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -3081,23 +3081,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 部署到预发布环境
+      - name: Deploy to Staging
         run: |
           kubectl config use-context staging-cluster
           kubectl set image deployment/myapp myapp=myapp:${{ github.sha }} -n staging
           kubectl rollout status deployment/myapp -n staging
 
-      - name: 运行集成测试
+      - name: Run Integration Tests
         run: |
           npm install -g newman
           newman run test/api/staging-collection.json --environment test/api/staging-env.json
 
-      - name: 性能基准测试
+      - name: Performance Benchmark
         run: |
           k6 run test/performance/smoke-test.js -e BASE_URL=https://staging.example.com
 
   deploy-production:
-    name: 部署到生产环境
+    name: Deploy to Production
     needs: deploy-staging
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -3107,44 +3107,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 部署到生产环境（金丝雀发布）
+      - name: Deploy to Production (Canary Release)
         run: |
           kubectl config use-context prod-cluster
 
-          # 金丝雀发布：先更新 1 个 Pod
+          # Canary release: update 1 Pod first
           kubectl set image deployment/myapp-canary myapp=myapp:${{ github.sha }} -n production
           kubectl rollout status deployment/myapp-canary -n production
 
-          # 等待 5 分钟观察
+          # Wait 5 minutes for observation
           sleep 300
 
-          # 检查金丝雀 Pod 的健康状态
+          # Check canary Pod health
           if kubectl get pods -n production -l app=myapp,version=canary | grep -q Running; then
-            echo "金丝雀发布健康，开始全量发布"
+            echo "Canary release healthy, starting full rollout"
             kubectl set image deployment/myapp myapp=myapp:${{ github.sha }} -n production
             kubectl rollout status deployment/myapp -n production
           else
-            echo "金丝雀发布失败，回滚"
+            echo "Canary release failed, rolling back"
             kubectl rollout undo deployment/myapp-canary -n production
             exit 1
           fi
 
-      - name: 验证生产部署
+      - name: Verify Production Deployment
         run: |
           curl -f https://api.example.com/health
           curl -f https://api.example.com/api/v1/version | jq .
 
-      - name: 通知部署结果
+      - name: Notify Deployment Result
         if: always()
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {
-              "text": "生产部署${{ job.status == 'success' ? '成功' : '失败' }}\n版本: ${{ github.sha }}\n时间: ${{ github.event.head_commit.timestamp }}"
+              "text": "Production deployment ${{ job.status == 'success' ? 'succeeded' : 'failed' }}\nVersion: ${{ github.sha }}\nTime: ${{ github.event.head_commit.timestamp }}"
             }
 ```
 
-### 13.2 蓝绿部署策略
+### 13.2 Blue-Green Deployment Strategy
 
 ```yaml
 # .github/workflows/blue-green-deploy.yml
@@ -3154,7 +3154,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: '目标环境 (blue/green)'
+        description: 'Target environment (blue/green)'
         required: true
         type: choice
         options:
@@ -3168,7 +3168,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 确定当前和目标环境
+      - name: Determine Current and Target Environment
         id: env
         run: |
           CURRENT=$(kubectl get svc myapp-active -n production -o jsonpath='{.spec.selector.slot}')
@@ -3180,30 +3180,30 @@ jobs:
             echo "target=blue" >> $GITHUB_OUTPUT
           fi
 
-      - name: 部署到目标环境
+      - name: Deploy to Target Environment
         run: |
           TARGET=${{ steps.env.outputs.target }}
           kubectl set image deployment/myapp-$TARGET myapp=myapp:${{ github.sha }} -n production
           kubectl rollout status deployment/myapp-$TARGET -n production
 
-      - name: 切换流量
+      - name: Switch Traffic
         run: |
           TARGET=${{ steps.env.outputs.target }}
           kubectl patch svc myapp-active -n production -p "{\"spec\":{\"selector\":{\"slot\":\"$TARGET\"}}}"
 
-      - name: 验证切换
+      - name: Verify Switch
         run: |
           sleep 30
           curl -f https://api.example.com/health
 
-      - name: 回滚（如果失败）
+      - name: Rollback (on Failure)
         if: failure()
         run: |
           CURRENT=${{ steps.env.outputs.current }}
           kubectl patch svc myapp-active -n production -p "{\"spec\":{\"selector\":{\"slot\":\"$CURRENT\"}}}"
 ```
 
-### 13.3 版本回滚策略
+### 13.3 Version Rollback Strategy
 
 ```yaml
 # .github/workflows/rollback.yml
@@ -3213,10 +3213,10 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: '回滚版本（留空回滚到上一个版本）'
+        description: 'Version to rollback to (leave empty for previous version)'
         required: false
       environment:
-        description: '目标环境'
+        description: 'Target environment'
         required: true
         type: choice
         options:
@@ -3228,11 +3228,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - name: 配置 kubectl
+      - name: Configure kubectl
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
 
-      - name: 执行回滚
+      - name: Execute Rollback
         run: |
           if [ -z "${{ inputs.version }}" ]; then
             kubectl rollout undo deployment/myapp -n ${{ inputs.environment }}
@@ -3241,25 +3241,25 @@ jobs:
           fi
           kubectl rollout status deployment/myapp -n ${{ inputs.environment }}
 
-      - name: 验证回滚
+      - name: Verify Rollback
         run: |
           sleep 30
           curl -f https://${{ inputs.environment }}.example.com/health
 
-      - name: 通知回滚
+      - name: Notify Rollback
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {
-              "text": "⚠️ 已执行回滚\n环境: ${{ inputs.environment }}\n版本: ${{ inputs.version || '上一个版本' }}\n操作人: ${{ github.actor }}"
+              "text": "⚠️ Rollback executed\nEnvironment: ${{ inputs.environment }}\nVersion: ${{ inputs.version || 'Previous version' }}\nOperator: ${{ github.actor }}"
             }
 ```
 
 ---
 
-## 14. 国内服务器部署方案
+## 14. Domestic Server Deployment Solutions
 
-### 14.1 阿里云容器服务部署
+### 14.1 Alibaba Cloud Container Service Deployment
 
 ```yaml
 # .github/workflows/aliyun-deploy.yml
@@ -3280,11 +3280,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 登录阿里云容器镜像服务
+      - name: Login to Alibaba Cloud Container Registry
         run: |
           docker login -u ${{ secrets.ALIYUN_CR_USERNAME }} -p ${{ secrets.ALIYUN_CR_PASSWORD }} ${{ env.REGISTRY }}
 
-      - name: 构建并推送镜像
+      - name: Build and Push Image
         run: |
           FULL_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}
           docker build -t $FULL_IMAGE:${{ github.sha }} .
@@ -3293,28 +3293,28 @@ jobs:
           docker push $FULL_IMAGE:latest
 
   deploy-ack:
-    name: 部署到阿里云 ACK
+    name: Deploy to Alibaba Cloud ACK
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: 配置 kubeconfig
+      - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.ALIYUN_KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
 
-      - name: 部署到 ACK
+      - name: Deploy to ACK
         run: |
           FULL_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}
           kubectl set image deployment/myapp myapp=$FULL_IMAGE:${{ github.sha }} -n production
           kubectl rollout status deployment/myapp -n production --timeout=300s
 
-      - name: 验证部署
+      - name: Verify Deployment
         run: |
           kubectl get pods -n production
           kubectl get svc -n production
 ```
 
-### 14.2 腾讯云容器服务部署
+### 14.2 Tencent Cloud Container Service Deployment
 
 ```yaml
 # .github/workflows/tencent-deploy.yml
@@ -3330,34 +3330,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 登录腾讯云容器镜像服务
+      - name: Login to Tencent Cloud Container Registry
         run: |
           docker login -u ${{ secrets.TCR_USERNAME }} -p ${{ secrets.TCR_PASSWORD }} ccr.ccs.tencentyun.com
 
-      - name: 构建并推送镜像
+      - name: Build and Push Image
         run: |
           IMAGE=ccr.ccs.tencentyun.com/my-namespace/myapp
           docker build -t $IMAGE:${{ github.sha }} .
           docker push $IMAGE:${{ github.sha }}
 
   deploy-tke:
-    name: 部署到腾讯云 TKE
+    name: Deploy to Tencent Cloud TKE
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: 配置 kubeconfig
+      - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.TKE_KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
 
-      - name: 部署到 TKE
+      - name: Deploy to TKE
         run: |
           IMAGE=ccr.ccs.tencentyun.com/my-namespace/myapp
           kubectl set image deployment/myapp myapp=$IMAGE:${{ github.sha }} -n production
           kubectl rollout status deployment/myapp -n production
 ```
 
-### 14.3 华为云容器服务部署
+### 14.3 Huawei Cloud Container Service Deployment
 
 ```yaml
 # .github/workflows/huawei-deploy.yml
@@ -3373,46 +3373,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 登录华为云 SWR
+      - name: Login to Huawei Cloud SWR
         run: |
           docker login -u ${{ secrets.HW_SWR_USERNAME }} -p ${{ secrets.HW_SWR_PASSWORD }} swr.cn-north-4.myhuaweicloud.com
 
-      - name: 构建并推送镜像
+      - name: Build and Push Image
         run: |
           IMAGE=swr.cn-north-4.myhuaweicloud.com/my-namespace/myapp
           docker build -t $IMAGE:${{ github.sha }} .
           docker push $IMAGE:${{ github.sha }}
 
   deploy-cce:
-    name: 部署到华为云 CCE
+    name: Deploy to Huawei Cloud CCE
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: 配置 kubeconfig
+      - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.CCE_KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
 
-      - name: 部署到 CCE
+      - name: Deploy to CCE
         run: |
           IMAGE=swr.cn-north-4.myhuaweicloud.com/my-namespace/myapp
           kubectl set image deployment/myapp myapp=$IMAGE:${{ github.sha }} -n production
           kubectl rollout status deployment/myapp -n production
 ```
 
-### 14.4 国内部署优化建议
+### 14.4 Domestic Deployment Optimization Tips
 
-**1. 镜像加速配置**
+**1. Mirror Acceleration Configuration**
 
 ```yaml
-# 在 CI 中使用国内镜像源
-- name: 配置 npm 镜像
+# Use domestic mirror sources in CI
+- name: Configure npm mirror
   run: npm config set registry https://registry.npmmirror.com
 
-- name: 配置 pip 镜像
+- name: Configure pip mirror
   run: pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
-- name: 配置 Docker 镜像加速
+- name: Configure Docker mirror acceleration
   run: |
     sudo mkdir -p /etc/docker
     sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -3427,10 +3427,10 @@ jobs:
     sudo systemctl restart docker
 ```
 
-**2. 多区域部署策略**
+**2. Multi-Region Deployment Strategy**
 
 ```yaml
-# 多区域部署矩阵
+# Multi-region deployment matrix
 strategy:
   matrix:
     region:
@@ -3442,26 +3442,26 @@ strategy:
         endpoint: registry.cn-shanghai.aliyuncs.com
 ```
 
-**3. CDN 静态资源加速**
+**3. CDN Static Asset Acceleration**
 
 ```yaml
-- name: 上传到阿里云 OSS + CDN
+- name: Upload to Alibaba Cloud OSS + CDN
   run: |
-    # 上传静态资源到 OSS
+    # Upload static assets to OSS
     ossutil cp -r dist/ oss://my-bucket/assets/ --update
 
-    # 刷新 CDN 缓存
+    # Refresh CDN cache
     aliyun cdn RefreshObjectCaches \
       --ObjectPath "https://cdn.example.com/assets/" \
       --ObjectType "Directory"
 ```
 
-**4. 国内监控集成**
+**4. Domestic Monitoring Integration**
 
 ```yaml
-- name: 部署监控
+- name: Deploy Monitoring
   run: |
-    # 配置阿里云 ARMS 监控
+    # Configure Alibaba Cloud ARMS monitoring
     kubectl apply -f - <<EOF
     apiVersion: v1
     kind: ConfigMap
@@ -3473,28 +3473,28 @@ strategy:
     EOF
 ```
 
-### 14.5 国内部署方案对比
+### 14.5 Domestic Deployment Solutions Comparison
 
-| 云服务商 | 容器服务 | 镜像仓库 | CI/CD 集成 | 优势 |
+| Cloud Provider | Container Service | Image Registry | CI/CD Integration | Advantages |
 |---------|---------|---------|-----------|------|
-| 阿里云 | ACK | ACR | 云效 | 生态完善、文档丰富 |
-| 腾讯云 | TKE | TCR | CODING | 游戏/社交场景优化 |
-| 华为云 | CCE | SWR | DevCloud | 企业级安全、混合云 |
-| AWS 中国 | EKS | ECR | CodeStar | 全球化部署能力 |
+| Alibaba Cloud | ACK | ACR | CloudEffect | Mature ecosystem, rich documentation |
+| Tencent Cloud | TKE | TCR | CODING | Optimized for gaming/social scenarios |
+| Huawei Cloud | CCE | SWR | DevCloud | Enterprise-grade security, hybrid cloud |
+| AWS China | EKS | ECR | CodeStar | Global deployment capabilities |
 
 ---
 
-## 总结
+## Summary
 
-本文档为后端开发者提供了完整的 GitHub CI/CD 实践指南，涵盖了从代码提交到生产部署的全流程自动化。
+This document provides a comprehensive GitHub CI/CD practice guide for backend developers, covering the full automation process from code commit to production deployment.
 
-**核心要点：**
+**Key Takeaways:**
 
-1. **自动化优先**：将代码检查、测试、构建、部署全部自动化，减少人工操作和人为错误
-2. **多语言支持**：针对 Java、Python、Go、Node.js、Rust 等主流后端语言提供详细的 CI 配置
-3. **容器化部署**：使用 Docker 多阶段构建优化镜像大小，Kubernetes 编排实现弹性伸缩
-4. **质量门禁**：通过 SonarQube、Codecov 等工具确保代码质量，自动化性能测试保障系统稳定性
-5. **多环境管理**：实现 dev/staging/prod 多环境自动化部署，支持金丝雀发布和蓝绿部署
-6. **国内优化**：提供阿里云、腾讯云、华为云等国内主流云服务商的部署方案
+1. **Automation First**: Automate code checks, testing, building, and deployment to reduce manual operations and human errors
+2. **Multi-Language Support**: Detailed CI configurations for mainstream backend languages including Java, Python, Go, Node.js, and Rust
+3. **Containerized Deployment**: Use Docker multi-stage builds to optimize image size, Kubernetes orchestration for elastic scaling
+4. **Quality Gates**: Ensure code quality through tools like SonarQube and Codecov, automated performance testing to ensure system stability
+5. **Multi-Environment Management**: Automated deployment across dev/staging/prod environments, supporting canary releases and blue-green deployment
+6. **Domestic Optimization**: Deployment solutions for major domestic cloud providers including Alibaba Cloud, Tencent Cloud, and Huawei Cloud
 
-通过合理运用这些工具和流程，后端团队可以构建稳定可靠的 CI/CD 体系，实现快速迭代和高质量交付。
+By effectively utilizing these tools and processes, backend teams can build a stable and reliable CI/CD system, achieving rapid iteration and high-quality delivery.

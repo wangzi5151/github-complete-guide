@@ -1,102 +1,102 @@
-# 开源协议完全指南
+# Complete Open Source License Guide
 
-> **目标读者**：中国开发者、开源项目维护者、企业法务与技术管理者
-> **预计阅读时间**：45 分钟
-> **前置知识**：基本的 Git 与 GitHub 使用经验
-
----
-
-## 目录
-
-1. [为什么开源协议很重要](#1-为什么开源协议很重要)
-2. [MIT License 详解（宽松型）](#2-mit-license-详解宽松型)
-3. [Apache License 2.0 详解（宽松型 + 专利保护）](#3-apache-license-20-详解宽松型--专利保护)
-4. [BSD 协议家族（2-Clause、3-Clause）](#4-bsd-协议家族2-clause3-clause)
-5. [GPL 家族（GPLv2、GPLv3、AGPLv3）详解](#5-gpl-家族gplv2gplv3agplv3-详解)
-6. [LGPL 详解](#6-lgpl-详解)
-7. [MPL 2.0（Mozilla Public License）](#7-mpl-20mozilla-public-license)
-8. [Creative Commons 协议](#8-creative-commons-协议)
-9. [协议兼容性矩阵](#9-协议兼容性矩阵)
-10. [如何选择开源协议（决策树）](#10-如何选择开源协议决策树)
-11. [双重许可与商业许可](#11-双重许可与商业许可)
-12. [开源协议的法律问题](#12-开源协议的法律问题)
-13. [License 文件与 SPDX 标识](#13-license-文件与-spdx-标识)
-14. [中国企业开源合规指南](#14-中国企业开源合规指南)
-15. [常见协议误区](#15-常见协议误区)
+> **Target Audience**: Chinese developers, open source project maintainers, enterprise legal and technical managers
+> **Estimated Reading Time**: 45 minutes
+> **Prerequisites**: Basic Git and GitHub experience
 
 ---
 
-## 1. 为什么开源协议很重要
+## Table of Contents
 
-### 1.1 开源协议的本质
+1. [Why Open Source Licenses Matter](#1-why-open-source-licenses-matter)
+2. [MIT License Deep Dive (Permissive)](#2-mit-license-deep-dive-permissive)
+3. [Apache License 2.0 Deep Dive (Permissive + Patent Protection)](#3-apache-license-20-deep-dive-permissive--patent-protection)
+4. [BSD License Family (2-Clause, 3-Clause)](#4-bsd-license-family-2-clause-3-clause)
+5. [GPL Family (GPLv2, GPLv3, AGPLv3) Deep Dive](#5-gpl-family-gplv2-gplv3-agplv3-deep-dive)
+6. [LGPL Deep Dive](#6-lgpl-deep-dive)
+7. [MPL 2.0 (Mozilla Public License)](#7-mpl-20mozilla-public-license)
+8. [Creative Commons Licenses](#8-creative-commons-licenses)
+9. [License Compatibility Matrix](#9-license-compatibility-matrix)
+10. [How to Choose an Open Source License (Decision Tree)](#10-how-to-choose-an-open-source-license-decision-tree)
+11. [Dual Licensing and Commercial Licensing](#11-dual-licensing-and-commercial-licensing)
+12. [Legal Issues of Open Source Licenses](#12-legal-issues-of-open-source-licenses)
+13. [LICENSE File and SPDX Identifiers](#13-license-file-and-spdx-identifiers)
+14. [Chinese Enterprise Open Source Compliance Guide](#14-chinese-enterprise-open-source-compliance-guide)
+15. [Common License Misconceptions](#15-common-license-misconceptions)
 
-开源协议（Open Source License）是一种法律许可文件，它定义了其他人可以如何使用、修改和分发你的代码。没有协议的代码，在法律上意味着"保留所有权利"（All Rights Reserved），其他人无权使用。
+---
 
-很多初学者有一个致命的误解：**"我把代码放在 GitHub 上就是开源了"**。事实上，如果你没有在仓库中明确声明开源协议，那么根据《伯尔尼公约》和各国著作权法，默认保留所有版权。其他人：
+## 1. Why Open Source Licenses Matter
 
-- 不能复制你的代码
-- 不能在自己的项目中使用你的代码
-- 不能修改并重新分发你的代码
-- 甚至不能 Fork 你的仓库后用于商业目的
+### 1.1 The Nature of Open Source Licenses
 
-### 1.2 开源协议的法律基础
+An open source license is a legal permission document that defines how others can use, modify, and distribute your code. Without a license, code legally means "All Rights Reserved" and others have no right to use it.
 
-开源协议的法律效力基于以下几个法律原则：
+Many beginners have a fatal misconception: **"I put my code on GitHub, so it's open source."** In fact, if you don't explicitly declare an open source license in your repository, under the Berne Convention and copyright laws of various countries, all copyrights are reserved by default. Others:
 
-**著作权法（Copyright Law）**：代码作为文学作品受著作权法保护。开发者自动拥有代码的著作权，无需注册。
+- Cannot copy your code
+- Cannot use your code in their own projects
+- Cannot modify and redistribute your code
+- Cannot even fork your repository for commercial purposes
 
-**合同法（Contract Law）**：在许多司法管辖区，开源协议被视为一种合同。用户通过使用代码表示接受协议条款。
+### 1.2 Legal Basis of Open Source Licenses
 
-**"接触即授权"原则**：在部分法律体系中，开源协议被视为一种"非独占许可"。用户接触到代码并按照协议要求使用，即构成授权关系。
+The legal force of open source licenses is based on the following legal principles:
 
-### 1.3 开源协议的核心权利
+**Copyright Law**: Code, as a literary work, is protected by copyright law. Developers automatically hold the copyright to their code without needing to register.
 
-所有开源协议都围绕以下四项核心权利展开：
+**Contract Law**: In many jurisdictions, open source licenses are treated as contracts. Users indicate acceptance of the license terms by using the code.
 
-| 权利 | 说明 | 英文术语 |
+**"Access Equals Authorization" Principle**: In some legal systems, open source licenses are treated as "non-exclusive licenses." When users access the code and use it according to license requirements, an authorization relationship is established.
+
+### 1.3 Core Rights of Open Source Licenses
+
+All open source licenses revolve around the following four core rights:
+
+| Right | Description | English Term |
 |------|------|----------|
-| 使用权 | 允许任何人出于任何目的运行软件 | Right to Use |
-| 修改权 | 允许修改源代码 | Right to Modify |
-| 分发权 | 允许将软件分发给他人 | Right to Distribute |
-| 衍生作品权 | 允许基于原作品创建衍生作品 | Right to Create Derivative Works |
+| Right to Use | Allows anyone to run the software for any purpose | Right to Use |
+| Right to Modify | Allows modification of source code | Right to Modify |
+| Right to Distribute | Allows distribution of the software to others | Right to Distribute |
+| Right to Create Derivative Works | Allows creating derivative works based on the original work | Right to Create Derivative Works |
 
-### 1.4 协议分类概览
+### 1.4 License Classification Overview
 
-开源协议通常分为三大类：
+Open source licenses are generally divided into three major categories:
 
 ```
-开源协议
-├── 宽松型（Permissive）
+Open Source Licenses
+├── Permissive
 │   ├── MIT License
 │   ├── BSD 2-Clause / 3-Clause
 │   ├── Apache License 2.0
 │   └── ISC License
-├── 弱传染型（Weak Copyleft）
+├── Weak Copyleft
 │   ├── LGPL v2.1 / v3
 │   ├── MPL 2.0
 │   └── EPL 2.0
-└── 强传染型（Strong Copyleft）
+└── Strong Copyleft
     ├── GPL v2
     ├── GPL v3
     └── AGPL v3
 ```
 
-### 1.5 不加协议的风险
+### 1.5 Risks of No License
 
-如果你在 GitHub 上发布代码但不添加任何协议文件：
+If you publish code on GitHub without adding any license file:
 
-- **法律风险**：任何人都可能起诉使用了你代码的人，因为没有授权
-- **商业风险**：企业不敢使用你的代码，因为法律地位不明确
-- **社区风险**：贡献者不知道自己的代码会被如何使用，不愿意参与
-- **声誉风险**：在开源社区中，没有协议的项目通常被视为不专业
+- **Legal Risk**: Anyone who uses your code could be sued because there is no authorization
+- **Business Risk**: Companies are reluctant to use your code because the legal status is unclear
+- **Community Risk**: Contributors don't know how their code will be used and are unwilling to participate
+- **Reputation Risk**: In the open source community, projects without licenses are generally considered unprofessional
 
 ---
 
-## 2. MIT License 详解（宽松型）
+## 2. MIT License Deep Dive (Permissive)
 
-### 2.1 协议全文
+### 2.1 Full License Text
 
-MIT License 是最简单、最流行的开源协议之一。它的全文非常简短：
+MIT License is one of the simplest and most popular open source licenses. Its full text is very short:
 
 ```
 MIT License
@@ -122,65 +122,80 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### 2.2 核心条款解读
+### 2.2 Core Terms Explained
 
-MIT License 的核心内容可以用三句话概括：
+The core content of MIT License can be summarized in three sentences:
 
-1. **授予广泛权利**：任何人可以免费使用、复制、修改、合并、发布、分发、再许可和/或出售软件的副本
-2. **唯一条件**：在所有副本或重要部分中保留版权声明和许可声明
-3. **免责声明**：软件按"原样"提供，不提供任何担保
+1. **Granting Broad Rights**: Anyone may use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software free of charge
+2. **Only Condition**: Retain the copyright notice and permission notice in all copies or substantial portions
+3. **Disclaimer**: The software is provided "as is" without any warranty
 
-### 2.3 适用场景
+### 2.3 Use Cases
 
-MIT License 特别适合以下场景：
+MIT License is particularly suitable for the following scenarios:
 
-- **工具库和框架**：如 jQuery、React、Vue.js、Babel 等
-- **个人项目**：希望代码被广泛使用的个人开发者
-- **企业友好型项目**：希望降低企业使用门槛的项目
-- **前端生态系统**：npm 生态中超过 70% 的包使用 MIT 协议
+- **Tools and Frameworks**: Such as jQuery, React, Vue.js, Babel, etc.
+- **Personal Projects**: Individual developers who want their code to be widely used
+- **Enterprise-Friendly Projects**: Projects that want to lower the barrier for enterprise adoption
+- **Frontend Ecosystem**: Over 70% of packages in the npm ecosystem use MIT License
 
-### 2.4 著名的 MIT 项目
+### 2.4 Notable MIT Projects
 
-| 项目 | 领域 | GitHub Stars |
+| Project | Domain | GitHub Stars |
 |------|------|-------------|
-| React | 前端框架 | 220k+ |
-| Vue.js | 前端框架 | 200k+ |
-| jQuery | JavaScript 库 | 59k+ |
-| Rails | Web 框架 | 55k+ |
-| Node.js | 运行时 | 100k+ |
-| .NET Core | 开发框架 | 70k+ |
+| React | Frontend Framework | 220k+ |
+| Vue.js | Frontend Framework | 200k+ |
+| jQuery | JavaScript Library | 59k+ |
+| Rails | Web Framework | 55k+ |
+| Node.js | Runtime | 100k+ |
+| .NET Core | Development Framework | 70k+ |
 
-### 2.5 MIT 协议的优缺点
+### 2.5 Pros and Cons of MIT License
 
-**优点**：
-- 简单明了，易于理解
-- 限制极少，企业友好
-- 兼容性极好，可与几乎所有其他协议的代码混合
-- 社区接受度高
+**Pros**:
+- Simple and clear, easy to understand
+- Very few restrictions, enterprise-friendly
+- Excellent compatibility, can be mixed with code from almost any other license
+- High community acceptance
 
-**缺点**：
-- 不提供专利保护（这是与 Apache 2.0 的主要区别）
-- 不要求衍生作品开源（可能导致代码被闭源使用）
-- 不要求保留原作者的署名（仅要求保留版权声明）
-- 没有明确的贡献者授权条款
+**Cons**:
+- No patent protection (this is the main difference from Apache 2.0)
+- Does not require derivative works to be open source (may lead to code being used in closed-source projects)
+- Does not require attribution to the original author (only requires retaining copyright notice)
+- No explicit contributor authorization terms
 
-### 2.6 在项目中使用 MIT 协议
+### 2.6 Using MIT License in Your Project
 
-在 GitHub 项目中添加 MIT 协议的步骤：
+Steps to add MIT License to a GitHub project:
 
 ```bash
-# 1. 在项目根目录创建 LICENSE 文件
+# 1. Create LICENSE file in project root
 touch LICENSE
 
-# 2. 将 MIT 协议全文写入文件，替换年份和版权持有人
+# 2. Write the full MIT license text to the file, replacing year and copyright holder
 echo "MIT License
 
 Copyright (c) 2024 Your Name
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-..." > LICENSE
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-# 3. 在 README.md 中添加协议说明
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE." > LICENSE
+
+# 3. Add license notice in README.md
 echo "## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details." >> README.md
@@ -188,33 +203,33 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 3. Apache License 2.0 详解（宽松型 + 专利保护）
+## 3. Apache License 2.0 Deep Dive (Permissive + Patent Protection)
 
-### 3.1 协议概述
+### 3.1 License Overview
 
-Apache License 2.0 由 Apache 软件基金会（ASF）维护，是企业级开源项目的首选协议。它在 MIT 的基础上增加了**专利授权**和**贡献者协议**的保护。
+Apache License 2.0 is maintained by the Apache Software Foundation (ASF) and is the preferred license for enterprise-level open source projects. It adds **patent authorization** and **contributor agreement** protections on top of MIT.
 
-### 3.2 核心条款
+### 3.2 Core Terms
 
-Apache 2.0 的关键条款包括：
+Key terms of Apache 2.0 include:
 
-**专利授权**：贡献者明确授予用户免费的、不可撤销的专利许可，覆盖其贡献中必然侵犯的专利权利要求。这是 Apache 2.0 相比 MIT 的最大优势。
+**Patent Authorization**: Contributors explicitly grant users a free, irrevocable patent license covering patent claims that are necessarily infringed by their contributions. This is Apache 2.0's biggest advantage over MIT.
 
-**商标保护**：协议不授予使用项目商标、服务标志或产品名称的权利。
+**Trademark Protection**: The license does not grant rights to use project trademarks, service marks, or product names.
 
-**贡献者声明**：如果用户修改了代码，必须在修改的文件中添加显著的声明。
+**Contributor Statement**: If users modify the code, they must add a prominent statement in the modified files.
 
-**NOTICE 文件**：如果原作品包含 NOTICE 文件，衍生作品必须包含该文件的可读副本。
+**NOTICE File**: If the original work contains a NOTICE file, derivative works must include a readable copy of that file.
 
-**分发要求**：分发时必须：
-- 给接收者一份本协议副本
-- 在修改的文件中添加声明
-- 保留所有版权、专利、商标和归属声明
-- 如果有 NOTICE 文件，必须包含其内容
+**Distribution Requirements**: When distributing, you must:
+- Give recipients a copy of this license
+- Add statements in modified files
+- Retain all copyright, patent, trademark, and attribution notices
+- Include the NOTICE file content if applicable
 
-### 3.3 专利条款详解
+### 3.3 Patent Terms Explained
 
-Apache 2.0 的专利条款是其最重要的特性：
+Apache 2.0's patent terms are its most important feature:
 
 ```
 Subject to the terms and conditions of this License, each Contributor hereby
@@ -226,14 +241,14 @@ infringed by their Contribution(s) alone or by combination of their
 Contribution(s) with the Work to which such Contribution(s) was submitted.
 ```
 
-这意味着：
-- 如果你贡献了代码，你授予用户使用你相关专利的权利
-- 这个授权是永久的、全球性的、不可撤销的
-- 如果你起诉用户专利侵权，你的专利许可将自动终止（专利报复条款）
+This means:
+- If you contribute code, you grant users the right to use your related patents
+- This authorization is perpetual, worldwide, and irrevocable
+- If you sue users for patent infringement, your patent license will be automatically terminated (patent retaliation clause)
 
-### 3.4 专利报复条款
+### 3.4 Patent Retaliation Clause
 
-Apache 2.0 包含一个"专利报复"（Patent Retaliation）条款：
+Apache 2.0 contains a "Patent Retaliation" clause:
 
 ```
 If You institute patent litigation against any entity (including a
@@ -243,42 +258,42 @@ patent infringement, then any patent licenses granted to You under this
 License for that Work shall terminate as of the date such litigation is filed.
 ```
 
-这有效防止了"专利钓鱼"行为：如果你使用了 Apache 2.0 的代码，然后起诉原项目侵犯专利，你将失去使用该代码的权利。
+This effectively prevents "patent trolling": if you use Apache 2.0 code and then sue the original project for patent infringement, you will lose the right to use that code.
 
-### 3.5 著名的 Apache 2.0 项目
+### 3.5 Notable Apache 2.0 Projects
 
-| 项目 | 领域 | 说明 |
+| Project | Domain | Description |
 |------|------|------|
-| Kubernetes | 容器编排 | 云原生基础设施 |
-| Android | 移动操作系统 | Google 维护 |
-| Apache Kafka | 消息队列 | 流处理平台 |
-| TensorFlow | 机器学习 | Google 开源 |
-| Swift | 编程语言 | Apple 开源 |
-| Elasticsearch | 搜索引擎 | 全文搜索 |
+| Kubernetes | Container Orchestration | Cloud-native infrastructure |
+| Android | Mobile Operating System | Maintained by Google |
+| Apache Kafka | Message Queue | Stream processing platform |
+| TensorFlow | Machine Learning | Open sourced by Google |
+| Swift | Programming Language | Open sourced by Apple |
+| Elasticsearch | Search Engine | Full-text search |
 
-### 3.6 Apache 2.0 vs MIT 对比
+### 3.6 Apache 2.0 vs MIT Comparison
 
-| 特性 | MIT | Apache 2.0 |
+| Feature | MIT | Apache 2.0 |
 |------|-----|------------|
-| 专利保护 | 无 | 有 |
-| 商标保护 | 无 | 有 |
-| 贡献者声明 | 无要求 | 要求 |
-| NOTICE 文件 | 无 | 有 |
-| 协议长度 | 短（~170 词） | 长（~4500 词） |
-| 企业友好度 | 高 | 更高 |
-| 学习成本 | 低 | 中等 |
+| Patent Protection | No | Yes |
+| Trademark Protection | No | Yes |
+| Contributor Statement | Not Required | Required |
+| NOTICE File | No | Yes |
+| License Length | Short (~170 words) | Long (~4500 words) |
+| Enterprise Friendliness | High | Higher |
+| Learning Cost | Low | Medium |
 
 ---
 
-## 4. BSD 协议家族（2-Clause、3-Clause）
+## 4. BSD License Family (2-Clause, 3-Clause)
 
-### 4.1 BSD 协议历史
+### 4.1 BSD License History
 
-BSD（Berkeley Software Distribution）协议源自加州大学伯克利分校，是最早的开源协议之一。BSD 家族有多个版本，最常用的是 2-Clause 和 3-Clause。
+BSD (Berkeley Software Distribution) license originated at the University of California, Berkeley and is one of the earliest open source licenses. The BSD family has multiple versions, with 2-Clause and 3-Clause being the most commonly used.
 
-### 4.2 BSD 2-Clause（Simplified BSD）
+### 4.2 BSD 2-Clause (Simplified BSD)
 
-BSD 2-Clause 是最简化的 BSD 协议，与 MIT 非常相似：
+BSD 2-Clause is the most simplified BSD license, very similar to MIT:
 
 ```
 BSD 2-Clause License
@@ -302,9 +317,9 @@ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.
 ```
 
-### 4.3 BSD 3-Clause（New BSD）
+### 4.3 BSD 3-Clause (New BSD)
 
-BSD 3-Clause 增加了一个"非背书"条款：
+BSD 3-Clause adds a "non-endorsement" clause:
 
 ```
 BSD 3-Clause License
@@ -330,48 +345,48 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES...
 ```
 
-第三条的核心含义：**未经许可，不得使用原作者或贡献者的名字来推广你的产品**。
+The core meaning of the third clause: **Without permission, you cannot use the original author's or contributors' names to promote your products**.
 
-### 4.4 BSD 协议家族对比
+### 4.4 BSD License Family Comparison
 
-| 版本 | 条款数 | 非背书条款 | 使用示例 |
+| Version | Clauses | Non-Endorsement Clause | Usage Examples |
 |------|--------|-----------|----------|
-| BSD 0-Clause | 0 | 无 | 超宽松 |
-| BSD 1-Clause | 1 | 无 | 简单保留声明 |
-| BSD 2-Clause | 2 | 无 | FreeBSD、Nginx |
-| BSD 3-Clause | 3 | 有 | Django、LLVM |
+| BSD 0-Clause | 0 | No | Ultra-permissive |
+| BSD 1-Clause | 1 | No | Simple attribution statement |
+| BSD 2-Clause | 2 | No | FreeBSD, Nginx |
+| BSD 3-Clause | 3 | Yes | Django, LLVM |
 
-### 4.5 著名的 BSD 项目
+### 4.5 Notable BSD Projects
 
-- **FreeBSD**：操作系统
-- **Nginx**：Web 服务器（使用 BSD 2-Clause）
-- **Django**：Python Web 框架（使用 BSD 3-Clause）
-- **LLVM**：编译器基础设施（使用 Apache 2.0 with LLVM Exceptions）
-- **Go 语言标准库**：使用 BSD 3-Clause
+- **FreeBSD**: Operating System
+- **Nginx**: Web Server (uses BSD 2-Clause)
+- **Django**: Python Web Framework (uses BSD 3-Clause)
+- **LLVM**: Compiler Infrastructure (uses Apache 2.0 with LLVM Exceptions)
+- **Go Standard Library**: Uses BSD 3-Clause
 
 ---
 
-## 5. GPL 家族（GPLv2、GPLv3、AGPLv3）详解
+## 5. GPL Family (GPLv2, GPLv3, AGPLv3) Deep Dive
 
-### 5.1 GPL 的哲学基础
+### 5.1 Philosophical Foundation of GPL
 
-GPL（GNU General Public License）由 Richard Stallman 和自由软件基金会（FSF）创建，基于"自由软件"的理念。GPL 的核心哲学是**"copyleft"**（著作权的反向运用）：
+GPL (GNU General Public License) was created by Richard Stallman and the Free Software Foundation (FSF), based on the "free software" philosophy. GPL's core philosophy is **"copyleft"** (the opposite application of copyright):
 
-> 你可以自由使用、修改和分发 GPL 软件，但你的衍生作品也必须使用 GPL 协议发布。
+> You are free to use, modify, and distribute GPL software, but your derivative works must also be released under the GPL license.
 
-这就是所谓的**"传染性"**（Viral Nature）：GPL 代码的"自由"会"传染"给所有衍生作品。
+This is what's known as the **"Viral Nature"**: the "freedom" of GPL code "infects" all derivative works.
 
-### 5.2 GPLv2 详解
+### 5.2 GPLv2 Explained
 
-GPLv2 发布于 1991 年，是 Linux 内核使用的协议。核心条款：
+GPLv2 was released in 1991 and is the license used by the Linux kernel. Core terms:
 
-**四大自由**：
-- 自由 0：出于任何目的运行程序的自由
-- 自由 1：研究程序如何工作并修改它的自由
-- 自由 2：重新分发副本的自由
-- 自由 3：改进程序并向公众发布改进的自由
+**Four Freedoms**:
+- Freedom 0: The freedom to run the program for any purpose
+- Freedom 1: The freedom to study how the program works and modify it
+- Freedom 2: The freedom to redistribute copies
+- Freedom 3: The freedom to improve the program and release improvements to the public
 
-**传染性要求**：
+**Viral Requirements**:
 ```
 You must cause any work that you distribute or publish, that in whole or in
 part contains or is derived from the Program or any part thereof, to be
@@ -379,31 +394,31 @@ licensed as a whole at no charge to all third parties under the terms of
 this License.
 ```
 
-**源码提供义务**：
-- 分发二进制文件时，必须同时提供源码或提供获取源码的书面要约
-- 源码必须以"机器可读"的形式提供
+**Source Code Obligation**:
+- When distributing binary files, you must also provide source code or a written offer to obtain source code
+- Source code must be provided in a "machine-readable" form
 
-### 5.3 GPLv3 详解
+### 5.3 GPLv3 Explained
 
-GPLv3 发布于 2007 年，主要增加了以下内容：
+GPLv3 was released in 2007 and mainly added the following:
 
-**反 Tivoization 条款**：TiVo 公司使用 GPL 代码但通过硬件锁定阻止用户运行修改后的版本。GPLv3 要求必须提供"安装信息"（Installation Information），允许用户在设备上安装修改后的版本。
+**Anti-Tivoization Clause**: TiVo used GPL code but prevented users from running modified versions through hardware locks. GPLv3 requires providing "Installation Information" to allow users to install modified versions on devices.
 
-**专利保护**：类似 Apache 2.0，贡献者授予用户明确的专利许可。
+**Patent Protection**: Similar to Apache 2.0, contributors grant users explicit patent licenses.
 
-**反 DRM 条款**：GPLv3 明确指出，基于 GPL 软件的"数字限制管理"（DRM）不构成有效的技术保护措施。
+**Anti-DRM Clause**: GPLv3 clearly states that "Digital Restrictions Management" (DRM) based on GPL software does not constitute effective technical protection measures.
 
-**国际化改进**：更好地适应不同国家的法律体系。
+**Internationalization Improvements**: Better adaptation to legal systems in different countries.
 
-**兼容性改进**：增加了与 Apache 2.0 的兼容性。
+**Compatibility Improvements**: Added compatibility with Apache 2.0.
 
-### 5.4 AGPLv3 详解
+### 5.4 AGPLv3 Explained
 
-AGPLv3（GNU Affero General Public License）解决了"网络使用"的漏洞：
+AGPLv3 (GNU Affero General Public License) addresses the "network use" loophole:
 
-**问题**：GPL 要求分发软件时提供源码，但通过网络提供服务（SaaS）不算"分发"。因此，公司可以修改 GPL 代码并通过网络提供服务，而不必公开修改后的源码。
+**Problem**: GPL requires providing source code when distributing software, but providing services over a network (SaaS) does not count as "distribution." Therefore, companies can modify GPL code and provide services over a network without releasing the modified source code.
 
-**AGPL 的解决方案**：
+**AGPL's Solution**:
 ```
 Notwithstanding any other provision of this License, if you modify the
 Program, your modified version must prominently offer all users interacting
@@ -412,199 +427,199 @@ interaction) an opportunity to receive the Corresponding Source of your
 version...
 ```
 
-**适用场景**：
-- SaaS 平台
-- 在线 API 服务
-- 云服务后端
+**Use Cases**:
+- SaaS platforms
+- Online API services
+- Cloud service backends
 
-**著名 AGPL 项目**：
-- MongoDB（早期版本）
+**Notable AGPL Projects**:
+- MongoDB (early versions)
 - Nextcloud
-- Grafana（早期版本）
+- Grafana (early versions)
 - Mastodon
 
-### 5.5 GPL 家族对比
+### 5.5 GPL Family Comparison
 
-| 特性 | GPLv2 | GPLv3 | AGPLv3 |
+| Feature | GPLv2 | GPLv3 | AGPLv3 |
 |------|-------|-------|--------|
-| 发布年份 | 1991 | 2007 | 2007 |
-| 反 Tivoization | 否 | 是 | 是 |
-| 专利保护 | 隐含 | 明确 | 明确 |
-| 网络使用 | 不触发 | 不触发 | 触发 |
-| 与 Apache 2.0 兼容 | 否 | 是 | 是 |
-| Linux 内核 | 是 | 否 | 否 |
+| Release Year | 1991 | 2007 | 2007 |
+| Anti-Tivoization | No | Yes | Yes |
+| Patent Protection | Implied | Explicit | Explicit |
+| Network Use | Not Triggered | Not Triggered | Triggered |
+| Compatible with Apache 2.0 | No | Yes | Yes |
+| Linux Kernel | Yes | No | No |
 
-### 5.6 GPL 传染性的实际影响
+### 5.6 Practical Impact of GPL Viral Nature
 
-**什么情况会"感染" GPL**：
-- 静态链接 GPL 库
-- 直接调用 GPL 代码
-- 将 GPL 代码复制到你的项目中
+**What causes GPL "infection"**:
+- Statically linking to GPL libraries
+- Directly calling GPL code
+- Copying GPL code into your project
 
-**什么情况不会"感染" GPL**：
-- 通过独立进程调用 GPL 程序（如命令行工具）
-- 使用 GPL 工具生成输出（如 GCC 编译的程序不受 GPL 约束）
-- 通过网络 API 调用（AGPL 除外）
+**What does not cause GPL "infection"**:
+- Calling GPL programs through independent processes (like command-line tools)
+- Using GPL tools to generate output (programs compiled with GCC are not bound by GPL)
+- Calling through network APIs (except AGPL)
 
 ---
 
-## 6. LGPL 详解
+## 6. LGPL Deep Dive
 
-### 6.1 LGPL 的定位
+### 6.1 LGPL's Positioning
 
-LGPL（GNU Lesser General Public License）是 GPL 的"弱化"版本，专为**库**（Library）设计。它允许闭源软件链接 LGPL 库，而不需要整个软件开源。
+LGPL (GNU Lesser General Public License) is a "weakened" version of GPL, specifically designed for **libraries**. It allows closed-source software to link to LGPL libraries without requiring the entire software to be open source.
 
-### 6.2 LGPL 的核心条款
+### 6.2 Core Terms of LGPL
 
-**允许闭源链接**：
-- 你可以将 LGPL 库用于闭源软件
-- 但你必须：允许用户替换 LGPL 库的版本
-- 你必须提供 LGPL 库的目标文件或源码
+**Allowing Closed-Source Linking**:
+- You can use LGPL libraries in closed-source software
+- But you must: Allow users to replace the LGPL library version
+- You must provide object files or source code of the LGPL library
 
-**修改 LGPL 库**：
-- 如果你修改了 LGPL 库本身，修改后的库必须以 LGPL 发布
-- 你的应用程序可以保持闭源
+**Modifying LGPL Libraries**:
+- If you modify the LGPL library itself, the modified library must be released under LGPL
+- Your application can remain closed source
 
-### 6.3 LGPL 的技术要求
+### 6.3 Technical Requirements of LGPL
 
-**动态链接**：最佳做法是通过动态链接（.so、.dll、.dylib）使用 LGPL 库。这样用户可以轻松替换库的版本。
+**Dynamic Linking**: The best practice is to use LGPL libraries through dynamic linking (.so, .dll, .dylib). This allows users to easily replace the library version.
 
-**静态链接**：如果静态链接，你必须：
-- 提供应用程序的目标文件（.o 文件）
-- 或提供完整的源码
-- 允许用户重新链接应用程序
+**Static Linking**: If you statically link, you must:
+- Provide application object files (.o files)
+- Or provide complete source code
+- Allow users to relink the application
 
-### 6.4 LGPL 版本
+### 6.4 LGPL Versions
 
-| 版本 | 说明 | 使用示例 |
+| Version | Description | Usage Examples |
 |------|------|----------|
-| LGPL v2 | 最初版本 | GTK+ 2 |
-| LGPL v2.1 | 小幅改进 | glibc |
-| LGPL v3 | 基于 GPLv3，增加专利保护 | GTK+ 3 |
+| LGPL v2 | Initial version | GTK+ 2 |
+| LGPL v2.1 | Minor improvements | glibc |
+| LGPL v3 | Based on GPLv3, adds patent protection | GTK+ 3 |
 
-### 6.5 著名的 LGPL 项目
+### 6.5 Notable LGPL Projects
 
-- **glibc**：GNU C 标准库
-- **GTK+**：图形界面库
-- **FFmpeg**：多媒体处理库
-- **Qt**（部分模块）：跨平台 GUI 框架
-- **FFTW**：快速傅里叶变换库
+- **glibc**: GNU C Standard Library
+- **GTK+**: GUI Library
+- **FFmpeg**: Multimedia Processing Library
+- **Qt** (partial modules): Cross-platform GUI Framework
+- **FFTW**: Fast Fourier Transform Library
 
-### 6.6 LGPL vs GPL 对比
+### 6.6 LGPL vs GPL Comparison
 
-| 特性 | GPL | LGPL |
+| Feature | GPL | LGPL |
 |------|-----|------|
-| 闭源软件可链接 | 否 | 是 |
-| 修改库必须开源 | 是 | 是（仅库本身） |
-| 传染性 | 强 | 弱（仅库本身） |
-| 适用场景 | 应用程序 | 库 |
+| Closed-Source Software Can Link | No | Yes |
+| Modified Libraries Must Be Open Source | Yes | Yes (library only) |
+| Viral Nature | Strong | Weak (library only) |
+| Use Cases | Applications | Libraries |
 
 ---
 
-## 7. MPL 2.0（Mozilla Public License）
+## 7. MPL 2.0 (Mozilla Public License)
 
-### 7.1 MPL 2.0 概述
+### 7.1 MPL 2.0 Overview
 
-MPL 2.0（Mozilla Public License 2.0）是 Mozilla 基金会维护的协议，用于 Firefox、Thunderbird 等项目。它是一种**文件级**的弱传染型协议。
+MPL 2.0 (Mozilla Public License 2.0) is a license maintained by the Mozilla Foundation, used for projects like Firefox and Thunderbird. It is a **file-level** weak copyleft license.
 
-### 7.2 核心条款
+### 7.2 Core Terms
 
-**文件级传染性**：
-- 如果你修改了 MPL 覆盖的文件，修改后的文件必须以 MPL 2.0 发布
-- 你可以在同一项目中混合 MPL 和非 MPL 代码
-- 新增的文件可以使用任何协议
+**File-Level Viral Nature**:
+- If you modify files covered by MPL, the modified files must be released under MPL 2.0
+- You can mix MPL and non-MPL code in the same project
+- New files can use any license
 
-**与其他协议的兼容性**：
+**Compatibility with Other Licenses**:
 ```
 This License gives you permission to combine Covered Software with other
 software that is not Covered Software, to create a Larger Work, and to
 distribute the Larger Work under the terms of your choice.
 ```
 
-**专利授权**：类似 Apache 2.0，贡献者授予用户明确的专利许可。
+**Patent Authorization**: Similar to Apache 2.0, contributors grant users explicit patent licenses.
 
-**二级许可**：MPL 2.0 允许将代码同时以 GPL、LGPL 或 Apache 2.0 发布。
+**Secondary Licensing**: MPL 2.0 allows code to be simultaneously released under GPL, LGPL, or Apache 2.0.
 
-### 7.3 MPL 2.0 的优势
+### 7.3 Advantages of MPL 2.0
 
-1. **灵活性**：允许在同一个项目中混合不同协议的代码
-2. **文件级控制**：比 GPL 的"项目级"传染更温和
-3. **企业友好**：允许商业软件包含 MPL 代码
-4. **专利保护**：明确的专利授权条款
+1. **Flexibility**: Allows mixing code with different licenses in the same project
+2. **File-Level Control**: More moderate than GPL's "project-level" viral nature
+3. **Enterprise-Friendly**: Allows commercial software to include MPL code
+4. **Patent Protection**: Clear patent authorization terms
 
-### 7.4 著名的 MPL 2.0 项目
+### 7.4 Notable MPL 2.0 Projects
 
-- **Firefox**：Web 浏览器
-- **Thunderbird**：邮件客户端
-- **LibreOffice**：办公套件（使用 MPL 2.0）
-- **Signal**：加密通讯应用（早期版本）
+- **Firefox**: Web Browser
+- **Thunderbird**: Email Client
+- **LibreOffice**: Office Suite (uses MPL 2.0)
+- **Signal**: Encrypted Messaging App (early versions)
 
 ---
 
-## 8. Creative Commons 协议
+## 8. Creative Commons Licenses
 
-### 8.1 CC 协议概述
+### 8.1 CC License Overview
 
-Creative Commons（CC）协议主要用于**非软件作品**，如文档、图片、音乐、视频等。虽然 CC 协议不推荐用于软件，但在开源项目中常用于文档和资源文件。
+Creative Commons (CC) licenses are mainly used for **non-software works**, such as documents, images, music, videos, etc. Although CC licenses are not recommended for software, they are commonly used for documentation and resource files in open source projects.
 
-### 8.2 CC 协议要素
+### 8.2 CC License Elements
 
-| 要素 | 缩写 | 说明 |
+| Element | Abbreviation | Description |
 |------|------|------|
-| 署名 | BY | 必须注明原作者 |
-| 相同方式共享 | SA | 衍生作品必须使用相同协议 |
-| 非商业性 | NC | 不得用于商业目的 |
-| 禁止演绎 | ND | 不得修改原作品 |
+| Attribution | BY | Must credit the original author |
+| ShareAlike | SA | Derivative works must use the same license |
+| NonCommercial | NC | Cannot be used for commercial purposes |
+| NoDerivatives | ND | Cannot modify the original work |
 
-### 8.3 CC 协议组合
+### 8.3 CC License Combinations
 
-| 协议 | 全称 | 说明 |
+| License | Full Name | Description |
 |------|------|------|
-| CC0 | | 公共领域，放弃所有权利 |
-| CC BY | 署名 4.0 | 仅要求署名 |
-| CC BY-SA | 署名-相同方式共享 4.0 | 类似 GPL 的传染性 |
-| CC BY-NC | 署名-非商业性 4.0 | 不得商用 |
-| CC BY-NC-SA | 署名-非商业性-相同方式共享 4.0 | 不得商用，衍生作品同协议 |
-| CC BY-ND | 署名-禁止演绎 4.0 | 不得修改 |
-| CC BY-NC-ND | 署名-非商业性-禁止演绎 4.0 | 最严格 |
+| CC0 | | Public Domain, waives all rights |
+| CC BY | Attribution 4.0 | Only requires attribution |
+| CC BY-SA | Attribution-ShareAlike 4.0 | Similar to GPL's viral nature |
+| CC BY-NC | Attribution-NonCommercial 4.0 | No commercial use |
+| CC BY-NC-SA | Attribution-NonCommercial-ShareAlike 4.0 | No commercial use, derivative works must use same license |
+| CC BY-ND | Attribution-NoDerivatives 4.0 | No modifications allowed |
+| CC BY-NC-ND | Attribution-NonCommercial-NoDerivatives 4.0 | Most restrictive |
 
-### 8.4 CC 协议在开源项目中的应用
+### 8.4 CC License Usage in Open Source Projects
 
-**推荐使用的 CC 协议**：
-- **CC0**：用于示例代码、测试数据
-- **CC BY 4.0**：用于文档、教程
-- **CC BY-SA 4.0**：用于需要保持开放的文档
+**Recommended CC Licenses**:
+- **CC0**: For example code, test data
+- **CC BY 4.0**: For documentation, tutorials
+- **CC BY-SA 4.0**: For documentation that needs to remain open
 
-**不推荐用于软件的 CC 协议**：
-- CC BY-NC：违反开源定义（OSD）的"无歧视"条款
-- CC BY-ND：不允许修改，不适合开源
+**CC Licenses Not Recommended for Software**:
+- CC BY-NC: Violates the "no discrimination" clause of the Open Source Definition (OSD)
+- CC BY-ND: Does not allow modifications, not suitable for open source
 
-### 8.5 开源项目文档的协议选择
+### 8.5 License Selection for Open Source Project Documentation
 
 ```markdown
-## 文档协议
+## Documentation License
 
-本项目文档采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 协议发布。
+This project's documentation is released under the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
-您可以自由地：
-- **共享**：在任何媒介以任何形式复制、发行本作品
-- **演绎**：修改、转换或以本作品为基础进行创作
+You are free to:
+- **Share**: Copy, distribute, and transmit this work in any medium or format
+- **Adapt**: Modify, transform, and build upon this work
 
-惟须遵守下列条件：
-- **署名**：您必须给出适当的署名
+Under the following conditions:
+- **Attribution**: You must provide appropriate attribution
 ```
 
 ---
 
-## 9. 协议兼容性矩阵
+## 9. License Compatibility Matrix
 
-### 9.1 什么是协议兼容性
+### 9.1 What is License Compatibility
 
-协议兼容性决定了你是否可以在同一个项目中混合使用不同协议的代码。如果协议 A 的代码可以放入协议 B 的项目中，我们说"A 与 B 兼容"。
+License compatibility determines whether you can mix code with different licenses in the same project. If code under License A can be incorporated into a project under License B, we say "A is compatible with B."
 
-### 9.2 兼容性矩阵
+### 9.2 Compatibility Matrix
 
-下表展示了主流协议之间的兼容性（行 → 列表示"行协议的代码能否放入列协议的项目"）：
+The following table shows compatibility between mainstream licenses (Row → Column indicates "whether code under Row license can be placed into Column license project"):
 
 |  | MIT | Apache 2.0 | BSD | GPLv2 | GPLv3 | AGPLv3 | LGPL | MPL 2.0 |
 |--|-----|------------|-----|-------|-------|--------|------|---------|
@@ -617,240 +632,240 @@ Creative Commons（CC）协议主要用于**非软件作品**，如文档、图�
 | **LGPL** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **MPL 2.0** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ✅ |
 
-### 9.3 常见兼容性问题
+### 9.3 Common Compatibility Issues
 
-**Apache 2.0 与 GPLv2 不兼容**：
-- Apache 2.0 的专利授权条款与 GPLv2 冲突
-- 解决方案：使用 GPLv3（明确兼容）
+**Apache 2.0 and GPLv2 Incompatibility**:
+- Apache 2.0's patent authorization terms conflict with GPLv2
+- Solution: Use GPLv3 (explicitly compatible)
 
-**GPL 与 MIT/BSD 混合**：
-- MIT/BSD 代码可以放入 GPL 项目
-- 但 GPL 代码不能放入 MIT/BSD 项目（因为 GPL 的传染性）
+**Mixing GPL with MIT/BSD**:
+- MIT/BSD code can be placed into GPL projects
+- But GPL code cannot be placed into MIT/BSD projects (due to GPL's viral nature)
 
-**MPL 2.0 的灵活性**：
-- MPL 2.0 的文件级传染性使其与许多协议兼容
-- 但不能将 MPL 文件直接放入纯 GPL v2 项目
+**MPL 2.0 Flexibility**:
+- MPL 2.0's file-level viral nature makes it compatible with many licenses
+- But MPL files cannot be placed directly into pure GPL v2 projects
 
-### 9.4 实际操作建议
+### 9.4 Practical Recommendations
 
-1. **避免混合使用强传染型协议**：如 GPL + AGPL
-2. **优先选择宽松型协议**：如果需要最大兼容性
-3. **检查依赖库的协议**：使用工具如 `license-checker`（npm）、`cargo-license`（Rust）
-4. **记录协议决策**：在项目文档中说明为什么选择特定协议
+1. **Avoid mixing strong copyleft licenses**: Such as GPL + AGPL
+2. **Prefer permissive licenses**: If maximum compatibility is needed
+3. **Check dependency licenses**: Use tools like `license-checker` (npm), `cargo-license` (Rust)
+4. **Document license decisions**: Explain in project documentation why specific licenses were chosen
 
 ---
 
-## 10. 如何选择开源协议（决策树）
+## 10. How to Choose an Open Source License (Decision Tree)
 
-### 10.1 决策流程
+### 10.1 Decision Process
 
-选择开源协议可以遵循以下决策树：
+Choosing an open source license can follow this decision tree:
 
 ```
-你想开源什么？
+What do you want to open source?
 │
-├── 软件/代码
+├── Software/Code
 │   │
-│   ├── 你希望代码被广泛使用（包括闭源项目）？
+│   ├── Do you want your code to be widely used (including closed-source projects)?
 │   │   │
-│   │   ├── 是 → 你需要专利保护吗？
-│   │   │   ├── 是 → Apache License 2.0
-│   │   │   └── 否 → MIT License
+│   │   ├── Yes → Do you need patent protection?
+│   │   │   ├── Yes → Apache License 2.0
+│   │   │   └── No → MIT License
 │   │   │
-│   │   └── 否 → 你希望衍生作品也必须开源？
+│   │   └── No → Do you want derivative works to also be open source?
 │   │       │
-│   │       ├── 是 → 衍生作品包括网络服务？
-│   │       │   ├── 是 → AGPL v3
-│   │       │   └── 否 → GPL v3
+│   │       ├── Yes → Do derivative works include network services?
+│   │       │   ├── Yes → AGPL v3
+│   │       │   └── No → GPL v3
 │   │       │
-│   │       └── 否 → 仅修改的文件需要开源？
-│   │           ├── 是 → MPL 2.0
-│   │           └── 否 → LGPL v3
+│   │       └── No → Do only modified files need to be open source?
+│   │           ├── Yes → MPL 2.0
+│   │           └── No → LGPL v3
 │   │
-│   └── 你开发的是库？
-│       ├── 是 → 希望闭源软件可以链接？
-│       │   ├── 是 → MIT / Apache 2.0
-│       │   └── 否 → LGPL v3
-│       └── 否 → 参考上面的决策
+│   └── Are you developing a library?
+│       ├── Yes → Want closed-source software to be able to link?
+│       │   ├── Yes → MIT / Apache 2.0
+│       │   └── No → LGPL v3
+│       └── No → Refer to the above decisions
 │
-└── 文档/资源
-    ├── 希望完全自由使用 → CC0
-    ├── 仅要求署名 → CC BY 4.0
-    └── 要求衍生作品同协议 → CC BY-SA 4.0
+└── Documentation/Resources
+    ├── Want completely free use → CC0
+    ├── Only require attribution → CC BY 4.0
+    └── Require derivative works to use same license → CC BY-SA 4.0
 ```
 
-### 10.2 快速选择指南
+### 10.2 Quick Selection Guide
 
-| 场景 | 推荐协议 | 理由 |
+| Scenario | Recommended License | Reason |
 |------|----------|------|
-| 个人工具项目 | MIT | 简单、广泛接受 |
-| 企业开源项目 | Apache 2.0 | 专利保护、企业友好 |
-| 希望保持开源的项目 | GPL v3 | 强传染性、专利保护 |
-| SaaS 项目 | AGPL v3 | 防止闭源 SaaS 使用 |
-| 开源库 | MIT / Apache 2.0 | 最大化采用率 |
-| 文档项目 | CC BY 4.0 | 适合非代码内容 |
-| 示例代码 | MIT / CC0 | 允许自由使用 |
+| Personal Tool Projects | MIT | Simple, widely accepted |
+| Enterprise Open Source Projects | Apache 2.0 | Patent protection, enterprise-friendly |
+| Projects Wanting to Stay Open Source | GPL v3 | Strong viral nature, patent protection |
+| SaaS Projects | AGPL v3 | Prevents closed-source SaaS use |
+| Open Source Libraries | MIT / Apache 2.0 | Maximizes adoption |
+| Documentation Projects | CC BY 4.0 | Suitable for non-code content |
+| Example Code | MIT / CC0 | Allows free use |
 
-### 10.3 中国开发者的选择建议
+### 10.3 Recommendations for Chinese Developers
 
-根据中国开源社区的实践，以下是推荐：
+Based on practices in the Chinese open source community, here are recommendations:
 
-**初创公司**：
-- 选择 Apache 2.0 或 MIT
-- 避免 GPL（可能限制商业模式）
+**Startups**:
+- Choose Apache 2.0 or MIT
+- Avoid GPL (may limit business models)
 
-**个人开发者**：
-- MIT 是最安全的选择
-- 如果希望保护开源性质，选择 GPL v3
+**Individual Developers**:
+- MIT is the safest choice
+- If you want to protect open source nature, choose GPL v3
 
-**企业级项目**：
-- Apache 2.0（有专利保护）
-- 或企业自定义协议
+**Enterprise-Level Projects**:
+- Apache 2.0 (with patent protection)
+- Or enterprise-customized licenses
 
-**文档和教程**：
-- CC BY 4.0（允许转载，要求署名）
-- 或 MIT（简单通用）
+**Documentation and Tutorials**:
+- CC BY 4.0 (allows reproduction, requires attribution)
+- Or MIT (simple and universal)
 
 ---
 
-## 11. 双重许可与商业许可
+## 11. Dual Licensing and Commercial Licensing
 
-### 11.1 双重许可模式
+### 11.1 Dual Licensing Model
 
-双重许可（Dual Licensing）是指同一个软件同时以两种或多种协议发布，用户可以选择适合自己的协议。
+Dual Licensing refers to releasing the same software under two or more licenses, allowing users to choose the license that suits them.
 
-**典型模式**：GPL + 商业许可
+**Typical Model**: GPL + Commercial License
 
-- GPL 版本：免费使用，但衍生作品必须开源
-- 商业许可：付费使用，不需要开源衍生作品
+- GPL version: Free to use, but derivative works must be open source
+- Commercial license: Paid use, no need to open source derivative works
 
-**成功案例**：
-- **MySQL**：GPL + 商业许可
-- **Qt**：LGPL + 商业许可
-- **MongoDB**：AGPL + 商业许可（早期）
-- **Redis**：BSD + 企业许可
+**Success Stories**:
+- **MySQL**: GPL + Commercial License
+- **Qt**: LGPL + Commercial License
+- **MongoDB**: AGPL + Commercial License (early)
+- **Redis**: BSD + Enterprise License
 
-### 11.2 商业许可模式
+### 11.2 Commercial Licensing Model
 
-商业许可（Commercial License）允许企业以付费方式获得更宽松的使用权限：
+Commercial License allows enterprises to obtain more permissive usage rights through payment:
 
-**常见模式**：
-- **单次购买**：一次性付费，永久使用
-- **订阅制**：按年/月付费，持续获得更新
-- **按使用量计费**：根据 API 调用次数、用户数等计费
-- **企业协议**：根据企业规模和需求定制
+**Common Models**:
+- **One-Time Purchase**: One-time payment, perpetual use
+- **Subscription**: Pay annually/monthly, continuous updates
+- **Usage-Based Billing**: Billed based on API calls, user count, etc.
+- **Enterprise Agreement**: Customized based on enterprise size and needs
 
-### 11.3 开源核心模式
+### 11.3 Open Core Model
 
-许多公司采用"开源核心"（Open Core）模式：
+Many companies adopt the "Open Core" model:
 
 ```
-产品结构
-├── 开源核心（Community Edition）
-│   ├── 使用开源协议（如 Apache 2.0）
-│   ├── 基本功能
-│   └── 社区支持
+Product Structure
+├── Open Core (Community Edition)
+│   ├── Uses open source license (e.g., Apache 2.0)
+│   ├── Basic features
+│   └── Community support
 │
-└── 商业扩展（Enterprise Edition）
-    ├── 商业许可
-    ├── 高级功能
-    ├── 企业支持
-    └── SLA 保障
+└── Commercial Extensions (Enterprise Edition)
+    ├── Commercial license
+    ├── Advanced features
+    ├── Enterprise support
+    └── SLA guarantees
 ```
 
-**成功案例**：
-- **GitLab**：MIT 核心 + 企业版扩展
-- **Elastic**：Apache 2.0 核心 + 企业功能
-- **Confluent**：Apache Kafka + Confluent Platform
+**Success Stories**:
+- **GitLab**: MIT core + Enterprise edition extensions
+- **Elastic**: Apache 2.0 core + Enterprise features
+- **Confluent**: Apache Kafka + Confluent Platform
 
-### 11.4 CLA（贡献者许可协议）
+### 11.4 CLA (Contributor License Agreement)
 
-CLA（Contributor License Agreement）是贡献者与项目维护者之间的法律协议，明确贡献者的权利授予。
+CLA (Contributor License Agreement) is a legal agreement between contributors and project maintainers that clarifies contributors' rights grants.
 
-**CLA 的作用**：
-- 确保项目有权更改协议
-- 保护项目免受专利诉讼
-- 明确贡献者的知识产权授予
+**Purpose of CLA**:
+- Ensures the project has the right to change licenses
+- Protects the project from patent litigation
+- Clarifies contributors' intellectual property grants
 
-**常见 CLA 类型**：
-- **个人 CLA**：个人贡献者签署
-- **企业 CLA**：企业代表其员工签署
-- **DCO**（Developer Certificate of Origin）：轻量级替代方案
-
----
-
-## 12. 开源协议的法律问题
-
-### 12.1 开源协议的法律效力
-
-开源协议在法律上具有约束力，这已经在多个司法判例中得到确认：
-
-**Jacobsen v. Katzer (2008)**：美国联邦巡回法院确认 Artistic License 是可执行的合同。
-
-**Cisco/FSF 和解案 (2009)**：FSF 起诉 Cisco 违反 GPL，最终达成和解。
-
-**Oracle v. Google (2021)**：美国最高法院裁定 Google 对 Java API 的合理使用。
-
-### 12.2 违反开源协议的法律后果
-
-违反开源协议可能导致：
-
-1. **版权侵权诉讼**：未经授权使用受版权保护的代码
-2. **合同违约诉讼**：违反协议条款
-3. **禁令**：法院可能禁止你继续使用或分发软件
-4. **损害赔偿**：可能需要赔偿版权持有人的损失
-5. **声誉损失**：在开源社区中失去信誉
-
-### 12.3 中国法律框架下的开源协议
-
-在中国法律体系下，开源协议的效力主要基于：
-
-**《著作权法》**：代码作为文学作品受保护
-
-**《合同法》**：开源协议可能构成合同关系
-
-**《计算机软件保护条例》**：专门保护计算机软件的知识产权
-
-**司法实践**：
-- 2021 年，杭州互联网法院首次确认 GPL 协议在中国具有法律效力
-- 多个地方法院认可开源协议的约束力
-
-### 12.4 合规审计
-
-企业进行开源合规审计的步骤：
-
-1. **识别开源组件**：扫描代码库，识别所有开源依赖
-2. **分析协议**：确定每个组件的开源协议
-3. **评估合规性**：检查是否满足所有协议要求
-4. **制定策略**：确定如何处理不兼容的组件
-5. **持续监控**：建立持续的合规监控机制
+**Common CLA Types**:
+- **Individual CLA**: Signed by individual contributors
+- **Corporate CLA**: Signed by companies on behalf of their employees
+- **DCO** (Developer Certificate of Origin): Lightweight alternative
 
 ---
 
-## 13. License 文件与 SPDX 标识
+## 12. Legal Issues of Open Source Licenses
 
-### 13.1 LICENSE 文件规范
+### 12.1 Legal Force of Open Source Licenses
 
-每个开源项目都应在根目录包含一个 `LICENSE` 文件：
+Open source licenses are legally binding, as confirmed in multiple judicial cases:
 
-**文件命名**：
-- `LICENSE`（推荐，GitHub 会自动识别）
-- `LICENSE.md`（Markdown 格式）
-- `LICENSE.txt`（纯文本格式）
-- `COPYING`（GNU 传统命名）
+**Jacobsen v. Katzer (2008)**: The U.S. Federal Circuit confirmed that the Artistic License is an enforceable contract.
 
-**文件内容**：
-- 协议全文
-- 版权声明
-- 年份和版权持有人
+**Cisco/FSF Settlement (2009)**: FSF sued Cisco for GPL violation, ultimately reaching a settlement.
 
-### 13.2 SPDX 标识
+**Oracle v. Google (2021)**: The U.S. Supreme Court ruled Google's use of Java APIs as fair use.
 
-SPDX（Software Package Data Exchange）是一种标准格式，用于标识软件包中使用的开源协议。
+### 12.2 Legal Consequences of Violating Open Source Licenses
 
-**SPDX 协议标识符**：
+Violating open source licenses may result in:
 
-| 协议 | SPDX 标识 |
+1. **Copyright Infringement Lawsuit**: Unauthorized use of copyrighted code
+2. **Contract Breach Lawsuit**: Violation of license terms
+3. **Injunction**: Courts may prohibit you from continuing to use or distribute the software
+4. **Damages**: You may need to compensate copyright holders for losses
+5. **Reputation Loss**: Loss of credibility in the open source community
+
+### 12.3 Open Source Licenses Under Chinese Law
+
+Under the Chinese legal system, the legal force of open source licenses is primarily based on:
+
+**Copyright Law**: Code is protected as a literary work
+
+**Contract Law**: Open source licenses may constitute a contractual relationship
+
+**Computer Software Protection Regulations**: Specifically protects intellectual property of computer software
+
+**Judicial Practice**:
+- In 2021, the Hangzhou Internet Court confirmed for the first time that GPL has legal force in China
+- Multiple local courts have recognized the binding force of open source licenses
+
+### 12.4 Compliance Audit
+
+Steps for enterprises to conduct open source compliance audits:
+
+1. **Identify Open Source Components**: Scan codebase to identify all open source dependencies
+2. **Analyze Licenses**: Determine the open source license of each component
+3. **Assess Compliance**: Check if all license requirements are met
+4. **Develop Strategy**: Determine how to handle incompatible components
+5. **Continuous Monitoring**: Establish ongoing compliance monitoring mechanisms
+
+---
+
+## 13. LICENSE File and SPDX Identifiers
+
+### 13.1 LICENSE File Specification
+
+Every open source project should include a `LICENSE` file in the root directory:
+
+**File Naming**:
+- `LICENSE` (recommended, GitHub will auto-detect)
+- `LICENSE.md` (Markdown format)
+- `LICENSE.txt` (plain text format)
+- `COPYING` (GNU traditional naming)
+
+**File Content**:
+- Full license text
+- Copyright notice
+- Year and copyright holder
+
+### 13.2 SPDX Identifiers
+
+SPDX (Software Package Data Exchange) is a standard format for identifying open source licenses used in software packages.
+
+**SPDX License Identifiers**:
+
+| License | SPDX Identifier |
 |------|-----------|
 | MIT License | MIT |
 | Apache License 2.0 | Apache-2.0 |
@@ -863,15 +878,15 @@ SPDX（Software Package Data Exchange）是一种标准格式，用于标识软�
 | GNU AGPL v3 | AGPL-3.0-only |
 | Mozilla Public License 2.0 | MPL-2.0 |
 
-### 13.3 在代码中使用 SPDX 标识
+### 13.3 Using SPDX Identifiers in Code
 
-**源文件头部**：
+**Source File Header**:
 ```python
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2024 Your Name
 ```
 
-**package.json**：
+**package.json**:
 ```json
 {
   "name": "your-package",
@@ -879,14 +894,14 @@ SPDX（Software Package Data Exchange）是一种标准格式，用于标识软�
 }
 ```
 
-**Cargo.toml**：
+**Cargo.toml**:
 ```toml
 [package]
 name = "your-crate"
 license = "MIT OR Apache-2.0"
 ```
 
-**setup.py**：
+**setup.py**:
 ```python
 setup(
     name='your-package',
@@ -897,371 +912,371 @@ setup(
 )
 ```
 
-### 13.4 GitHub 的协议支持
+### 13.4 GitHub's License Support
 
-GitHub 提供以下功能来帮助管理开源协议：
+GitHub provides the following features to help manage open source licenses:
 
-1. **自动检测**：GitHub 会自动检测 LICENSE 文件并显示协议名称
-2. **协议模板**：创建仓库时可以选择协议模板
-3. **协议比较**：在仓库页面可以查看协议详情
-4. **Dependabot**：自动检测依赖的协议合规性
+1. **Auto-Detection**: GitHub automatically detects LICENSE files and displays the license name
+2. **License Templates**: You can select license templates when creating repositories
+3. **License Comparison**: License details can be viewed on repository pages
+4. **Dependabot**: Automatically detects license compliance of dependencies
 
 ---
 
-## 14. 中国企业开源合规指南
+## 14. Chinese Enterprise Open Source Compliance Guide
 
-### 14.1 中国开源现状
+### 14.1 Current State of Open Source in China
 
-中国已成为全球第二大开源贡献国，但在开源合规方面仍面临挑战：
+China has become the world's second-largest open source contributor, but still faces challenges in open source compliance:
 
-**主要挑战**：
-- 对开源协议法律效力认识不足
-- 企业合规流程不完善
-- 缺乏专业的开源合规人才
-- 历史遗留代码的合规问题
+**Main Challenges**:
+- Insufficient understanding of the legal force of open source licenses
+- Incomplete enterprise compliance processes
+- Lack of professional open source compliance talent
+- Compliance issues with legacy code
 
-### 14.2 企业开源合规框架
+### 14.2 Enterprise Open Source Compliance Framework
 
-建立企业开源合规框架的步骤：
+Steps to establish an enterprise open source compliance framework:
 
-**第一步：建立政策**
-- 制定企业开源使用政策
-- 明确允许和禁止的开源协议
-- 建立开源审批流程
+**Step 1: Establish Policies**
+- Develop enterprise open source usage policies
+- Clearly define allowed and prohibited open source licenses
+- Establish open source approval processes
 
-**第二步：组建团队**
-- 成立开源合规委员会
-- 包括法务、技术、安全等角色
-- 指定开源合规负责人
+**Step 2: Form Teams**
+- Establish an open source compliance committee
+- Include legal, technical, and security roles
+- Designate an open source compliance officer
 
-**第三步：工具建设**
-- 部署开源扫描工具（如 FOSSA、Black Duck、Snyk）
-- 建立开源组件数据库
-- 集成到 CI/CD 流程
+**Step 3: Build Tools**
+- Deploy open source scanning tools (such as FOSSA, Black Duck, Snyk)
+- Establish an open source component database
+- Integrate into CI/CD pipelines
 
-**第四步：流程管理**
-- 新项目开源前的合规审查
-- 定期合规审计
-- 员工培训和意识提升
+**Step 4: Process Management**
+- Compliance review before new projects go open source
+- Regular compliance audits
+- Employee training and awareness improvement
 
-### 14.3 开源扫描工具
+### 14.3 Open Source Scanning Tools
 
-| 工具 | 类型 | 特点 |
+| Tool | Type | Features |
 |------|------|------|
-| FOSSA | 商业 | 全面的合规管理平台 |
-| Black Duck | 商业 | 企业级开源风险管理 |
-| Snyk | 商业 | 安全 + 合规 |
-| ScanCode | 开源 | 开源协议检测工具 |
-| FOSSology | 开源 | 开源合规分析工具 |
-| licensee | 开源 | GitHub 开发的协议检测工具 |
+| FOSSA | Commercial | Comprehensive compliance management platform |
+| Black Duck | Commercial | Enterprise-level open source risk management |
+| Snyk | Commercial | Security + Compliance |
+| ScanCode | Open Source | Open source license detection tool |
+| FOSSology | Open Source | Open source compliance analysis tool |
+| licensee | Open Source | License detection tool developed by GitHub |
 
-### 14.4 合规检查清单
+### 14.4 Compliance Checklist
 
-**使用开源代码前**：
-- [ ] 确认开源协议
-- [ ] 评估协议与项目商业模式的兼容性
-- [ ] 检查是否需要公开源码
-- [ ] 确认专利条款
-- [ ] 记录使用情况
+**Before Using Open Source Code**:
+- [ ] Confirm open source license
+- [ ] Assess license compatibility with project business model
+- [ ] Check if source code needs to be published
+- [ ] Confirm patent terms
+- [ ] Document usage
 
-**发布开源项目时**：
-- [ ] 选择合适的开源协议
-- [ ] 创建完整的 LICENSE 文件
-- [ ] 添加 SPDX 标识
-- [ ] 准备 NOTICE 文件（如需要）
-- [ ] 建立贡献者协议（CLA/DCO）
+**When Publishing Open Source Projects**:
+- [ ] Choose appropriate open source license
+- [ ] Create complete LICENSE file
+- [ ] Add SPDX identifiers
+- [ ] Prepare NOTICE file (if needed)
+- [ ] Establish contributor agreements (CLA/DCO)
 
-### 14.5 中国企业的最佳实践
+### 14.5 Best Practices for Chinese Enterprises
 
-**华为**：
-- 建立了完善的开源合规体系
-- 积极参与国际开源项目
-- 发布了多个开源项目（如 openEuler、MindSpore）
+**Huawei**:
+- Established a comprehensive open source compliance system
+- Actively participates in international open source projects
+- Released multiple open source projects (such as openEuler, MindSpore)
 
-**阿里巴巴**：
-- 成立了开源委员会
-- 贡献了多个顶级开源项目（如 Apache Flink、Apache RocketMQ）
-- 建立了开源合规流程
+**Alibaba**:
+- Established an open source committee
+- Contributed to multiple top open source projects (such as Apache Flink, Apache RocketMQ)
+- Established open source compliance processes
 
-**腾讯**：
-- 积极参与开源社区
-- 贡献了多个开源项目（如 Tars、Angel）
-- 建立了开源治理平台
+**Tencent**:
+- Actively participates in the open source community
+- Contributed to multiple open source projects (such as Tars, Angel)
+- Established an open source governance platform
 
 ---
 
-### 15. 常见协议误区
+### 15. Common License Misconceptions
 
-开源协议是开源项目中最重要的法律文件之一，但很多开发者对其存在误解。以下是十五个最常见的误区，帮助你正确理解开源协议的含义和应用。
+Open source licenses are one of the most important legal documents in open source projects, but many developers have misconceptions about them. Here are fifteen of the most common misconceptions to help you correctly understand the meaning and application of open source licenses.
 
-#### 误区 1："开源就是免费"
+#### Misconception 1: "Open source means free"
 
-很多人认为开源软件就是免费软件，这是一个常见的误解。开源的核心在于源代码的开放和共享，而不是价格。实际上，很多开源项目通过多种方式实现商业化：
+Many people think open source software is free software, which is a common misconception. The core of open source is the openness and sharing of source code, not the price. In fact, many open source projects achieve commercialization through various methods:
 
-- **商业许可**：提供付费的商业版本，包含额外功能和支持
-- **托管服务**：提供云端托管的 SaaS 服务
-- **技术支持**：提供付费的技术支持和咨询服务
-- **培训认证**：提供付费培训和认证服务
-- **双许可模式**：同时提供开源版本和商业版本
+- **Commercial Licenses**: Offering paid commercial versions with additional features and support
+- **Hosting Services**: Providing cloud-hosted SaaS services
+- **Technical Support**: Providing paid technical support and consulting services
+- **Training and Certification**: Providing paid training and certification services
+- **Dual Licensing Model**: Offering both open source and commercial versions simultaneously
 
-例如，Red Hat 公司基于开源的 Linux 发行版建立了价值数百亿美元的企业，主要通过订阅服务盈利。MongoDB、Elastic、Confluent 等公司也成功实现了开源项目的商业化。
+For example, Red Hat built a multi-billion dollar enterprise based on open source Linux distributions, primarily profiting through subscription services. Companies like MongoDB, Elastic, and Confluent have also successfully commercialized open source projects.
 
-#### 误区 2："MIT 协议可以随便用，不需要做任何事"
+#### Misconception 2: "MIT License can be used freely without doing anything"
 
-MIT 协议虽然宽松，但仍然有明确的要求。使用 MIT 协议的代码时，你必须：
+Although MIT License is permissive, it still has clear requirements. When using MIT-licensed code, you must:
 
-1. **保留版权声明**：在所有副本或重要部分中保留原始的版权声明
-2. **保留许可声明**：保留完整的 MIT 许可声明文本
-3. **包含在软件中**：这些声明必须包含在软件的所有副本中
+1. **Retain Copyright Notice**: Retain the original copyright notice in all copies or substantial portions
+2. **Retain Permission Notice**: Retain the complete MIT license notice text
+3. **Include in Software**: These notices must be included in all copies of the software
 
-这意味着，即使你在闭源商业软件中使用了 MIT 代码，你也必须在软件的某个位置（如关于页面、文档、许可文件）包含原始的版权声明和许可声明。
+This means that even if you use MIT code in closed-source commercial software, you must include the original copyright notice and license notice somewhere in the software (such as an about page, documentation, or license file).
 
-实际操作中，很多公司会在软件的"关于"对话框、安装目录的 LICENSE 文件、或者软件的设置页面中展示这些声明。
+In practice, many companies display these notices in the software's "About" dialog, LICENSE file in the installation directory, or the software's settings page.
 
-#### 误区 3："GPL 代码不能商用"
+#### Misconception 3: "GPL code cannot be used commercially"
 
-这是一个非常普遍的误解。GPL 协议明确允许商业使用，你可以：
+This is a very common misconception. GPL explicitly allows commercial use. You can:
 
-- 销售 GPL 软件的副本
-- 提供 GPL 软件的付费支持服务
-- 在商业环境中使用 GPL 软件
-- 基于 GPL 软件建立商业模式
+- Sell copies of GPL software
+- Provide paid support services for GPL software
+- Use GPL software in commercial environments
+- Build business models based on GPL software
 
-GPL 的要求不是禁止商业使用，而是要求：
+GPL does not prohibit commercial use, but requires:
 
-1. **开源衍生作品**：如果你修改了 GPL 代码并分发，修改后的版本必须以 GPL 发布
-2. **提供源码**：分发 GPL 软件时，必须同时提供源码或获取源码的途径
-3. **保持 GPL**：衍生作品必须使用相同的 GPL 协议
+1. **Open Source Derivative Works**: If you modify GPL code and distribute it, the modified version must be released under GPL
+2. **Provide Source Code**: When distributing GPL software, you must also provide source code or a way to obtain it
+3. **Maintain GPL**: Derivative works must use the same GPL license
 
-Red Hat、SUSE、Canonical 等公司都基于 GPL 软件（Linux）建立了成功的商业模式。
+Companies like Red Hat, SUSE, and Canonical have all built successful business models based on GPL software (Linux).
 
-#### 误区 4："我修改了开源代码，就可以闭源"
+#### Misconception 4: "I modified open source code, so I can close source it"
 
-这取决于你使用的开源协议：
+This depends on the open source license you're using:
 
-**允许闭源修改的协议**：
+**Licenses Allowing Closed-Source Modifications**:
 - MIT License
-- BSD 协议
+- BSD License
 - Apache License 2.0
 - ISC License
 
-**要求开源修改的协议**：
-- GPL（所有衍生作品必须开源）
-- AGPL（包括网络服务）
-- LGPL（仅库本身需要开源）
-- MPL 2.0（修改的文件需要开源）
+**Licenses Requiring Open Source Modifications**:
+- GPL (all derivative works must be open source)
+- AGPL (including network services)
+- LGPL (only the library itself needs to be open source)
+- MPL 2.0 (modified files need to be open source)
 
-如果你使用 GPL 代码并修改，当你分发修改后的版本时，必须以 GPL 协议发布源码。但如果你仅在内部使用而不分发，则不受此限制（AGPL 除外）。
+If you use GPL code and modify it, when you distribute the modified version, you must release the source code under GPL. But if you only use it internally without distribution, you are not bound by this restriction (except for AGPL).
 
-#### 误区 5："只要不发布源码，就不受开源协议约束"
+#### Misconception 5: "If I don't publish source code, I'm not bound by open source licenses"
 
-这个误区涉及"分发"（Distribution）的定义。在不同的协议中，分发的含义有所不同：
+This misconception involves the definition of "Distribution." The meaning of distribution varies across different licenses:
 
-**GPL v2/v3**：分发指的是向第三方提供软件副本。如果你仅在公司内部使用，通常不算分发。
+**GPL v2/v3**: Distribution refers to providing copies of the software to third parties. If you only use it within your company, it generally doesn't count as distribution.
 
-**AGPL v3**：通过网络提供服务也算分发。如果你修改了 AGPL 代码并通过网络提供服务，你必须向所有用户提供修改后的源码。
+**AGPL v3**: Providing services over a network also counts as distribution. If you modify AGPL code and provide services over a network, you must provide the modified source code to all users.
 
-**实际案例**：
-- 如果你修改了 AGPL 的 Web 应用并部署到服务器，所有访问该服务的用户都有权获取你的修改
-- 很多云服务商因为 AGPL 的这一条款而避免使用 AGPL 软件
+**Practical Examples**:
+- If you modify an AGPL web application and deploy it to a server, all users accessing that service have the right to obtain your modifications
+- Many cloud service providers avoid using AGPL software because of this clause
 
-#### 误区 6："开源协议是合同，必须签字才有效"
+#### Misconception 6: "Open source licenses are contracts that require signatures to be valid"
 
-开源协议的法律效力在不同法律体系中有不同的解释：
+The legal force of open source licenses is interpreted differently across different legal systems:
 
-**美国法律**：开源协议通常被视为合同，通过使用软件即可表示接受条款（"点击接受"或"浏览接受"）。
+**U.S. Law**: Open source licenses are generally treated as contracts, with acceptance of terms indicated through use of the software ("click-wrap" or "browse-wrap").
 
-**欧盟法律**：开源协议可能被视为许可而非合同，但同样具有法律约束力。
+**EU Law**: Open source licenses may be treated as licenses rather than contracts, but still have legal binding force.
 
-**中国法律**：中国法院已在多个案例中确认 GPL 协议的法律效力，通常将其视为合同关系。
+**Chinese Law**: Chinese courts have confirmed the legal force of GPL in multiple cases, generally treating it as a contractual relationship.
 
-关键点是：你不需要物理签名来接受开源协议。通过复制、使用或修改开源代码，你就已经接受了协议的条款。
+The key point is: You don't need a physical signature to accept an open source license. By copying, using, or modifying open source code, you have already accepted the license terms.
 
-#### 误区 7："我可以把 MIT 代码放入 GPL 项目，然后整个项目变成 MIT"
+#### Misconception 7: "I can put MIT code into a GPL project, and then the entire project becomes MIT"
 
-这个理解是错误的。协议兼容性是单向的：
+This understanding is incorrect. License compatibility is one-way:
 
-- MIT 代码可以放入 GPL 项目（因为 MIT 允许更宽松的使用）
-- 但整个项目必须遵守 GPL 的要求（因为 GPL 有传染性）
+- MIT code can be placed into GPL projects (because MIT allows more permissive use)
+- But the entire project must comply with GPL requirements (because GPL has viral nature)
 
-当你将 MIT 代码放入 GPL 项目时：
-1. MIT 代码仍然保持 MIT 协议
-2. 但整个项目的衍生作品必须以 GPL 发布
-3. 你不能将整个项目重新以 MIT 发布
+When you put MIT code into a GPL project:
+1. MIT code still maintains MIT license
+2. But all derivative works of the entire project must be released under GPL
+3. You cannot re-release the entire project under MIT
 
-这就是为什么在混合不同协议的代码时，必须仔细考虑兼容性问题。
+This is why you must carefully consider compatibility issues when mixing code with different licenses.
 
-#### 误区 8："Creative Commons 可以用于软件"
+#### Misconception 8: "Creative Commons can be used for software"
 
-Creative Commons 协议明确声明不推荐用于软件：
+Creative Commons licenses explicitly state they are not recommended for software:
 
-> "Creative Commons 公共许可不适用于软件。我们建议使用专门的软件许可，如 GNU GPL、BSD 或 MIT 许可。"
+> "Creative Commons public licenses are not recommended for software. We recommend using specialized software licenses such as GNU GPL, BSD, or MIT licenses."
 
-原因包括：
+Reasons include:
 
-1. **源码/二进制区分**：CC 协议没有考虑软件特有的源码和二进制形式的区分
-2. **链接问题**：CC 协议没有处理静态链接、动态链接等软件特有的问题
-3. **安装信息**：CC 协议没有考虑软件安装和运行的技术细节
-4. **专利问题**：CC 协议没有明确的专利条款
+1. **Source Code/Binary Distinction**: CC licenses do not account for the software-specific distinction between source code and binary forms
+2. **Linking Issues**: CC licenses do not address software-specific issues like static and dynamic linking
+3. **Installation Information**: CC licenses do not consider technical details of software installation and operation
+4. **Patent Issues**: CC licenses do not have explicit patent terms
 
-CC 协议适合用于：
-- 文档和教程
-- 图片和多媒体资源
-- 教育材料
-- 数据集
+CC licenses are suitable for:
+- Documentation and tutorials
+- Images and multimedia resources
+- Educational materials
+- Datasets
 
-#### 误区 9："我引用了开源库，我的项目就必须开源"
+#### Misconception 9: "I referenced an open source library, so my project must be open source"
 
-这取决于你如何引用开源库以及使用的协议：
+This depends on how you reference the open source library and the license being used:
 
-**动态链接**：
-- 使用 MIT/BSD/Apache 库：你的项目可以保持闭源
-- 使用 LGPL 库：你的项目可以保持闭源，但必须允许用户替换库
-- 使用 GPL 库：通常需要开源（有争议）
+**Dynamic Linking**:
+- Using MIT/BSD/Apache libraries: Your project can remain closed source
+- Using LGPL libraries: Your project can remain closed source, but must allow users to replace the library
+- Using GPL libraries: Generally requires open source (controversial)
 
-**静态链接**：
-- 使用 MIT/BSD/Apache 库：你的项目可以保持闭源
-- 使用 LGPL 库：需要提供目标文件或源码
-- 使用 GPL 库：通常需要开源
+**Static Linking**:
+- Using MIT/BSD/Apache libraries: Your project can remain closed source
+- Using LGPL libraries: Need to provide object files or source code
+- Using GPL libraries: Generally requires open source
 
-**最佳实践**：
-- 如果你不确定，使用宽松型协议的库
-- 咨询法律顾问
-- 使用依赖分析工具检查协议
+**Best Practices**:
+- If unsure, use libraries with permissive licenses
+- Consult legal counsel
+- Use dependency analysis tools to check licenses
 
-#### 误区 10："开源协议在不同国家法律效力不同"
+#### Misconception 10: "Open source licenses have different legal force in different countries"
 
-虽然各国法律体系不同，但开源协议在主要司法管辖区都已得到认可：
+Although legal systems differ across countries, open source licenses have been recognized in major jurisdictions:
 
-**美国**：多个联邦法院确认开源协议的法律效力，如 Jacobsen v. Katzer 案。
+**United States**: Multiple federal courts have confirmed the legal force of open source licenses, such as the Jacobsen v. Katzer case.
 
-**欧盟**：欧盟法院认可开源协议的约束力，德国法院在多个案例中支持 GPL。
+**European Union**: EU courts recognize the binding force of open source licenses, and German courts have supported GPL in multiple cases.
 
-**中国**：2021 年，杭州互联网法院首次确认 GPL 协议在中国具有法律效力。之后，多个地方法院在类似案件中做出了相同认定。
+**China**: In 2021, the Hangzhou Internet Court confirmed for the first time that GPL has legal force in China. Since then, multiple local courts have made similar rulings.
 
-**日本**：日本法院在多个案例中认可了 GPL 协议的效力。
+**Japan**: Japanese courts have recognized the force of GPL in multiple cases.
 
-关键点是：开源协议在大多数发达国家都有法律效力，违反协议可能导致严重的法律后果。
+The key point is: Open source licenses have legal force in most developed countries, and violating licenses may lead to serious legal consequences.
 
-#### 误区 11："开源代码不需要注明原作者"
+#### Misconception 11: "Open source code doesn't require attributing the original author"
 
-这是一个危险的误解。大多数开源协议都要求保留原作者的署名：
+This is a dangerous misconception. Most open source licenses require retaining the original author's attribution:
 
-**MIT 协议**：要求保留版权声明和许可声明
+**MIT License**: Requires retaining copyright notice and permission notice
 
-**BSD 协议**：要求保留版权声明、免责声明，BSD 3-Clause 还禁止使用原作者名字背书
+**BSD License**: Requires retaining copyright notice and disclaimer, and BSD 3-Clause also prohibits using the original author's name for endorsement
 
-**Apache 2.0**：要求保留版权声明、专利声明、商标声明和归属声明
+**Apache 2.0**: Requires retaining copyright notice, patent notice, trademark notice, and attribution notice
 
-**GPL**：要求保留所有版权声明和许可声明
+**GPL**: Requires retaining all copyright notices and permission notices
 
-不遵守这些要求可能导致：
-- 协议授权自动终止
-- 面临版权侵权诉讼
-- 被要求停止使用相关代码
+Non-compliance may result in:
+- Automatic termination of license authorization
+- Facing copyright infringement lawsuits
+- Being required to stop using the relevant code
 
-#### 误区 12："我可以在自己的项目中混合任意协议的代码"
+#### Misconception 12: "I can mix any license's code in my own project"
 
-协议兼容性是一个复杂的问题，不是所有协议都可以混合使用：
+License compatibility is a complex issue; not all licenses can be mixed:
 
-**兼容性矩阵简化版**：
-- 宽松型（MIT/BSD/Apache）→ 可以放入大多数项目
-- 弱传染型（LGPL/MPL）→ 有一定限制
-- 强传染型（GPL/AGPL）→ 严格限制
+**Simplified Compatibility Matrix**:
+- Permissive (MIT/BSD/Apache) → Can be placed in most projects
+- Weak Copyleft (LGPL/MPL) → Has certain restrictions
+- Strong Copyleft (GPL/AGPL) → Strict restrictions
 
-**常见不兼容情况**：
-- Apache 2.0 与 GPL v2 不兼容（Apache 的专利条款与 GPL v2 冲突）
-- 不同版本的 GPL 之间可能不兼容（GPL v2 与 GPL v3）
+**Common Incompatibilities**:
+- Apache 2.0 is incompatible with GPL v2 (Apache's patent terms conflict with GPL v2)
+- Different versions of GPL may be incompatible (GPL v2 with GPL v3)
 
-**建议**：
-- 在选择依赖库时检查其协议
-- 使用协议兼容性检查工具
-- 咨询法律专家
+**Recommendations**:
+- Check the license of dependency libraries when selecting them
+- Use license compatibility checking tools
+- Consult legal experts
 
-#### 误区 13："开源协议一旦选择就不能更改"
+#### Misconception 13: "Once a license is chosen, it cannot be changed"
 
-实际上，协议是可以更改的，但需要满足特定条件：
+Actually, licenses can be changed, but specific conditions must be met:
 
-**条件一：你拥有所有版权**
-- 如果你是代码的唯一作者，你可以随时更改协议
-- 如果有其他贡献者，需要获得所有贡献者的同意
+**Condition 1: You Own All Copyrights**
+- If you are the sole author of the code, you can change the license at any time
+- If there are other contributors, you need to obtain consent from all contributors
 
-**条件二：使用 CLA**
-- 如果项目要求贡献者签署 CLA，且 CLA 允许更改协议
-- 你可以根据 CLA 的授权更改协议
+**Condition 2: Use CLA**
+- If the project requires contributors to sign a CLA, and the CLA allows license changes
+- You can change the license based on the CLA authorization
 
-**条件三：双重许可**
-- 你可以将代码同时以多个协议发布
-- 用户可以选择适合自己的协议
+**Condition 3: Dual Licensing**
+- You can release code under multiple licenses simultaneously
+- Users can choose the license that suits them
 
-**实际案例**：
-- MongoDB 从 AGPL 更改为 SSPL
-- Elasticsearch 从 Apache 2.0 更改为 SSPL
-- WordPress 插件从 GPL v2 更改为 GPL v3
+**Practical Examples**:
+- MongoDB changed from AGPL to SSPL
+- Elasticsearch changed from Apache 2.0 to SSPL
+- WordPress plugins changed from GPL v2 to GPL v3
 
-#### 误区 14："我使用了开源代码，就自动获得了专利许可"
+#### Misconception 14: "I used open source code, so I automatically received patent authorization"
 
-这取决于协议：
+This depends on the license:
 
-**明确专利授权的协议**：
-- Apache License 2.0：明确授予专利许可
-- GPL v3：明确授予专利许可
-- MPL 2.0：明确授予专利许可
+**Licenses with Explicit Patent Authorization**:
+- Apache License 2.0: Explicitly grants patent licenses
+- GPL v3: Explicitly grants patent licenses
+- MPL 2.0: Explicitly grants patent licenses
 
-**没有明确专利授权的协议**：
-- MIT License：没有明确的专利条款
-- BSD 协议：没有明确的专利条款
-- GPL v2：有隐含的专利授权，但不够明确
+**Licenses without Explicit Patent Authorization**:
+- MIT License: No explicit patent terms
+- BSD License: No explicit patent terms
+- GPL v2: Has implied patent authorization, but not explicit enough
 
-如果你的项目涉及专利技术，建议：
-- 使用包含明确专利条款的协议（如 Apache 2.0）
-- 要求贡献者签署 CLA
-- 进行专利风险评估
+If your project involves patent technology, recommendations include:
+- Use licenses with explicit patent terms (such as Apache 2.0)
+- Require contributors to sign CLA
+- Conduct patent risk assessments
 
-#### 误区 15："开源代码没有任何担保，出了问题与原作者无关"
+#### Misconception 15: "Open source code has no guarantees, and the original author has no responsibility if problems occur"
 
-大多数开源协议确实包含免责声明，但这不意味着完全没有责任：
+Most open source licenses do contain disclaimers, but this doesn't mean there is no responsibility:
 
-**免责声明的作用**：
-- 限制原作者的赔偿责任
-- 明确软件按"原样"提供
-- 排除特定类型的担保
+**Purpose of Disclaimers**:
+- Limit the original author's liability
+- Explicitly state software is provided "as is"
+- Exclude certain types of warranties
 
-**免责声明的限制**：
-- 不能排除故意欺诈的责任
-- 不能违反消费者保护法
-- 在某些司法管辖区可能部分无效
+**Limitations of Disclaimers**:
+- Cannot exclude liability for intentional fraud
+- Cannot violate consumer protection laws
+- May be partially invalid in certain jurisdictions
 
-**最佳实践**：
-- 在使用开源代码前进行充分测试
-- 了解代码的安全性和可靠性
-- 不要在关键系统中使用未经验证的开源代码
-- 建立安全漏洞响应机制
+**Best Practices**:
+- Conduct thorough testing before using open source code
+- Understand the security and reliability of the code
+- Don't use unverified open source code in critical systems
+- Establish security vulnerability response mechanisms
 
 ---
 
-## 附录 A：开源协议速查表
+## Appendix A: Open Source License Quick Reference
 
 ---
 
-## 16. 开源协议实战案例分析
+## 16. Open Source License Practical Case Studies
 
-### 16.1 案例一：个人项目选择协议
+### 16.1 Case 1: Personal Project License Selection
 
-小明是一名前端开发者，他开发了一个轻量级的 JavaScript 工具库，希望这个库能被广泛使用，包括被商业公司采用。他面临的选择是：
+Xiao Ming is a frontend developer who developed a lightweight JavaScript tool library. He hopes this library will be widely used, including by commercial companies. His choices are:
 
-**分析**：
-- 希望代码被广泛使用 → 需要宽松型协议
-- 允许商业使用 → 不能选择带非商业条款的协议
-- 工具库性质 → 不需要传染性
+**Analysis**:
+- Wants code to be widely used → Needs a permissive license
+- Allows commercial use → Cannot choose licenses with non-commercial clauses
+- Library nature → No viral nature needed
 
-**推荐**：MIT License
+**Recommendation**: MIT License
 
-**理由**：MIT 协议简单明了，限制极少，几乎所有公司都可以放心使用。React、Vue.js 等知名前端项目都采用 MIT 协议，这使得它们被广泛集成到各种商业产品中。
+**Reason**: MIT License is simple and clear with very few restrictions, making it safe for virtually all companies to use. Well-known frontend projects like React and Vue.js use MIT License, which has allowed them to be widely integrated into various commercial products.
 
-**实际操作**：
+**Practical Steps**:
 ```bash
-# 在项目根目录创建 LICENSE 文件
+# Create LICENSE file in project root
 cat > LICENSE << 'EOF'
 MIT License
 
@@ -1287,94 +1302,94 @@ SOFTWARE.
 EOF
 ```
 
-### 16.2 案例二：企业开源项目
+### 16.2 Case 2: Enterprise Open Source Project
 
-某科技公司开发了一套微服务框架，希望开源后能获得社区贡献，同时保护自己的专利技术。公司法务部门担心竞争对手可能利用专利条款发起诉讼。
+A technology company developed a microservices framework and hopes to open source it to gain community contributions while protecting their patented technology. The company's legal department is concerned that competitors might use patent clauses to initiate lawsuits.
 
-**分析**：
-- 企业级项目 → 需要专利保护
-- 希望社区贡献 → 需要清晰的贡献者协议
-- 担心专利诉讼 → 需要专利报复条款
+**Analysis**:
+- Enterprise-level project → Needs patent protection
+- Wants community contributions → Needs clear contributor agreements
+- Concerned about patent litigation → Needs patent retaliation clause
 
-**推荐**：Apache License 2.0 + CLA
+**Recommendation**: Apache License 2.0 + CLA
 
-**理由**：Apache 2.0 提供明确的专利授权和专利报复条款，能有效保护企业利益。同时，配合 CLA（贡献者许可协议），可以确保所有贡献者的专利也被授权给项目。
+**Reason**: Apache 2.0 provides explicit patent authorization and patent retaliation clauses, effectively protecting enterprise interests. Additionally, combined with CLA (Contributor License Agreement), it ensures all contributors' patents are also authorized to the project.
 
-**企业开源合规检查清单**：
-1. 法务部门审核协议条款
-2. 建立 CLA 签署流程
-3. 扫描代码中的第三方开源组件
-4. 确保所有依赖协议兼容
-5. 在 README 中明确声明协议
-6. 建立贡献者指南
+**Enterprise Open Source Compliance Checklist**:
+1. Legal department reviews license terms
+2. Establish CLA signing process
+3. Scan code for third-party open source components
+4. Ensure all dependency licenses are compatible
+5. Clearly declare license in README
+6. Establish contributor guidelines
 
-### 16.3 案例三：开源 SaaS 平台
+### 16.3 Case 3: Open Source SaaS Platform
 
-一家创业公司开发了一个项目管理工具，提供在线 SaaS 服务。他们希望保持代码开源，但不希望竞争对手直接拿代码部署相同的服务。
+A startup developed a project management tool and provides online SaaS services. They want to keep the code open source but don't want competitors to directly take the code and deploy identical services.
 
-**分析**：
-- 提供网络服务 → GPL 的分发条款不适用
-- 希望保持开源 → 需要开源协议
-- 防止直接竞争 → 需要网络使用条款
+**Analysis**:
+- Provides network services → GPL's distribution terms don't apply
+- Wants to stay open source → Needs open source license
+- Prevent direct competition → Needs network use terms
 
-**推荐**：AGPL v3
+**Recommendation**: AGPL v3
 
-**理由**：AGPL v3 堵住了 GPL 的"网络使用漏洞"，要求通过网络提供服务的项目也必须公开源码。这使得竞争对手如果想使用代码提供服务，也必须开源其修改。
+**Reason**: AGPL v3 closes GPL's "network use loophole," requiring projects that provide services over a network to also publish source code. This means competitors who want to use the code to provide services must also open source their modifications.
 
-**注意事项**：
-- AGPL 的传染性较强，可能吓退部分企业用户
-- 需要明确告知用户其义务
-- 考虑提供商业许可选项
+**Considerations**:
+- AGPL's viral nature is strong and may deter some enterprise users
+- Need to clearly inform users of their obligations
+- Consider providing commercial license options
 
-### 16.4 案例四：开源库的商业化
+### 16.4 Case 4: Commercialization of Open Source Libraries
 
-一个流行的开源库维护者希望通过项目盈利，同时保持代码的开源性质。
+A popular open source library maintainer wants to profit from the project while maintaining the open source nature of the code.
 
-**分析**：
-- 希望盈利 → 需要商业许可模式
-- 保持开源 → 需要开源核心
-- 库的性质 → 需要考虑用户的使用场景
+**Analysis**:
+- Wants to profit → Needs commercial license model
+- Maintain open source → Needs open core
+- Library nature → Need to consider user scenarios
 
-**推荐**：LGPL v3（库）+ 商业许可
+**Recommendation**: LGPL v3 (library) + Commercial License
 
-**模式设计**：
+**Model Design**:
 ```
-项目结构
-├── 核心库（LGPL v3）
-│   ├── 基础功能
-│   └── 开源，允许闭源链接
+Project Structure
+├── Core Library (LGPL v3)
+│   ├── Basic Features
+│   └── Open source, allows closed-source linking
 │
-├── 扩展插件（商业许可）
-│   ├── 高级功能
-│   └── 付费使用
+├── Extension Plugins (Commercial License)
+│   ├── Advanced Features
+│   └── Paid usage
 │
-└── 企业版（商业许可）
-    ├── 完整功能
-    ├── 技术支持
-    └── SLA 保障
+└── Enterprise Edition (Commercial License)
+    ├── Complete Features
+    ├── Technical Support
+    └── SLA Guarantees
 ```
 
-**成功案例参考**：
-- Qt：LGPL + 商业许可
-- MySQL：GPL + 商业许可
-- Redis：BSD + 企业许可
+**Success Story References**:
+- Qt: LGPL + Commercial License
+- MySQL: GPL + Commercial License
+- Redis: BSD + Enterprise License
 
-### 16.5 案例五：学术项目开源
+### 16.5 Case 5: Academic Project Open Sourcing
 
-大学研究团队开发了一个机器学习算法库，希望学术界和工业界都能使用，同时确保学术引用。
+A university research team developed a machine learning algorithm library and hopes both academia and industry can use it while ensuring academic citations.
 
-**分析**：
-- 学术项目 → 需要引用要求
-- 工业界使用 → 需要宽松协议
-- 机器学习领域 → 常见 Apache 2.0
+**Analysis**:
+- Academic project → Needs citation requirements
+- Industry use → Needs permissive license
+- Machine learning field → Apache 2.0 is common
 
-**推荐**：Apache License 2.0 + 引用文件
+**Recommendation**: Apache License 2.0 + Citation File
 
-**操作方式**：
+**Implementation Method**:
 ```markdown
-## 引用
+## Citation
 
-如果本项目对你的研究有帮助，请引用我们的论文：
+If this project is helpful to your research, please cite our paper:
 
 ```bibtex
 @article{author2024paper,
@@ -1386,92 +1401,92 @@ EOF
 ```
 ```
 
-### 16.6 协议迁移案例
+### 16.6 License Migration Case Study
 
-**案例：MongoDB 协议变更**
+**Case: MongoDB License Change**
 
-MongoDB 在 2018 年将协议从 AGPL v3 变更为 SSPL（Server Side Public License），引发了广泛讨论。
+MongoDB changed its license from AGPL v3 to SSPL (Server Side Public License) in 2018, sparking widespread discussion.
 
-**变更原因**：
-- 云服务商直接使用 MongoDB 提供托管服务
-- 原协议未能有效保护 MongoDB 的商业利益
+**Reasons for Change**:
+- Cloud service providers directly using MongoDB to provide hosted services
+- Original license did not effectively protect MongoDB's commercial interests
 
-**变更影响**：
-- 部分开源组织不认可 SSPL
-- 一些 Linux 发行版移除了 MongoDB
-- 催生了兼容项目如 FerretDB
+**Impact of Change**:
+- Some open source organizations did not recognize SSPL
+- Some Linux distributions removed MongoDB
+- Spawned compatible projects like FerretDB
 
-**教训**：
-- 协议变更需要慎重考虑
-- 提前评估社区和用户的反应
-- 准备好应对方案
+**Lessons**:
+- License changes need careful consideration
+- Assess community and user reactions in advance
+- Prepare response plans
 
-### 16.7 多协议项目管理
+### 16.7 Multi-License Project Management
 
-大型项目可能包含多种协议的代码，需要系统化管理：
+Large projects may contain code under multiple licenses and need systematic management:
 
-**目录结构示例**：
+**Directory Structure Example**:
 ```
 project/
 ├── src/
-│   ├── core/           # 核心代码，Apache 2.0
+│   ├── core/           # Core code, Apache 2.0
 │   ├── plugins/
-│   │   ├── plugin-a/   # 插件 A，MIT
-│   │   └── plugin-b/   # 插件 B，BSD 3-Clause
+│   │   ├── plugin-a/   # Plugin A, MIT
+│   │   └── plugin-b/   # Plugin B, BSD 3-Clause
 │   └── third-party/
-│       ├── lib-x/      # 第三方库 X，LGPL
-│       └── lib-y/      # 第三方库 Y，Apache 2.0
-├── docs/               # 文档，CC BY 4.0
-├── examples/           # 示例代码，MIT
-└── LICENSE             # 项目主协议
+│       ├── lib-x/      # Third-party library X, LGPL
+│       └── lib-y/      # Third-party library Y, Apache 2.0
+├── docs/               # Documentation, CC BY 4.0
+├── examples/           # Example code, MIT
+└── LICENSE             # Main project license
 ```
 
-**协议管理工具**：
+**License Management Tools**:
 ```bash
-# npm 项目
+# npm projects
 npm install -g license-checker
 license-checker --summary
 
-# Python 项目
+# Python projects
 pip install pip-licenses
 pip-licenses --format=table
 
-# Rust 项目
+# Rust projects
 cargo install cargo-license
 cargo license
 ```
 
 ---
 
-## 附录 A：开源协议速查表
+## Appendix A: Open Source License Quick Reference
 
-| 协议 | 传染性 | 专利保护 | 商标保护 | 推荐场景 |
+| License | Viral Nature | Patent Protection | Trademark Protection | Recommended Scenario |
 |------|--------|----------|----------|----------|
-| MIT | 无 | 无 | 无 | 通用项目 |
-| Apache 2.0 | 无 | 有 | 有 | 企业项目 |
-| BSD 2-Clause | 无 | 无 | 无 | 类 MIT |
-| BSD 3-Clause | 无 | 无 | 有 | 需要署名保护 |
-| GPL v2 | 强 | 隐含 | 无 | Linux 内核 |
-| GPL v3 | 强 | 有 | 无 | 通用 GPL 项目 |
-| AGPL v3 | 强（含网络） | 有 | 无 | SaaS 项目 |
-| LGPL v3 | 弱（库） | 有 | 无 | 开源库 |
-| MPL 2.0 | 文件级 | 有 | 无 | 混合项目 |
-| CC BY 4.0 | 无 | 无 | 无 | 文档 |
-| CC BY-SA 4.0 | 有 | 无 | 无 | 需保持开放的文档 |
-| CC0 | 无 | 无 | 无 | 公共领域 |
+| MIT | None | None | None | General projects |
+| Apache 2.0 | None | Yes | Yes | Enterprise projects |
+| BSD 2-Clause | None | None | None | MIT-like |
+| BSD 3-Clause | None | None | Yes | Attribution protection needed |
+| GPL v2 | Strong | Implied | None | Linux kernel |
+| GPL v3 | Strong | Yes | None | General GPL projects |
+| AGPL v3 | Strong (includes network) | Yes | None | SaaS projects |
+| LGPL v3 | Weak (library) | Yes | None | Open source libraries |
+| MPL 2.0 | File-level | Yes | None | Mixed projects |
+| CC BY 4.0 | None | None | None | Documentation |
+| CC BY-SA 4.0 | Yes | None | None | Documentation that needs to stay open |
+| CC0 | None | None | None | Public domain |
 
-## 附录 B：推荐阅读
+## Appendix B: Recommended Reading
 
 - [Open Source Initiative (OSI)](https://opensource.org/)
 - [Free Software Foundation (FSF)](https://www.fsf.org/)
 - [SPDX License List](https://spdx.org/licenses/)
 - [Choose a License](https://choosealicense.com/)
 - [TLDRLegal](https://tldrlegal.com/)
-- [中国开源云联盟](http://www.coscl.org.cn/)
-- [开放原子开源基金会](https://www.openatom.org/)
+- [China Open Source Cloud League](http://www.coscl.org.cn/)
+- [OpenAtom Foundation](https://www.openatom.org/)
 
 ---
 
-**最后更新**：2024 年 12 月
+**Last Updated**: December 2024
 
-**免责声明**：本文档仅供学习参考，不构成法律建议。在做出重要的开源协议决策时，请咨询专业法律顾问。
+**Disclaimer**: This document is for learning reference only and does not constitute legal advice. When making important open source license decisions, please consult professional legal counsel.

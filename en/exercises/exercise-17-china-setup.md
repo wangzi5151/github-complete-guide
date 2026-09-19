@@ -1,78 +1,78 @@
-# 练习 17：国内环境配置实战
+# Exercise 17: Domestic Environment Configuration Practice
 
-## 学习目标
+## Learning Objectives
 
-- 配置国内加速方案
-- 设置国内包管理器镜像
-- 优化 Git 连接
+- Configure domestic acceleration solutions
+- Set up domestic package manager mirrors
+- Optimize Git connections
 
-## 步骤
+## Steps
 
-### 步骤 1：配置 GitHub520
+### Step 1: Configure GitHub520
 
 ```bash
-# 安装 GitHub520
+# Install GitHub520
 pip install github520
 
-# 验证 hosts 文件
+# Verify hosts file
 cat /etc/hosts | grep github
 ```
 
-### 步骤 2：配置 npm 镜像
+### Step 2: Configure npm Mirror
 
 ```bash
-# 永久设置淘宝镜像
+# Permanently set Taobao mirror
 npm config set registry https://registry.npmmirror.com
 
-# 验证
+# Verify
 npm config get registry
-# 输出: https://registry.npmmirror.com
+# Output: https://registry.npmmirror.com
 
-# 测试速度
+# Test speed
 npm install -g typescript
 ```
 
-### 步骤 3：配置 pip 镜像
+### Step 3: Configure pip Mirror
 
 ```bash
-# 永久设置阿里云镜像
+# Permanently set Alibaba Cloud mirror
 pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 pip config set global.trusted-host mirrors.aliyun.com
 
-# 验证
+# Verify
 pip config list
 
-# 测试速度
+# Test speed
 pip install requests
 ```
 
-### 步骤 4：配置 Git SSH
+### Step 4: Configure Git SSH
 
 ```bash
-# 转换为 SSH
+# Convert to SSH
 git config --global url."git@github.com:".insteadOf "https://github.com/"
 
-# 验证
+# Verify
 git config --global --get-regexp url
 ```
 
-### 步骤 5：配置 Go 镜像
+### Step 5: Configure Go Mirror
 
 ```bash
-# 设置代理
+# Set proxy
 go env -w GOPROXY=https://goproxy.cn,direct
 
-# 验证
+# Verify
 go env GOPROXY
 ```
 
-### 步骤 6：配置 Docker 镜像
+### Step 6: Configure Docker Mirror
 
 ```bash
-# 创建配置目录
+# Create configuration directory
 sudo mkdir -p /etc/docker
 
-# 写入配置
+# Write configuration
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
   "registry-mirrors": [
@@ -82,31 +82,31 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 }
 EOF
 
-# 重启 Docker
+# Restart Docker
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 
-# 验证
+# Verify
 docker info | grep -A 5 "Registry Mirrors"
 ```
 
-## 实战任务
+## Practical Tasks
 
-1. 安装并配置 GitHub520
-2. 配置 npm/pip/Docker 国内镜像
-3. 测试各工具的下载速度
-4. 对比配置前后的速度差异
+1. Install and configure GitHub520
+2. Configure domestic mirrors for npm/pip/Docker
+3. Test download speeds for each tool
+4. Compare speed differences before and after configuration
 
-## 验证清单
+## Verification Checklist
 
-- [ ] GitHub520 已安装并运行
-- [ ] npm 镜像已配置
-- [ ] pip 镜像已配置
-- [ ] Git SSH 已配置
-- [ ] Go 镜像已配置
-- [ ] Docker 镜像已配置
-- [ ] 能够正常访问 GitHub
+- [ ] GitHub520 installed and running
+- [ ] npm mirror configured
+- [ ] pip mirror configured
+- [ ] Git SSH configured
+- [ ] Go mirror configured
+- [ ] Docker mirror configured
+- [ ] Can access GitHub normally
 
-## 下一步
+## Next Steps
 
-恭喜完成所有练习！你现在可以在国内环境下高效使用 GitHub。
+Congratulations on completing all exercises! You can now efficiently use GitHub in a domestic environment.

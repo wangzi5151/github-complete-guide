@@ -30,7 +30,7 @@
 
 **Fork** is a collaboration mechanism provided by GitHub, allowing you to create a complete copy of others' repository under your own account. This copy is independent of the original repository, you can freely modify, experiment and develop in it without affecting the original project.
 
-Use a通俗 metaphor to understand: Suppose the original project is a book manuscript, Fork is equivalent to you getting a copy of this manuscript, you can freely annotate and modify on the copy, while the original manuscript remains intact. When you think your modifications are valuable, you can suggest to the original author (Pull Request), the original author decides whether to adopt your modifications after review.
+Use a plain metaphor to understand: Suppose the original project is a book manuscript, Fork is equivalent to you getting a copy of this manuscript, you can freely annotate and modify on the copy, while the original manuscript remains intact. When you think your modifications are valuable, you can suggest to the original author (Pull Request), the original author decides whether to adopt your modifications after review.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -85,7 +85,7 @@ Many beginners confuse Fork and Clone, they have essential differences:
 |---------|------|-------|
 | Location | Create copy on GitHub server | Download to local computer |
 | Permissions | Need GitHub account | Anyone can Clone public repository |
-| Relationship | Maintain traceable relationship with original repository | Don't automatically关联 original repository |
+| Relationship | Maintain traceable relationship with original repository | Don't automatically associate with original repository |
 | Usage | Open source contribution, independent development | Local development, learning research |
 | Network | Happens on GitHub platform | Happens on Git command line |
 
@@ -115,7 +115,7 @@ Fork → Clone → Branch → Commit → Push → Pull Request
 3. Select your account as Fork target
 4. Wait for GitHub to complete Fork operation
 
-After Fork is complete, a repository with the same name as the original repository will appear under your account, GitHub will automatically display "This repository was forked from original-owner/repo"提示.
+After Fork is complete, a repository with the same name as the original repository will appear under your account, GitHub will automatically display "This repository was forked from original-owner/repo" prompt.
 
 ### 2.2 Step 2: Clone to Local
 
@@ -144,7 +144,7 @@ git remote add upstream git@github.com:original-owner/repo-name.git
 git remote -v
 ```
 
-After executing `git remote -v`, you should see output类似 to:
+After executing `git remote -v`, you should see output similar to:
 
 ```
 origin    git@github.com:your-username/repo-name.git (fetch)
@@ -165,7 +165,7 @@ git checkout main
 git checkout -b feature/your-feature-name
 ```
 
-Branch naming建议使用 meaningful names, common naming conventions:
+Branch naming should use meaningful names, common naming conventions:
 
 ```bash
 # Feature branches
@@ -240,7 +240,7 @@ After push is complete, visit your Fork page, GitHub will display a yellow promp
 
 ## 3. Keep Fork Sync with Upstream
 
-Over time, the original repository will have new updates. Keeping your Fork synced with upstream is very important, this can avoid大量 conflicts during later merges.
+Over time, the original repository will have new updates. Keeping your Fork synced with upstream is very important, this can avoid a large number of conflicts during later merges.
 
 ### 3.1 Configure Upstream Repository
 
@@ -312,13 +312,13 @@ git checkout feature/your-feature-name
 # Method 1: merge
 git merge upstream/main
 
-# Method 2: rebase (Recommended,可以让 feature branch based on latest upstream code)
+# Method 2: rebase (Recommended, can make feature branch based on latest upstream code)
 git rebase upstream/main
 ```
 
 ### 3.6 Set Regular Sync Habit
 
-Recommend syncing upstream repository at以下时机:
+Recommend syncing upstream repository at the following times:
 
 - Before starting new development work
 - Before preparing to submit Pull Request
@@ -331,7 +331,7 @@ Recommend syncing upstream repository at以下时机:
 
 ### 4.1 Preparation Before Submitting PR
 
-Before submitting PR, please ensure completing以下检查:
+Before submitting PR, please ensure completing the following checks:
 
 ```markdown
 Pre-submission checklist:
@@ -341,13 +341,13 @@ Pre-submission checklist:
 □ Run tests locally and passed
 □ Added necessary test cases
 □ Updated related documentation
-□ Commit message符合 project standards
+□ Commit message conforms to project standards
 □ Code synced with upstream
 ```
 
 ### 4.2 Write High-quality PR Description
 
-A good PR description should include以下内容:
+A good PR description should include the following content:
 
 ```markdown
 ## Description
@@ -358,7 +358,7 @@ Briefly explain what this PR does, and why this modification is needed.
 
 - List your changes in detail
 - Use list format for easy reading
-- Each change point on单独 line
+- Each change point on a separate line
 
 ## Related Issues
 
@@ -430,7 +430,7 @@ git commit -m "fix: Fix login page form validation issue"
 git commit -m "feat: Add remember password feature"
 git commit -m "docs: Update login feature documentation"
 
-# ❌ Bad practice: one commit包含 multiple unrelated changes
+# ❌ Bad practice: one commit contains multiple unrelated changes
 git commit -m "Fix login issue, add new feature, update documentation"
 ```
 
@@ -467,7 +467,7 @@ git push origin feature/tests-docs
 
 ### 5.3 Associate Issues
 
-Associate related Issues in PR description,这样 when PR is merged, Issue will automatically close:
+Associate related Issues in PR description, so that when PR is merged, Issue will automatically close:
 
 ```markdown
 ## Related Issues
@@ -520,7 +520,7 @@ git commit -m "WIP"
 
 **Respect Maintainer's Time and Energy**
 
-Open source project maintainers are usually volunteers working无偿 in their spare time. Before asking questions or submitting contributions, please:
+Open source project maintainers are usually volunteers working in their spare time. Before asking questions or submitting contributions, please:
 
 - Read project documentation carefully
 - Search existing Issues and PRs
@@ -540,7 +540,7 @@ In Issue and PR communications, always maintain politeness and respect:
 
 **Wait Patiently for Reply**
 
-Maintainers may need几天 or even weeks to回复 your Issue or PR. Don't frequently催促, wait patiently.
+Maintainers may need several days or even weeks to reply to your Issue or PR. Don't frequently urge, wait patiently.
 
 ### 6.2 Issue Etiquette
 
@@ -548,7 +548,7 @@ Before creating Issue:
 
 1. Search existing Issues, avoid duplicates
 2. Use Issue template (if project provides)
-3. Provide足够的 context information
+3. Provide enough context information
 4. Include reproducible steps (for Bug reports)
 
 ```markdown
@@ -586,7 +586,7 @@ If applicable, provide screenshots.
 ### 6.3 Pull Request Etiquette
 
 - Before starting large work, open Issue to discuss first
-- Ensure your PR符合 project's contribution guidelines
+- Ensure your PR conforms to project's contribution guidelines
 - Respond to reviewer's feedback, maintain open mind
 - If you cannot continue work, promptly notify maintainer
 
@@ -952,7 +952,7 @@ module.exports = {
 ```python
 # Python code style (PEP 8)
 # Use 4 spaces for indentation
-# Line length不超过 79 characters
+# Line length not exceeding 79 characters
 # Function names use snake_case
 # Class names use CamelCase
 
@@ -1061,15 +1061,15 @@ echo "✅ All checks passed"
 
 ### 11.1 Understanding Reasons for Rejection
 
-PR may be rejected for多种原因:
+PR may be rejected for multiple reasons:
 
 ```
 Common rejection reasons:
-├── Doesn't符合 project direction
+├── Doesn't conform to project direction
 │   └── Maintainer has specific vision
 │
 ├── Code quality issues
-│   ├── Doesn't符合 code standards
+│   ├── Doesn't conform to code standards
 │   ├── Missing tests
 │   └── Has bugs
 │
@@ -1090,7 +1090,7 @@ Common rejection reasons:
 ```markdown
 # ✅ Positive response
 "Thank you for your feedback! I will modify according to suggestions. Regarding the second point,
-I have a question: how do you希望 to handle boundary cases?"
+I have a question: how would you like to handle boundary cases?"
 
 # ❌ Negative response
 "I think my code is fine, why should I change it?"
@@ -1212,7 +1212,7 @@ Project Lead
 
 ### 12.3 Maintainer Responsibilities
 
-After becoming maintainer, you will承担以下职责:
+After becoming maintainer, you will shoulder the following responsibilities:
 
 ```markdown
 Maintainer's daily work:
@@ -1232,7 +1232,7 @@ Maintainer's daily work:
 # Visit https://github.com/your-username
 
 # Your contribution calendar will show daily activity
-# Your profile will show projects you参与
+# Your profile will show projects you participated in
 
 # Showcase your open source contributions in resume
 # - Project name and link
@@ -1250,7 +1250,7 @@ Star is the simplest way to express love and support for a project:
 
 ```
 Star's role:
-├──收藏 project, convenient to find later
+├── Save project, convenient to find later
 ├── Express recognition of project
 ├── Help project increase visibility
 └── Affect GitHub's recommendation algorithm
@@ -1262,14 +1262,14 @@ Star's role:
 # 2. Click ⭐ Star button in top right corner
 # 3. You can view all Starred projects at https://github.com/stars
 
-# Star分类
+# Star classification
 # Create lists to organize your Starred projects
-# Example: Learning resources,常用 tools, open source contributions
+# Example: Learning resources, commonly used tools, open source contributions
 ```
 
 ### 13.2 GitHub Watch
 
-Watch allows you to及时了解 project's dynamics:
+Watch allows you to stay informed about project dynamics in a timely manner:
 
 ```
 Watch options:
@@ -1307,8 +1307,8 @@ Sponsor is an economic way to support open source maintainers:
 
 # Why should consider sponsoring
 
-- Support持续 development of open source projects
-- Help maintainers获得 economic return
+- Support continuous development of open source projects
+- Help maintainers obtain economic return
 - Get priority support (some projects)
 - Become part of project community
 ```
@@ -1378,7 +1378,7 @@ Impact of time zone differences:
 └── Need to reasonably arrange your contribution time
 
 Coping strategies:
-├── Don't期望 immediate reply
+├── Don't expect immediate reply
 ├── State your time zone in Issues
 ├── Use asynchronous communication methods
 └── Reasonably arrange your contribution time
@@ -1409,13 +1409,13 @@ git config --global https.proxy http://127.0.0.1:7890
 ## Western Style (Common in open source communities)
 - Directly express opinions
 - Focus on matter, not personal
-- Encourage提出 different viewpoints
+- Encourage proposing different viewpoints
 - Value logic and evidence
 
 ## Adaptation Suggestions
 - Don't treat code review criticism as personal attack
 - Directly state your problems and needs
-- Support your观点 with facts and data
+- Support your viewpoints with facts and data
 - Respect project's existing standards and processes
 ```
 
@@ -1540,7 +1540,7 @@ Closes #12345
 
 ### Checklist
 - [x] I have read CONTRIBUTING.md
-- [x] My code符合 project's code standards
+- [x] My code conforms to project's code standards
 - [x] I have tested my changes locally
 - [x] My commit message conforms to standards
 ```
@@ -1556,7 +1556,7 @@ Closes #12345
 
 # Response example:
 "Thank you for your feedback! I have modified the code according to suggestions.
-Now 'color' spelling is统一 to American English."
+Now 'color' spelling is unified to American English."
 ```
 
 ### 15.7 PR is Merged

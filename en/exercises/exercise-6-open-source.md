@@ -1,126 +1,126 @@
-# 练习 6：参与开源项目
+# Exercise 6: Participating in Open Source Projects
 
-## 目标
+## Objective
 
-学习如何 Fork 项目、创建 PR 和参与开源贡献。
+Learn how to Fork a project, create PRs, and participate in open source contributions.
 
-## 步骤
+## Steps
 
-### 1. 找到适合的项目
+### 1. Find a Suitable Project
 
-使用以下标签搜索：
+Search using the following labels:
 - `good first issue`
 - `help wanted`
 - `beginner friendly`
 
-### 2. Fork 项目
+### 2. Fork the Project
 
-1. 找到目标仓库
-2. 点击右上角 **Fork** 按钮
-3. 等待 Fork 完成
+1. Find the target repository
+2. Click the **Fork** button in the top right corner
+3. Wait for the Fork to complete
 
-### 3. 克隆你的 Fork
+### 3. Clone Your Fork
 
 ```bash
-git clone git@github.com:你的用户名/项目名.git
-cd 项目名
+git clone git@github.com:your-username/project-name.git
+cd project-name
 ```
 
-### 4. 添加上游仓库
+### 4. Add the Upstream Repository
 
 ```bash
-git remote add upstream git@github.com:原作者/项目名.git
+git remote add upstream git@github.com:original-author/project-name.git
 
-# 验证
+# Verify
 git remote -v
 ```
 
-### 5. 创建功能分支
+### 5. Create a Feature Branch
 
 ```bash
-# 同步上游最新代码
+# Sync with the latest upstream code
 git fetch upstream
 git checkout main
 git merge upstream/main
 
-# 创建功能分支
+# Create a feature branch
 git checkout -b fix/typo-in-readme
 ```
 
-### 6. 进行修改
+### 6. Make Changes
 
-例如修复 README 中的拼写错误：
+For example, fix a typo in the README:
 
 ```bash
-# 修改文件
+# Edit the file
 vim README.md
 
-# 提交
+# Commit
 git add README.md
-git commit -m "docs: 修复 README 中的拼写错误"
+git commit -m "docs: Fix typo in README"
 ```
 
-### 7. 推送到你的 Fork
+### 7. Push to Your Fork
 
 ```bash
 git push origin fix/typo-in-readme
 ```
 
-### 8. 创建 Pull Request
+### 8. Create a Pull Request
 
-1. 打开你的 Fork 页面
-2. 点击 **Compare & pull request**
-3. 确认：
-   - base repository: 原作者的仓库
-   - head repository: 你的 Fork
-4. 填写 PR 描述
-5. 点击 **Create pull request**
+1. Open your Fork page
+2. Click **Compare & pull request**
+3. Confirm:
+   - base repository: the original author's repository
+   - head repository: your Fork
+4. Fill in the PR description
+5. Click **Create pull request**
 
-### 9. 撰写好的 PR 描述
+### 9. Write a Good PR Description
 
 ```markdown
-## 变更说明
-修复了 README 中 "installtion" 拼写错误，改为 "installation"。
+## Description of Changes
+Fixed the typo "installtion" in the README, changed to "installation".
 
-## 变更类型
-- [x] 文档更新 (docs)
+## Type of Change
+- [x] Documentation update (docs)
 
-## 关联 Issue
-无
+## Related Issue
+None
 
-## 截图
-无
+## Screenshots
+None
 ```
 
-### 10. 等待审查
+### 10. Wait for Review
 
-- 回复审查者的评论
-- 根据反馈修改代码
-- 保持耐心和友好
+- Respond to reviewer comments
+- Make changes based on feedback
+- Be patient and friendly
 
-## 最佳实践
+## Best Practices
 
-### 提交前
-1. 阅读 CONTRIBUTING.md
-2. 了解代码规范
-3. 检查是否已有相关 Issue/PR
+### Before Submitting
+1. Read CONTRIBUTING.md
+2. Understand the code standards
+3. Check if there are already related Issues/PRs
 
-### 提交时
-1. 使用清晰的提交信息
-2. 一个 PR 只做一件事
-3. 写好 PR 描述
+### When Submitting
+1. Use clear commit messages
+2. One PR should only do one thing
+3. Write a good PR description
 
-### 提交后
-1. 及时响应反馈
-2. 保持礼貌和专业
-3. 接受可能被拒绝
+### After Submitting
+1. Respond to feedback in a timely manner
+2. Be polite and professional
+3. Accept that it may be rejected
 
-## 常见问题
+## Common Questions
 
-### Q: PR 被拒绝了怎么办？
-**A:** 这很正常，不要灰心。询问原因，学习改进，或者寻找其他贡献机会。
+### Q: What if my PR is rejected?
+**A:** This is very normal, don't be discouraged. Ask for the reason, learn and improve, or look for other contribution opportunities.
 
-### Q: 如何同步上游更新？
+### Q: How do I sync upstream updates?
 **A:**
 ```bash
 git fetch upstream
@@ -129,33 +129,33 @@ git merge upstream/main
 git push origin main
 ```
 
-### Q: 如何撤销 PR 中的提交？
+### Q: How do I revert a commit in a PR?
 **A:**
 ```bash
 git revert commit-hash
 git push
 ```
 
-## 开源贡献类型
+## Types of Open Source Contributions
 
-1. **修复 Bug**：最简单的贡献方式
-2. **改进文档**：添加说明、修复错误
-3. **添加测试**：提高代码质量
-4. **添加功能**：较大的改动
-5. **翻译内容**：帮助更多人
+1. **Fix Bugs**: The simplest way to contribute
+2. **Improve Documentation**: Add explanations, fix errors
+3. **Add Tests**: Improve code quality
+4. **Add Features**: Larger changes
+5. **Translate Content**: Help more people
 
-## 知识点
+## Key Takeaways
 
-- Fork 的概念和使用
-- 同步上游仓库
-- 创建高质量的 PR
-- 开源贡献礼仪
+- The concept and usage of Fork
+- Syncing with upstream repositories
+- Creating high-quality PRs
+- Open source contribution etiquette
 
-## 恭喜你！
+## Congratulations!
 
-完成这个练习后，你已经掌握了 GitHub 的基本使用方法。继续参与开源项目，你会变得越来越熟练！
+After completing this exercise, you have mastered the basic usage of GitHub. Keep participating in open source projects and you will become more and more proficient!
 
-## 推荐资源
+## Recommended Resources
 
 - [First Timers Only](https://www.firsttimersonly.com/)
 - [Good First Issues](https://goodfirstissue.dev/)

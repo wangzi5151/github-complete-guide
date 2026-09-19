@@ -1,55 +1,55 @@
-# Kubernetes + GitHub Actions 实战指南
+# Kubernetes + GitHub Actions Practical Guide
 
-> 本教程面向中国开发者，系统讲解如何将 Kubernetes 与 GitHub Actions 深度集成，实现从代码提交到生产部署的全自动化流水线。
-
----
-
-## 目录
-
-1. [Kubernetes 基础概念回顾](#1-kubernetes-基础概念回顾)
-2. [GitHub Actions 部署到 K8s 的方案](#2-github-actions-部署到-k8s-的方案)
-3. [kubectl 配置与 GitHub Secrets](#3-kubectl-配置与-github-secrets)
-4. [Helm Chart + GitHub Actions 部署](#4-helm-chart--github-actions-部署)
-5. [Kustomize + GitHub Actions 部署](#5-kustomize--github-actions-部署)
-6. [ArgoCD + GitOps 工作流](#6-argocd--gitops-工作流)
-7. [Flux CD + GitHub 集成](#7-flux-cd--github-集成)
-8. [K8s 多环境管理（dev/staging/prod）](#8-k8s-多环境管理devstagingprod)
-9. [K8s 自动扩缩容配置](#9-k8s-自动扩缩容配置)
-10. [监控与告警（Prometheus + Grafana）](#10-监控与告警prometheus--grafana)
-11. [K8s 安全最佳实践](#11-k8s-安全最佳实践)
-12. [云厂商 K8s 服务](#12-云厂商-k8s-服务)
-13. [K8s 成本优化](#13-k8s-成本优化)
-14. [国内 K8s 部署注意事项](#14-国内-k8s-部署注意事项)
+> This tutorial is aimed at Chinese developers, systematically explaining how to deeply integrate Kubernetes with GitHub Actions to achieve a fully automated pipeline from code commit to production deployment.
 
 ---
 
-## 1. Kubernetes 基础概念回顾
+## Table of Contents
 
-### 1.1 什么是 Kubernetes
+1. [Kubernetes Basic Concepts Review](#1-kubernetes-basic-concepts-review)
+2. [GitHub Actions Deployment to K8s Solutions](#2-github-actions-deployment-to-k8s-solutions)
+3. [kubectl Configuration and GitHub Secrets](#3-kubectl-configuration-and-github-secrets)
+4. [Helm Chart + GitHub Actions Deployment](#4-helm-chart--github-actions-deployment)
+5. [Kustomize + GitHub Actions Deployment](#5-kustomize--github-actions-deployment)
+6. [ArgoCD + GitOps Workflow](#6-argocd--gitops-workflow)
+7. [Flux CD + GitHub Integration](#7-flux-cd--github-integration)
+8. [K8s Multi-Environment Management (dev/staging/prod)](#8-k8s-multi-environment-management-devstagingprod)
+9. [K8s Autoscaling Configuration](#9-k8s-autoscaling-configuration)
+10. [Monitoring and Alerting (Prometheus + Grafana)](#10-monitoring-and-alerting-prometheus--grafana)
+11. [K8s Security Best Practices](#11-k8s-security-best-practices)
+12. [Cloud Provider K8s Services](#12-cloud-provider-k8s-services)
+13. [K8s Cost Optimization](#13-k8s-cost-optimization)
+14. [Domestic K8s Deployment Considerations](#14-domestic-k8s-deployment-considerations)
 
-Kubernetes（简称 K8s）是由 Google 开源的容器编排平台，用于自动化部署、扩展和管理容器化应用程序。它已经成为云原生领域的事实标准，被国内外各大企业广泛采用。
+---
 
-### 1.2 核心架构
+## 1. Kubernetes Basic Concepts Review
 
-Kubernetes 采用主从架构，主要包含以下组件：
+### 1.1 What is Kubernetes
 
-**控制平面（Control Plane）：**
+Kubernetes (abbreviated as K8s) is an open-source container orchestration platform by Google, used for automating deployment, scaling, and management of containerized applications. It has become the de facto standard in the cloud-native field and is widely adopted by major enterprises both domestically and internationally.
 
-- `kube-apiserver`：API 服务器，所有操作的入口
-- `etcd`：分布式键值存储，保存集群状态
-- `kube-scheduler`：调度器，决定 Pod 运行在哪个节点
-- `kube-controller-manager`：控制器管理器，维护期望状态
+### 1.2 Core Architecture
 
-**工作节点（Worker Node）：**
+Kubernetes adopts a master-slave architecture, mainly consisting of the following components:
 
-- `kubelet`：节点代理，管理 Pod 生命周期
-- `kube-proxy`：网络代理，实现 Service 负载均衡
-- `Container Runtime`：容器运行时（Docker、containerd、CRI-O）
+**Control Plane:**
 
-### 1.3 核心资源对象
+- `kube-apiserver`: API server, the entry point for all operations
+- `etcd`: Distributed key-value store, saves cluster state
+- `kube-scheduler`: Scheduler, decides which node a Pod runs on
+- `kube-controller-manager`: Controller manager, maintains desired state
+
+**Worker Node:**
+
+- `kubelet`: Node agent, manages Pod lifecycle
+- `kube-proxy`: Network proxy, implements Service load balancing
+- `Container Runtime`: Container runtime (Docker, containerd, CRI-O)
+
+### 1.3 Core Resource Objects
 
 ```yaml
-# Pod - 最小部署单元
+# Pod - Minimum deployment unit
 apiVersion: v1
 kind: Pod
 metadata:
@@ -82,7 +82,7 @@ spec:
       initialDelaySeconds: 5
       periodSeconds: 5
 ---
-# Deployment - 无状态应用部署
+# Deployment - Stateless application deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -108,7 +108,7 @@ spec:
         ports:
         - containerPort: 8080
 ---
-# Service - 服务发现与负载均衡
+# Service - Service discovery and load balancing
 apiVersion: v1
 kind: Service
 metadata:
@@ -121,7 +121,7 @@ spec:
     targetPort: 8080
   type: ClusterIP
 ---
-# Ingress - HTTP 路由
+# Ingress - HTTP routing
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -142,49 +142,49 @@ spec:
               number: 80
 ```
 
-### 1.4 Kubernetes 对象管理方式
+### 1.4 Kubernetes Object Management Methods
 
-| 方式 | 说明 | 适用场景 |
+| Method | Description | Use Case |
 |------|------|----------|
-| 命令式命令 | `kubectl run/create/delete` | 临时测试 |
-| 命令式对象配置 | `kubectl create -f manifest.yaml` | 简单部署 |
-| 声明式对象配置 | `kubectl apply -f manifest.yaml` | 生产环境（推荐） |
+| Imperative Commands | `kubectl run/create/delete` | Ad-hoc testing |
+| Imperative Object Configuration | `kubectl create -f manifest.yaml` | Simple deployments |
+| Declarative Object Configuration | `kubectl apply -f manifest.yaml` | Production environments (recommended) |
 
-### 1.5 为什么选择 Kubernetes + GitHub Actions
+### 1.5 Why Choose Kubernetes + GitHub Actions
 
-GitHub Actions 作为 CI/CD 平台的优势：
+Advantages of GitHub Actions as a CI/CD platform:
 
-- **原生集成**：与 GitHub 仓库无缝集成，代码推送即触发
-- **丰富的生态**：Marketplace 提供数千个现成的 Action
-- **矩阵构建**：支持多平台、多版本并行测试
-- **自托管 Runner**：可在内网 K8s 集群中运行 Runner
-- **安全机制**：Secrets、OIDC、环境审批等完善的安全体系
+- **Native Integration**: Seamless integration with GitHub repositories, triggered on code push
+- **Rich Ecosystem**: Marketplace provides thousands of ready-made Actions
+- **Matrix Builds**: Supports parallel testing across multiple platforms and versions
+- **Self-hosted Runner**: Can run Runners in internal K8s clusters
+- **Security Mechanisms**: Comprehensive security system with Secrets, OIDC, environment approvals, etc.
 
 ---
 
-## 2. GitHub Actions 部署到 K8s 的方案
+## 2. GitHub Actions Deployment to K8s Solutions
 
-### 2.1 常见部署方案对比
+### 2.1 Common Deployment Solution Comparison
 
-| 方案 | 复杂度 | 安全性 | 适用场景 |
+| Solution | Complexity | Security | Use Case |
 |------|--------|--------|----------|
-| kubectl 直接部署 | 低 | 中 | 小型项目、快速验证 |
-| Helm Chart 部署 | 中 | 中 | 中大型项目、多环境 |
-| Kustomize 部署 | 中 | 中 | 多环境变体管理 |
-| ArgoCD (GitOps) | 高 | 高 | 企业级生产环境 |
-| Flux CD (GitOps) | 高 | 高 | 企业级生产环境 |
+| kubectl Direct Deployment | Low | Medium | Small projects, quick validation |
+| Helm Chart Deployment | Medium | Medium | Medium to large projects, multi-environment |
+| Kustomize Deployment | Medium | Medium | Multi-environment variant management |
+| ArgoCD (GitOps) | High | High | Enterprise production environments |
+| Flux CD (GitOps) | High | High | Enterprise production environments |
 
-### 2.2 基本流水线架构
+### 2.2 Basic Pipeline Architecture
 
 ```
-代码提交 → GitHub Actions CI → 构建镜像 → 推送镜像仓库 → 部署到 K8s
+Code Commit → GitHub Actions CI → Build Image → Push Image Registry → Deploy to K8s
     ↓              ↓              ↓            ↓              ↓
-  触发器        测试/扫描      Docker Build   阿里云ACR/     kubectl/Helm
-                                               腾讯云CCR/
-                                               华为云SWR
+  Trigger      Test/Scan      Docker Build   Alibaba Cloud ACR/   kubectl/Helm
+                                                Tencent Cloud CCR/
+                                                Huawei Cloud SWR
 ```
 
-### 2.3 完整 CI/CD 流水线示例
+### 2.3 Complete CI/CD Pipeline Example
 
 ```yaml
 name: CI/CD Pipeline
@@ -202,7 +202,7 @@ env:
   IMAGE_NAME: my-app
 
 jobs:
-  # 阶段1：代码测试
+  # Stage 1: Code Testing
   test:
     runs-on: ubuntu-latest
     steps:
@@ -221,7 +221,7 @@ jobs:
       with:
         file: ./coverage.out
 
-  # 阶段2：构建与推送镜像
+  # Stage 2: Build and Push Image
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -259,7 +259,7 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-  # 阶段3：部署到 Kubernetes
+  # Stage 3: Deploy to Kubernetes
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -290,72 +290,72 @@ jobs:
     - name: Notify on success
       if: success()
       run: |
-        # 发送钉钉/飞书/企业微信通知
+        # Send DingTalk/Feishu/WeCom notification
         curl -X POST "${{ secrets.DINGTALK_WEBHOOK }}" \
           -H 'Content-Type: application/json' \
-          -d '{"msgtype":"text","text":{"content":"部署成功: '${{ github.repository }}' @ '${GITHUB_SHA::8}'"}}'
+          -d '{"msgtype":"text","text":{"content":"Deployment successful: '${{ github.repository }}' @ '${GITHUB_SHA::8}'"}}'
 ```
 
 ---
 
-## 3. kubectl 配置与 GitHub Secrets
+## 3. kubectl Configuration and GitHub Secrets
 
-### 3.1 获取 kubeconfig
+### 3.1 Obtain kubeconfig
 
-**方式一：从云厂商控制台获取**
+**Method 1: Get from Cloud Provider Console**
 
-以阿里云 ACK 为例：
+Using Alibaba Cloud ACK as an example:
 
 ```bash
-# 安装 aliyun CLI
+# Install aliyun CLI
 curl -O https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
 tar xzvf aliyun-cli-linux-latest-amd64.tgz
 sudo mv aliyun /usr/local/bin/
 
-# 配置阿里云账号
+# Configure Alibaba Cloud account
 aliyun configure
 
-# 获取集群 kubeconfig
+# Get cluster kubeconfig
 aliyun cs GET /k8s/{cluster_id}/user_config | jq -r '.config' > kubeconfig.yaml
 ```
 
-**方式二：使用 kubectl 直接配置**
+**Method 2: Configure using kubectl directly**
 
 ```bash
-# 阿里云 ACK
+# Alibaba Cloud ACK
 aliyun cs GET /k8s/{cluster_id}/user_config | jq -r '.config' > ~/.kube/config
 
-# 腾讯云 TKE
-# 从控制台下载 kubeconfig 或使用 tke 命令行工具
+# Tencent Cloud TKE
+# Download kubeconfig from console or use tke CLI tool
 
-# 华为云 CCE
-# 从控制台下载 kubeconfig 文件
+# Huawei Cloud CCE
+# Download kubeconfig file from console
 ```
 
-**方式三：使用 OIDC Token（更安全）**
+**Method 3: Use OIDC Token (more secure)**
 
 ```yaml
-# 使用 aws-iam-authenticator（EKS）
-# 使用 gcp-auth-plugin（GKE）
-# 使用 OIDC Token
+# Use aws-iam-authenticator (EKS)
+# Use gcp-auth-plugin (GKE)
+# Use OIDC Token
 ```
 
-### 3.2 配置 GitHub Secrets
+### 3.2 Configure GitHub Secrets
 
-在 GitHub 仓库中设置 Secrets：
+Set Secrets in the GitHub repository:
 
-1. 进入仓库 → Settings → Secrets and variables → Actions
-2. 点击 "New repository secret"
-3. 添加以下 Secrets：
+1. Go to repository → Settings → Secrets and variables → Actions
+2. Click "New repository secret"
+3. Add the following Secrets:
 
-| Secret 名称 | 说明 | 获取方式 |
+| Secret Name | Description | How to Obtain |
 |-------------|------|----------|
-| `KUBECONFIG` | Base64 编码的 kubeconfig | `cat ~/.kube/config \| base64 -w 0` |
-| `ACR_USERNAME` | 镜像仓库用户名 | 阿里云控制台 |
-| `ACR_PASSWORD` | 镜像仓库密码 | 阿里云控制台 |
-| `SLACK_WEBHOOK` | 通知 Webhook | Slack/钉钉/飞书设置 |
+| `KUBECONFIG` | Base64 encoded kubeconfig | `cat ~/.kube/config \| base64 -w 0` |
+| `ACR_USERNAME` | Image registry username | Alibaba Cloud Console |
+| `ACR_PASSWORD` | Image registry password | Alibaba Cloud Console |
+| `SLACK_WEBHOOK` | Notification Webhook | Slack/DingTalk/Feishu Settings |
 
-### 3.3 Base64 编码 kubeconfig
+### 3.3 Base64 Encode kubeconfig
 
 ```bash
 # Linux
@@ -368,29 +368,29 @@ cat ~/.kube/config | base64
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\.kube\config"))
 ```
 
-### 3.4 使用 GitHub Environments 管理多环境
+### 3.4 Use GitHub Environments to Manage Multiple Environments
 
 ```yaml
-# 创建环境：Settings → Environments → New environment
+# Create environment: Settings → Environments → New environment
 # - development
 # - staging
-# - production（添加审批规则）
+# - production (add approval rules)
 
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
-    environment: production  # 需要审批
+    environment: production  # Requires approval
     steps:
     - name: Deploy
       run: kubectl apply -f k8s/prod/
 ```
 
-### 3.5 使用 OIDC 替代长期凭证（推荐）
+### 3.5 Use OIDC Instead of Long-Term Credentials (Recommended)
 
-GitHub Actions 支持 OIDC（OpenID Connect）与云厂商联合认证，避免存储长期凭证：
+GitHub Actions supports OIDC (OpenID Connect) federation with cloud providers, avoiding storing long-term credentials:
 
 ```yaml
-# 阿里云 OIDC 配置
+# Alibaba Cloud OIDC Configuration
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -405,14 +405,14 @@ jobs:
         access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
         access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
     
-    # 或使用 OIDC（更安全）
+    # Or use OIDC (more secure)
     - name: Assume Role via OIDC
       run: |
-        # 获取 OIDC Token
+        # Get OIDC Token
         OIDC_TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
           "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.aliyuncs.com" | jq -r '.value')
         
-        # 使用 STS Assume Role
+        # Use STS Assume Role
         aliyun sts AssumeRoleWithOIDC \
           --RoleArn "acs:ram::123456789:role/github-actions-role" \
           --OIDCProviderArn "acs:ram::123456789:oidc-provider/github" \
@@ -420,7 +420,7 @@ jobs:
           --RoleSessionName "github-actions"
 ```
 
-**AWS EKS OIDC 配置示例：**
+**AWS EKS OIDC Configuration Example:**
 
 ```yaml
 jobs:
@@ -443,30 +443,30 @@ jobs:
 
 ---
 
-## 4. Helm Chart + GitHub Actions 部署
+## 4. Helm Chart + GitHub Actions Deployment
 
-### 4.1 Helm 基础概念
+### 4.1 Helm Basic Concepts
 
-Helm 是 Kubernetes 的包管理器，将相关资源打包为 Chart：
+Helm is the package manager for Kubernetes, packaging related resources into Charts:
 
 ```
 my-chart/
-├── Chart.yaml          # Chart 元数据
-├── values.yaml         # 默认配置值
-├── templates/          # 模板文件
+├── Chart.yaml          # Chart metadata
+├── values.yaml         # Default configuration values
+├── templates/          # Template files
 │   ├── deployment.yaml
 │   ├── service.yaml
 │   ├── ingress.yaml
 │   ├── hpa.yaml
 │   └── _helpers.tpl
-├── charts/             # 依赖的子 Chart
+├── charts/             # Dependent sub-charts
 └── README.md
 ```
 
-### 4.2 创建 Helm Chart
+### 4.2 Create Helm Chart
 
 ```bash
-# 创建新的 Chart
+# Create new Chart
 helm create my-app
 
 # Chart.yaml
@@ -485,10 +485,10 @@ dependencies:
 EOF
 ```
 
-### 4.3 values.yaml 多环境配置
+### 4.3 values.yaml Multi-Environment Configuration
 
 ```yaml
-# values.yaml - 默认值
+# values.yaml - Default values
 replicaCount: 1
 
 image:
@@ -530,11 +530,11 @@ affinity: {}
 ```
 
 ```yaml
-# values-production.yaml - 生产环境覆盖值
+# values-production.yaml - Production environment overrides
 replicaCount: 3
 
 image:
-  tag: ""  # 由 CI/CD 动态设置
+  tag: ""  # Set dynamically by CI/CD
 
 ingress:
   enabled: true
@@ -572,7 +572,7 @@ postgresql:
     existingSecret: postgres-credentials
 ```
 
-### 4.4 GitHub Actions Helm 部署工作流
+### 4.4 GitHub Actions Helm Deployment Workflow
 
 ```yaml
 name: Helm Deploy
@@ -641,10 +641,10 @@ jobs:
         kubectl get pods -n ${{ env.NAMESPACE }} -l app.kubernetes.io/name=my-app
 ```
 
-### 4.5 Helm Chart 测试
+### 4.5 Helm Chart Testing
 
 ```yaml
-# 在 GitHub Actions 中运行 Helm 测试
+# Run Helm tests in GitHub Actions
 - name: Run Helm tests
   run: |
     helm test ${{ env.RELEASE_NAME }} -n ${{ env.NAMESPACE }} --timeout 5m
@@ -671,13 +671,13 @@ spec:
 
 ---
 
-## 5. Kustomize + GitHub Actions 部署
+## 5. Kustomize + GitHub Actions Deployment
 
-### 5.1 Kustomize 简介
+### 5.1 Kustomize Introduction
 
-Kustomize 是 Kubernetes 原生的配置管理工具，通过 overlay 机制实现多环境配置管理，无需模板引擎。
+Kustomize is a Kubernetes native configuration management tool that achieves multi-environment configuration management through the overlay mechanism, without needing a template engine.
 
-### 5.2 项目结构
+### 5.2 Project Structure
 
 ```
 k8s/
@@ -701,7 +701,7 @@ k8s/
         └── hpa.yaml
 ```
 
-### 5.3 Base 配置
+### 5.3 Base Configuration
 
 ```yaml
 # base/kustomization.yaml
@@ -767,7 +767,7 @@ spec:
             memory: 128Mi
 ```
 
-### 5.4 Overlay 配置
+### 5.4 Overlay Configuration
 
 ```yaml
 # overlays/prod/kustomization.yaml
@@ -793,7 +793,7 @@ configMapGenerator:
 
 images:
 - name: my-app
-  newTag: ""  # 由 CI/CD 动态设置
+  newTag: ""  # Set dynamically by CI/CD
 ```
 
 ```yaml
@@ -828,7 +828,7 @@ spec:
         averageUtilization: 70
 ```
 
-### 5.5 Kustomize + GitHub Actions 工作流
+### 5.5 Kustomize + GitHub Actions Workflow
 
 ```yaml
 name: Kustomize Deploy
@@ -863,20 +863,20 @@ jobs:
       run: |
         cd k8s/overlays/prod
         
-        # 使用 kustomize edit 设置镜像标签
+        # Use kustomize edit to set image tag
         kustomize edit set image my-app=${{ env.IMAGE }}:${{ steps.tag.outputs.tag }}
         
-        # 构建并应用
+        # Build and apply
         kustomize build . | kubectl apply -f -
         
-        # 等待部署完成
+        # Wait for deployment to complete
         kubectl rollout status deployment/my-app -n production --timeout=300s
 ```
 
-### 5.6 使用 kubectl 的内置 kustomize
+### 5.6 Using kubectl's Built-in Kustomize
 
 ```yaml
-# 直接使用 kubectl apply -k
+# Use kubectl apply -k directly
 - name: Deploy with kubectl kustomize
   run: |
     cd k8s/overlays/prod
@@ -886,50 +886,50 @@ jobs:
 
 ---
 
-## 6. ArgoCD + GitOps 工作流
+## 6. ArgoCD + GitOps Workflow
 
-### 6.1 GitOps 原则
+### 6.1 GitOps Principles
 
-GitOps 是一种以 Git 仓库为唯一事实来源的运维模式：
+GitOps is an operational model where the Git repository is the single source of truth:
 
-1. **声明式**：所有配置以声明式方式存储在 Git 中
-2. **版本化**：所有变更通过 Git 追踪
-3. **自动化**：变更自动应用到集群
-4. **自愈**：集群状态与 Git 声明不一致时自动修复
+1. **Declarative**: All configurations are stored declaratively in Git
+2. **Versioned**: All changes are tracked through Git
+3. **Automated**: Changes are automatically applied to the cluster
+4. **Self-healing**: Automatically repairs when cluster state diverges from Git declarations
 
-### 6.2 ArgoCD 架构
+### 6.2 ArgoCD Architecture
 
 ```
-Git Repository (期望状态)
+Git Repository (Desired State)
         ↓
    ArgoCD Server
         ↓
-   Application Controller → Kubernetes Cluster (实际状态)
+   Application Controller → Kubernetes Cluster (Actual State)
         ↓
-   Notification Controller → 钉钉/飞书/Slack
+   Notification Controller → DingTalk/Feishu/Slack
 ```
 
-### 6.3 安装 ArgoCD
+### 6.3 Install ArgoCD
 
 ```bash
-# 创建命名空间
+# Create namespace
 kubectl create namespace argocd
 
-# 安装 ArgoCD
+# Install ArgoCD
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-# 获取初始密码
+# Get initial password
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
-# 访问 UI（端口转发）
+# Access UI (port forwarding)
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 
-# 安装 CLI
+# Install CLI
 curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 ```
 
-### 6.4 ArgoCD Application 配置
+### 6.4 ArgoCD Application Configuration
 
 ```yaml
 # argocd-application.yaml
@@ -951,8 +951,8 @@ spec:
     namespace: production
   syncPolicy:
     automated:
-      prune: true        # 删除 Git 中不存在的资源
-      selfHeal: true     # 自动修复手动更改
+      prune: true        # Delete resources that don't exist in Git
+      selfHeal: true     # Automatically repair manual changes
     syncOptions:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
@@ -964,13 +964,13 @@ spec:
         maxDuration: 3m
 ```
 
-### 6.5 GitHub Actions + ArgoCD 集成
+### 6.5 GitHub Actions + ArgoCD Integration
 
-**方式一：ArgoCD 自动检测 Git 变更（Pull 模式）**
+**Method 1: ArgoCD Auto-detects Git Changes (Pull Mode)**
 
-ArgoCD 默认每 3 分钟检查 Git 仓库变更，无需额外配置。
+ArgoCD checks Git repository changes every 3 minutes by default, no additional configuration needed.
 
-**方式二：GitHub Actions 触发 ArgoCD 同步（Push 模式）**
+**Method 2: GitHub Actions Triggers ArgoCD Sync (Push Mode)**
 
 ```yaml
 name: Build and Notify ArgoCD
@@ -994,15 +994,15 @@ jobs:
     
     - name: Update image tag in config repo
       run: |
-        # 克隆配置仓库
+        # Clone config repository
         git clone https://x-access-token:${{ secrets.CONFIG_REPO_TOKEN }}@github.com/my-org/my-app-config.git
         cd my-app-config
         
-        # 更新镜像标签
+        # Update image tag
         cd overlays/prod
         kustomize edit set image my-app=registry.cn-hangzhou.aliyuncs.com/my-namespace/my-app:${GITHUB_SHA::8}
         
-        # 提交并推送
+        # Commit and push
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add .
@@ -1011,12 +1011,12 @@ jobs:
     
     - name: Trigger ArgoCD sync
       run: |
-        # 方式一：使用 ArgoCD CLI
+        # Method 1: Use ArgoCD CLI
         argocd app sync my-app --server argocd.example.com \
           --auth-token ${{ secrets.ARGOCD_TOKEN }} \
           --insecure
         
-        # 方式二：使用 ArgoCD API
+        # Method 2: Use ArgoCD API
         curl -X POST "https://argocd.example.com/api/v1/applications/my-app/sync" \
           -H "Authorization: Bearer ${{ secrets.ARGOCD_TOKEN }}" \
           -H "Content-Type: application/json" \
@@ -1026,7 +1026,7 @@ jobs:
 ### 6.6 ArgoCD Notifications
 
 ```yaml
-# 配置 ArgoCD 通知
+# Configure ArgoCD notifications
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1047,8 +1047,8 @@ data:
           {
             "msgtype": "markdown",
             "markdown": {
-              "title": "ArgoCD 部署通知",
-              "text": "## ArgoCD 部署成功\n\n- **应用**: {{.app.metadata.name}}\n- **状态**: {{.app.status.sync.status}}\n- **提交**: {{.app.status.sync.revision}}"
+              "title": "ArgoCD Deployment Notification",
+              "text": "## ArgoCD Deployment Successful\n\n- **Application**: {{.app.metadata.name}}\n- **Status**: {{.app.status.sync.status}}\n- **Commit**: {{.app.status.sync.revision}}"
             }
           }
   
@@ -1059,22 +1059,22 @@ data:
 
 ---
 
-## 7. Flux CD + GitHub 集成
+## 7. Flux CD + GitHub Integration
 
-### 7.1 Flux CD 简介
+### 7.1 Flux CD Introduction
 
-Flux CD 是 CNCF 毕业项目，原生支持 GitOps，与 Kubernetes API 深度集成。
+Flux CD is a CNCF graduated project, natively supports GitOps, and deeply integrates with the Kubernetes API.
 
-### 7.2 安装 Flux CD
+### 7.2 Install Flux CD
 
 ```bash
-# 安装 Flux CLI
+# Install Flux CLI
 curl -s https://fluxcd.io/install.sh | sudo bash
 
-# 检查集群是否满足要求
+# Check if cluster meets requirements
 flux check --pre
 
-# Bootstrap Flux（以 GitHub 为例）
+# Bootstrap Flux (using GitHub as example)
 flux bootstrap github \
   --owner=my-org \
   --repository=my-cluster-config \
@@ -1083,7 +1083,7 @@ flux bootstrap github \
   --personal
 ```
 
-### 7.3 Flux GitRepository 配置
+### 7.3 Flux GitRepository Configuration
 
 ```yaml
 # git-repository.yaml
@@ -1101,7 +1101,7 @@ spec:
     name: github-credentials
 ```
 
-### 7.4 Flux Kustomization 配置
+### 7.4 Flux Kustomization Configuration
 
 ```yaml
 # kustomization.yaml
@@ -1125,7 +1125,7 @@ spec:
   timeout: 3m
 ```
 
-### 7.5 GitHub Actions + Flux 集成
+### 7.5 GitHub Actions + Flux Integration
 
 ```yaml
 name: Update Flux Image
@@ -1153,7 +1153,7 @@ jobs:
           --interval=5m \
           --export > policy.yaml
         
-        # 或直接使用 flux 命令更新
+        # Or use flux command directly to update
         flux update kustomization my-app \
           --source=GitRepository/my-app
 ```
@@ -1188,17 +1188,17 @@ spec:
 
 ---
 
-## 8. K8s 多环境管理（dev/staging/prod）
+## 8. K8s Multi-Environment Management (dev/staging/prod)
 
-### 8.1 环境管理策略
+### 8.1 Environment Management Strategies
 
-| 策略 | 说明 | 适用场景 |
+| Strategy | Description | Use Case |
 |------|------|----------|
-| 单集群多命名空间 | 一个集群用 Namespace 隔离 | 成本敏感、小团队 |
-| 多集群 | 每个环境独立集群 | 安全要求高、大团队 |
-| 混合模式 | dev/staging 同集群，prod 独立 | 平衡成本与安全 |
+| Single Cluster Multi-Namespace | One cluster isolated by Namespace | Cost-sensitive, small teams |
+| Multi-Cluster | Each environment has independent clusters | High security requirements, large teams |
+| Hybrid Mode | dev/staging in same cluster, prod independent | Balance cost and security |
 
-### 8.2 GitHub Actions 多环境部署
+### 8.2 GitHub Actions Multi-Environment Deployment
 
 ```yaml
 name: Multi-Environment Deploy
@@ -1210,7 +1210,7 @@ on:
     branches: [main]
 
 jobs:
-  # 开发环境 - develop 分支自动部署
+  # Development environment - Auto-deploy on develop branch
   deploy-dev:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
@@ -1223,7 +1223,7 @@ jobs:
         kustomize build k8s/overlays/dev | kubectl apply -f -
         kubectl rollout status deployment/my-app -n development
 
-  # 预发布环境 - main 分支自动部署
+  # Staging environment - Auto-deploy on main branch
   deploy-staging:
     runs-on: ubuntu-latest
     needs: [test, build]
@@ -1239,15 +1239,15 @@ jobs:
     
     - name: Run integration tests
       run: |
-        # 运行集成测试
+        # Run integration tests
         npm run test:integration -- --base-url=https://staging.example.com
 
-  # 生产环境 - Tag 触发，需要审批
+  # Production environment - Tag triggered, requires approval
   deploy-prod:
     runs-on: ubuntu-latest
     needs: [deploy-staging]
     if: startsWith(github.ref, 'refs/tags/v')
-    environment: production  # 需要人工审批
+    environment: production  # Requires manual approval
     steps:
     - uses: actions/checkout@v4
     - name: Deploy to Production
@@ -1260,10 +1260,10 @@ jobs:
       run: |
         curl -X POST "${{ secrets.DINGTALK_WEBHOOK }}" \
           -H 'Content-Type: application/json' \
-          -d '{"msgtype":"text","text":{"content":"生产部署成功: ${{ github.ref_name }}"}}'
+          -d '{"msgtype":"text","text":{"content":"Production deployment successful: ${{ github.ref_name }}"}}'
 ```
 
-### 8.3 使用 Matrix 策略多环境部署
+### 8.3 Use Matrix Strategy for Multi-Environment Deployment
 
 ```yaml
 jobs:
@@ -1290,13 +1290,13 @@ jobs:
         kubectl scale deployment/my-app --replicas=${{ matrix.replicas }} -n ${{ matrix.namespace }}
 ```
 
-### 8.4 环境配置管理
+### 8.4 Environment Configuration Management
 
 ```yaml
-# 使用 GitHub Environments 配置环境变量
-# Settings → Environments → 选择环境 → Environment variables
+# Use GitHub Environments to configure environment variables
+# Settings → Environments → Select environment → Environment variables
 
-# 在工作流中使用
+# Use in workflow
 - name: Use environment config
   run: |
     echo "Deploying to ${{ vars.CLUSTER_NAME }}"
@@ -1306,9 +1306,9 @@ jobs:
 
 ---
 
-## 9. K8s 自动扩缩容配置
+## 9. K8s Autoscaling Configuration
 
-### 9.1 HPA（水平 Pod 自动扩缩容）
+### 9.1 HPA (Horizontal Pod Autoscaler)
 
 ```yaml
 # hpa.yaml
@@ -1358,7 +1358,7 @@ spec:
         periodSeconds: 60
 ```
 
-### 9.2 VPA（垂直 Pod 自动扩缩容）
+### 9.2 VPA (Vertical Pod Autoscaler)
 
 ```yaml
 # vpa.yaml
@@ -1388,8 +1388,8 @@ spec:
 ### 9.3 Cluster Autoscaler
 
 ```yaml
-# 阿里云 ACK 集群自动伸缩配置
-# 在 ACK 控制台配置节点池的自动伸缩策略
+# Alibaba Cloud ACK cluster autoscaling configuration
+# Configure node pool autoscaling strategy in ACK console
 
 # AWS EKS Cluster Autoscaler
 apiVersion: apps/v1
@@ -1419,14 +1419,14 @@ spec:
         - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/my-cluster
 ```
 
-### 9.4 KEDA（Kubernetes Event-Driven Autoscaling）
+### 9.4 KEDA (Kubernetes Event-Driven Autoscaling)
 
 ```yaml
-# 安装 KEDA
+# Install KEDA
 helm repo add kedacore https://kedacore.github.io/charts
 helm install keda kedacore/keda --namespace keda --create-namespace
 
-# ScaledObject 配置
+# ScaledObject configuration
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -1452,12 +1452,12 @@ spec:
 
 ---
 
-## 10. 监控与告警（Prometheus + Grafana）
+## 10. Monitoring and Alerting (Prometheus + Grafana)
 
-### 10.1 Prometheus 安装
+### 10.1 Prometheus Installation
 
 ```bash
-# 使用 Helm 安装 kube-prometheus-stack
+# Install kube-prometheus-stack using Helm
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
@@ -1468,7 +1468,7 @@ helm install prometheus prometheus-community/kube-prometheus-stack \
   --set prometheus.prometheusSpec.retention=30d
 ```
 
-### 10.2 自定义 ServiceMonitor
+### 10.2 Custom ServiceMonitor
 
 ```yaml
 # service-monitor.yaml
@@ -1488,7 +1488,7 @@ spec:
     path: /metrics
 ```
 
-### 10.3 PrometheusRule 告警规则
+### 10.3 PrometheusRule Alert Rules
 
 ```yaml
 # alert-rules.yaml
@@ -1510,8 +1510,8 @@ spec:
       labels:
         severity: critical
       annotations:
-        summary: "高错误率告警"
-        description: "my-app 的 5xx 错误率超过 5%，当前值: {{ $value }}"
+        summary: "High Error Rate Alert"
+        description: "my-app 5xx error rate exceeds 5%, current value: {{ $value }}"
     
     - alert: HighLatency
       expr: |
@@ -1520,8 +1520,8 @@ spec:
       labels:
         severity: warning
       annotations:
-        summary: "高延迟告警"
-        description: "my-app 的 P95 延迟超过 1 秒，当前值: {{ $value }}"
+        summary: "High Latency Alert"
+        description: "my-app P95 latency exceeds 1 second, current value: {{ $value }}"
     
     - alert: PodCrashLooping
       expr: |
@@ -1530,11 +1530,11 @@ spec:
       labels:
         severity: critical
       annotations:
-        summary: "Pod 重启告警"
-        description: "Pod {{ $labels.pod }} 正在频繁重启"
+        summary: "Pod Restart Alert"
+        description: "Pod {{ $labels.pod }} is frequently restarting"
 ```
 
-### 10.4 Grafana Dashboard 配置
+### 10.4 Grafana Dashboard Configuration
 
 ```yaml
 # grafana-dashboard.yaml
@@ -1551,7 +1551,7 @@ data:
         "title": "My App Dashboard",
         "panels": [
           {
-            "title": "请求速率",
+            "title": "Request Rate",
             "type": "graph",
             "targets": [
               {
@@ -1561,7 +1561,7 @@ data:
             ]
           },
           {
-            "title": "延迟分布",
+            "title": "Latency Distribution",
             "type": "heatmap",
             "targets": [
               {
@@ -1575,7 +1575,7 @@ data:
     }
 ```
 
-### 10.5 GitHub Actions 部署监控栈
+### 10.5 GitHub Actions Deploy Monitoring Stack
 
 ```yaml
 name: Deploy Monitoring Stack
@@ -1615,9 +1615,9 @@ jobs:
 
 ---
 
-## 11. K8s 安全最佳实践
+## 11. K8s Security Best Practices
 
-### 11.1 RBAC 配置
+### 11.1 RBAC Configuration
 
 ```yaml
 # rbac.yaml
@@ -1655,10 +1655,10 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 ```
 
-**GitHub Actions 使用最小权限：**
+**GitHub Actions Least Privilege:**
 
 ```yaml
-# 为 GitHub Actions 创建专用 ServiceAccount
+# Create dedicated ServiceAccount for GitHub Actions
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -1714,7 +1714,7 @@ spec:
     ports:
     - protocol: TCP
       port: 5432
-  - to:  # 允许 DNS 查询
+  - to:  # Allow DNS queries
     - namespaceSelector: {}
     ports:
     - protocol: UDP
@@ -1754,10 +1754,10 @@ spec:
     emptyDir: {}
 ```
 
-### 11.4 镜像安全扫描
+### 11.4 Image Security Scanning
 
 ```yaml
-# 在 GitHub Actions 中集成 Trivy 扫描
+# Integrate Trivy scanning in GitHub Actions
 - name: Run Trivy vulnerability scanner
   uses: aquasecurity/trivy-action@master
   with:
@@ -1765,7 +1765,7 @@ spec:
     format: 'sarif'
     output: 'trivy-results.sarif'
     severity: 'CRITICAL,HIGH'
-    exit-code: '1'  # 发现高危漏洞时失败
+    exit-code: '1'  # Fail when high-risk vulnerabilities are found
 
 - name: Upload Trivy scan results
   uses: github/codeql-action/upload-sarif@v3
@@ -1777,15 +1777,15 @@ spec:
 ### 11.5 Sealed Secrets
 
 ```bash
-# 安装 Sealed Secrets
+# Install Sealed Secrets
 kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.24.0/controller.yaml
 
-# 安装 kubeseal CLI
+# Install kubeseal CLI
 wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.24.0/kubeseal-0.24.0-linux-amd64.tar.gz
 tar xvfz kubeseal-0.24.0-linux-amd64.tar.gz
 sudo mv kubeseal /usr/local/bin/
 
-# 创建 Sealed Secret
+# Create Sealed Secret
 echo -n mypassword | kubectl create secret generic my-secret \
   --dry-run=client --from-file=password=/dev/stdin -o yaml | \
   kubeseal -o yaml > sealed-secret.yaml
@@ -1793,14 +1793,14 @@ echo -n mypassword | kubectl create secret generic my-secret \
 
 ---
 
-## 12. 云厂商 K8s 服务
+## 12. Cloud Provider K8s Services
 
-### 12.1 阿里云 ACK（容器服务 Kubernetes 版）
+### 12.1 Alibaba Cloud ACK (Container Service for Kubernetes)
 
-**创建集群：**
+**Create Cluster:**
 
 ```bash
-# 使用 aliyun CLI 创建 ACK 集群
+# Use aliyun CLI to create ACK cluster
 aliyun cs POST /clusters --header "Content-Type=application/json" --body '{
   "name": "my-cluster",
   "cluster_type": "ManagedKubernetes",
@@ -1813,48 +1813,48 @@ aliyun cs POST /clusters --header "Content-Type=application/json" --body '{
 }'
 ```
 
-**配置 GitHub Actions：**
+**Configure GitHub Actions:**
 
 ```yaml
 - name: Setup kubeconfig for ACK
   run: |
-    # 使用阿里云 OIDC 或 AccessKey
+    # Use Alibaba Cloud OIDC or AccessKey
     aliyun cs GET /k8s/${{ secrets.ACK_CLUSTER_ID }}/user_config | jq -r '.config' > kubeconfig.yaml
     export KUBECONFIG=kubeconfig.yaml
     kubectl get nodes
 ```
 
-### 12.2 腾讯云 TKE（容器服务）
+### 12.2 Tencent Cloud TKE (Tencent Kubernetes Engine)
 
 ```yaml
-# 使用腾讯云 CLI 配置
+# Use Tencent Cloud CLI to configure
 - name: Configure TKE
   run: |
-    # 安装 tke 命令行工具
+    # Install tke CLI tool
     pip install tencentcloud-sdk-python
     
-    # 配置 kubeconfig
-    # 从控制台下载或使用 API 获取
+    # Configure kubeconfig
+    # Download from console or obtain via API
     echo "${{ secrets.TKE_KUBECONFIG }}" | base64 -d > $HOME/.kube/config
 ```
 
-### 12.3 华为云 CCE（云容器引擎）
+### 12.3 Huawei Cloud CCE (Cloud Container Engine)
 
 ```yaml
-# 使用华为云 CLI 配置
+# Use Huawei Cloud CLI to configure
 - name: Configure CCE
   run: |
-    # 安装 cce 命令行工具
+    # Install cce CLI tool
     pip install huaweicloudsdkcce
     
-    # 配置 kubeconfig
+    # Configure kubeconfig
     echo "${{ secrets.CCE_KUBECONFIG }}" | base64 -d > $HOME/.kube/config
 ```
 
-### 12.4 多云部署策略
+### 12.4 Multi-Cloud Deployment Strategy
 
 ```yaml
-# 使用 GitHub Actions Matrix 多云部署
+# Use GitHub Actions Matrix for multi-cloud deployment
 jobs:
   deploy-multi-cloud:
     runs-on: ubuntu-latest
@@ -1877,18 +1877,18 @@ jobs:
     
     - name: Deploy to ${{ matrix.cloud }}
       run: |
-        # 配置对应的云厂商凭证
+        # Configure corresponding cloud provider credentials
         echo "${{ secrets[format('{0}_KUBECONFIG', matrix.cloud)] }}" | base64 -d > $HOME/.kube/config
         
-        # 部署
+        # Deploy
         kubectl apply -f k8s/
 ```
 
 ---
 
-## 13. K8s 成本优化
+## 13. K8s Cost Optimization
 
-### 13.1 资源配额管理
+### 13.1 Resource Quota Management
 
 ```yaml
 # resource-quota.yaml
@@ -1908,7 +1908,7 @@ spec:
     persistentvolumeclaims: "10"
 ```
 
-### 13.2 LimitRange 配置
+### 13.2 LimitRange Configuration
 
 ```yaml
 # limit-range.yaml
@@ -1934,10 +1934,10 @@ spec:
     type: Container
 ```
 
-### 13.3 成本监控
+### 13.3 Cost Monitoring
 
 ```yaml
-# 使用 kubecost 进行成本监控
+# Use kubecost for cost monitoring
 helm install kubecost cost-analyzer \
   --repo https://kubecost.github.io/cost-analyzer/ \
   --namespace kubecost \
@@ -1945,11 +1945,11 @@ helm install kubecost cost-analyzer \
   --set kubecostToken="your-token"
 ```
 
-### 13.4 节点优化策略
+### 13.4 Node Optimization Strategy
 
 ```yaml
-# 使用 Spot/抢占式实例
-# 阿里云抢占式实例配置
+# Use Spot/Preemptible instances
+# Alibaba Cloud preemptible instance configuration
 apiVersion: v1
 kind: Node
 metadata:
@@ -1961,7 +1961,7 @@ spec:
     value: "true"
     effect: NoSchedule
 
-# Pod 配置容忍
+# Pod toleration configuration
 apiVersion: v1
 kind: Pod
 metadata:
@@ -1976,10 +1976,10 @@ spec:
     node-type: spot
 ```
 
-### 13.5 GitHub Actions 成本优化
+### 13.5 GitHub Actions Cost Optimization
 
 ```yaml
-# 使用缓存减少构建时间
+# Use cache to reduce build time
 - name: Cache Docker layers
   uses: actions/cache@v4
   with:
@@ -1988,22 +1988,22 @@ spec:
     restore-keys: |
       ${{ runner.os }}-buildx-
 
-# 使用自托管 Runner 降低成本
+# Use self-hosted Runner to reduce costs
 jobs:
   build:
-    runs-on: self-hosted  # 使用自托管 Runner
+    runs-on: self-hosted  # Use self-hosted Runner
     steps:
     - uses: actions/checkout@v4
 ```
 
 ---
 
-## 14. 国内 K8s 部署注意事项
+## 14. Domestic K8s Deployment Considerations
 
-### 14.1 镜像加速配置
+### 14.1 Image Acceleration Configuration
 
 ```yaml
-# 配置 Docker 镜像加速器
+# Configure Docker image accelerator
 # /etc/docker/daemon.json
 {
   "registry-mirrors": [
@@ -2014,97 +2014,97 @@ jobs:
 }
 ```
 
-### 14.2 使用国内镜像仓库
+### 14.2 Use Domestic Image Registries
 
 ```yaml
-# 阿里云容器镜像服务
+# Alibaba Cloud Container Image Service
 image: registry.cn-hangzhou.aliyuncs.com/my-namespace/my-app:v1.0.0
 
-# 腾讯云容器镜像服务
+# Tencent Cloud Container Image Service
 image: ccr.ccs.tencentyun.com/my-namespace/my-app:v1.0.0
 
-# 华为云容器镜像服务
+# Huawei Cloud Container Image Service
 image: swr.cn-north-4.myhuaweicloud.com/my-namespace/my-app:v1.0.0
 ```
 
-### 14.3 使用国内 Helm 仓库
+### 14.3 Use Domestic Helm Repositories
 
 ```bash
-# 阿里云 Helm 仓库
+# Alibaba Cloud Helm repository
 helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
-# 微软中国镜像
+# Microsoft China mirror
 helm repo add azurecn-mirror https://kubernetesartifacts.azureedge.net/stable
 
-# 腾讯云 Helm 仓库
+# Tencent Cloud Helm repository
 helm repo add tencentcloud https://mirror.ccs.tencentyun.com
 ```
 
-### 14.4 解决 GitHub 访问问题
+### 14.4 Resolve GitHub Access Issues
 
 ```yaml
-# 使用国内 Git 仓库镜像
-# Gitee 镜像同步 GitHub 仓库
+# Use domestic Git repository mirrors
+# Gitee mirrors sync GitHub repositories
 
-# 或使用代理
+# Or use proxy
 - name: Git proxy
   run: |
     git config --global http.proxy http://proxy.example.com:8080
     git config --global https.proxy http://proxy.example.com:8080
 
-# 使用 ghproxy 加速下载
+# Use ghproxy to accelerate downloads
 - name: Download binary
   run: |
     wget https://ghproxy.com/https://github.com/owner/repo/releases/download/v1.0.0/binary-linux-amd64
 ```
 
-### 14.5 国内 CI/CD 替代方案
+### 14.5 Domestic CI/CD Alternatives
 
-| 平台 | 说明 | 特点 |
+| Platform | Description | Features |
 |------|------|------|
-| 云效（阿里云） | 阿里云 DevOps 平台 | 深度集成阿里云服务 |
-| CODING（腾讯云） | 腾讯云 DevOps 平台 | 深度集成腾讯云服务 |
-| 华为云 DevCloud | 华为云 DevOps 平台 | 深度集成华为云服务 |
-| Gitee Go | Gitee CI/CD | 与 Gitee 集成 |
-| Jenkins | 开源 CI/CD | 自托管、灵活 |
+| Yunxiao (Alibaba Cloud) | Alibaba Cloud DevOps platform | Deep integration with Alibaba Cloud services |
+| CODING (Tencent Cloud) | Tencent Cloud DevOps platform | Deep integration with Tencent Cloud services |
+| Huawei Cloud DevCloud | Huawei Cloud DevOps platform | Deep integration with Huawei Cloud services |
+| Gitee Go | Gitee CI/CD | Integrated with Gitee |
+| Jenkins | Open-source CI/CD | Self-hosted, flexible |
 
-### 14.6 合规与数据安全
+### 14.6 Compliance and Data Security
 
 ```yaml
-# 数据驻留要求
-# - 确保 K8s 集群部署在国内区域
-# - 镜像仓库使用国内节点
-# - 日志和监控数据存储在国内
+# Data residency requirements
+# - Ensure K8s cluster is deployed in domestic regions
+# - Use domestic nodes for image registries
+# - Store logs and monitoring data domestically
 
-# 阿里云区域选择
-region: cn-hangzhou   # 杭州
-region: cn-shanghai   # 上海
-region: cn-beijing    # 北京
-region: cn-shenzhen   # 深圳
-region: cn-guangzhou  # 广州
-region: cn-chengdu    # 成都
+# Alibaba Cloud region selection
+region: cn-hangzhou   # Hangzhou
+region: cn-shanghai   # Shanghai
+region: cn-beijing    # Beijing
+region: cn-shenzhen   # Shenzhen
+region: cn-guangzhou  # Guangzhou
+region: cn-chengdu    # Chengdu
 
-# 腾讯云区域选择
-region: ap-guangzhou  # 广州
-region: ap-shanghai   # 上海
-region: ap-beijing    # 北京
-region: ap-nanjing    # 南京
+# Tencent Cloud region selection
+region: ap-guangzhou  # Guangzhou
+region: ap-shanghai   # Shanghai
+region: ap-beijing    # Beijing
+region: ap-nanjing    # Nanjing
 ```
 
 ---
 
-## 附录：完整项目结构示例
+## Appendix: Complete Project Structure Example
 
 ```
 my-k8s-app/
 ├── .github/
 │   └── workflows/
-│       ├── ci.yml                    # 持续集成
-│       ├── cd-dev.yml                # 开发环境部署
-│       ├── cd-prod.yml               # 生产环境部署
-│       └── monitoring.yml            # 监控栈部署
+│       ├── ci.yml                    # Continuous Integration
+│       ├── cd-dev.yml                # Development Environment Deployment
+│       ├── cd-prod.yml               # Production Environment Deployment
+│       └── monitoring.yml            # Monitoring Stack Deployment
 ├── src/
-│   └── ...                          # 应用源代码
+│   └── ...                          # Application Source Code
 ├── Dockerfile
 ├── helm/
 │   └── my-app/
@@ -2122,24 +2122,24 @@ my-k8s-app/
 │   ├── service-monitors.yaml
 │   └── dashboards/
 ├── terraform/
-│   └── ...                          # 基础设施代码
+│   └── ...                          # Infrastructure Code
 └── README.md
 ```
 
 ---
 
-## 总结
+## Summary
 
-本教程详细介绍了 Kubernetes 与 GitHub Actions 集成的完整方案，从基础概念到高级实践，涵盖了：
+This tutorial provides a detailed introduction to the complete solution for integrating Kubernetes with GitHub Actions, from basic concepts to advanced practices, covering:
 
-- **CI/CD 流水线**：从代码提交到生产部署的自动化流程
-- **部署策略**：kubectl、Helm、Kustomize、ArgoCD、Flux CD 等多种方案
-- **多环境管理**：dev/staging/prod 环境隔离与配置管理
-- **自动扩缩容**：HPA、VPA、KEDA 等弹性伸缩方案
-- **监控告警**：Prometheus + Grafana 可观测性体系
-- **安全实践**：RBAC、NetworkPolicy、镜像扫描等安全措施
-- **云厂商集成**：阿里云 ACK、腾讯云 TKE、华为云 CCE
-- **成本优化**：资源配额、Spot 实例、缓存策略
-- **国内实践**：镜像加速、网络优化、合规要求
+- **CI/CD Pipeline**: Automated workflow from code commit to production deployment
+- **Deployment Strategies**: Multiple solutions including kubectl, Helm, Kustomize, ArgoCD, Flux CD
+- **Multi-Environment Management**: Environment isolation and configuration management for dev/staging/prod
+- **Autoscaling**: Elastic scaling solutions including HPA, VPA, KEDA
+- **Monitoring and Alerting**: Prometheus + Grafana observability system
+- **Security Practices**: RBAC, NetworkPolicy, image scanning and other security measures
+- **Cloud Provider Integration**: Alibaba Cloud ACK, Tencent Cloud TKE, Huawei Cloud CCE
+- **Cost Optimization**: Resource quotas, Spot instances, caching strategies
+- **Domestic Practices**: Image acceleration, network optimization, compliance requirements
 
-通过这些实践，中国开发者可以构建高效、安全、可靠的云原生 CI/CD 流水线。
+Through these practices, Chinese developers can build efficient, secure, and reliable cloud-native CI/CD pipelines.

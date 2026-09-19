@@ -1,39 +1,39 @@
-# 练习 3：Pull Request 工作流
+# Exercise 3: Pull Request Workflow
 
-## 目标
+## Goal
 
-掌握使用 Pull Request 进行协作开发的完整流程。
+Master the complete workflow of collaborative development using Pull Requests.
 
-## 准备工作
+## Prerequisites
 
-### 1. 创建练习仓库
+### 1. Create a Practice Repository
 
 ```bash
-# 在 GitHub 上创建仓库 pr-practice
+# Create a repository on GitHub named pr-practice
 gh repo create pr-practice --public
 
-# 克隆到本地
-git clone git@github.com:你的用户名/pr-practice.git
+# Clone it locally
+git clone git@github.com:your-username/pr-practice.git
 cd pr-practice
 
-# 创建初始文件
+# Create an initial file
 echo "# PR Practice" > README.md
 git add README.md
 git commit -m "Initial commit"
 git push -u origin main
 ```
 
-## 步骤
+## Steps
 
-### 1. 创建功能分支
+### 1. Create a Feature Branch
 
 ```bash
 git checkout -b feature/add-todo
 ```
 
-### 2. 实现功能
+### 2. Implement the Feature
 
-创建 `todo.js`：
+Create `todo.js`:
 
 ```javascript
 // todo.js
@@ -64,101 +64,101 @@ function removeTodo(id) {
 module.exports = { addTodo, toggleTodo, removeTodo };
 ```
 
-### 3. 提交并推送
+### 3. Commit and Push
 
 ```bash
 git add todo.js
-git commit -m "feat: 添加 todo 功能"
+git commit -m "feat: add todo functionality"
 
 git push -u origin feature/add-todo
 ```
 
-### 4. 创建 Pull Request
+### 4. Create a Pull Request
 
 ```bash
-# 使用 GitHub CLI
+# Using GitHub CLI
 gh pr create \
-  --title "feat: 添加 todo 功能" \
-  --body "## 变更说明
-- 添加了 addTodo 函数
-- 添加了 toggleTodo 函数
-- 添加了 removeTodo 函数
+  --title "feat: add todo functionality" \
+  --body "## Description of Changes
+- Added addTodo function
+- Added toggleTodo function
+- Added removeTodo function
 
-## 测试
-- [x] 本地测试通过
+## Testing
+- [x] Local testing passed
 
-## 关联 Issue
-无"
+## Related Issues
+None"
 ```
 
-### 5. 代码审查
+### 5. Code Review
 
-在 GitHub 上：
-1. 查看 PR 的代码变更
-2. 添加审查评论
-3. 点击 **Review changes**
-4. 选择 **Approve** 或 **Request changes**
+On GitHub:
+1. Review the PR's code changes
+2. Add review comments
+3. Click **Review changes**
+4. Select **Approve** or **Request changes**
 
-### 6. 响应审查
+### 6. Respond to Review
 
-如果需要修改：
+If changes are needed:
 
 ```bash
-# 根据审查意见修改代码
+# Make changes based on review feedback
 git add todo.js
-git commit -m "fix: 根据审查添加参数验证"
+git commit -m "fix: add parameter validation based on review"
 git push
 ```
 
-PR 会自动更新。
+The PR will update automatically.
 
-### 7. 合并 PR
+### 7. Merge the PR
 
 ```bash
-# 使用 GitHub CLI
+# Using GitHub CLI
 gh pr merge --merge
 ```
 
-### 8. 清理
+### 8. Cleanup
 
 ```bash
-# 删除已合并的远程分支
+# Delete the merged remote branch
 git push origin --delete feature/add-todo
 
-# 删除本地分支
+# Delete the local branch
 git checkout main
 git pull
 git branch -d feature/add-todo
 ```
 
-## PR 模板
+## PR Template
 
-创建 `.github/pull_request_template.md`：
+Create `.github/pull_request_template.md`:
 
 ```markdown
-## 变更说明
-<!-- 描述这个 PR 做了什么 -->
+## Description of Changes
+<!-- Describe what this PR does -->
 
-## 变更类型
-- [ ] 新功能 (feat)
-- [ ] Bug 修复 (fix)
-- [ ] 文档更新 (docs)
-- [ ] 其他
+## Type of Change
+- [ ] New feature (feat)
+- [ ] Bug fix (fix)
+- [ ] Documentation update (docs)
+- [ ] Other
 
-## 测试
-- [ ] 已添加测试
-- [ ] 已通过所有测试
+## Testing
+- [ ] Tests added
+- [ ] All tests passed
 
-## 截图（如适用）
+## Screenshots (if applicable)
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **PR 标题清晰**：遵循 Conventional Commits
-2. **描述完整**：说明变更内容和原因
-3. **小步提交**：一个 PR 只做一件事
-4. **及时响应**：不要让审查者等待
+1. **Clear PR titles**: Follow Conventional Commits
+2. **Complete descriptions**: Explain what was changed and why
+3. **Small commits**: One PR does one thing
+4. **Respond promptly**: Don't make reviewers wait
 
-## 下一步
+## Next Steps
 
-[练习 4：修复 Merge Conflict →](exercise-4-fix-conflict.md)
+[Exercise 4: Fix Merge Conflicts →](exercise-4-fix-conflict.md)

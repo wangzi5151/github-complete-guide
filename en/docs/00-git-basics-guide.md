@@ -1,57 +1,57 @@
-# 第四章：Git 基础命令详解
+# Chapter 4: Git Basic Commands in Detail
 
-## 4.1 仓库操作
+## 4.1 Repository Operations
 
-### 创建新仓库
+### Creating a New Repository
 
-#### 方法一：在 GitHub 网页创建
+#### Method 1: Create on GitHub Web
 
-**第 1 步：** 登录 GitHub，点击右上角的 **+** 号，选择 **New repository**
+**Step 1:** Log in to GitHub, click the **+** icon in the top right corner, and select **New repository**
 
-**第 2 步：** 填写仓库信息
-- Repository name：仓库名称
-- Description：仓库描述（可选）
-- Public/Private：选择可见性
-- 勾选 **Add a README file**
+**Step 2:** Fill in repository information
+- Repository name: repository name
+- Description: repository description (optional)
+- Public/Private: choose visibility
+- Check **Add a README file**
 
-**第 3 步：** 点击 **Create repository**
+**Step 3:** Click **Create repository**
 
-#### 方法二：在本地创建
+#### Method 2: Create Locally
 
 ```bash
-# 创建新目录
+# Create a new directory
 mkdir my-project
 cd my-project
 
-# 初始化 Git 仓库
+# Initialize Git repository
 git init
 ```
 
-**git init 的作用：**
-- 创建 `.git` 目录
-- 初始化仓库结构
-- 创建默认分支（通常是 main）
+**What does `git init` do:**
+- Creates the `.git` directory
+- Initializes repository structure
+- Creates the default branch (usually main)
 
-#### 方法三：克隆现有仓库
+#### Method 3: Clone an Existing Repository
 
 ```bash
-# 克隆仓库
+# Clone a repository
 git clone https://github.com/user/repo.git
 
-# 克隆到指定目录
+# Clone into a specific directory
 git clone https://github.com/user/repo.git my-folder
 
-# 克隆特定分支
+# Clone a specific branch
 git clone -b develop https://github.com/user/repo.git
 ```
 
-### 查看仓库状态
+### Checking Repository Status
 
 ```bash
 git status
 ```
 
-**输出示例：**
+**Example Output:**
 
 ```
 On branch main
@@ -70,563 +70,563 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-**状态说明：**
-- `Changes not staged for commit`：已修改但未暂存
-- `Untracked files`：新文件，未被 Git 跟踪
-- `Changes to be committed`：已暂存，等待提交
+**Status Explanation:**
+- `Changes not staged for commit`: modified but not staged
+- `Untracked files`: new files, not tracked by Git
+- `Changes to be committed`: staged, waiting to be committed
 
-## 4.2 文件操作
+## 4.2 File Operations
 
-### 添加文件到暂存区
+### Adding Files to the Staging Area
 
 ```bash
-# 添加单个文件
+# Add a single file
 git add index.html
 
-# 添加多个文件
+# Add multiple files
 git add index.html style.css
 
-# 添加所有更改
+# Add all changes
 git add .
 
-# 添加所有 .js 文件
+# Add all .js files
 git add *.js
 
-# 添加 src 目录下的所有文件
+# Add all files in the src directory
 git add src/
 ```
 
-**什么是暂存区？**
+**What is the Staging Area?**
 
-暂存区（Staging Area）是一个中间区域，用于准备下次提交的内容。你可以选择性地添加文件，而不是一次性提交所有更改。
+The staging area (Staging Area) is an intermediate area used to prepare content for the next commit. You can selectively add files instead of committing all changes at once.
 
 ```
-工作区 → 暂存区 → 仓库
+Working directory → Staging area → Repository
        git add    git commit
 ```
 
-### 提交更改
+### Committing Changes
 
 ```bash
-# 提交暂存区的内容
-git commit -m "描述信息"
+# Commit staged content
+git commit -m "Description"
 
-# 提交并添加详细描述
-git commit -m "描述信息" -m "详细描述"
+# Commit with detailed description
+git commit -m "Description" -m "Detailed description"
 
-# 添加所有更改并提交（跳过 git add）
-git commit -am "描述信息"
+# Add all changes and commit (skip git add)
+git commit -am "Description"
 
-# 修改最近一次提交
-git commit --amend -m "新的描述信息"
+# Amend the most recent commit
+git commit --amend -m "New description"
 ```
 
-**提交信息规范：**
+**Commit Message Convention:**
 
 ```
-类型(范围): 描述
+type(scope): description
 
-详细描述（可选）
+Detailed description (optional)
 
-关联 Issue（可选）
+Related Issue (optional)
 ```
 
-**类型说明：**
-- `feat`: 新功能
-- `fix`: Bug 修复
-- `docs`: 文档更新
-- `style`: 代码格式（不影响功能）
-- `refactor`: 重构
-- `test`: 测试
-- `chore`: 构建/工具
+**Type Descriptions:**
+- `feat`: new feature
+- `fix`: bug fix
+- `docs`: documentation update
+- `style`: code formatting (does not affect functionality)
+- `refactor`: refactoring
+- `test`: tests
+- `chore`: build/tooling
 
-**示例：**
+**Examples:**
 ```bash
-git commit -m "feat: 添加用户登录功能"
-git commit -m "fix: 修复登录页面样式问题"
-git commit -m "docs: 更新 README 安装说明"
+git commit -m "feat: add user login feature"
+git commit -m "fix: fix login page styling issue"
+git commit -m "docs: update README installation instructions"
 ```
 
-### 查看文件差异
+### Viewing File Differences
 
 ```bash
-# 查看工作区与暂存区的差异
+# View differences between working directory and staging area
 git diff
 
-# 查看暂存区与仓库的差异
+# View differences between staging area and repository
 git diff --staged
 
-# 查看两个提交之间的差异
+# View differences between two commits
 git diff abc1234 def5678
 
-# 查看某个文件的差异
+# View differences for a specific file
 git diff index.html
 ```
 
-## 4.3 分支操作
+## 4.3 Branch Operations
 
-### 查看分支
+### Viewing Branches
 
 ```bash
-# 查看本地分支
+# View local branches
 git branch
 
-# 查看所有分支（含远程）
+# View all branches (including remote)
 git branch -a
 
-# 查看分支及最后一次提交
+# View branches with last commit
 git branch -v
 
-# 查看已合并的分支
+# View merged branches
 git branch --merged
 
-# 查看未合并的分支
+# View unmerged branches
 git branch --no-merged
 ```
 
-**输出示例：**
+**Example Output:**
 ```
-* main          abc1234 最新提交信息
-  feature-login def5678 添加登录功能
-  feature-cart  ghi9012 购物车功能
+* main          abc1234 latest commit message
+  feature-login def5678 add login feature
+  feature-cart  ghi9012 shopping cart feature
 ```
 
-带 `*` 号的是当前分支。
+The one marked with `*` is the current branch.
 
-### 创建分支
+### Creating Branches
 
 ```bash
-# 创建新分支
+# Create a new branch
 git branch feature-login
 
-# 创建并切换到新分支（推荐）
+# Create and switch to a new branch (recommended)
 git checkout -b feature-login
 
-# 或使用新语法
+# Or use new syntax
 git switch -c feature-login
 
-# 基于特定提交创建分支
+# Create a branch based on a specific commit
 git checkout -b feature-login abc1234
 
-# 基于远程分支创建本地分支
+# Create a local branch based on a remote branch
 git checkout -b feature-login origin/feature-login
 ```
 
-### 切换分支
+### Switching Branches
 
 ```bash
-# 切换到已有分支
+# Switch to an existing branch
 git checkout feature-login
 
-# 或使用新语法
+# Or use new syntax
 git switch feature-login
 ```
 
-### 合并分支
+### Merging Branches
 
 ```bash
-# 切换到目标分支
+# Switch to the target branch
 git checkout main
 
-# 合并功能分支
+# Merge the feature branch
 git merge feature-login
 
-# 合并并创建合并提交
+# Merge and create a merge commit
 git merge --no-ff feature-login
 
-# 取消合并
+# Abort the merge
 git merge --abort
 ```
 
-**合并类型：**
+**Merge Types:**
 
-1. **快进合并（Fast-forward）**
+1. **Fast-forward merge**
 ```
-合并前：
+Before merge:
 main:    A --- B --- C
                       \
 feature:               D --- E
 
-合并后：
+After merge:
 main:    A --- B --- C --- D --- E
 ```
 
-2. **三方合并（Three-way merge）**
+2. **Three-way merge**
 ```
-合并前：
+Before merge:
 main:    A --- B --- C --- F
                       \
 feature:               D --- E
 
-合并后：
+After merge:
 main:    A --- B --- C --- F --- M (merge commit)
                       \         /
 feature:               D --- E
 ```
 
-### 删除分支
+### Deleting Branches
 
 ```bash
-# 删除已合并的分支
+# Delete a merged branch
 git branch -d feature-login
 
-# 强制删除分支
+# Force delete a branch
 git branch -D feature-login
 
-# 删除远程分支
+# Delete a remote branch
 git push origin --delete feature-login
 ```
 
-### 重命名分支
+### Renaming Branches
 
 ```bash
-# 重命名当前分支
+# Rename the current branch
 git branch -m new-name
 
-# 重命名指定分支
+# Rename a specific branch
 git branch -m old-name new-name
 ```
 
-## 4.4 远程操作
+## 4.4 Remote Operations
 
-### 查看远程仓库
+### Viewing Remote Repositories
 
 ```bash
-# 查看远程仓库列表
+# View remote repository list
 git remote -v
 
-# 查看远程仓库详细信息
+# View detailed remote repository info
 git remote show origin
 ```
 
-### 添加远程仓库
+### Adding Remote Repositories
 
 ```bash
-# 添加远程仓库
+# Add a remote repository
 git remote add origin https://github.com/user/repo.git
 
-# 添加多个远程仓库
+# Add multiple remote repositories
 git remote add upstream https://github.com/owner/repo.git
 ```
 
-### 推送到远程
+### Pushing to Remote
 
 ```bash
-# 推送当前分支
+# Push the current branch
 git push
 
-# 推送到指定分支
+# Push to a specific branch
 git push origin main
 
-# 首次推送并设置上游分支
+# First push and set upstream branch
 git push -u origin main
 
-# 推送所有分支
+# Push all branches
 git push --all
 
-# 推送标签
+# Push tags
 git push --tags
 ```
 
-### 从远程拉取
+### Pulling from Remote
 
 ```bash
-# 拉取远程更改（不合并）
+# Fetch remote changes (without merging)
 git fetch
 
-# 拉取并合并
+# Pull and merge
 git pull
 
-# 拉取并变基
+# Pull and rebase
 git pull --rebase
 
-# 拉取特定远程分支
+# Pull a specific remote branch
 git pull origin main
 ```
 
-### 查看远程分支
+### Viewing Remote Branches
 
 ```bash
-# 查看远程分支
+# View remote branches
 git branch -r
 
-# 查看所有分支（本地+远程）
+# View all branches (local + remote)
 git branch -a
 
-# 查看远程分支的详细信息
+# View detailed info for remote branches
 git branch -vv
 ```
 
-## 4.5 查看历史
+## 4.5 Viewing History
 
-### 查看提交历史
+### Viewing Commit History
 
 ```bash
-# 查看所有提交
+# View all commits
 git log
 
-# 查看简洁版历史
+# View compact history
 git log --oneline
 
-# 查看图形化历史
+# View graphical history
 git log --graph --oneline
 
-# 查看最近 5 次提交
+# View the last 5 commits
 git log -5
 
-# 查看某个文件的历史
+# View history for a specific file
 git log index.html
 
-# 查看某个作者的提交
+# View commits by a specific author
 git log --author="Zhang"
 
-# 按时间筛选
+# Filter by date
 git log --since="2024-01-01"
 git log --until="2024-12-31"
 ```
 
-**输出示例：**
+**Example Output:**
 ```
-* abc1234 (HEAD -> main) feat: 添加用户登录
-* def5678 fix: 修复样式问题
-* ghi9012 docs: 更新 README
-* jkl3456 feat: 初始化项目
+* abc1234 (HEAD -> main) feat: add user login
+* def5678 fix: fix styling issue
+* ghi9012 docs: update README
+* jkl3456 feat: initialize project
 ```
 
-### 查看提交详情
+### Viewing Commit Details
 
 ```bash
-# 查看某次提交的详细信息
+# View detailed info for a specific commit
 git show abc1234
 
-# 查看某次提交的文件变更
+# View file changes for a specific commit
 git show --stat abc1234
 ```
 
-### 查看文件变更
+### Viewing File Changes
 
 ```bash
-# 查看工作区与暂存区的差异
+# View differences between working directory and staging area
 git diff
 
-# 查看暂存区与仓库的差异
+# View differences between staging area and repository
 git diff --staged
 
-# 查看某次提交的变更
+# View changes from a specific commit
 git diff abc1234^ abc1234
 
-# 查看某文件的变更
+# View changes for a specific file
 git diff index.html
 ```
 
-## 4.6 撤销操作
+## 4.6 Undo Operations
 
-### 撤销工作区的修改
+### Undoing Working Directory Changes
 
 ```bash
-# 丢弃工作区的修改
+# Discard working directory changes
 git restore index.html
 
-# 丢弃所有修改
+# Discard all changes
 git restore .
 ```
 
-### 撤销暂存区的修改
+### Undoing Staging Area Changes
 
 ```bash
-# 将文件从暂存区移除（保留工作区修改）
+# Remove a file from staging area (keep working directory changes)
 git restore --staged index.html
 
-# 将所有文件从暂存区移除
+# Remove all files from staging area
 git restore --staged .
 ```
 
-### 修改最近一次提交
+### Amending the Most Recent Commit
 
 ```bash
-# 修改提交信息
-git commit --amend -m "新的提交信息"
+# Amend commit message
+git commit --amend -m "New commit message"
 
-# 添加文件到最近一次提交
+# Add a file to the most recent commit
 git add forgotten-file.js
 git commit --amend --no-edit
 ```
 
-### 回退提交
+### Reverting Commits
 
 ```bash
-# 回退到某次提交（保留修改在工作区）
+# Revert to a specific commit (keep changes in working directory)
 git reset abc1234
 
-# 回退到某次提交（保留修改在暂存区）
+# Revert to a specific commit (keep changes in staging area)
 git reset --soft abc1234
 
-# 回退到某次提交（丢弃所有修改）
+# Revert to a specific commit (discard all changes)
 git reset --hard abc1234
 
-# 回退最近一次提交
+# Revert the most recent commit
 git reset HEAD~1
 ```
 
-**reset 的三种模式：**
+**Three modes of `reset`:**
 
-| 模式 | 说明 |
+| Mode | Description |
 |------|------|
-| `--soft` | 保留工作区和暂存区的修改 |
-| `--mixed`（默认） | 保留工作区的修改，清空暂存区 |
-| `--hard` | 丢弃所有修改 |
+| `--soft` | Keep working directory and staging area changes |
+| `--mixed` (default) | Keep working directory changes, clear staging area |
+| `--hard` | Discard all changes |
 
-### 创建反向提交
+### Creating a Reverse Commit
 
 ```bash
-# 创建一个新提交来撤销之前的提交
+# Create a new commit to revert a previous commit
 git revert abc1234
 ```
 
-## 4.7 标签操作
+## 4.7 Tag Operations
 
-### 查看标签
+### Viewing Tags
 
 ```bash
-# 列出所有标签
+# List all tags
 git tag
 
-# 查看标签详情
+# View tag details
 git show v1.0.0
 
-# 按模式搜索标签
+# Search tags by pattern
 git tag -l "v1.*"
 ```
 
-### 创建标签
+### Creating Tags
 
 ```bash
-# 创建轻量标签
+# Create a lightweight tag
 git tag v1.0.0
 
-# 创建附注标签（推荐）
+# Create an annotated tag (recommended)
 git tag -a v1.0.0 -m "Release version 1.0.0"
 
-# 为某次提交创建标签
+# Create a tag for a specific commit
 git tag -a v1.0.0 abc1234 -m "Release version 1.0.0"
 ```
 
-### 推送标签
+### Pushing Tags
 
 ```bash
-# 推送单个标签
+# Push a single tag
 git push origin v1.0.0
 
-# 推送所有标签
+# Push all tags
 git push origin --tags
 ```
 
-### 删除标签
+### Deleting Tags
 
 ```bash
-# 删除本地标签
+# Delete a local tag
 git tag -d v1.0.0
 
-# 删除远程标签
+# Delete a remote tag
 git push origin --delete v1.0.0
 ```
 
-### 检出标签
+### Checking Out Tags
 
 ```bash
-# 检出标签（只读）
+# Check out a tag (read-only)
 git checkout v1.0.0
 
-# 基于标签创建分支
+# Create a branch based on a tag
 git checkout -b release-1.0.0 v1.0.0
 ```
 
-## 4.8 暂存操作
+## 4.8 Stash Operations
 
-### 暂存当前修改
+### Stashing Current Changes
 
 ```bash
-# 暂存所有修改
+# Stash all changes
 git stash
 
-# 暂存并添加描述
-git stash save "正在开发登录功能"
+# Stash with a description
+git stash save "Working on login feature"
 
-# 暂存未跟踪的文件
+# Stash untracked files
 git stash -u
 
-# 暂存所有文件（包括忽略的）
+# Stash all files (including ignored)
 git stash -a
 ```
 
-### 查看暂存列表
+### Viewing Stash List
 
 ```bash
 git stash list
 ```
 
-**输出示例：**
+**Example Output:**
 ```
-stash@{0}: On main: 正在开发登录功能
+stash@{0}: On main: Working on login feature
 stash@{1}: WIP on main: abc1234 some commit
 ```
 
-### 恢复暂存
+### Restoring Stashed Changes
 
 ```bash
-# 恢复最近的暂存（保留暂存记录）
+# Restore the most recent stash (keep stash record)
 git stash apply
 
-# 恢复最近的暂存（删除暂存记录）
+# Restore the most recent stash (delete stash record)
 git stash pop
 
-# 恢复特定暂存
+# Restore a specific stash
 git stash apply stash@{2}
 
-# 恢复特定暂存并删除记录
+# Restore a specific stash and delete the record
 git stash pop stash@{2}
 ```
 
-### 删除暂存
+### Deleting Stashes
 
 ```bash
-# 删除最近的暂存
+# Delete the most recent stash
 git stash drop
 
-# 删除特定暂存
+# Delete a specific stash
 git stash drop stash@{0}
 
-# 删除所有暂存
+# Delete all stashes
 git stash clear
 ```
 
-### 查看暂存详情
+### Viewing Stash Details
 
 ```bash
-# 查看最近暂存的详细内容
+# View detailed content of the most recent stash
 git stash show -p
 
-# 查看特定暂存的详细内容
+# View detailed content of a specific stash
 git stash show -p stash@{2}
 ```
 
-## 4.9 本章小结
+## 4.9 Chapter Summary
 
-本章详细介绍了 Git 的基础命令，包括：
+This chapter provided a detailed introduction to Git basic commands, including:
 
-- 仓库操作：创建、克隆、状态查看
-- 文件操作：添加、提交、差异查看
-- 分支操作：创建、切换、合并、删除
-- 远程操作：添加、推送、拉取
-- 历史查看：日志、差异、详情
-- 撤销操作：修改、回退、反向提交
-- 标签操作：创建、推送、删除
-- 暂存操作：暂存、恢复、删除
+- Repository operations: create, clone, check status
+- File operations: add, commit, view differences
+- Branch operations: create, switch, merge, delete
+- Remote operations: add, push, pull
+- History viewing: log, diff, details
+- Undo operations: amend, revert, reverse commit
+- Tag operations: create, push, delete
+- Stash operations: stash, restore, delete
 
-**关键要点：**
-- 熟练掌握这些命令是使用 Git 的基础
-- 多练习，在实践中加深理解
-- 遇到问题不要慌，大多数操作都可以撤销
+**Key Takeaways:**
+- Mastering these commands is the foundation of using Git
+- Practice more to deepen your understanding through hands-on experience
+- Don't panic when encountering problems — most operations can be undone
 
-**下一步：**
-[GitHub 核心功能 →](14-create-repo.md)
+**Next Step:**
+[GitHub Core Features →](14-create-repo.md)

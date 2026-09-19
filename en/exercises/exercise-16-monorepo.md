@@ -1,21 +1,21 @@
-# 练习 16：Monorepo 管理实战
+# Exercise 16: Monorepo Management in Practice
 
-## 学习目标
+## Learning Objectives
 
-- 使用 pnpm workspaces
-- 配置 Turborepo
-- 创建增量构建工作流
+- Use pnpm workspaces
+- Configure Turborepo
+- Create an incremental build workflow
 
-## 步骤
+## Steps
 
-### 步骤 1：初始化 Monorepo
+### Step 1: Initialize the Monorepo
 
 ```bash
 mkdir my-monorepo && cd my-monorepo
 pnpm init
 ```
 
-### 步骤 2：配置 workspace
+### Step 2: Configure workspace
 
 ```yaml
 # pnpm-workspace.yaml
@@ -23,7 +23,7 @@ packages:
   - 'packages/*'
 ```
 
-### 步骤 3：创建包结构
+### Step 3: Create package structure
 
 ```
 my-monorepo/
@@ -42,7 +42,7 @@ my-monorepo/
 │       └── src/
 ```
 
-### 步骤 4：配置 Turborepo
+### Step 4: Configure Turborepo
 
 ```json
 {
@@ -60,7 +60,7 @@ my-monorepo/
 }
 ```
 
-### 步骤 5：创建 CI 工作流
+### Step 5: Create CI workflow
 
 ```yaml
 # .github/workflows/monorepo.yml
@@ -87,27 +87,27 @@ jobs:
     - run: pnpm turbo build test lint
 ```
 
-## 实战任务
+## Hands-on Tasks
 
-1. 初始化 pnpm workspace
-2. 创建多个包
-3. 配置 Turborepo
-4. 创建增量构建工作流
+1. Initialize a pnpm workspace
+2. Create multiple packages
+3. Configure Turborepo
+4. Create an incremental build workflow
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 能够初始化 pnpm workspace
-- [ ] 能够配置 Turborepo
-- [ ] 能够运行增量构建
-- [ ] 能够创建 Monorepo CI
+- [ ] Able to initialize a pnpm workspace
+- [ ] Able to configure Turborepo
+- [ ] Able to run incremental builds
+- [ ] Able to create Monorepo CI
 
-## 完成
+## Completion
 
-恭喜完成所有练习！你已经掌握了：
-- Git 基础操作
-- GitHub 核心功能
-- CI/CD 流水线
-- Docker 容器化
-- 安全扫描
-- 发布管理
-- Monorepo 管理
+Congratulations on completing all exercises! You have mastered:
+- Git fundamentals
+- GitHub core features
+- CI/CD pipelines
+- Docker containerization
+- Security scanning
+- Release management
+- Monorepo management

@@ -1,33 +1,33 @@
-# 第七章：安全与 DevOps 实践
+# Chapter 7: Security and DevOps Practices
 
-## 7.1 GitHub 安全基础
+## 7.1 GitHub Security Basics
 
-### 账号安全
+### Account Security
 
-**两步验证（2FA）：**
+**Two-Factor Authentication (2FA):**
 
-1. 进入 **Settings** → **Password and authentication**
-2. 点击 **Enable two-factor authentication**
-3. 选择验证方式：
-   - Authenticator App（推荐）
+1. Go to **Settings** → **Password and authentication**
+2. Click **Enable two-factor authentication**
+3. Choose a verification method:
+   - Authenticator App (recommended)
    - SMS/voice message
    - Security key
-4. 保存恢复代码
+4. Save recovery codes
 
-**个人访问令牌（PAT）：**
+**Personal Access Token (PAT):**
 
-1. 进入 **Settings** → **Developer settings** → **Personal access tokens**
-2. 点击 **Generate new token**
-3. 选择权限范围
-4. 保存生成的令牌
+1. Go to **Settings** → **Developer settings** → **Personal access tokens**
+2. Click **Generate new token**
+3. Select permission scopes
+4. Save the generated token
 
-### 仓库安全
+### Repository Security
 
-**分支保护规则：**
+**Branch Protection Rules:**
 
-1. 进入 **Settings** → **Branches**
-2. 点击 **Add rule**
-3. 配置保护规则：
+1. Go to **Settings** → **Branches**
+2. Click **Add rule**
+3. Configure protection rules:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -49,52 +49,52 @@
 └─────────────────────────────────────────────┘
 ```
 
-**CODEOWNERS：**
+**CODEOWNERS:**
 
-创建 `.github/CODEOWNERS` 文件：
+Create a `.github/CODEOWNERS` file:
 
 ```yaml
-# 默认所有者
+# Default owners
 * @your-org/core-team
 
-# 前端代码
+# Frontend code
 /src/components/ @your-org/frontend-team
 
-# 后端代码
+# Backend code
 /src/api/ @your-org/backend-team
 
-# 基础设施
+# Infrastructure
 /terraform/ @your-org/devops-team
 ```
 
 ## 7.2 Secret Scanning
 
-### 什么是 Secret Scanning？
+### What is Secret Scanning?
 
-GitHub 自动扫描仓库中的敏感信息（如 API 密钥、密码等），并发出警告。
+GitHub automatically scans repositories for sensitive information (such as API keys, passwords, etc.) and sends alerts.
 
-### 启用 Secret Scanning
+### Enabling Secret Scanning
 
-1. 进入 **Settings** → **Code security and analysis**
-2. 启用 **Secret scanning**
-3. 启用 **Push protection**
+1. Go to **Settings** → **Code security and analysis**
+2. Enable **Secret scanning**
+3. Enable **Push protection**
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Code security and analysis                  │
 │                                             │
 │  Secret scanning                             │
-│  ○ Disable  ● Enable  ← 启用                │
+│  ○ Disable  ● Enable  ← Enabled             │
 │                                             │
 │  Push protection                             │
-│  ○ Disable  ● Enable  ← 启用                │
+│  ○ Disable  ● Enable  ← Enabled             │
 │                                             │
 └─────────────────────────────────────────────┘
 ```
 
-### 自定义 Secret 模式
+### Custom Secret Patterns
 
-创建 `.github/secret-scanning.yml`：
+Create `.github/secret-scanning.yml`:
 
 ```yaml
 custom-patterns:
@@ -105,19 +105,19 @@ custom-patterns:
 
 ## 7.3 Dependabot
 
-### 什么是 Dependabot？
+### What is Dependabot?
 
-Dependabot 自动检查项目依赖的安全漏洞，并提供更新建议。
+Dependabot automatically checks project dependencies for security vulnerabilities and provides update recommendations.
 
-### 启用 Dependabot
+### Enabling Dependabot
 
-1. 进入 **Settings** → **Code security and analysis**
-2. 启用 **Dependabot alerts**
-3. 启用 **Dependabot security updates**
+1. Go to **Settings** → **Code security and analysis**
+2. Enable **Dependabot alerts**
+3. Enable **Dependabot security updates**
 
-### 配置 Dependabot
+### Configuring Dependabot
 
-创建 `.github/dependabot.yml`：
+Create `.github/dependabot.yml`:
 
 ```yaml
 version: 2
@@ -137,7 +137,7 @@ updates:
       interval: "weekly"
 ```
 
-### 自动合并安全更新
+### Auto-Merging Security Updates
 
 ```yaml
 # .github/workflows/auto-merge.yml
@@ -172,17 +172,17 @@ jobs:
 
 ## 7.4 Code Scanning
 
-### 什么是 Code Scanning？
+### What is Code Scanning?
 
-Code Scanning 使用 CodeQL 分析代码中的安全漏洞。
+Code Scanning uses CodeQL to analyze code for security vulnerabilities.
 
-### 配置 Code Scanning
+### Configuring Code Scanning
 
-**第 1 步：** 进入 **Security** → **Code scanning**
+**Step 1:** Go to **Security** → **Code scanning**
 
-**第 2 步：** 点击 **Set up**
+**Step 2:** Click **Set up**
 
-**第 3 步：** 选择 CodeQL
+**Step 3:** Select CodeQL
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -190,7 +190,7 @@ Code Scanning 使用 CodeQL 分析代码中的安全漏洞。
 │                                             │
 │  Select a tool:                              │
 │                                             │
-│  ● CodeQL  ← 推荐                            │
+│  ● CodeQL  ← Recommended                    │
 │  ○ Third-party tools                         │
 │                                             │
 │  Select languages:                           │
@@ -202,9 +202,9 @@ Code Scanning 使用 CodeQL 分析代码中的安全漏洞。
 └─────────────────────────────────────────────┘
 ```
 
-### 创建工作流
+### Creating a Workflow
 
-创建 `.github/workflows/codeql.yml`：
+Create `.github/workflows/codeql.yml`:
 
 ```yaml
 name: CodeQL
@@ -243,16 +243,16 @@ jobs:
       uses: github/codeql-action/analyze@v3
 ```
 
-## 7.5 CI/CD 基础
+## 7.5 CI/CD Basics
 
-### 什么是 CI/CD？
+### What is CI/CD?
 
-- **CI（Continuous Integration）**：持续集成，频繁地将代码集成到主干
-- **CD（Continuous Deployment）**：持续部署，自动将代码部署到生产环境
+- **CI (Continuous Integration):** Continuously integrates code changes into the main branch
+- **CD (Continuous Deployment):** Automatically deploys code to production
 
-### GitHub Actions 基础
+### GitHub Actions Basics
 
-**工作流文件结构：**
+**Workflow File Structure:**
 
 ```
 .github/
@@ -260,7 +260,7 @@ jobs:
     └── ci.yml
 ```
 
-**基本模板：**
+**Basic Template:**
 
 ```yaml
 name: CI
@@ -293,13 +293,13 @@ jobs:
       run: npm run build
 ```
 
-### Secrets 管理
+### Secrets Management
 
-**添加 Secrets：**
+**Adding Secrets:**
 
-1. 进入 **Settings** → **Secrets and variables** → **Actions**
-2. 点击 **New repository secret**
-3. 输入名称和值
+1. Go to **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Enter name and value
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -314,7 +314,7 @@ jobs:
 └─────────────────────────────────────────────┘
 ```
 
-**使用 Secrets：**
+**Using Secrets:**
 
 ```yaml
 - name: Deploy
@@ -323,9 +323,9 @@ jobs:
   run: ./deploy.sh
 ```
 
-## 7.6 部署实践
+## 7.6 Deployment Practices
 
-### 部署到 GitHub Pages
+### Deploying to GitHub Pages
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -361,7 +361,7 @@ jobs:
       uses: actions/deploy-pages@v4
 ```
 
-### 部署到 Vercel
+### Deploying to Vercel
 
 ```yaml
 name: Deploy to Vercel
@@ -385,7 +385,7 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
 ```
 
-### 部署到 Docker
+### Deploying to Docker
 
 ```yaml
 name: Docker Build and Push
@@ -415,16 +415,16 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
 ```
 
-## 7.7 监控和告警
+## 7.7 Monitoring and Alerting
 
-### 监控工作流
+### Monitoring Workflow
 
 ```yaml
 name: Monitor
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 每小时
+    - cron: '0 * * * *'  # Every hour
 
 jobs:
   health-check:
@@ -440,7 +440,7 @@ jobs:
         fi
 ```
 
-### 告警通知
+### Alert Notifications
 
 ```yaml
 - name: Notify on failure
@@ -455,22 +455,22 @@ jobs:
     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-## 7.8 本章小结
+## 7.8 Chapter Summary
 
-本章详细介绍了 GitHub 的安全和 DevOps 实践，包括：
+This chapter covered GitHub security and DevOps practices, including:
 
-- 账号和仓库安全
+- Account and repository security
 - Secret Scanning
 - Dependabot
 - Code Scanning
-- CI/CD 基础
-- 部署实践
-- 监控和告警
+- CI/CD basics
+- Deployment practices
+- Monitoring and alerting
 
-**关键要点：**
-- 安全是开发的重要环节
-- CI/CD 可以提高开发效率
-- 自动化是 DevOps 的核心
+**Key Takeaways:**
+- Security is an essential part of development
+- CI/CD can improve development efficiency
+- Automation is the core of DevOps
 
-**下一步：**
-[实战练习 →](exercises/exercise-1-create-repo.md)
+**Next Steps:**
+[Hands-on Exercise →](exercises/exercise-1-create-repo.md)

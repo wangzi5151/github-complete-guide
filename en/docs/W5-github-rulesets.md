@@ -1,28 +1,28 @@
-# GitHub Rulesets 介绍
+# GitHub Rulesets Introduction
 
-## 什么是 Rulesets？
+## What are Rulesets?
 
-GitHub Rulesets 是分支保护规则的下一代替代方案。它提供了更灵活的方式来控制分支和标签的推送、合并和删除操作。
+GitHub Rulesets is the next-generation alternative to branch protection rules. It provides more flexible ways to control push, merge, and delete operations for branches and tags.
 
-## Rulesets vs 旧版保护规则
+## Rulesets vs Legacy Protection Rules
 
-| 特性 | Rulesets | 旧版保护规则 |
-|------|----------|--------------|
-| 应用范围 | 仓库、组织、企业 | 仅仓库 |
-| 条件 | 多种条件组合 | 仅分支名匹配 |
-| 嵌套规则 | 支持 | 不支持 |
-| 优先级 | 支持 | 不支持 |
-| 绕过权限 | 更灵活 | 较简单 |
+| Feature | Rulesets | Legacy Protection Rules |
+|---------|----------|------------------------|
+| Scope | Repository, Organization, Enterprise | Repository only |
+| Conditions | Multiple condition combinations | Branch name matching only |
+| Nested Rules | Supported | Not supported |
+| Priority | Supported | Not supported |
+| Bypass Permissions | More flexible | Simpler |
 
-## 创建 Ruleset
+## Creating a Ruleset
 
-### 通过 Web UI 创建
+### Creating via Web UI
 
-1. 进入仓库 **Settings** → **Rules** → **Rulesets**
-2. 点击 **New ruleset** → **New branch ruleset**
-3. 配置规则
+1. Go to repository **Settings** → **Rules** → **Rulesets**
+2. Click **New ruleset** → **New branch ruleset**
+3. Configure the rules
 
-### 通过 API 创建
+### Creating via API
 
 ```bash
 gh api repos/{owner}/{repo}/rulesets \
@@ -34,9 +34,9 @@ gh api repos/{owner}/{repo}/rulesets \
   -f rules='[{"type":"pull_request","parameters":{"required_approving_review_count":1,"dismiss_stale_reviews_on_push":true,"require_last_push_approval":false}}]'
 ```
 
-## 常用规则类型
+## Common Rule Types
 
-### 分支保护规则
+### Branch Protection Rules
 
 ```json
 {
@@ -50,7 +50,7 @@ gh api repos/{owner}/{repo}/rulesets \
 }
 ```
 
-### 要求状态检查通过
+### Required Status Checks
 
 ```json
 {
@@ -65,7 +65,7 @@ gh api repos/{owner}/{repo}/rulesets \
 }
 ```
 
-### 禁止强制推送
+### Prevent Force Pushes
 
 ```json
 {
@@ -73,7 +73,7 @@ gh api repos/{owner}/{repo}/rulesets \
 }
 ```
 
-### 要求签名提交
+### Require Signed Commits
 
 ```json
 {
@@ -81,7 +81,7 @@ gh api repos/{owner}/{repo}/rulesets \
 }
 ```
 
-### 限制文件大小
+### File Size Limits
 
 ```json
 {
@@ -92,25 +92,25 @@ gh api repos/{owner}/{repo}/rulesets \
 }
 ```
 
-## 组织级 Ruleset
+## Organization-Level Rulesets
 
-### 创建组织 Ruleset
+### Creating Organization Rulesets
 
-1. 进入组织 **Settings** → **Repository** → **Rulesets**
-2. 点击 **New ruleset** → **New branch ruleset**
-3. 选择应用范围
+1. Go to organization **Settings** → **Repository** → **Rulesets**
+2. Click **New ruleset** → **New branch ruleset**
+3. Select the scope
 
-### 继承组织 Ruleset
+### Inheriting Organization Rulesets
 
-仓库可以继承组织级 Ruleset：
+Repositories can inherit organization-level Rulesets:
 
-1. 进入仓库 **Settings** → **Rules** → **Rulesets**
-2. 查看组织级 Ruleset 是否已应用
-3. 仓库级 Ruleset 会覆盖组织级规则
+1. Go to repository **Settings** → **Rules** → **Rulesets**
+2. Check if organization-level Rulesets are already applied
+3. Repository-level Rulesets will override organization-level rules
 
-## 高级用法
+## Advanced Usage
 
-### 多条件组合
+### Multiple Condition Combinations
 
 ```yaml
 name: Release Branch
@@ -134,10 +134,10 @@ rules:
   - type: non_fast_forward
 ```
 
-### 创建 Ruleset 集合
+### Creating Ruleset Collections
 
 ```bash
-# 创建 Ruleset 集合
+# Create Ruleset collection
 gh api orgs/{org}/rulesets \
   --method POST \
   -f name='Default Branch Rules' \
@@ -147,19 +147,19 @@ gh api orgs/{org}/rulesets \
   -f rules='[{"type":"pull_request","parameters":{"required_approving_review_count":1}}]'
 ```
 
-## 管理 Rulesets
+## Managing Rulesets
 
-### 查看所有 Ruleset
+### Viewing All Rulesets
 
 ```bash
-# 仓库级
+# Repository level
 gh api repos/{owner}/{repo}/rulesets
 
-# 组织级
+# Organization level
 gh api orgs/{org}/rulesets
 ```
 
-### 禁用 Ruleset
+### Disabling a Ruleset
 
 ```bash
 gh api repos/{owner}/{repo}/rulesets/{ruleset_id} \
@@ -167,37 +167,37 @@ gh api repos/{owner}/{repo}/rulesets/{ruleset_id} \
   -f enforcement='disabled'
 ```
 
-### 删除 Ruleset
+### Deleting a Ruleset
 
 ```bash
 gh api repos/{owner}/{repo}/rulesets/{ruleset_id} \
   --method DELETE
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **从简单开始**：先创建基本保护规则，逐步添加复杂规则
-2. **使用组织级规则**：统一团队的分支管理策略
-3. **文档化规则**：在 README 中说明分支策略
-4. **定期审查**：检查规则是否仍然适用
-5. **使用条件组合**：针对不同分支应用不同规则
+1. **Start Simple**: Begin with basic protection rules and gradually add complex ones
+2. **Use Organization-Level Rules**: Standardize your team's branch management strategy
+3. **Document Rules**: Explain your branch strategy in the README
+4. **Review Regularly**: Check if the rules are still applicable
+5. **Use Condition Combinations**: Apply different rules to different branches
 
-## 常见问题
+## Frequently Asked Questions
 
-### Q: Ruleset 和 Ruleset 集合的区别？
-A: Ruleset 是单个规则集合，Ruleset 集合是多个 Ruleset 的组合，可以按优先级应用。
+### Q: What's the difference between a Ruleset and a Ruleset collection?
+A: A Ruleset is a single rule set, while a Ruleset collection is a combination of multiple Rulesets that can be applied by priority.
 
-### Q: 如何绕过 Ruleset？
-A: 需要配置 bypass 选项，通常只有仓库管理员或指定用户可以绕过。
+### Q: How to bypass a Ruleset?
+A: You need to configure bypass options. Usually only repository administrators or designated users can bypass.
 
-### Q: Ruleset 会影响现有分支吗？
-A: 是的，Ruleset 会立即应用到符合条件的现有分支。
+### Q: Will Rulesets affect existing branches?
+A: Yes, Rulesets will immediately apply to existing branches that meet the conditions.
 
-## 相关资源
+## Related Resources
 
-- [GitHub Rulesets 官方文档](https://docs.github.com/en/repositories/configuring-your-warehouse/managing-rulesets)
-- [分支保护规则迁移指南](https://docs.github.com/en/repositories/configuring-your-repository/managing-rules/migrating-to-rulesets)
+- [GitHub Rulesets Official Documentation](https://docs.github.com/en/repositories/configuring-your-warehouse/managing-rulesets)
+- [Branch Protection Rules Migration Guide](https://docs.github.com/en/repositories/configuring-your-repository/managing-rules/migrating-to-rulesets)
 
 ---
 
-**上一篇：[GitHub Projects 项目管理](21-github-projects.md) | 下一篇：[Fork 与开源贡献](22-fork-contribute.md)**
+**Previous: [GitHub Projects Project Management](21-github-projects.md) | Next: [Fork and Open Source Contribution](22-fork-contribute.md)**

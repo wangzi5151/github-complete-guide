@@ -1,150 +1,150 @@
-# GitHub 开源项目管理完全指南
+# Complete Guide to Managing Open Source Projects on GitHub
 
-> 本章将详细介绍如何使用 GitHub 管理开源项目，包括项目规划、社区建设、贡献者管理、版本发布、文档编写、营销推广等方面。
-
----
-
-## 目录
-
-1. [开源项目概述](#开源项目概述)
-2. [项目规划与准备](#项目规划与准备)
-3. [仓库结构与文档](#仓库结构与文档)
-4. [社区建设与管理](#社区建设与管理)
-5. [贡献者管理](#贡献者管理)
-6. [版本发布与管理](#版本发布与管理)
-7. [项目营销与推广](#项目营销与推广)
-8. [开源项目商业化](#开源项目商业化)
-9. [开源许可证](#开源许可证)
-10. [开源项目案例分析](#开源项目案例分析)
-11. [最佳实践](#最佳实践)
-12. [相关资源](#相关资源)
+> This chapter will detail how to use GitHub to manage open source projects, including project planning, community building, contributor management, version releases, documentation, marketing, and more.
 
 ---
 
-## 开源项目概述
+## Table of Contents
 
-### 什么是开源项目？
+1. [Open Source Project Overview](#open-source-project-overview)
+2. [Project Planning and Preparation](#project-planning-and-preparation)
+3. [Repository Structure and Documentation](#repository-structure-and-documentation)
+4. [Community Building and Management](#community-building-and-management)
+5. [Contributor Management](#contributor-management)
+6. [Version Releases and Management](#version-releases-and-management)
+7. [Project Marketing and Promotion](#project-marketing-and-promotion)
+8. [Open Source Project Commercialization](#open-source-project-commercialization)
+9. [Open Source Licenses](#open-source-licenses)
+10. [Open Source Project Case Studies](#open-source-project-case-studies)
+11. [Best Practices](#best-practices)
+12. [Related Resources](#related-resources)
 
-开源项目是指源代码公开可用的软件项目，任何人都可以查看、使用、修改和分发代码。开源项目通常遵循特定的开源许可证。
+---
 
-### 开源项目的优势
+## Open Source Project Overview
 
-**对开发者**：
-- 提高技术能力
-- 建立个人品牌
-- 扩展职业网络
-- 获得工作机会
-- 学习最佳实践
+### What is an Open Source Project?
 
-**对企业**：
-- 降低开发成本
-- 提高软件质量
-- 加速创新
-- 建立技术标准
-- 吸引人才
+An open source project is a software project whose source code is publicly available, allowing anyone to view, use, modify, and distribute the code. Open source projects typically follow specific open source licenses.
 
-**对社区**：
-- 知识共享
-- 协作创新
-- 解决共同问题
-- 推动技术进步
+### Advantages of Open Source Projects
 
-### 开源项目的挑战
+**For Developers**:
+- Improve technical skills
+- Build personal brand
+- Expand professional network
+- Gain job opportunities
+- Learn best practices
 
-**常见挑战**：
-- 维护者倦怠
-- 社区管理困难
-- 资金不足
-- 安全问题
-- 法律风险
+**For Businesses**:
+- Reduce development costs
+- Improve software quality
+- Accelerate innovation
+- Establish technical standards
+- Attract talent
 
-**应对策略**：
-- 建立维护团队
-- 自动化流程
-- 寻求赞助
-- 安全审计
-- 法律咨询
+**For the Community**:
+- Knowledge sharing
+- Collaborative innovation
+- Solve common problems
+- Drive technological progress
 
-## 项目规划与准备
+### Challenges of Open Source Projects
 
-### 项目定位
+**Common Challenges**:
+- Maintainer burnout
+- Difficult community management
+- Insufficient funding
+- Security issues
+- Legal risks
 
-**明确项目目标**：
-- 解决什么问题？
-- 目标用户是谁？
-- 与现有项目有何不同？
-- 长期愿景是什么？
+**Coping Strategies**:
+- Build a maintenance team
+- Automate processes
+- Seek sponsorship
+- Conduct security audits
+- Obtain legal consultation
 
-**项目类型**：
-- **库/框架**：供其他开发者使用
-- **工具**：解决特定问题
-- **应用**：完整的软件产品
-- **文档**：知识分享
-- **标准**：技术规范
+## Project Planning and Preparation
 
-### 项目准备
+### Project Positioning
 
-**技术准备**：
-- 选择编程语言
-- 选择开发框架
-- 设置开发环境
-- 配置 CI/CD
-- 设置代码质量工具
+**Define Project Goals**:
+- What problem does it solve?
+- Who are the target users?
+- How is it different from existing projects?
+- What is the long-term vision?
 
-**文档准备**：
-- 编写 README
-- 编写贡献指南
-- 编写行为准则
-- 编写许可证
-- 编写变更日志
+**Project Types**:
+- **Library/Framework**: For use by other developers
+- **Tool**: Solves a specific problem
+- **Application**: Complete software product
+- **Documentation**: Knowledge sharing
+- **Standard**: Technical specification
 
-**社区准备**：
-- 创建 GitHub 组织
-- 设置团队权限
-- 配置 Issue 模板
-- 配置 PR 模板
-- 设置讨论区
+### Project Preparation
 
-### 项目启动清单
+**Technical Preparation**:
+- Choose a programming language
+- Choose a development framework
+- Set up development environment
+- Configure CI/CD
+- Set up code quality tools
+
+**Documentation Preparation**:
+- Write README
+- Write contribution guidelines
+- Write code of conduct
+- Write license
+- Write changelog
+
+**Community Preparation**:
+- Create GitHub organization
+- Set up team permissions
+- Configure issue templates
+- Configure PR templates
+- Set up discussion board
+
+### Project Launch Checklist
 
 ```markdown
-# 开源项目启动清单
+# Open Source Project Launch Checklist
 
-## 技术准备
-- [ ] 选择编程语言和框架
-- [ ] 设置开发环境
-- [ ] 配置版本控制
-- [ ] 设置 CI/CD
-- [ ] 配置代码质量工具
-- [ ] 设置安全扫描
+## Technical Preparation
+- [ ] Choose programming language and framework
+- [ ] Set up development environment
+- [ ] Configure version control
+- [ ] Set up CI/CD
+- [ ] Configure code quality tools
+- [ ] Set up security scanning
 
-## 文档准备
-- [ ] 编写 README.md
-- [ ] 编写 CONTRIBUTING.md
-- [ ] 编写 CODE_OF_CONDUCT.md
-- [ ] 编写 LICENSE
-- [ ] 编写 CHANGELOG.md
-- [ ] 编写 SECURITY.md
+## Documentation Preparation
+- [ ] Write README.md
+- [ ] Write CONTRIBUTING.md
+- [ ] Write CODE_OF_CONDUCT.md
+- [ ] Write LICENSE
+- [ ] Write CHANGELOG.md
+- [ ] Write SECURITY.md
 
-## 社区准备
-- [ ] 创建 GitHub 组织
-- [ ] 设置团队权限
-- [ ] 配置 Issue 模板
-- [ ] 配置 PR 模板
-- [ ] 设置讨论区
-- [ ] 配置 GitHub Pages
+## Community Preparation
+- [ ] Create GitHub organization
+- [ ] Set up team permissions
+- [ ] Configure issue templates
+- [ ] Configure PR templates
+- [ ] Set up discussion board
+- [ ] Configure GitHub Pages
 
-## 发布准备
-- [ ] 确定版本号策略
-- [ ] 设置发布流程
-- [ ] 配置自动发布
-- [ ] 准备发布公告
-- [ ] 设置包管理器
+## Release Preparation
+- [ ] Determine versioning strategy
+- [ ] Set up release process
+- [ ] Configure automated releases
+- [ ] Prepare release announcements
+- [ ] Set up package manager
 ```
 
-## 仓库结构与文档
+## Repository Structure and Documentation
 
-### 标准仓库结构
+### Standard Repository Structure
 
 ```
 project-name/
@@ -182,214 +182,214 @@ project-name/
 └── package.json
 ```
 
-### README.md 编写指南
+### README.md Writing Guide
 
-**README 结构**：
+**README Structure**:
 ```markdown
-# 项目名称
+# Project Name
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](CHANGELOG.md)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/user/repo/actions)
 
-> 项目简介：一句话描述项目是什么、解决什么问题。
+> Project description: One sentence describing what the project is and what problem it solves.
 
-## 功能特性
+## Features
 
-- 特性1：描述
-- 特性2：描述
-- 特性3：描述
+- Feature 1: Description
+- Feature 2: Description
+- Feature 3: Description
 
-## 快速开始
+## Quick Start
 
-### 安装
+### Installation
 
 ```bash
 npm install package-name
 ```
 
-### 使用
+### Usage
 
 ```javascript
 const package = require('package-name');
-// 使用示例
+// Usage example
 ```
 
-## 文档
+## Documentation
 
-- [快速开始](docs/getting-started.md)
-- [API 参考](docs/api-reference.md)
-- [示例](docs/examples/)
-- [贡献指南](CONTRIBUTING.md)
+- [Getting Started](docs/getting-started.md)
+- [API Reference](docs/api-reference.md)
+- [Examples](docs/examples/)
+- [Contributing Guide](CONTRIBUTING.md)
 
-## 贡献
+## Contributing
 
-欢迎贡献！请阅读 [贡献指南](CONTRIBUTING.md) 了解如何参与。
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) to learn how to participate.
 
-## 许可证
+## License
 
-本项目采用 [MIT 许可证](LICENSE)。
+This project uses the [MIT License](LICENSE).
 
-## 致谢
+## Acknowledgments
 
-- 感谢所有[贡献者](https://github.com/user/repo/graphs/contributors)
+- Thanks to all [contributors](https://github.com/user/repo/graphs/contributors)
 ```
 
-### CONTRIBUTING.md 编写指南
+### CONTRIBUTING.md Writing Guide
 
-**贡献指南结构**：
+**Contributing Guide Structure**:
 ```markdown
-# 贡献指南
+# Contributing Guide
 
-感谢你对本项目的关注！我们欢迎各种形式的贡献。
+Thank you for your interest in this project! We welcome contributions in all forms.
 
-## 如何贡献
+## How to Contribute
 
-### 报告问题
+### Reporting Issues
 
-1. 搜索现有的 [Issues](https://github.com/user/repo/issues)
-2. 如果没有找到，创建新的 Issue
-3. 使用清晰的标题描述问题
-4. 提供详细的复现步骤
+1. Search existing [Issues](https://github.com/user/repo/issues)
+2. If not found, create a new Issue
+3. Use a clear title to describe the problem
+4. Provide detailed reproduction steps
 
-### 提交代码
+### Submitting Code
 
-1. Fork 本仓库
-2. 创建你的分支：`git checkout -b feature/amazing-feature`
-3. 提交你的更改：`git commit -m 'feat: add amazing feature'`
-4. 推送到分支：`git push origin feature/amazing-feature`
-5. 创建 Pull Request
+1. Fork this repository
+2. Create your branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'feat: add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Create a Pull Request
 
-### 开发环境设置
+### Development Environment Setup
 
 ```bash
-# 克隆仓库
+# Clone the repository
 git clone https://github.com/user/repo.git
 cd repo
 
-# 安装依赖
+# Install dependencies
 npm install
 
-# 运行测试
+# Run tests
 npm test
 
-# 启动开发服务器
+# Start development server
 npm run dev
 ```
 
-### 代码规范
+### Code Standards
 
-- 使用 ESLint 进行代码检查
-- 使用 Prettier 进行代码格式化
-- 遵循 Conventional Commits 规范
-- 编写测试用例
-- 更新文档
+- Use ESLint for code linting
+- Use Prettier for code formatting
+- Follow Conventional Commits specification
+- Write test cases
+- Update documentation
 
-### Pull Request 规范
+### Pull Request Standards
 
-- 标题清晰描述更改
-- 关联相关 Issue
-- 提供详细的更改说明
-- 包含测试用例
-- 更新文档
+- Clear title describing changes
+- Link related Issues
+- Provide detailed change description
+- Include test cases
+- Update documentation
 
-### 行为准则
+### Code of Conduct
 
-请阅读 [行为准则](CODE_OF_CONDUCT.md)，确保在社区中保持友好和尊重。
+Please read the [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a friendly and respectful environment in the community.
 ```
 
-### 行为准则
+### Code of Conduct
 
-**CODE_OF_CONDUCT.md**：
+**CODE_OF_CONDUCT.md**:
 ```markdown
-# 行为准则
+# Code of Conduct
 
-## 我们的承诺
+## Our Commitment
 
-为了营造一个开放和友好的环境，我们承诺：
+To create an open and friendly environment, we commit to:
 
-- 尊重每个人
-- 接受建设性的批评
-- 关注对社区最有利的事情
-- 对其他社区成员表示同理心
+- Respecting everyone
+- Accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy to other community members
 
-## 我们的标准
+## Our Standards
 
-有助于创造积极环境的行为包括：
+Behaviors that contribute to creating a positive environment include:
 
-- 使用包容和友好的语言
-- 尊重不同的观点和经验
-- 优雅地接受建设性的批评
-- 关注对社区最有利的事情
-- 对其他社区成员表示同理心
+- Using inclusive and friendly language
+- Respecting different viewpoints and experiences
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy to other community members
 
-不可接受的行为包括：
+Unacceptable behaviors include:
 
-- 使用性暗示的语言或图像
-- 恶意评论、人身攻击
-- 公开或私下的骚扰
-- 发布他人的私人信息
-- 其他不专业或不道德的行为
+- Using sexually suggestive language or imagery
+- Malicious comments, personal attacks
+- Public or private harassment
+- Publishing others' private information
+- Other unprofessional or unethical behavior
 
-## 执行
+## Enforcement
 
-如果发现违反行为准则的行为，请通过 [email@example.com] 报告。
+If you find behavior that violates the code of conduct, please report it via [email@example.com].
 ```
 
-## 社区建设与管理
+## Community Building and Management
 
-### 社区建设策略
+### Community Building Strategy
 
-**建立社区文化**：
-- 明确项目价值观
-- 建立行为准则
-- 培养友好氛围
-- 鼓励多样性
-- 认可贡献者
+**Building Community Culture**:
+- Clearly define project values
+- Establish code of conduct
+- Foster a friendly atmosphere
+- Encourage diversity
+- Recognize contributors
 
-**社区沟通渠道**：
-- GitHub Issues：问题报告和功能请求
-- GitHub Discussions：讨论和问答
-- Discord/Slack：实时沟通
-- 邮件列表：重要公告
-- 博客：项目更新
+**Community Communication Channels**:
+- GitHub Issues: Bug reports and feature requests
+- GitHub Discussions: Discussions and Q&A
+- Discord/Slack: Real-time communication
+- Mailing list: Important announcements
+- Blog: Project updates
 
-### 社区管理最佳实践
+### Community Management Best Practices
 
-**响应及时**：
-- 及时回复 Issue 和 PR
-- 设置响应时间目标
-- 使用自动化工具
-- 建立维护团队
+**Timely Response**:
+- Respond promptly to Issues and PRs
+- Set response time goals
+- Use automation tools
+- Build a maintenance team
 
-**透明沟通**：
-- 公开讨论决策
-- 分享项目路线图
-- 定期发布更新
-- 接受社区反馈
+**Transparent Communication**:
+- Publicly discuss decisions
+- Share project roadmap
+- Regularly publish updates
+- Accept community feedback
 
-**认可贡献**：
-- 感谢贡献者
-- 展示贡献者名单
-- 提供贡献者奖励
-- 推荐贡献者
+**Recognizing Contributions**:
+- Thank contributors
+- Display contributor list
+- Provide contributor rewards
+- Recommend contributors
 
-### 社区管理工具
+### Community Management Tools
 
-**GitHub 内置工具**：
-- Issue 模板
-- PR 模板
-- 讨论区
-- 项目看板
-- 安全警报
+**GitHub Built-in Tools**:
+- Issue templates
+- PR templates
+- Discussion board
+- Project board
+- Security alerts
 
-**第三方工具**：
-- **All Contributors**：认可所有类型的贡献
-- **Stale**：自动关闭过期 Issue
-- **Welcome**：欢迎新贡献者
-- **Release Drafter**：自动生成发布说明
+**Third-party Tools**:
+- **All Contributors**: Recognize all types of contributions
+- **Stale**: Automatically close stale issues
+- **Welcome**: Welcome new contributors
+- **Release Drafter**: Automatically generate release notes
 
-**All Contributors 配置**：
+**All Contributors Configuration**:
 ```json
 // .all-contributorsrc
 {
@@ -413,67 +413,67 @@ npm run dev
 }
 ```
 
-## 贡献者管理
+## Contributor Management
 
-### 贡献者类型
+### Contributor Types
 
-**核心贡献者**：
-- 长期参与项目
-- 有代码合并权限
-- 参与项目决策
-- 指导新贡献者
+**Core Contributors**:
+- Long-term project involvement
+- Code merge permissions
+- Participate in project decisions
+- Mentor new contributors
 
-**活跃贡献者**：
-- 定期提交代码
-- 参与讨论
-- 帮助解决问题
-- 提供反馈
+**Active Contributors**:
+- Regularly submit code
+- Participate in discussions
+- Help resolve issues
+- Provide feedback
 
-**偶尔贡献者**：
-- 偶尔提交修复
-- 报告问题
-- 提供文档改进
-- 参与测试
+**Occasional Contributors**:
+- Occasionally submit fixes
+- Report issues
+- Provide documentation improvements
+- Participate in testing
 
-**新贡献者**：
-- 初次参与项目
-- 需要指导
-- 学习项目结构
-- 建立信心
+**New Contributors**:
+- First-time project participation
+- Need guidance
+- Learn project structure
+- Build confidence
 
-### 贡献者培养
+### Contributor Development
 
-**新贡献者引导**：
-- 标记适合新贡献者的 Issue
-- 提供详细的指导
-- 及时反馈
-- 认可贡献
+**Onboarding New Contributors**:
+- Label issues suitable for new contributors
+- Provide detailed guidance
+- Give timely feedback
+- Recognize contributions
 
-**贡献者晋升**：
-- 识别活跃贡献者
-- 提供更多责任
-- 授予更多权限
-- 邀请成为维护者
+**Contributor Advancement**:
+- Identify active contributors
+- Provide more responsibilities
+- Grant more permissions
+- Invite to become maintainers
 
-**贡献者激励**：
-- 公开认可贡献
-- 提供推荐信
-- 赠送礼品
-- 邀请参加会议
+**Contributor Incentives**:
+- Publicly recognize contributions
+- Provide recommendations
+- Give gifts
+- Invite to attend conferences
 
-### 贡献者管理工具
+### Contributor Management Tools
 
-**GitHub 贡献者页面**：
-- 查看贡献者列表
-- 查看贡献统计
-- 查看贡献图表
+**GitHub Contributors Page**:
+- View contributor list
+- View contribution statistics
+- View contribution charts
 
-**贡献者统计工具**：
-- **Contributors**：显示贡献者
-- **Stargazers**：显示 Star 用户
-- **Forks**：显示 Fork 用户
+**Contribution Statistics Tools**:
+- **Contributors**: Display contributors
+- **Stargazers**: Display star users
+- **Forks**: Display fork users
 
-**自动化工具**：
+**Automation Tools**:
 ```yaml
 # .github/workflows/welcome.yml
 name: Welcome
@@ -514,40 +514,40 @@ jobs:
           }
 ```
 
-## 版本发布与管理
+## Version Releases and Management
 
-### 版本号策略
+### Versioning Strategy
 
-**语义化版本号（SemVer）**：
+**Semantic Versioning (SemVer)**:
 ```
 MAJOR.MINOR.PATCH
 
-MAJOR：不兼容的 API 更改
-MINOR：向下兼容的功能添加
-PATCH：向下兼容的问题修复
+MAJOR: Incompatible API changes
+MINOR: Backward-compatible feature additions
+PATCH: Backward-compatible bug fixes
 ```
 
-**示例**：
-- `1.0.0`：初始版本
-- `1.1.0`：添加新功能
-- `1.1.1`：修复 bug
-- `2.0.0`：重大更新
+**Examples**:
+- `1.0.0`: Initial version
+- `1.1.0`: New features added
+- `1.1.1`: Bug fixes
+- `2.0.0`: Major update
 
-### 发布流程
+### Release Process
 
-**手动发布**：
+**Manual Release**:
 ```bash
-# 更新版本号
-npm version patch  # 或 minor, major
+# Update version number
+npm version patch  # or minor, major
 
-# 推送标签
+# Push tags
 git push origin main --tags
 
-# 创建发布
+# Create release
 gh release create v1.0.0 --title "v1.0.0" --notes "Release notes"
 ```
 
-**自动发布**：
+**Automated Release**:
 ```yaml
 # .github/workflows/release.yml
 name: Release
@@ -594,50 +594,50 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
-### 发布说明
+### Release Notes
 
-**发布说明模板**：
+**Release Notes Template**:
 ```markdown
 # Release v1.0.0
 
-## 新功能
-- 功能1：描述
-- 功能2：描述
+## New Features
+- Feature 1: Description
+- Feature 2: Description
 
-## 问题修复
-- 修复1：描述
-- 修复2：描述
+## Bug Fixes
+- Fix 1: Description
+- Fix 2: Description
 
-## 文档更新
-- 更新1：描述
-- 更新2：描述
+## Documentation Updates
+- Update 1: Description
+- Update 2: Description
 
-## 依赖更新
-- 更新1：描述
-- 更新2：描述
+## Dependency Updates
+- Update 1: Description
+- Update 2: Description
 
-## 贡献者
+## Contributors
 - @contributor1
 - @contributor2
 
-## 安装
+## Installation
 
 ```bash
 npm install package-name@1.0.0
 ```
 
-## 升级指南
+## Upgrade Guide
 
-从 v0.x.x 升级到 v1.0.0：
+Upgrading from v0.x.x to v1.0.0:
 
-1. 更改1
-2. 更改2
-3. 更改3
+1. Change 1
+2. Change 2
+3. Change 3
 ```
 
-### 自动发布说明
+### Automated Release Notes
 
-**Release Drafter 配置**：
+**Release Drafter Configuration**:
 ```yaml
 # .github/release-drafter.yml
 name-template: 'v$RESOLVED_VERSION 🌈'
@@ -683,49 +683,49 @@ template: |
   $CONTRIBUTORS
 ```
 
-## 项目营销与推广
+## Project Marketing and Promotion
 
-### 项目推广策略
+### Project Promotion Strategy
 
-**GitHub 优化**：
-- 编写优秀的 README
-- 添加项目描述和主题
-- 设置项目网站
-- 配置 GitHub Pages
+**GitHub Optimization**:
+- Write an excellent README
+- Add project description and topics
+- Set up project website
+- Configure GitHub Pages
 
-**内容营销**：
-- 编写博客文章
-- 制作视频教程
-- 分享使用案例
-- 参与技术讨论
+**Content Marketing**:
+- Write blog posts
+- Create video tutorials
+- Share use cases
+- Participate in technical discussions
 
-**社区推广**：
-- 在 Reddit、Hacker News 分享
-- 在 Twitter、LinkedIn 推广
-- 参加技术会议
-- 建立邮件列表
+**Community Promotion**:
+- Share on Reddit, Hacker News
+- Promote on Twitter, LinkedIn
+- Attend technical conferences
+- Build mailing lists
 
-### 项目指标
+### Project Metrics
 
-**关键指标**：
-- Star 数量
-- Fork 数量
-- Issue 数量
-- PR 数量
-- 下载量
-- 贡献者数量
+**Key Metrics**:
+- Star count
+- Fork count
+- Issue count
+- PR count
+- Download count
+- Contributor count
 
-**指标分析**：
+**Metrics Analysis**:
 ```bash
-# 使用 GitHub API 获取指标
+# Use GitHub API to get metrics
 gh api repos/{owner}/{repo} --jq '.stargazers_count'
 gh api repos/{owner}/{repo} --jq '.forks_count'
 gh api repos/{owner}/{repo} --jq '.open_issues_count'
 ```
 
-### 项目网站
+### Project Website
 
-**使用 GitHub Pages**：
+**Using GitHub Pages**:
 ```yaml
 # .github/workflows/pages.yml
 name: GitHub Pages
@@ -759,100 +759,100 @@ jobs:
         publish_dir: ./build
 ```
 
-## 开源项目商业化
+## Open Source Project Commercialization
 
-### 商业化模式
+### Commercialization Models
 
-**开源核心模式**：
-- 核心功能开源
-- 高级功能付费
-- 企业版收费
-- 提供商业支持
+**Open Core Model**:
+- Core features open source
+- Premium features paid
+- Enterprise edition paid
+- Provide commercial support
 
-**服务模式**：
-- 提供托管服务
-- 提供技术支持
-- 提供培训服务
-- 提供咨询服务
+**Service Model**:
+- Provide hosting services
+- Provide technical support
+- Provide training services
+- Provide consulting services
 
-**双重许可模式**：
-- 开源许可证
-- 商业许可证
-- 根据使用场景选择
+**Dual Licensing Model**:
+- Open source license
+- Commercial license
+- Choose based on usage scenario
 
-### 商业化策略
+### Commercialization Strategy
 
-**定价策略**：
-- 免费增值模式
-- 按使用量计费
-- 按用户数量计费
-- 按功能模块计费
+**Pricing Strategy**:
+- Freemium model
+- Usage-based billing
+- Per-user billing
+- Per-feature module billing
 
-**销售渠道**：
-- 自助服务
-- 销售团队
-- 合作伙伴
-- 代理商
+**Sales Channels**:
+- Self-service
+- Sales team
+- Partners
+- Agents
 
-**客户支持**：
-- 社区支持
-- 邮件支持
-- 电话支持
-- 专属支持
+**Customer Support**:
+- Community support
+- Email support
+- Phone support
+- Dedicated support
 
-### 商业化案例
+### Commercialization Case Studies
 
-**成功案例**：
-- **Red Hat**：开源操作系统商业化
-- **MongoDB**：开源数据库商业化
-- **Elastic**：开源搜索引擎商业化
-- **GitLab**：开源 DevOps 平台商业化
+**Success Cases**:
+- **Red Hat**: Open source operating system commercialization
+- **MongoDB**: Open source database commercialization
+- **Elastic**: Open source search engine commercialization
+- **GitLab**: Open source DevOps platform commercialization
 
-**失败案例**：
-- **Redis Labs**：许可证变更引发争议
-- **MongoDB**：许可证变更引发争议
-- **Elastic**：许可证变更引发争议
+**Failure Cases**:
+- **Redis Labs**: License change sparked controversy
+- **MongoDB**: License change sparked controversy
+- **Elastic**: License change sparked controversy
 
-## 开源许可证
+## Open Source Licenses
 
-### 常见许可证
+### Common Licenses
 
-**宽松许可证**：
-- **MIT**：最宽松，允许任何用途
-- **Apache 2.0**：允许任何用途，包含专利授权
-- **BSD**：允许任何用途，包含非背书条款
+**Permissive Licenses**:
+- **MIT**: Most permissive, allows any use
+- **Apache 2.0**: Allows any use, includes patent grant
+- **BSD**: Allows any use, includes non-endorsement clause
 
-**弱传染性许可证**：
-- **LGPL**：库可以私有使用，修改必须开源
-- **MPL**：文件级传染性
+**Weak Copyleft Licenses**:
+- **LGPL**: Library can be used privately, modifications must be open source
+- **MPL**: File-level copyleft
 
-**强传染性许可证**：
-- **GPL**：衍生作品必须开源
-- **AGPL**：网络使用也必须开源
+**Strong Copyleft Licenses**:
+- **GPL**: Derivative works must be open source
+- **AGPL**: Network use must also be open source
 
-### 许可证选择
+### License Selection
 
-**选择指南**：
+**Selection Guide**:
 ```markdown
-# 许可证选择指南
+# License Selection Guide
 
-## 如果你想要：
-- 最宽松的许可证 → MIT
-- 包含专利授权 → Apache 2.0
-- 库可以私有使用 → LGPL
-- 衍生作品必须开源 → GPL
-- 网络使用也必须开源 → AGPL
+## If you want:
+- Most permissive license → MIT
+- Include patent grant → Apache 2.0
+- Library can be used privately → LGPL
+- Derivative works must be open source → GPL
+- Network use must also be open source → AGPL
 
-## 考虑因素：
-- 商业使用
-- 修改分发
-- 专利授权
-- 贡献者协议
+## Considerations:
+- Commercial use
+- Modified distribution
+- Patent grant
+- Contributor agreement
 ```
 
-### 许可证文件
+### License File
 
-**MIT 许可证**：
+**MIT License**:
 ```markdown
 MIT License
 
@@ -877,108 +877,108 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 开源项目案例分析
+## Open Source Project Case Studies
 
-### 成功案例
+### Success Cases
 
-**Vue.js**：
-- **成功因素**：
-  - 优秀的文档
-  - 渐进式框架
-  - 活跃的社区
-  - 强大的生态系统
+**Vue.js**:
+- **Success Factors**:
+  - Excellent documentation
+  - Progressive framework
+  - Active community
+  - Strong ecosystem
 
-**React**：
-- **成功因素**：
-  - Facebook 支持
-  - 创新的虚拟 DOM
-  - 强大的生态系统
-  - 企业级支持
+**React**:
+- **Success Factors**:
+  - Facebook support
+  - Innovative virtual DOM
+  - Strong ecosystem
+  - Enterprise support
 
-**Kubernetes**：
-- **成功因素**：
-  - Google 支持
-  - 解决容器编排问题
-  - 强大的生态系统
-  - 企业级支持
+**Kubernetes**:
+- **Success Factors**:
+  - Google support
+  - Solves container orchestration problems
+  - Strong ecosystem
+  - Enterprise support
 
-### 失败案例
+### Failure Cases
 
-**案例分析**：
-- **项目维护者倦怠**：缺乏维护团队
-- **社区分裂**：决策不透明
-- **许可证变更**：引发争议
-- **商业化失败**：无法盈利
+**Case Analysis**:
+- **Project Maintainer Burnout**: Lack of maintenance team
+- **Community Split**: Opaque decision-making
+- **License Change**: Sparked controversy
+- **Commercialization Failure**: Unable to profit
 
-### 经验教训
+### Lessons Learned
 
-**成功因素**：
-- 优秀的文档
-- 活跃的社区
-- 强大的生态系统
-- 企业级支持
+**Success Factors**:
+- Excellent documentation
+- Active community
+- Strong ecosystem
+- Enterprise support
 
-**失败因素**：
-- 维护者倦怠
-- 社区分裂
-- 许可证争议
-- 商业化失败
+**Failure Factors**:
+- Maintainer burnout
+- Community split
+- License controversy
+- Commercialization failure
 
-## 最佳实践
+## Best Practices
 
-### 项目管理
+### Project Management
 
-1. **明确项目目标**：定义清晰的项目目标和愿景
-2. **建立维护团队**：避免单点故障
-3. **自动化流程**：减少手动工作
-4. **定期发布**：保持项目活跃
-5. **社区建设**：培养活跃的社区
+1. **Define Clear Goals**: Set clear project goals and vision
+2. **Build a Maintenance Team**: Avoid single point of failure
+3. **Automate Processes**: Reduce manual work
+4. **Regular Releases**: Keep the project active
+5. **Community Building**: Cultivate an active community
 
-### 社区管理
+### Community Management
 
-1. **及时响应**：快速回复 Issue 和 PR
-2. **透明沟通**：公开讨论决策
-3. **认可贡献**：感谢贡献者
-4. **培养新人**：帮助新贡献者
-5. **建立文化**：营造友好的氛围
+1. **Timely Response**: Quickly respond to Issues and PRs
+2. **Transparent Communication**: Publicly discuss decisions
+3. **Recognize Contributions**: Thank contributors
+4. **Mentor Newcomers**: Help new contributors
+5. **Build Culture**: Create a friendly atmosphere
 
-### 文档编写
+### Documentation Writing
 
-1. **README 优秀**：第一印象很重要
-2. **贡献指南**：降低参与门槛
-3. **API 文档**：详细且准确
-4. **示例代码**：易于理解
-5. **变更日志**：记录所有更改
+1. **Excellent README**: First impressions matter
+2. **Contributing Guide**: Lower the barrier to participation
+3. **API Documentation**: Detailed and accurate
+4. **Example Code**: Easy to understand
+5. **Changelog**: Record all changes
 
-### 版本管理
+### Version Management
 
-1. **语义化版本**：遵循 SemVer 规范
-2. **定期发布**：保持项目活跃
-3. **发布说明**：详细描述更改
-4. **向下兼容**：尽量保持兼容
-5. **升级指南**：帮助用户升级
+1. **Semantic Versioning**: Follow SemVer specification
+2. **Regular Releases**: Keep the project active
+3. **Release Notes**: Detailed change descriptions
+4. **Backward Compatibility**: Maintain compatibility when possible
+5. **Upgrade Guide**: Help users upgrade
 
-## 相关资源
+## Related Resources
 
-### 官方文档
+### Official Documentation
 
-- [GitHub 开源指南](https://opensource.guide/)
-- [GitHub 文档](https://docs.github.com/)
+- [GitHub Open Source Guide](https://opensource.guide/)
+- [GitHub Documentation](https://docs.github.com/)
 - [GitHub Skills](https://skills.github.com/)
 
-### 开源社区
+### Open Source Communities
 
 - [Open Source Initiative](https://opensource.org/)
 - [Linux Foundation](https://www.linuxfoundation.org/)
 - [Apache Foundation](https://www.apache.org/)
 
-### 学习资源
+### Learning Resources
 
 - [The Open Source Way](https://www.theopensourceway.org/)
 - [Producing Open Source Software](https://producingoss.com/)
 - [The Architecture of Open Source Applications](https://aosabook.org/en/)
 
-### 工具
+### Tools
 
 - [All Contributors](https://allcontributors.org/)
 - [Release Drafter](https://github.com/release-drafter/release-drafter)
@@ -987,4 +987,4 @@ SOFTWARE.
 
 ---
 
-**上一篇：[GitHub 技术写作指南](X8-technical-writing-github.md) | 下一篇：[GitHub 认证考试](W30-certification.md)**
+**Previous: [GitHub Technical Writing Guide](X8-technical-writing-github.md) | Next: [GitHub Certification Exam](W30-certification.md)**

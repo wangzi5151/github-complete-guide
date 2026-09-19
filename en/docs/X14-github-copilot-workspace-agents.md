@@ -1,95 +1,96 @@
-# GitHub Copilot Workspace 与 AI Agent 开发
+# GitHub Copilot Workspace and AI Agent Development
 
-> **目标读者**：希望深入了解 GitHub Copilot 高级功能、AI Agent 开发和自动化工作流的开发者  
-> **预计学习时间**：4-5 小时  
-> **前置知识**：Git/GitHub 基础、至少一种编程语言、基本的 AI 概念
-
----
-
-## 目录
-
-1. [Copilot Workspace 概述与架构](#1-copilot-workspace-概述与架构)
-2. [Copilot Workspace 工作流](#2-copilot-workspace-工作流)
-3. [Copilot Agent Mode 深度使用](#3-copilot-agent-mode-深度使用)
-4. [Copilot Extensions 开发详解](#4-copilot-extensions-开发详解)
-5. [GitHub AI 平台与 GitHub Models API](#5-github-ai-平台与-github-models-api)
-6. [构建自定义 GitHub Copilot Extension](#6-构建自定义-github-copilot-extension)
-7. [GitHub Actions + AI Agent 自动化](#7-github-actions--ai-agent-自动化)
-8. [AI 辅助代码审查](#8-ai-辅助代码审查)
-9. [AI 辅助 Issue 分类与管理](#9-ai-辅助-issue-分类与管理)
-10. [AI 辅助文档生成](#10-ai-辅助文档生成)
-11. [AI 辅助测试生成](#11-ai-辅助测试生成)
-12. [GitHub Next 实验性功能介绍](#12-github-next-实验性功能介绍)
-13. [AI 对开源社区的影响](#13-ai-对开源社区的影响)
-14. [中国开发者的 AI 工具链](#14-中国开发者的-ai-工具链)
+> **Target Audience**: Developers who want to gain in-depth knowledge of GitHub Copilot advanced features, AI Agent development, and automated workflows  
+> **Estimated Learning Time**: 4-5 hours  
+> **Prerequisites**: Git/GitHub basics, at least one programming language, basic AI concepts
 
 ---
 
-## 1. Copilot Workspace 概述与架构
+## Table of Contents
 
-### 1.1 什么是 Copilot Workspace
+1. [Copilot Workspace Overview and Architecture](#1-copilot-workspace-overview-and-architecture)
+2. [Copilot Workspace Workflow](#2-copilot-workspace-workflow)
+3. [Deep Dive into Copilot Agent Mode](#3-deep-dive-into-copilot-agent-mode)
+4. [Copilot Extensions Development Guide](#4-copilot-extensions-development-guide)
+5. [GitHub AI Platform and GitHub Models API](#5-github-ai-platform-and-github-models-api)
+6. [Building a Custom GitHub Copilot Extension](#6-building-a-custom-github-copilot-extension)
+7. [GitHub Actions + AI Agent Automation](#7-github-actions--ai-agent-automation)
+8. [AI-Assisted Code Review](#8-ai-assisted-code-review)
+9. [AI-Assisted Issue Triage and Management](#9-ai-assisted-issue-triage-and-management)
+10. [AI-Assisted Documentation Generation](#10-ai-assisted-documentation-generation)
+11. [AI-Assisted Test Generation](#11-ai-assisted-test-generation)
+12. [GitHub Next Experimental Features](#12-github-next-experimental-features)
+13. [Impact of AI on Open Source Communities](#13-impact-of-ai-on-open-source-communities)
+14. [AI Toolchain for Chinese Developers](#14-ai-toolchain-for-chinese-developers)
 
-GitHub Copilot Workspace 是 GitHub 推出的 **AI 原生开发环境**，它将 AI 能力深度集成到整个开发工作流中。与传统的 Copilot 代码补全不同，Copilot Workspace 能够理解整个项目的上下文，并协助开发者完成从 Issue 分析到代码实现的完整流程。
+---
 
-**核心理念**：
+## 1. Copilot Workspace Overview and Architecture
+
+### 1.1 What is Copilot Workspace
+
+GitHub Copilot Workspace is GitHub's **AI-native development environment** that deeply integrates AI capabilities into the entire development workflow. Unlike traditional Copilot code completion, Copilot Workspace can understand the context of an entire project and assist developers in completing the full process from issue analysis to code implementation.
+
+**Core Concept**:
 
 ```
-传统开发流程：
-Issue → 人工分析 → 人工设计 → 人工编码 → 人工测试 → PR
+Traditional Development Workflow:
+Issue → Manual Analysis → Manual Design → Manual Coding → Manual Testing → PR
 
-Copilot Workspace 流程：
-Issue → AI 分析 → AI 设计 → 人工 + AI 编码 → AI 辅助测试 → PR
+Copilot Workspace Workflow:
+Issue → AI Analysis → AI Design → Human + AI Coding → AI-Assisted Testing → PR
 ```
 
-### 1.2 架构设计
+### 1.2 Architecture Design
 
-Copilot Workspace 的架构分为多个层次：
+Copilot Workspace architecture is divided into multiple layers:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    用户界面层                              │
+│                    User Interface Layer                   │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │  Web IDE    │  │  CLI 工具   │  │  VS Code    │     │
+│  │  Web IDE    │  │  CLI Tool   │  │  VS Code    │     │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘     │
 ├─────────┼────────────────┼────────────────┼─────────────┤
 │         └────────────────┼────────────────┘             │
-│                    API 网关层                              │
+│                    API Gateway Layer                      │
 │  ┌─────────────────────────────────────────────────┐    │
 │  │         GitHub REST / GraphQL API               │    │
 │  └─────────────────────┬───────────────────────────┘    │
 ├─────────────────────────┼───────────────────────────────┤
-│                    AI 服务层                              │
+│                    AI Service Layer                       │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
 │  │ Copilot     │  │ Code        │  │ Issue        │     │
 │  │ Models      │  │ Analysis    │  │ Understanding│     │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘     │
 │         └────────────────┼────────────────┘             │
-│                    模型推理层                              │
+│                    Model Inference Layer                   │
 │  ┌─────────────────────────────────────────────────┐    │
-│  │    GPT-4o / Claude / Gemini / 自定义模型         │    │
+│  │    GPT-4o / Claude / Gemini / Custom Models     │    │
 │  └─────────────────────────────────────────────────┘    │
 ├─────────────────────────────────────────────────────────┤
-│                    数据存储层                              │
+│                    Data Storage Layer                     │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │ 代码索引    │  │ 上下文缓存  │  │ 用户偏好    │     │
+│  │ Code Index  │  │ Context     │  │ User         │     │
+│  │             │  │ Cache       │  │ Preferences  │     │
 │  └─────────────┘  └─────────────┘  └─────────────┘     │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 1.3 核心组件
+### 1.3 Core Components
 
-**1. 代码索引引擎**
+**1. Code Indexing Engine**
 
-Copilot Workspace 会对仓库建立 **语义索引**，支持：
-- 代码结构分析（AST 解析）
-- 依赖关系图构建
-- 符号引用追踪
-- 跨文件上下文理解
+Copilot Workspace builds a **semantic index** for repositories, supporting:
+- Code structure analysis (AST parsing)
+- Dependency graph construction
+- Symbol reference tracking
+- Cross-file context understanding
 
-**2. 上下文管理器**
+**2. Context Manager**
 
 ```python
-# 上下文管理器的简化模型
+# Simplified model of the context manager
 class ContextManager:
     def __init__(self, repo):
         self.repo = repo
@@ -110,173 +111,174 @@ class ContextManager:
         }
 ```
 
-**3. 任务规划器**
+**3. Task Planner**
 
-Copilot Workspace 会将复杂任务分解为可执行的子任务：
+Copilot Workspace breaks down complex tasks into executable subtasks:
 
 ```
-Issue: "添加用户认证功能"
-    ├── 分析需求
-    │   ├── 理解现有的认证机制
-    │   ├── 识别需要修改的文件
-    │   └── 确定技术方案
-    ├── 设计方案
-    │   ├── 数据模型设计
-    │   ├── API 端点设计
-    │   └── 中间件设计
-    ├── 实现代码
-    │   ├── 创建用户模型
-    │   ├── 实现认证服务
-    │   ├── 添加路由
-    │   └── 编写测试
-    └── 验证结果
-        ├── 运行测试
-        ├── 代码审查
-        └── 文档更新
+Issue: "Add user authentication feature"
+    ├── Analyze requirements
+    │   ├── Understand existing authentication mechanisms
+    │   ├── Identify files that need to be modified
+    │   └── Determine technical solution
+    ├── Design solution
+    │   ├── Data model design
+    │   ├── API endpoint design
+    │   └── Middleware design
+    ├── Implement code
+    │   ├── Create user model
+    │   ├── Implement authentication service
+    │   ├── Add routes
+    │   └── Write tests
+    └── Verify results
+        ├── Run tests
+        ├── Code review
+        └── Update documentation
 ```
 
-### 1.4 Copilot Workspace 与传统 IDE 的区别
+### 1.4 Copilot Workspace vs Traditional IDE
 
-| 特性 | 传统 IDE | Copilot Workspace |
-|------|----------|-------------------|
-| 代码补全 | 基于语法 | 基于语义和上下文 |
-| 重构 | 手动操作 | AI 辅助自动重构 |
-| 调试 | 断点调试 | AI 分析错误原因 |
-| 测试 | 手动编写 | AI 生成测试用例 |
-| 文档 | 手动编写 | AI 自动生成 |
-| Issue 理解 | 人工阅读 | AI 自动分析 |
-| 代码审查 | 纯人工 | AI + 人工协作 |
+| Feature | Traditional IDE | Copilot Workspace |
+|---------|----------------|-------------------|
+| Code Completion | Syntax-based | Semantic and context-based |
+| Refactoring | Manual operations | AI-assisted automatic refactoring |
+| Debugging | Breakpoint debugging | AI analyzes root causes |
+| Testing | Manual test writing | AI generates test cases |
+| Documentation | Manual writing | AI auto-generation |
+| Issue Understanding | Manual reading | AI automatic analysis |
+| Code Review | Purely manual | AI + human collaboration |
 
 ---
 
-## 2. Copilot Workspace 工作流
+## 2. Copilot Workspace Workflow
 
-### 2.1 Issue → Plan → Code → PR 完整流程
+### 2.1 Issue → Plan → Code → PR Complete Flow
 
-Copilot Workspace 的核心工作流分为四个阶段：
+Copilot Workspace's core workflow consists of four phases:
 
 ```
 ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
 │  Issue   │───▶│   Plan   │───▶│   Code   │───▶│    PR    │
-│  分析    │    │   规划   │    │   实现   │    │   提交   │
+│ Analysis │    │ Planning │    │Implementation│   │Submit   │
 └──────────┘    └──────────┘    └──────────┘    └──────────┘
      │               │               │               │
      ▼               ▼               ▼               ▼
- 理解需求       设计方案        编写代码       创建PR
- 识别代码       确定范围        生成测试       请求审查
- 上下文         任务分解        运行验证       合并代码
+ Understand       Design         Write Code     Create PR
+ Requirements     Solution                      Request Review
+ Identify Code    Define Scope   Generate Tests Merge Code
+ Context          Task Breakdown Run Validation
 ```
 
-### 2.2 阶段一：Issue 分析
+### 2.2 Phase 1: Issue Analysis
 
-当你在 GitHub Issue 上启动 Copilot Workspace 时，AI 会：
+When you launch Copilot Workspace on a GitHub Issue, the AI will:
 
-1. **解析 Issue 内容**：理解问题描述、复现步骤、期望行为
-2. **搜索相关代码**：在仓库中找到与 Issue 相关的文件和函数
-3. **分析代码上下文**：理解现有代码的结构、依赖关系和设计模式
-4. **生成分析报告**：总结问题根因和可能的解决方案
+1. **Parse Issue Content**: Understand the problem description, reproduction steps, and expected behavior
+2. **Search Related Code**: Find files and functions related to the Issue in the repository
+3. **Analyze Code Context**: Understand the structure, dependencies, and design patterns of existing code
+4. **Generate Analysis Report**: Summarize the root cause and potential solutions
 
-**示例**：
+**Example**:
 
 ```markdown
-## Issue #123: 用户登录后 session 过期时间不正确
+## Issue #123: Session expiration time is incorrect after user login
 
-### 描述
-用户登录后，session 在 30 分钟后过期，但配置文件中设置的是 24 小时。
+### Description
+After user login, the session expires after 30 minutes, but the configuration file is set to 24 hours.
 
-### 复现步骤
-1. 用户登录
-2. 等待 30 分钟
-3. 访问需要认证的页面
-4. 被重定向到登录页面
+### Steps to Reproduce
+1. User logs in
+2. Wait 30 minutes
+3. Access a page that requires authentication
+4. Being redirected to the login page
 
-### 期望行为
-session 应该在 24 小时后过期。
+### Expected Behavior
+The session should expire after 24 hours.
 ```
 
-**Copilot Workspace 分析结果**：
+**Copilot Workspace Analysis Result**:
 
 ```markdown
-## AI 分析
+## AI Analysis
 
-### 问题定位
-- 文件：`src/middleware/session.js:45`
-- 问题：`maxAge` 配置使用了硬编码的 `30 * 60 * 1000`（30 分钟）
-- 而非从配置文件读取 `config.session.maxAge`
+### Problem Location
+- File: `src/middleware/session.js:45`
+- Issue: `maxAge` configuration uses a hardcoded value of `30 * 60 * 1000` (30 minutes)
+- Instead of reading `config.session.maxAge` from the configuration file
 
-### 相关文件
-1. `src/middleware/session.js` - Session 中间件
-2. `config/default.json` - 配置文件
-3. `src/routes/auth.js` - 认证路由
+### Related Files
+1. `src/middleware/session.js` - Session middleware
+2. `config/default.json` - Configuration file
+3. `src/routes/auth.js` - Authentication routes
 
-### 建议方案
-修改 `session.js` 第 45 行，从配置文件读取 session 过期时间。
+### Suggested Solution
+Modify line 45 of `session.js` to read session expiration time from the configuration file.
 ```
 
-### 2.3 阶段二：方案规划
+### 2.3 Phase 2: Solution Planning
 
-在理解问题后，Copilot Workspace 会生成详细的实施方案：
+After understanding the problem, Copilot Workspace generates a detailed implementation plan:
 
 ```markdown
-## 实施方案
+## Implementation Plan
 
-### 修改文件清单
+### Files to Modify
 1. `src/middleware/session.js`
-   - 修改第 45 行：使用 `config.session.maxAge` 替代硬编码值
-   - 添加配置验证：确保 maxAge 是有效的数字
+   - Modify line 45: Use `config.session.maxAge` instead of hardcoded value
+   - Add configuration validation: Ensure maxAge is a valid number
 
 2. `config/default.json`
-   - 确认 `session.maxAge` 配置项存在且值为 `86400000`（24 小时）
+   - Confirm `session.maxAge` configuration exists with value `86400000` (24 hours)
 
 3. `tests/session.test.js`
-   - 添加测试用例：验证 session 使用配置文件的过期时间
+   - Add test case: Verify session uses configured expiration time
 
-### 任务分解
-- [ ] 1. 修复 session.js 中的硬编码值
-- [ ] 2. 添加配置验证逻辑
-- [ ] 3. 编写单元测试
-- [ ] 4. 运行现有测试确保无回归
+### Task Breakdown
+- [ ] 1. Fix hardcoded value in session.js
+- [ ] 2. Add configuration validation logic
+- [ ] 3. Write unit tests
+- [ ] 4. Run existing tests to ensure no regression
 
-### 预期影响
-- 修复 session 过期时间不正确的问题
-- 不影响其他功能
-- 测试覆盖率增加
+### Expected Impact
+- Fix incorrect session expiration time issue
+- No impact on other features
+- Increased test coverage
 ```
 
-### 2.4 阶段三：代码实现
+### 2.4 Phase 3: Code Implementation
 
-基于方案，Copilot Workspace 会生成代码修改：
+Based on the plan, Copilot Workspace generates code modifications:
 
 ```javascript
-// src/middleware/session.js - 修改前
+// src/middleware/session.js - Before modification
 const sessionMiddleware = session({
   secret: config.session.secret,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 30 * 60 * 1000  // 硬编码 30 分钟
+    maxAge: 30 * 60 * 1000  // Hardcoded 30 minutes
   }
 });
 
-// src/middleware/session.js - 修改后
+// src/middleware/session.js - After modification
 const sessionMiddleware = session({
   secret: config.session.secret,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: config.session.maxAge || 24 * 60 * 60 * 1000  // 从配置读取，默认 24 小时
+    maxAge: config.session.maxAge || 24 * 60 * 60 * 1000  // Read from config, default 24 hours
   }
 });
 ```
 
 ```javascript
-// tests/session.test.js - 新增测试
+// tests/session.test.js - New tests
 describe('Session Configuration', () => {
   it('should use configured maxAge for session cookie', () => {
     const config = {
       session: {
         secret: 'test-secret',
-        maxAge: 24 * 60 * 60 * 1000  // 24 小时
+        maxAge: 24 * 60 * 60 * 1000  // 24 hours
       }
     };
     
@@ -297,169 +299,169 @@ describe('Session Configuration', () => {
 });
 ```
 
-### 2.5 阶段四：PR 创建
+### 2.5 Phase 4: PR Creation
 
-代码实现完成后，Copilot Workspace 会自动创建 Pull Request：
+After code implementation is complete, Copilot Workspace automatically creates a Pull Request:
 
 ```markdown
-## PR #456: 修复 session 过期时间配置问题
+## PR #456: Fix session expiration time configuration issue
 
-### 问题
+### Issue
 Closes #123
 
-Session 过期时间使用了硬编码的 30 分钟值，而非从配置文件读取。
+Session expiration time was using a hardcoded 30-minute value instead of reading from the configuration file.
 
-### 解决方案
-- 修改 `session.js` 从 `config.session.maxAge` 读取过期时间
-- 添加配置验证和默认值处理
-- 新增单元测试覆盖配置场景
+### Solution
+- Modify `session.js` to read expiration time from `config.session.maxAge`
+- Add configuration validation and default value handling
+- Add unit tests to cover configuration scenarios
 
-### 测试
-- [x] 新增单元测试通过
-- [x] 现有测试无回归
-- [x] 手动测试验证 session 过期时间为 24 小时
+### Tests
+- [x] New unit tests pass
+- [x] No regression in existing tests
+- [x] Manual testing verifies session expiration time is 24 hours
 
-### 变更文件
-- `src/middleware/session.js` - 修复配置读取
-- `tests/session.test.js` - 新增测试用例
+### Changed Files
+- `src/middleware/session.js` - Fix configuration reading
+- `tests/session.test.js` - Add new test cases
 ```
 
-### 2.6 工作流的最佳实践
+### 2.6 Workflow Best Practices
 
 ```markdown
-## 使用 Copilot Workspace 的最佳实践
+## Best Practices for Using Copilot Workspace
 
-### Issue 编写
-1. 提供清晰的问题描述
-2. 包含复现步骤
-3. 指定期望行为
-4. 附上错误日志或截图
+### Issue Writing
+1. Provide clear problem description
+2. Include reproduction steps
+3. Specify expected behavior
+4. Attach error logs or screenshots
 
-### 方案审查
-1. 仔细审查 AI 生成的方案
-2. 确认修改范围是否合理
-3. 检查是否遗漏了边界情况
-4. 验证技术方案的正确性
+### Solution Review
+1. Carefully review AI-generated solutions
+2. Confirm modification scope is reasonable
+3. Check if edge cases are missed
+4. Verify correctness of technical solution
 
-### 代码审查
-1. 不要盲目接受 AI 生成的代码
-2. 检查代码风格是否符合项目规范
-3. 验证逻辑的正确性
-4. 确保测试覆盖充分
+### Code Review
+1. Do not blindly accept AI-generated code
+2. Check if code style conforms to project standards
+3. Verify logic correctness
+4. Ensure sufficient test coverage
 
-### PR 管理
-1. 补充 AI 生成的 PR 描述
-2. 添加必要的上下文信息
-3. 标记相关的审查者
-4. 关联相关的 Issue
+### PR Management
+1. Supplement AI-generated PR descriptions
+2. Add necessary context information
+3. Tag relevant reviewers
+4. Link related Issues
 ```
 
 ---
 
-## 3. Copilot Agent Mode 深度使用
+## 3. Deep Dive into Copilot Agent Mode
 
-### 3.1 什么是 Copilot Agent Mode
+### 3.1 What is Copilot Agent Mode
 
-Copilot Agent Mode 是 Copilot 的 **自主代理模式**，它能够独立执行复杂的开发任务，而不仅仅是提供建议。
+Copilot Agent Mode is Copilot's **autonomous agent mode** that can independently execute complex development tasks, not just provide suggestions.
 
-**Agent Mode 与传统模式的区别**：
+**Agent Mode vs Traditional Mode**:
 
 ```
-传统 Copilot：
-开发者输入 → Copilot 建议 → 开发者选择 → 开发者执行
+Traditional Copilot:
+Developer Input → Copilot Suggestion → Developer Selection → Developer Execution
 
-Agent Mode：
-开发者描述任务 → Agent 分析 → Agent 规划 → Agent 执行 → 开发者审查
+Agent Mode:
+Developer Describes Task → Agent Analysis → Agent Planning → Agent Execution → Developer Review
 ```
 
-### 3.2 Agent Mode 的核心能力
+### 3.2 Agent Mode Core Capabilities
 
-**1. 多文件编辑**
+**1. Multi-file Editing**
 
-Agent Mode 可以同时修改多个文件，保持代码的一致性：
+Agent Mode can modify multiple files simultaneously while maintaining code consistency:
 
 ```python
-# Agent 可以理解跨文件的依赖关系
-# 例如：修改数据库模型时，同时更新：
-# - 数据模型定义
-# - 数据库迁移文件
-# - API 端点
-# - 序列化器
-# - 测试文件
+# Agent can understand cross-file dependencies
+# For example: When modifying a database model, simultaneously update:
+# - Data model definition
+# - Database migration files
+# - API endpoints
+# - Serializers
+# - Test files
 ```
 
-**2. 终端命令执行**
+**2. Terminal Command Execution**
 
-Agent 可以执行终端命令来完成任务：
+Agent can execute terminal commands to complete tasks:
 
 ```bash
-# Agent 可以执行的操作
-npm install <package>      # 安装依赖
-npm run test               # 运行测试
-git add . && git commit    # 提交代码
-docker build .             # 构建镜像
+# Operations Agent can perform
+npm install <package>      # Install dependencies
+npm run test               # Run tests
+git add . && git commit    # Commit code
+docker build .             # Build image
 ```
 
-**3. 错误修复循环**
+**3. Error Fix Loop**
 
-Agent 具有 **自我修复** 能力：
+Agent has **self-healing** capabilities:
 
 ```
-执行代码 → 检测错误 → 分析原因 → 修复代码 → 重新执行
+Execute Code → Detect Error → Analyze Cause → Fix Code → Re-execute
     │                                          │
-    └──────────────── 循环直到成功 ─────────────┘
+    └──────────────── Loop Until Success ──────┘
 ```
 
-### 3.3 Agent Mode 使用场景
+### 3.3 Agent Mode Use Cases
 
-**场景一：快速原型开发**
+**Scenario 1: Rapid Prototyping**
 
 ```markdown
-## 用户提示
-"创建一个简单的 TODO 应用，使用 React + TypeScript + Tailwind CSS，
-支持增删改查功能，使用 localStorage 存储数据。"
+## User Prompt
+"Create a simple TODO application using React + TypeScript + Tailwind CSS,
+with CRUD functionality, storing data in localStorage."
 
-## Agent 执行过程
-1. 创建 React 项目：`npx create-react-app todo-app --template typescript`
-2. 安装 Tailwind CSS：`npm install -D tailwindcss postcss autoprefixer`
-3. 创建组件结构：
+## Agent Execution Process
+1. Create React project: `npx create-react-app todo-app --template typescript`
+2. Install Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
+3. Create component structure:
    - `src/components/TodoApp.tsx`
    - `src/components/TodoItem.tsx`
    - `src/components/TodoInput.tsx`
-4. 实现核心功能
-5. 运行测试验证
+4. Implement core functionality
+5. Run tests to verify
 ```
 
-**场景二：代码重构**
+**Scenario 2: Code Refactoring**
 
 ```markdown
-## 用户提示
-"将项目中的类组件重构为函数组件，使用 React Hooks。"
+## User Prompt
+"Refactor class components in the project to function components using React Hooks."
 
-## Agent 执行过程
-1. 扫描项目中的所有类组件
-2. 分析每个组件的状态和生命周期方法
-3. 逐个重构为函数组件
-4. 使用 useState 和 useEffect 替代 state 和生命周期
-5. 运行测试确保功能不变
+## Agent Execution Process
+1. Scan all class components in the project
+2. Analyze state and lifecycle methods of each component
+3. Refactor to function components one by one
+4. Replace state and lifecycle with useState and useEffect
+5. Run tests to ensure functionality is unchanged
 ```
 
-**场景三：Bug 修复**
+**Scenario 3: Bug Fix**
 
 ```markdown
-## 用户提示
-"修复 Issue #789 中描述的内存泄漏问题。"
+## User Prompt
+"Fix the memory leak issue described in Issue #789."
 
-## Agent 执行过程
-1. 阅读 Issue #789 的描述
-2. 分析相关代码
-3. 识别内存泄漏的根本原因
-4. 实现修复方案
-5. 添加测试用例
-6. 运行测试验证
+## Agent Execution Process
+1. Read Issue #789 description
+2. Analyze related code
+3. Identify root cause of memory leak
+4. Implement fix
+5. Add test cases
+6. Run tests to verify
 ```
 
-### 3.4 Agent Mode 的配置
+### 3.4 Agent Mode Configuration
 
 ```json
 // .github/copilot-agent-config.json
@@ -495,51 +497,51 @@ Agent 具有 **自我修复** 能力：
 }
 ```
 
-### 3.5 Agent Mode 安全考虑
+### 3.5 Agent Mode Security Considerations
 
 ```markdown
-## Agent Mode 安全最佳实践
+## Agent Mode Security Best Practices
 
-### 权限控制
-1. 默认不自动批准文件写入
-2. 限制可执行的终端命令
-3. 设置最大迭代次数防止无限循环
-4. 监控 Agent 的资源使用
+### Permission Control
+1. Default to not auto-approving file writes
+2. Limit executable terminal commands
+3. Set maximum iteration count to prevent infinite loops
+4. Monitor Agent resource usage
 
-### 代码审查
-1. 所有 Agent 生成的代码都需要人工审查
-2. 检查是否引入了安全漏洞
-3. 验证是否符合项目规范
-4. 确保没有敏感信息泄露
+### Code Review
+1. All Agent-generated code requires human review
+2. Check for security vulnerabilities introduced
+3. Verify compliance with project standards
+4. Ensure no sensitive information is leaked
 
-### 审计日志
-1. 记录 Agent 的所有操作
-2. 保存 Agent 的决策过程
-3. 支持回滚到之前的状态
-4. 定期审查 Agent 的行为模式
+### Audit Logging
+1. Record all Agent operations
+2. Save Agent decision-making process
+3. Support rollback to previous state
+4. Regularly review Agent behavior patterns
 ```
 
 ---
 
-## 4. Copilot Extensions 开发详解
+## 4. Copilot Extensions Development Guide
 
-### 4.1 什么是 Copilot Extensions
+### 4.1 What are Copilot Extensions
 
-Copilot Extensions 是 **扩展 Copilot 能力** 的机制，允许第三方开发者为 Copilot 添加新的功能和数据源。
+Copilot Extensions are a mechanism to **extend Copilot's capabilities**, allowing third-party developers to add new features and data sources to Copilot.
 
-**Copilot Extensions 的类型**：
+**Types of Copilot Extensions**:
 
 ```
-Copilot Extensions 分类：
-├── Chat Extensions（聊天扩展）
-│   └── 在 Copilot Chat 中添加新的命令和技能
-├── Coding Agent Extensions（编码代理扩展）
-│   └── 扩展 Agent Mode 的能力
-└── Content Exclusions（内容排除）
-    └── 控制 Copilot 可以访问的内容
+Copilot Extensions Categories:
+├── Chat Extensions
+│   └── Add new commands and skills in Copilot Chat
+├── Coding Agent Extensions
+│   └── Extend Agent Mode capabilities
+└── Content Exclusions
+    └── Control what content Copilot can access
 ```
 
-### 4.2 Copilot Extension 架构
+### 4.2 Copilot Extension Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -553,16 +555,17 @@ Copilot Extensions 分类：
 │  │         Copilot Extension Protocol              │    │
 │  └─────────────────────┬───────────────────────────┘    │
 ├─────────────────────────┼───────────────────────────────┤
-│                    你的 Extension                         │
+│                    Your Extension                        │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │ HTTP 服务   │  │ 认证模块    │  │ 业务逻辑    │     │
+│  │ HTTP Server │  │ Auth Module │  │ Business     │     │
+│  │             │  │             │  │ Logic        │     │
 │  └─────────────┘  └─────────────┘  └─────────────┘     │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 4.3 Chat Extension 开发
+### 4.3 Chat Extension Development
 
-**基本结构**：
+**Basic Structure**:
 
 ```typescript
 // src/extension.ts
@@ -573,11 +576,11 @@ const app = createApp({
   version: '1.0.0',
 });
 
-// 处理 Copilot Chat 消息
+// Handle Copilot Chat messages
 app.onMessage(async (message, context) => {
   const userMessage = message.body;
   
-  // 调用外部 API
+  // Call external API
   const response = await fetch('https://api.example.com/data', {
     method: 'POST',
     body: JSON.stringify({ query: userMessage }),
@@ -585,14 +588,14 @@ app.onMessage(async (message, context) => {
   
   const data = await response.json();
   
-  // 返回格式化的响应
+  // Return formatted response
   return {
     type: 'markdown',
-    content: `## 查询结果\n\n${formatData(data)}`,
+    content: `## Query Results\n\n${formatData(data)}`,
   };
 });
 
-// 注册斜杠命令
+// Register slash commands
 app.command('/search', async (args, context) => {
   const results = await searchDatabase(args);
   return {
@@ -602,84 +605,84 @@ app.command('/search', async (args, context) => {
 });
 
 app.command('/deploy', async (args, context) => {
-  // 验证用户权限
+  // Verify user permissions
   if (!context.user.hasPermission('deploy')) {
     return {
       type: 'error',
-      content: '你没有部署权限',
+      content: 'You do not have deployment permissions',
     };
   }
   
-  // 执行部署
+  // Execute deployment
   const result = await deployApplication(args);
   return {
     type: 'markdown',
-    content: `部署成功！\n\n${result.summary}`,
+    content: `Deployment successful!\n\n${result.summary}`,
   };
 });
 
 export default app;
 ```
 
-### 4.4 manifest.yml 配置
+### 4.4 manifest.yml Configuration
 
 ```yaml
 # manifest.yml
 name: my-extension
-description: 一个示例 Copilot Extension
+description: A sample Copilot Extension
 version: 1.0.0
 
-# 入口点
+# Entrypoint
 entrypoint:
   type: http
   url: https://your-server.com/copilot
 
-# 权限声明
+# Permission declarations
 permissions:
   - name: repository_read
-    description: 读取仓库内容
+    description: Read repository content
   - name: issues_read
-    description: 读取 Issue 信息
+    description: Read Issue information
 
-# 命令注册
+# Command registration
 commands:
   - name: /search
-    description: 搜索数据库
+    description: Search database
     usage: "/search <query>"
   - name: /deploy
-    description: 部署应用
+    description: Deploy application
     usage: "/deploy <environment>"
 
-# 上下文配置
+# Context configuration
 context:
   include_repository: true
   include_issues: true
   include_pull_requests: true
 ```
 
-### 4.5 Extension 的认证与安全
+### 4.5 Extension Authentication and Security
 
 ```typescript
 // src/auth.ts
 import { verifyCopilotToken } from '@copilot-extensions/extension-sdk';
 
 export async function authenticateRequest(req: Request): Promise<UserContext> {
-  // 1. 验证 Copilot Token
+  // 1. Verify Copilot Token
   const token = req.headers.get('x-copilot-token');
   if (!token) {
     throw new Error('Missing authentication token');
   }
 
-  // 2. 验证 Token 有效性
+  // 2. Verify Token validity
   const payload = await verifyCopilotToken(token);
   
-  // 3. 验证用户权限
+  // 3. Verify user permissions
   const user = await getUserFromPayload(payload);
   if (!user.hasAccess) {
     throw new Error('User does not have access');
   }
 
-  // 4. 验证请求来源
+  // 4. Verify request origin
   const origin = req.headers.get('origin');
   if (!isValidOrigin(origin)) {
     throw new Error('Invalid request origin');
@@ -693,7 +696,7 @@ export async function authenticateRequest(req: Request): Promise<UserContext> {
 }
 ```
 
-### 4.6 Extension 测试
+### 4.6 Extension Testing
 
 ```typescript
 // tests/extension.test.ts
@@ -707,7 +710,7 @@ describe('My Extension', () => {
     const response = await client.sendCommand('/search test query');
     
     expect(response.type).toBe('markdown');
-    expect(response.content).toContain('查询结果');
+    expect(response.content).toContain('Query Results');
   });
 
   test('should reject unauthorized deploy', async () => {
@@ -716,11 +719,11 @@ describe('My Extension', () => {
     });
     
     expect(response.type).toBe('error');
-    expect(response.content).toContain('没有部署权限');
+    expect(response.content).toContain('do not have deployment permissions');
   });
 
   test('should handle message with context', async () => {
-    const response = await client.sendMessage('这个仓库有多少个 Issue？', {
+    const response = await client.sendMessage('How many Issues does this repository have?', {
       repository: { owner: 'test', name: 'repo' },
     });
     
@@ -731,40 +734,40 @@ describe('My Extension', () => {
 
 ---
 
-## 5. GitHub AI 平台与 GitHub Models API
+## 5. GitHub AI Platform and GitHub Models API
 
-### 5.1 GitHub Models 概述
+### 5.1 GitHub Models Overview
 
-GitHub Models 是 GitHub 提供的 **AI 模型即服务平台**，开发者可以直接在 GitHub 上访问和使用各种 AI 模型。
+GitHub Models is GitHub's **AI Model-as-a-Service platform** that allows developers to directly access and use various AI models on GitHub.
 
-**支持的模型**：
+**Supported Models**:
 
 ```
-GitHub Models 支持的模型：
-├── 语言模型
+GitHub Models Supported Models:
+├── Language Models
 │   ├── GPT-4o
 │   ├── GPT-4o-mini
 │   ├── Claude 3.5 Sonnet
 │   ├── Llama 3.1
 │   └── Mistral Large
-├── 代码模型
+├── Code Models
 │   ├── CodeLlama
 │   ├── StarCoder2
 │   └── Mixtral Code
-├── 图像模型
+├── Image Models
 │   ├── DALL-E 3
 │   └── Stable Diffusion
-└── 嵌入模型
+└── Embedding Models
     ├── text-embedding-3-small
     └── text-embedding-3-large
 ```
 
-### 5.2 GitHub Models API 使用
+### 5.2 GitHub Models API Usage
 
-**基本使用**：
+**Basic Usage**:
 
 ```python
-# 使用 GitHub Models API
+# Using GitHub Models API
 import requests
 
 GITHUB_TOKEN = "ghp_your_token_here"
@@ -786,20 +789,20 @@ def chat_with_model(messages, model="gpt-4o"):
     )
     return response.json()
 
-# 使用示例
+# Usage example
 messages = [
-    {"role": "system", "content": "你是一个 helpful 的编程助手。"},
-    {"role": "user", "content": "解释什么是 Docker？"}
+    {"role": "system", "content": "You are a helpful programming assistant."},
+    {"role": "user", "content": "Explain what Docker is?"}
 ]
 
 result = chat_with_model(messages)
 print(result["choices"][0]["message"]["content"])
 ```
 
-**Python SDK 使用**：
+**Python SDK Usage**:
 
 ```python
-# 使用 OpenAI SDK 访问 GitHub Models
+# Using OpenAI SDK to access GitHub Models
 from openai import OpenAI
 
 client = OpenAI(
@@ -807,12 +810,12 @@ client = OpenAI(
     api_key="ghp_your_token_here"
 )
 
-# 文本生成
+# Text generation
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=[
-        {"role": "system", "content": "你是一个 Python 专家。"},
-        {"role": "user", "content": "写一个快速排序算法。"}
+        {"role": "system", "content": "You are a Python expert."},
+        {"role": "user", "content": "Write a quicksort algorithm."}
     ],
     temperature=0.7,
     max_tokens=500
@@ -820,12 +823,12 @@ response = client.chat.completions.create(
 
 print(response.choices[0].message.content)
 
-# 代码生成
+# Code generation
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=[
-        {"role": "system", "content": "你是一个代码生成助手。"},
-        {"role": "user", "content": "生成一个 React 组件，实现计数器功能。"}
+        {"role": "system", "content": "You are a code generation assistant."},
+        {"role": "user", "content": "Generate a React component that implements a counter."}
     ],
     temperature=0.3
 )
@@ -833,83 +836,83 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-### 5.3 GitHub Models 的定价
+### 5.3 GitHub Models Pricing
 
 ```markdown
-## GitHub Models 定价（2024 年）
+## GitHub Models Pricing (2024)
 
-### 免费层
-- 每月 1000 次请求
-- 支持所有基础模型
-- 有限的并发请求
+### Free Tier
+- 1,000 requests per month
+- Supports all base models
+- Limited concurrent requests
 
-### Pro 层（$4/月）
-- 每月 10000 次请求
-- 支持高级模型
-- 更高的并发限制
-- 优先支持
+### Pro Tier ($4/month)
+- 10,000 requests per month
+- Supports advanced models
+- Higher concurrency limits
+- Priority support
 
-### Enterprise 层
-- 自定义配额
-- 私有模型部署
-- 企业级支持
-- SLA 保证
+### Enterprise Tier
+- Custom quotas
+- Private model deployment
+- Enterprise-grade support
+- SLA guarantees
 ```
 
-### 5.4 模型选择指南
+### 5.4 Model Selection Guide
 
 ```markdown
-## 模型选择指南
+## Model Selection Guide
 
-### 代码生成
-- **GPT-4o**：最强大的通用代码生成能力
-- **CodeLlama**：专注于代码理解，性价比高
-- **StarCoder2**：开源代码模型，适合本地部署
+### Code Generation
+- **GPT-4o**: Most powerful general-purpose code generation
+- **CodeLlama**: Focused on code understanding, cost-effective
+- **StarCoder2**: Open-source code model, suitable for local deployment
 
-### 文本处理
-- **GPT-4o**：最强大的文本理解和生成
-- **Claude 3.5 Sonnet**：擅长长文本处理
-- **Mistral Large**：多语言支持优秀
+### Text Processing
+- **GPT-4o**: Most powerful text understanding and generation
+- **Claude 3.5 Sonnet**: Excels at long text processing
+- **Mistral Large**: Excellent multilingual support
 
-### 图像生成
-- **DALL-E 3**：高质量图像生成
-- **Stable Diffusion**：开源，可本地部署
+### Image Generation
+- **DALL-E 3**: High-quality image generation
+- **Stable Diffusion**: Open-source, deployable locally
 
-### 嵌入向量
-- **text-embedding-3-small**：性价比高
-- **text-embedding-3-large**：精度更高
+### Embeddings
+- **text-embedding-3-small**: Cost-effective
+- **text-embedding-3-large**: Higher accuracy
 ```
 
 ---
 
-## 6. 构建自定义 GitHub Copilot Extension
+## 6. Building a Custom GitHub Copilot Extension
 
-### 6.1 Extension 开发环境设置
+### 6.1 Extension Development Environment Setup
 
 ```bash
-# 1. 创建项目目录
+# 1. Create project directory
 mkdir my-copilot-extension
 cd my-copilot-extension
 
-# 2. 初始化 Node.js 项目
+# 2. Initialize Node.js project
 npm init -y
 
-# 3. 安装依赖
+# 3. Install dependencies
 npm install @copilot-extensions/extension-sdk
 npm install -D typescript @types/node
 
-# 4. 配置 TypeScript
+# 4. Configure TypeScript
 npx tsc --init
 
-# 5. 创建项目结构
+# 5. Create project structure
 mkdir -p src tests
 
-# 6. 创建入口文件
+# 6. Create entry files
 touch src/index.ts
 touch manifest.yml
 ```
 
-### 6.2 完整的 Extension 示例：代码搜索
+### 6.2 Complete Extension Example: Code Search
 
 ```typescript
 // src/index.ts
@@ -921,24 +924,24 @@ const app = createApp({
   version: '1.0.0',
 });
 
-// 初始化 GitHub 客户端
+// Initialize GitHub client
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-// 代码搜索命令
+// Code search command
 app.command('/search-code', async (args: string, context: CopilotContext) => {
   const { repository } = context;
   
   if (!repository) {
     return {
       type: 'error',
-      content: '无法获取仓库信息',
+      content: 'Unable to retrieve repository information',
     };
   }
 
   try {
-    // 使用 GitHub API 搜索代码
+    // Use GitHub API to search code
     const { data } = await octokit.search.code({
       q: `${args} repo:${repository.owner}/${repository.name}`,
       per_page: 5,
@@ -947,32 +950,32 @@ app.command('/search-code', async (args: string, context: CopilotContext) => {
     if (data.total_count === 0) {
       return {
         type: 'markdown',
-        content: `未找到与 "${args}" 相关的代码。`,
+        content: `No code found related to "${args}".`,
       };
     }
 
-    // 格式化搜索结果
+    // Format search results
     const results = data.items.map((item, index) => {
       return `### ${index + 1}. ${item.name}
-- **路径**: \`${item.path}\`
-- **仓库**: ${item.repository.full_name}
-- **分数**: ${item.score}
+- **Path**: \`${item.path}\`
+- **Repository**: ${item.repository.full_name}
+- **Score**: ${item.score}
 `;
     }).join('\n');
 
     return {
       type: 'markdown',
-      content: `## 代码搜索结果: "${args}"\n\n找到 ${data.total_count} 个结果，显示前 5 个:\n\n${results}`,
+      content: `## Code Search Results: "${args}"\n\nFound ${data.total_count} results, showing top 5:\n\n${results}`,
     };
   } catch (error) {
     return {
       type: 'error',
-      content: `搜索失败: ${error.message}`,
+      content: `Search failed: ${error.message}`,
     };
   }
 });
 
-// 文件内容查看命令
+// File content viewer command
 app.command('/view-file', async (args: string, context: CopilotContext) => {
   const { repository } = context;
   const [filePath, branch] = args.split(' ');
@@ -980,7 +983,7 @@ app.command('/view-file', async (args: string, context: CopilotContext) => {
   if (!filePath) {
     return {
       type: 'error',
-      content: '请指定文件路径，例如: /view-file src/index.ts',
+      content: 'Please specify a file path, e.g.: /view-file src/index.ts',
     };
   }
 
@@ -1004,22 +1007,22 @@ app.command('/view-file', async (args: string, context: CopilotContext) => {
 
     return {
       type: 'error',
-      content: '无法读取文件内容',
+      content: 'Unable to read file content',
     };
   } catch (error) {
     return {
       type: 'error',
-      content: `读取文件失败: ${error.message}`,
+      content: `Failed to read file: ${error.message}`,
     };
   }
 });
 
-// 代码分析命令
+// Code analysis command
 app.command('/analyze', async (args: string, context: CopilotContext) => {
   const { repository } = context;
 
   try {
-    // 获取仓库统计信息
+    // Get repository statistics
     const [repoData, languages, contributors] = await Promise.all([
       octokit.repos.get({
         owner: repository.owner,
@@ -1047,26 +1050,26 @@ app.command('/analyze', async (args: string, context: CopilotContext) => {
 
     return {
       type: 'markdown',
-      content: `## 仓库分析: ${repository.owner}/${repository.name}
+      content: `## Repository Analysis: ${repository.owner}/${repository.name}
 
-### 基本信息
-- **描述**: ${repoData.data.description || '无'}
+### Basic Information
+- **Description**: ${repoData.data.description || 'None'}
 - **Stars**: ${repoData.data.stargazers_count}
 - **Forks**: ${repoData.data.forks_count}
 - **Open Issues**: ${repoData.data.open_issues_count}
-- **创建时间**: ${new Date(repoData.data.created_at).toLocaleDateString()}
+- **Created**: ${new Date(repoData.data.created_at).toLocaleDateString()}
 
-### 语言统计
+### Language Statistics
 ${languageStats}
 
-### 贡献者排行
+### Top Contributors
 ${topContributors}
 `,
     };
   } catch (error) {
     return {
       type: 'error',
-      content: `分析失败: ${error.message}`,
+      content: `Analysis failed: ${error.message}`,
     };
   }
 });
@@ -1080,10 +1083,10 @@ function formatBytes(bytes: number): string {
 export default app;
 ```
 
-### 6.3 Extension 部署
+### 6.3 Extension Deployment
 
 ```yaml
-# GitHub Actions 部署工作流
+# GitHub Actions Deployment Workflow
 # .github/workflows/deploy-extension.yml
 name: Deploy Copilot Extension
 
@@ -1125,9 +1128,9 @@ jobs:
 
 ---
 
-## 7. GitHub Actions + AI Agent 自动化
+## 7. GitHub Actions + AI Agent Automation
 
-### 7.1 AI 辅助的 CI/CD 工作流
+### 7.1 AI-Assisted CI/CD Workflow
 
 ```yaml
 # .github/workflows/ai-powered-ci.yml
@@ -1172,7 +1175,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### 7.2 自定义 AI Agent Action
+### 7.2 Custom AI Agent Action
 
 ```typescript
 // src/ai-agent-action.ts
@@ -1182,12 +1185,12 @@ import OpenAI from 'openai';
 
 async function run() {
   try {
-    // 获取输入参数
+    // Get input parameters
     const githubToken = core.getInput('github-token');
     const openaiKey = core.getInput('openai-api-key');
     const task = core.getInput('task');
 
-    // 初始化客户端
+    // Initialize clients
     const octokit = github.getOctokit(githubToken);
     const openai = new OpenAI({ apiKey: openaiKey });
     
@@ -1199,39 +1202,39 @@ async function run() {
       return;
     }
 
-    // 获取 PR 变更的文件
+    // Get PR changed files
     const { data: files } = await octokit.rest.pulls.listFiles({
       owner: context.repo.owner,
       repo: context.repo.repo,
       pull_number: pr.number,
     });
 
-    // 构建上下文
+    // Build context
     const fileChanges = files.map(f => ({
       filename: f.filename,
       patch: f.patch,
       status: f.status,
     }));
 
-    // 使用 AI 分析代码变更
+    // Use AI to analyze code changes
     const analysis = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {
           role: 'system',
-          content: `你是一个代码审查专家。分析以下 Pull Request 的代码变更，
-提供详细的审查意见，包括：
-1. 代码质量
-2. 潜在问题
-3. 改进建议
-4. 安全考虑`
+          content: `You are a code review expert. Analyze the code changes in this Pull Request,
+providing detailed review comments including:
+1. Code quality
+2. Potential issues
+3. Improvement suggestions
+4. Security considerations`
         },
         {
           role: 'user',
-          content: `PR 标题: ${pr.title}
-PR 描述: ${pr.body}
+          content: `PR Title: ${pr.title}
+PR Description: ${pr.body}
 
-变更文件:
+Changed Files:
 ${JSON.stringify(fileChanges, null, 2)}`
         }
       ],
@@ -1241,15 +1244,15 @@ ${JSON.stringify(fileChanges, null, 2)}`
 
     const review = analysis.choices[0].message.content;
 
-    // 发布审查评论
+    // Post review comment
     await octokit.rest.issues.createComment({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: pr.number,
-      body: `## 🤖 AI 代码审查\n\n${review}`,
+      body: `## 🤖 AI Code Review\n\n${review}`,
     });
 
-    // 设置输出
+    // Set output
     core.setOutput('review', review);
 
   } catch (error) {
@@ -1260,7 +1263,7 @@ ${JSON.stringify(fileChanges, null, 2)}`
 run();
 ```
 
-### 7.3 自动化 Issue 处理 Agent
+### 7.3 Automated Issue Processing Agent
 
 ```yaml
 # .github/workflows/issue-agent.yml
@@ -1309,7 +1312,7 @@ jobs:
             });
 ```
 
-### 7.4 AI 辅助发布管理
+### 7.4 AI-Assisted Release Management
 
 ```yaml
 # .github/workflows/ai-release.yml
@@ -1346,9 +1349,9 @@ jobs:
 
 ---
 
-## 8. AI 辅助代码审查
+## 8. AI-Assisted Code Review
 
-### 8.1 自定义 AI 审查机器人
+### 8.1 Custom AI Review Bot
 
 ```typescript
 // src/ai-reviewer.ts
@@ -1363,14 +1366,14 @@ export default function aiReviewer(app: Probot) {
   app.on(['pull_request.opened', 'pull_request.synchronize'], async (context) => {
     const pr = context.payload.pull_request;
     
-    // 获取 PR 的文件变更
+    // Get PR file changes
     const files = await context.octokit.pulls.listFiles({
       owner: context.repo().owner,
       repo: context.repo().repo,
       pull_number: pr.number,
     });
 
-    // 过滤需要审查的文件
+    // Filter files that need review
     const reviewableFiles = files.data.filter(file => 
       !file.filename.match(/\.(md|txt|json|yml|yaml)$/) &&
       file.patch
@@ -1380,7 +1383,7 @@ export default function aiReviewer(app: Probot) {
       return;
     }
 
-    // 对每个文件进行 AI 审查
+    // Perform AI review on each file
     const reviews = await Promise.all(
       reviewableFiles.map(async (file) => {
         const response = await openai.chat.completions.create({
@@ -1388,25 +1391,25 @@ export default function aiReviewer(app: Probot) {
           messages: [
             {
               role: 'system',
-              content: `你是一个代码审查专家。审查以下代码变更，指出：
-1. 潜在的 bug
-2. 安全漏洞
-3. 性能问题
-4. 代码风格问题
-5. 改进建议
+              content: `You are a code review expert. Review the following code changes and identify:
+1. Potential bugs
+2. Security vulnerabilities
+3. Performance issues
+4. Code style issues
+5. Improvement suggestions
 
-使用 Markdown 格式，每个问题用 [severity] 标记，severity 可以是:
-- [critical] 严重问题，必须修复
-- [warning] 警告，建议修复
-- [info] 信息，可选修复
-- [suggestion] 建议`
+Use Markdown format, marking each issue with [severity], where severity can be:
+- [critical] Critical issue, must fix
+- [warning] Warning, recommended to fix
+- [info] Informational, optional fix
+- [suggestion] Suggestion`
             },
             {
               role: 'user',
-              content: `文件: ${file.filename}
-状态: ${file.status}
+              content: `File: ${file.filename}
+Status: ${file.status}
 
-变更:
+Changes:
 \`\`\`diff
 ${file.patch}
 \`\`\``
@@ -1422,20 +1425,20 @@ ${file.patch}
       })
     );
 
-    // 构建审查评论
+    // Build review comment
     const reviewBody = reviews
       .map(r => `### ${r.filename}\n\n${r.review}`)
       .join('\n\n---\n\n');
 
-    // 发布审查评论
+    // Post review comment
     await context.octokit.issues.createComment({
       owner: context.repo().owner,
       repo: context.repo().repo,
       issue_number: pr.number,
-      body: `## 🤖 AI 代码审查报告\n\n${reviewBody}`,
+      body: `## 🤖 AI Code Review Report\n\n${reviewBody}`,
     });
 
-    // 根据严重程度添加标签
+    // Add labels based on severity
     const hasCritical = reviews.some(r => r.review.includes('[critical]'));
     if (hasCritical) {
       await context.octokit.issues.addLabels({
@@ -1449,7 +1452,7 @@ ${file.patch}
 }
 ```
 
-### 8.2 审查规则配置
+### 8.2 Review Rules Configuration
 
 ```yaml
 # .github/ai-review-config.yml
@@ -1458,58 +1461,58 @@ ai_review:
   model: gpt-4o
   
   rules:
-    # 安全规则
+    # Security rules
     security:
       - pattern: "eval\\("
         severity: critical
-        message: "使用 eval() 可能导致代码注入漏洞"
+        message: "Using eval() may lead to code injection vulnerabilities"
         
       - pattern: "innerHTML"
         severity: warning
-        message: "使用 innerHTML 可能导致 XSS 漏洞"
+        message: "Using innerHTML may lead to XSS vulnerabilities"
         
       - pattern: "password.*=.*['\"]"
         severity: critical
-        message: "检测到硬编码的密码"
+        message: "Hardcoded password detected"
     
-    # 性能规则
+    # Performance rules
     performance:
       - pattern: "SELECT \\* FROM"
         severity: warning
-        message: "避免使用 SELECT *，只查询需要的字段"
+        message: "Avoid using SELECT *, only query needed fields"
         
       - pattern: "console\\.log"
         severity: info
-        message: "生产代码中应移除 console.log"
+        message: "console.log should be removed from production code"
     
-    # 代码质量规则
+    # Code quality rules
     quality:
       - pattern: "catch \\(e\\) \\{\\}"
         severity: warning
-        message: "空的 catch 块会隐藏错误"
+        message: "Empty catch block will hide errors"
         
       - pattern: "TODO|FIXME|HACK"
         severity: info
-        message: "检测到 TODO/FIXME 注释，请确认是否处理"
+        message: "TODO/FIXME comment detected, please verify if addressed"
   
-  # 文件排除规则
+  # File exclusion rules
   exclude:
     - "*.md"
     - "*.txt"
     - "test/**"
     - "docs/**"
   
-  # 审查语言
-  language: zh-CN
+  # Review language
+  language: en-US
   
-  # 最大文件数
+  # Maximum number of files
   max_files: 50
   
-  # 最大文件大小（字节）
+  # Maximum file size (bytes)
   max_file_size: 100000
 ```
 
-### 8.3 审查结果分析
+### 8.3 Review Results Analysis
 
 ```typescript
 // src/review-analyzer.ts
@@ -1535,16 +1538,16 @@ export function analyzeReviewResults(reviews: any[]): ReviewMetrics {
   for (const review of reviews) {
     const content = review.review;
     
-    // 统计各类问题数量
+    // Count different types of issues
     metrics.criticalIssues += (content.match(/\[critical\]/g) || []).length;
     metrics.warnings += (content.match(/\[warning\]/g) || []).length;
     metrics.suggestions += (content.match(/\[suggestion\]/g) || []).length;
     
-    // 统计安全和性能问题
-    if (content.includes('安全') || content.includes('security')) {
+    // Count security and performance issues
+    if (content.includes('security') || content.includes('Security')) {
       metrics.securityIssues++;
     }
-    if (content.includes('性能') || content.includes('performance')) {
+    if (content.includes('performance') || content.includes('Performance')) {
       metrics.performanceIssues++;
     }
   }
@@ -1553,15 +1556,15 @@ export function analyzeReviewResults(reviews: any[]): ReviewMetrics {
 }
 
 export function generateReviewSummary(metrics: ReviewMetrics): string {
-  let summary = '## 审查统计\n\n';
-  summary += `| 指标 | 数量 |\n`;
-  summary += `|------|------|\n`;
-  summary += `| 审查文件数 | ${metrics.totalFiles} |\n`;
-  summary += `| 严重问题 | ${metrics.criticalIssues} |\n`;
-  summary += `| 警告 | ${metrics.warnings} |\n`;
-  summary += `| 建议 | ${metrics.suggestions} |\n`;
-  summary += `| 安全问题 | ${metrics.securityIssues} |\n`;
-  summary += `| 性能问题 | ${metrics.performanceIssues} |\n`;
+  let summary = '## Review Statistics\n\n';
+  summary += `| Metric | Count |\n`;
+  summary += `|--------|-------|\n`;
+  summary += `| Files Reviewed | ${metrics.totalFiles} |\n`;
+  summary += `| Critical Issues | ${metrics.criticalIssues} |\n`;
+  summary += `| Warnings | ${metrics.warnings} |\n`;
+  summary += `| Suggestions | ${metrics.suggestions} |\n`;
+  summary += `| Security Issues | ${metrics.securityIssues} |\n`;
+  summary += `| Performance Issues | ${metrics.performanceIssues} |\n`;
   
   return summary;
 }
@@ -1569,9 +1572,9 @@ export function generateReviewSummary(metrics: ReviewMetrics): string {
 
 ---
 
-## 9. AI 辅助 Issue 分类与管理
+## 9. AI-Assisted Issue Triage and Management
 
-### 9.1 自动分类系统
+### 9.1 Automatic Classification System
 
 ```typescript
 // src/issue-classifier.ts
@@ -1602,32 +1605,32 @@ export class IssueClassifier {
       messages: [
         {
           role: 'system',
-          content: `你是一个 Issue 分类专家。根据 Issue 的标题和内容，进行以下分类：
+          content: `You are an Issue classification expert. Based on the Issue title and content, perform the following classifications:
 
-1. 类别 (category):
-   - bug: 缺陷报告
-   - feature: 功能请求
-   - documentation: 文档问题
-   - question: 问题咨询
-   - enhancement: 增强建议
-   - performance: 性能问题
-   - security: 安全问题
+1. Category:
+   - bug: Bug report
+   - feature: Feature request
+   - documentation: Documentation issue
+   - question: Question/inquiry
+   - enhancement: Enhancement suggestion
+   - performance: Performance issue
+   - security: Security issue
 
-2. 优先级 (priority):
-   - critical: 严重问题，影响生产环境
-   - high: 高优先级，影响主要功能
-   - medium: 中优先级，不影响主要功能
-   - low: 低优先级，可以稍后处理
+2. Priority:
+   - critical: Critical issue, affects production
+   - high: High priority, affects main functionality
+   - medium: Medium priority, does not affect main functionality
+   - low: Low priority, can be handled later
 
-3. 建议标签 (labels): 适合的标签列表
+3. Suggested labels: Appropriate label list
 
-请以 JSON 格式返回结果。`
+Please return the result in JSON format.`
         },
         {
           role: 'user',
-          content: `Issue 标题: ${issue.title}
-Issue 内容: ${issue.body}
-现有标签: ${issue.labels.join(', ')}`
+          content: `Issue Title: ${issue.title}
+Issue Content: ${issue.body}
+Existing Labels: ${issue.labels.join(', ')}`
         }
       ],
       response_format: { type: 'json_object' },
@@ -1645,13 +1648,13 @@ Issue 内容: ${issue.body}
 }
 ```
 
-### 9.2 Issue 优先级排序
+### 9.2 Issue Priority Sorting
 
 ```typescript
 // src/issue-prioritizer.ts
 export class IssuePrioritizer {
   async prioritizeIssues(issues: any[]): Promise<any[]> {
-    // 使用 AI 评估每个 Issue 的优先级
+    // Use AI to evaluate the priority of each Issue
     const prioritized = await Promise.all(
       issues.map(async (issue) => {
         const priority = await this.evaluatePriority(issue);
@@ -1659,15 +1662,15 @@ export class IssuePrioritizer {
       })
     );
 
-    // 按优先级排序
+    // Sort by priority
     return prioritized.sort((a, b) => b.priorityScore - a.priorityScore);
   }
 
   private async evaluatePriority(issue: any): Promise<number> {
-    // 基于多个因素计算优先级分数
+    // Calculate priority score based on multiple factors
     let score = 0;
 
-    // 因素 1: 标签权重
+    // Factor 1: Label weights
     const labelWeights = {
       'bug': 3,
       'security': 5,
@@ -1680,19 +1683,19 @@ export class IssuePrioritizer {
       score += labelWeights[label.name] || 0;
     }
 
-    // 因素 2: Issue 年龄（越老越优先）
+    // Factor 2: Issue age (older = higher priority)
     const ageInDays = (Date.now() - new Date(issue.created_at).getTime()) / (1000 * 60 * 60 * 24);
-    score += Math.min(ageInDays / 7, 5); // 最多加 5 分
+    score += Math.min(ageInDays / 7, 5); // Maximum 5 points
 
-    // 因素 3: 反应数量（社区关注度）
+    // Factor 3: Reaction count (community attention)
     const reactionCount = issue.reactions?.total_count || 0;
-    score += Math.min(reactionCount, 10); // 最多加 10 分
+    score += Math.min(reactionCount, 10); // Maximum 10 points
 
-    // 因素 4: 评论数量（讨论活跃度）
+    // Factor 4: Comment count (discussion activity)
     const commentCount = issue.comments || 0;
-    score += Math.min(commentCount / 2, 5); // 最多加 5 分
+    score += Math.min(commentCount / 2, 5); // Maximum 5 points
 
-    // 因素 5: 关联 PR 数量
+    // Factor 5: Linked PR count
     const linkedPRs = issue.pull_request ? 1 : 0;
     score += linkedPRs * 2;
 
@@ -1701,7 +1704,7 @@ export class IssuePrioritizer {
 }
 ```
 
-### 9.3 自动回复系统
+### 9.3 Auto-Response System
 
 ```typescript
 // src/auto-responder.ts
@@ -1719,7 +1722,7 @@ export class AutoResponder {
     body: string;
     labels: string[];
   }): Promise<string | null> {
-    // 只对特定类型的 Issue 自动生成回复
+    // Only auto-generate responses for specific Issue types
     const shouldRespond = this.shouldAutoRespond(issue);
     if (!shouldRespond) {
       return null;
@@ -1730,30 +1733,30 @@ export class AutoResponder {
       messages: [
         {
           role: 'system',
-          content: `你是一个友好的开源社区助手。根据 Issue 的类型生成合适的回复：
+          content: `You are a friendly open source community assistant. Generate appropriate responses based on Issue type:
 
-对于 bug 报告：
-- 感谢用户的报告
-- 询问更多信息（如果需要）
-- 提供可能的解决方案或临时规避方法
+For bug reports:
+- Thank the user for reporting
+- Ask for more information (if needed)
+- Provide possible solutions or workarounds
 
-对于功能请求：
-- 感谢用户的建议
-- 询问使用场景
-- 说明当前的计划
+For feature requests:
+- Thank the user for the suggestion
+- Ask about use cases
+- Explain current plans
 
-对于问题咨询：
-- 提供详细的解答
-- 指向相关文档
-- 建议搜索已有 Issue
+For questions:
+- Provide detailed answers
+- Point to relevant documentation
+- Suggest searching existing Issues
 
-回复要简洁、友好、有帮助。`
+Keep responses concise, friendly, and helpful.`
         },
         {
           role: 'user',
-          content: `Issue 标题: ${issue.title}
-Issue 内容: ${issue.body}
-标签: ${issue.labels.join(', ')}`
+          content: `Issue Title: ${issue.title}
+Issue Content: ${issue.body}
+Labels: ${issue.labels.join(', ')}`
         }
       ],
       temperature: 0.7,
@@ -1764,13 +1767,13 @@ Issue 内容: ${issue.body}
   }
 
   private shouldAutoRespond(issue: any): boolean {
-    // 不自动回复的情况
+    // Cases where auto-response should be skipped
     const skipLabels = ['wontfix', 'duplicate', 'invalid'];
     if (issue.labels.some((l: any) => skipLabels.includes(l.name))) {
       return false;
     }
 
-    // 不自动回复已经有评论的 Issue
+    // Don't auto-respond to Issues that already have comments
     if (issue.comments > 0) {
       return false;
     }
@@ -1782,9 +1785,9 @@ Issue 内容: ${issue.body}
 
 ---
 
-## 10. AI 辅助文档生成
+## 10. AI-Assisted Documentation Generation
 
-### 10.1 自动化 API 文档生成
+### 10.1 Automated API Documentation Generation
 
 ```typescript
 // src/api-doc-generator.ts
@@ -1807,25 +1810,25 @@ export class APIDocGenerator {
       messages: [
         {
           role: 'system',
-          content: `你是一个 API 文档生成专家。根据代码生成详细的 API 文档，包括：
+          content: `You are an API documentation generation expert. Generate detailed API documentation from code, including:
 
-1. 模块概述
-2. 类/函数列表
-3. 每个函数的详细说明：
-   - 功能描述
-   - 参数说明（类型、是否必需、默认值）
-   - 返回值说明
-   - 异常说明
-   - 使用示例
-4. 类型定义说明
-5. 常量说明
+1. Module overview
+2. Class/function list
+3. Detailed description for each function:
+   - Function description
+   - Parameter description (type, required, default value)
+   - Return value description
+   - Exception description
+   - Usage example
+4. Type definition description
+5. Constant description
 
-使用 Markdown 格式。`
+Use Markdown format.`
         },
         {
           role: 'user',
-          content: `文件路径: ${filePath}
-代码内容:
+          content: `File path: ${filePath}
+Code content:
 \`\`\`typescript
 ${code}
 \`\`\``
@@ -1844,7 +1847,6 @@ ${code}
     for (const file of files) {
       const doc = await this.generateFromFile(file);
       const docPath = file.replace(/\.(ts|js)$/, '.md');
-      
       fs.writeFileSync(docPath, doc);
       console.log(`Generated documentation: ${docPath}`);
     }
@@ -1869,7 +1871,7 @@ ${code}
 }
 ```
 
-### 10.2 README 自动生成
+### 10.2 README Auto-Generation
 
 ```yaml
 # .github/workflows/auto-readme.yml
@@ -1904,7 +1906,7 @@ jobs:
           git push
 ```
 
-### 10.3 变更日志自动生成
+### 10.3 Changelog Auto-Generation
 
 ```typescript
 // src/changelog-generator.ts
@@ -1925,22 +1927,22 @@ export class ChangelogGenerator {
       messages: [
         {
           role: 'system',
-          content: `你是一个变更日志生成专家。根据 Git 提交记录生成结构化的变更日志。
+          content: `You are a changelog generation expert. Generate structured changelog from Git commit records.
 
-使用以下分类：
-- 🚀 新功能 (Features)
-- 🐛 Bug 修复 (Bug Fixes)
-- 📝 文档 (Documentation)
-- 🔧 维护 (Maintenance)
-- ⚡ 性能优化 (Performance)
-- 🔒 安全 (Security)
-- 💥 破坏性变更 (Breaking Changes)
+Use the following categories:
+- 🚀 New Features
+- 🐛 Bug Fixes
+- 📝 Documentation
+- 🔧 Maintenance
+- ⚡ Performance Improvements
+- 🔒 Security
+- 💥 Breaking Changes
 
-每个变更用简洁的描述，包含相关的 Issue/PR 编号。`
+Use concise descriptions for each change, including related Issue/PR numbers.`
         },
         {
           role: 'user',
-          content: `提交记录：
+          content: `Commit records:
 ${commitMessages}`
         }
       ],
@@ -1955,9 +1957,9 @@ ${commitMessages}`
 
 ---
 
-## 11. AI 辅助测试生成
+## 11. AI-Assisted Test Generation
 
-### 11.1 智能测试用例生成
+### 11.1 Intelligent Test Case Generation
 
 ```typescript
 // src/test-generator.ts
@@ -1980,25 +1982,25 @@ export class TestGenerator {
       messages: [
         {
           role: 'system',
-          content: `你是一个测试生成专家。根据代码生成全面的单元测试。
+          content: `You are a test generation expert. Generate comprehensive unit tests from code.
 
-测试要求：
-1. 覆盖所有公开函数/方法
-2. 测试正常流程
-3. 测试边界条件
-4. 测试错误处理
-5. 使用 ${testFramework} 测试框架
-6. 使用 AAA 模式（Arrange-Act-Assert）
-7. 包含描述性的测试名称
-8. Mock 外部依赖
+Test requirements:
+1. Cover all public functions/methods
+2. Test normal flow
+3. Test boundary conditions
+4. Test error handling
+5. Use ${testFramework} test framework
+6. Use AAA pattern (Arrange-Act-Assert)
+7. Include descriptive test names
+8. Mock external dependencies
 
-生成的测试代码应该可以直接运行。`
+Generated test code should be directly runnable.`
         },
         {
           role: 'user',
-          content: `文件路径: ${filePath}
-测试框架: ${testFramework}
-代码内容:
+          content: `File path: ${filePath}
+Test framework: ${testFramework}
+Code content:
 \`\`\`typescript
 ${code}
 \`\`\``
@@ -2024,12 +2026,12 @@ ${code}
       return 'Mocha';
     }
     
-    return 'Jest'; // 默认使用 Jest
+    return 'Jest'; // Default to Jest
   }
 }
 ```
 
-### 11.2 测试覆盖率分析
+### 11.2 Test Coverage Analysis
 
 ```typescript
 // src/coverage-analyzer.ts
@@ -2048,18 +2050,18 @@ export class CoverageAnalyzer {
       messages: [
         {
           role: 'system',
-          content: `你是一个测试覆盖率分析专家。分析覆盖率报告，找出未覆盖的代码路径，
-并建议需要添加的测试用例。
+          content: `You are a test coverage analysis expert. Analyze the coverage report to find uncovered code paths
+and suggest test cases that need to be added.
 
-返回格式：
-1. 总体覆盖率摘要
-2. 未覆盖的关键路径
-3. 建议的测试用例列表
-4. 优先级排序`
+Return format:
+1. Overall coverage summary
+2. Uncovered critical paths
+3. Suggested test case list
+4. Priority ranking`
         },
         {
           role: 'user',
-          content: `覆盖率报告:
+          content: `Coverage report:
 ${JSON.stringify(coverageReport, null, 2)}`
         }
       ],
@@ -2072,7 +2074,7 @@ ${JSON.stringify(coverageReport, null, 2)}`
 }
 ```
 
-### 11.3 测试生成工作流
+### 11.3 Test Generation Workflow
 
 ```yaml
 # .github/workflows/ai-test-generation.yml
@@ -2121,290 +2123,290 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `## 📊 测试覆盖率报告\n\n` +
-                    `| 指标 | 覆盖率 |\n` +
-                    `|------|--------|\n` +
-                    `| 语句 | ${coverage.total.statements.pct}% |\n` +
-                    `| 分支 | ${coverage.total.branches.pct}% |\n` +
-                    `| 函数 | ${coverage.total.functions.pct}% |\n` +
-                    `| 行 | ${coverage.total.lines.pct}% |\n`
+              body: `## 📊 Test Coverage Report\n\n` +
+                    `| Metric | Coverage |\n` +
+                    `|--------|----------|\n` +
+                    `| Statements | ${coverage.total.statements.pct}% |\n` +
+                    `| Branches | ${coverage.total.branches.pct}% |\n` +
+                    `| Functions | ${coverage.total.functions.pct}% |\n` +
+                    `| Lines | ${coverage.total.lines.pct}% |\n`
             });
 ```
 
 ---
 
-## 12. GitHub Next 实验性功能介绍
+## 12. GitHub Next Experimental Features
 
-### 12.1 GitHub Next 概述
+### 12.1 GitHub Next Overview
 
-GitHub Next 是 GitHub 的 **研究和实验部门**，专注于探索 AI 和软件开发的未来。
+GitHub Next is GitHub's **research and experimentation division**, focused on exploring the future of AI and software development.
 
-**GitHub Next 的项目**：
+**GitHub Next Projects**:
 
 ```
-GitHub Next 研究项目：
+GitHub Next Research Projects:
 ├── Copilot Workspace
-│   └── AI 原生开发环境
+│   └── AI-native development environment
 ├── GitHub Models
-│   └── AI 模型即服务
+│   └── AI Model-as-a-Service
 ├── Copilot for CLI
-│   └── 终端命令 AI 助手
+│   └── Terminal command AI assistant
 ├── Copilot for Docs
-│   └── 文档 AI 助手
+│   └── Documentation AI assistant
 ├── Copilot for Pull Requests
-│   └── PR AI 助手
+│   └── PR AI assistant
 ├── GitHub Blocks
-│   └── 可视化编程
+│   └── Visual programming
 ├── Project Padawan
-│   └── AI 软件工程代理
+│   └── AI software engineering agent
 └── Sketch-to-Code
-    └── 草图转代码
+    └── Sketch to code
 ```
 
 ### 12.2 Copilot for CLI
 
 ```bash
-# Copilot for CLI 使用示例
+# Copilot for CLI usage examples
 
-# 自然语言转命令
+# Natural language to command
 $ gh copilot suggest "find all large files in the current directory"
 > find . -type f -size +100M
 
-# 解释命令
+# Explain command
 $ gh copilot explain "find . -name '*.js' -exec grep -l 'TODO' {} \;"
-> 这个命令做了以下几件事：
-> 1. find . - 在当前目录及子目录中查找
-> 2. -name '*.js' - 只查找 .js 文件
-> 3. -exec grep -l 'TODO' {} \; - 对每个找到的文件执行 grep
->    -l 只输出包含 'TODO' 的文件名
+> This command does the following:
+> 1. find . - Searches in the current directory and subdirectories
+> 2. -name '*.js' - Only looks for .js files
+> 3. -exec grep -l 'TODO' {} \; - Executes grep on each found file
+>    -l only outputs filenames containing 'TODO'
 
-# 命令修复
+# Fix command
 $ gh copilot fix "git pus origin main"
-> 您是否想执行: git push origin main?
-> 可能的修正:
-> 1. git push origin main (修正拼写错误)
+> Did you mean: git push origin main?
+> Possible corrections:
+> 1. git push origin main (fix typo)
 ```
 
 ### 12.3 GitHub Blocks
 
-GitHub Blocks 是一个 **可视化编程** 环境，允许用户通过拖拽组件来构建应用。
+GitHub Blocks is a **visual programming** environment that allows users to build applications by dragging and dropping components.
 
 ```
-GitHub Blocks 功能：
-├── 数据块
-│   ├── API 调用块
-│   ├── 数据库查询块
-│   └── 文件读取块
-├── 处理块
-│   ├── 代码执行块
-│   ├── 数据转换块
-│   └── 条件判断块
-├── 输出块
-│   ├── 显示块
-│   ├── 文件输出块
-│   └── API 响应块
-└── 连接器
-    ├── 数据流连接
-    └── 控制流连接
+GitHub Blocks Features:
+├── Data Blocks
+│   ├── API Call Block
+│   ├── Database Query Block
+│   └── File Read Block
+├── Processing Blocks
+│   ├── Code Execution Block
+│   ├── Data Transformation Block
+│   └── Conditional Block
+├── Output Blocks
+│   ├── Display Block
+│   ├── File Output Block
+│   └── API Response Block
+└── Connectors
+    ├── Data Flow Connection
+    └── Control Flow Connection
 ```
 
 ### 12.4 Project Padawan
 
-Project Padawan 是 GitHub 的 **AI 软件工程代理** 项目，目标是创建能够独立完成复杂软件工程任务的 AI 代理。
+Project Padawan is GitHub's **AI software engineering agent** project, aiming to create AI agents capable of independently completing complex software engineering tasks.
 
-**Padawan 的能力**：
+**Padawan Capabilities**:
 
 ```markdown
-## Project Padawan 能力
+## Project Padawan Capabilities
 
-### 代码理解
-- 理解整个代码库的结构
-- 追踪代码依赖关系
-- 理解代码意图和设计模式
+### Code Understanding
+- Understand the structure of entire codebases
+- Track code dependencies
+- Understand code intent and design patterns
 
-### 任务执行
-- 根据 Issue 描述独立完成任务
-- 自动创建分支、编写代码、提交 PR
-- 响应代码审查意见并修改代码
+### Task Execution
+- Independently complete tasks based on Issue descriptions
+- Automatically create branches, write code, submit PRs
+- Respond to code review comments and modify code
 
-### 学习能力
-- 从项目历史中学习
-- 适应项目的编码风格
-- 理解团队的工作流程
+### Learning Ability
+- Learn from project history
+- Adapt to project coding style
+- Understand team workflows
 
-### 协作能力
-- 与人类开发者协作
-- 解释自己的决策过程
-- 接受反馈并改进
+### Collaboration
+- Collaborate with human developers
+- Explain decision-making process
+- Accept feedback and improve
 ```
 
 ---
 
-## 13. AI 对开源社区的影响
+## 13. Impact of AI on Open Source Communities
 
-### 13.1 积极影响
+### 13.1 Positive Impact
 
 ```markdown
-## AI 对开源社区的积极影响
+## Positive Impact of AI on Open Source Communities
 
-### 1. 降低贡献门槛
-- AI 辅助代码理解，帮助新人快速上手
-- 自动生成文档，降低学习曲线
-- 智能推荐 "Good First Issues"
+### 1. Lowering Contribution Barriers
+- AI-assisted code understanding helps newcomers get started quickly
+- Automatic documentation generation reduces learning curve
+- Smart recommendation of "Good First Issues"
 
-### 2. 提高开发效率
-- AI 代码补全加速开发
-- 自动化代码审查减少人工负担
-- 智能 Bug 修复建议
+### 2. Improving Development Efficiency
+- AI code completion accelerates development
+- Automated code review reduces manual workload
+- Intelligent bug fix suggestions
 
-### 3. 改善代码质量
-- AI 检测潜在 Bug 和安全漏洞
-- 自动化测试生成提高覆盖率
-- 代码风格一致性检查
+### 3. Improving Code Quality
+- AI detects potential bugs and security vulnerabilities
+- Automated test generation improves coverage
+- Code style consistency checking
 
-### 4. 增强社区协作
-- AI 辅助 Issue 分类和优先级排序
-- 自动翻译打破语言障碍
-- 智能匹配贡献者和任务
+### 4. Enhancing Community Collaboration
+- AI-assisted Issue classification and priority sorting
+- Automatic translation breaks language barriers
+- Smart matching of contributors and tasks
 ```
 
-### 13.2 挑战与风险
+### 13.2 Challenges and Risks
 
 ```markdown
-## AI 对开源社区的挑战
+## Challenges of AI on Open Source Communities
 
-### 1. 代码质量风险
-- AI 生成的代码可能包含隐蔽的 Bug
-- 过度依赖 AI 可能降低开发者的技能
-- AI 可能生成不符合项目规范的代码
+### 1. Code Quality Risks
+- AI-generated code may contain hidden bugs
+- Over-reliance on AI may degrade developer skills
+- AI may generate code that doesn't conform to project standards
 
-### 2. 安全风险
-- AI 可能生成包含安全漏洞的代码
-- 训练数据可能包含恶意代码
-- AI 工具可能被用于恶意目的
+### 2. Security Risks
+- AI may generate code with security vulnerabilities
+- Training data may contain malicious code
+- AI tools may be used for malicious purposes
 
-### 3. 社区治理挑战
-- AI 生成的大量 PR 如何有效审查
-- 如何确保 AI 贡献的质量
-- AI 生成代码的版权和许可问题
+### 3. Community Governance Challenges
+- How to effectively review the large volume of AI-generated PRs
+- How to ensure the quality of AI contributions
+- Copyright and licensing issues of AI-generated code
 
-### 4. 伦理问题
-- AI 训练数据的版权问题
-- AI 可能加剧技术不平等
-- AI 可能取代人类开发者的工作
+### 4. Ethical Issues
+- Copyright issues of AI training data
+- AI may exacerbate technological inequality
+- AI may replace human developer jobs
 ```
 
-### 13.3 开源社区的应对策略
+### 13.3 Open Source Community Response Strategies
 
 ```markdown
-## 应对策略
+## Response Strategies
 
-### 1. 建立 AI 代码审查机制
-- 制定 AI 生成代码的审查标准
-- 建立 AI 代码质量检查流程
-- 使用 AI 辅助审查 AI 生成的代码
+### 1. Establish AI Code Review Mechanisms
+- Develop review standards for AI-generated code
+- Establish AI code quality checking processes
+- Use AI to assist in reviewing AI-generated code
 
-### 2. 完善社区治理
-- 更新贡献指南，包含 AI 贡献的规则
-- 建立 AI 贡献的透明度要求
-- 制定 AI 工具使用的社区规范
+### 2. Improve Community Governance
+- Update contribution guidelines to include rules for AI contributions
+- Establish transparency requirements for AI contributions
+- Develop community norms for AI tool usage
 
-### 3. 投资教育和培训
-- 帮助开发者学习有效使用 AI 工具
-- 强调 AI 是辅助工具而非替代品
-- 培养批判性思维，不盲目信任 AI
+### 3. Invest in Education and Training
+- Help developers learn to effectively use AI tools
+- Emphasize that AI is an assistant tool, not a replacement
+- Cultivate critical thinking, don't blindly trust AI
 
-### 4. 技术保障
-- 建立自动化测试和 CI/CD 流程
-- 使用多个 AI 工具交叉验证
-- 保持人类在关键决策中的控制权
+### 4. Technical Safeguards
+- Establish automated testing and CI/CD processes
+- Use multiple AI tools for cross-validation
+- Maintain human control in critical decision-making
 ```
 
 ---
 
-## 14. 中国开发者的 AI 工具链
+## 14. AI Toolchain for Chinese Developers
 
-### 14.1 国内 AI 编程工具
+### 14.1 Domestic AI Programming Tools
 
 ```
-中国开发者可用的 AI 工具：
-├── 代码助手
-│   ├── 通义灵码（阿里云）
-│   ├── CodeGeeX（智谱 AI）
-│   ├── 文心快码（百度）
-│   ├── 豆包 MarsCode（字节跳动）
-│   └── Comate（百度）
-├── AI 模型平台
-│   ├── 百度文心一言 API
-│   ├── 阿里通义千问 API
-│   ├── 智谱 AI API
-│   ├── 月之暗面 Kimi API
+AI Tools Available to Chinese Developers:
+├── Code Assistants
+│   ├── Tongyi Lingma (Alibaba Cloud)
+│   ├── CodeGeeX (Zhipu AI)
+│   ├── Wenxin Kuaima (Baidu)
+│   ├── Doubao MarsCode (ByteDance)
+│   └── Comate (Baidu)
+├── AI Model Platforms
+│   ├── Baidu Wenxin Yiyan API
+│   ├── Alibaba Tongyi Qianwen API
+│   ├── Zhipu AI API
+│   ├── Moonshot Kimi API
 │   └── DeepSeek API
-├── AI 开发平台
-│   ├── 百度飞桨
-│   ├── 阿里 PAI
-│   ├── 腾讯 TI 平台
-│   └── 华为 ModelArts
-└── AI 应用平台
-    ├── 扣子（字节跳动）
-    ├── 通义千问应用
-    └── 文心一言应用
+├── AI Development Platforms
+│   ├── Baidu PaddlePaddle
+│   ├── Alibaba PAI
+│   ├── Tencent TI Platform
+│   └── Huawei ModelArts
+└── AI Application Platforms
+    ├── Coze (ByteDance)
+    ├── Tongyi Qianwen Applications
+    └── Wenxin Yiyan Applications
 ```
 
-### 14.2 通义灵码使用
+### 14.2 Tongyi Lingma Usage
 
 ```python
-# 通义灵码使用示例（VS Code 插件）
+# Tongyi Lingma usage examples (VS Code plugin)
 
-# 1. 代码补全
-# 输入注释，自动生成代码
+# 1. Code completion
+# Input comments, automatically generate code
 def calculate_fibonacci(n):
-    # 计算斐波那契数列的第 n 项
-    # 通义灵码会自动生成完整实现
+    # Calculate the nth Fibonacci number
+    # Tongyi Lingma will automatically generate complete implementation
     
-# 2. 代码解释
-# 选中代码，右键选择 "通义灵码：解释代码"
-# 会生成详细的代码解释
+# 2. Code explanation
+# Select code, right-click to select "Tongyi Lingma: Explain Code"
+# Will generate detailed code explanation
 
-# 3. 代码优化建议
-# 选中代码，右键选择 "通义灵码：优化代码"
-# 会提供优化建议
+# 3. Code optimization suggestions
+# Select code, right-click to select "Tongyi Lingma: Optimize Code"
+# Will provide optimization suggestions
 
-# 4. 单元测试生成
-# 选中函数，右键选择 "通义灵码：生成单元测试"
-# 会自动生成测试用例
+# 4. Unit test generation
+# Select function, right-click to select "Tongyi Lingma: Generate Unit Tests"
+# Will automatically generate test cases
 ```
 
-### 14.3 CodeGeeX 使用
+### 14.3 CodeGeeX Usage
 
 ```python
-# CodeGeeX 使用示例
+# CodeGeeX usage examples
 
-# 1. 多语言代码生成
-# 用中文描述需求，生成 Python 代码
-# "创建一个函数，计算两个日期之间的天数差"
+# 1. Multi-language code generation
+# Describe requirements in Chinese, generate Python code
+# "Create a function to calculate the number of days between two dates"
 
-# 2. 代码翻译
-# 将 Python 代码翻译为 Java
-# 选中代码，选择 "翻译到 Java"
+# 2. Code translation
+# Translate Python code to Java
+# Select code, choose "Translate to Java"
 
-# 3. 代码注释生成
-# 选中代码，选择 "生成注释"
-# 自动生成中英文注释
+# 3. Code comment generation
+# Select code, choose "Generate Comments"
+# Automatically generate Chinese and English comments
 
-# 4. 代码重构
-# 选中代码，选择 "重构建议"
-# 提供重构方案
+# 4. Code refactoring
+# Select code, choose "Refactoring Suggestions"
+# Provide refactoring solutions
 ```
 
-### 14.4 国内 AI API 使用
+### 14.4 Domestic AI API Usage
 
 ```python
-# 使用百度文心一言 API
+# Using Baidu Wenxin Yiyan API
 import requests
 
 def call_wenxin(prompt, api_key, secret_key):
-    # 获取 access_token
+    # Get access_token
     token_url = "https://aip.baidubce.com/oauth/2.0/token"
     token_params = {
         "grant_type": "client_credentials",
@@ -2414,7 +2416,7 @@ def call_wenxin(prompt, api_key, secret_key):
     token_response = requests.post(token_url, params=token_params)
     access_token = token_response.json()["access_token"]
     
-    # 调用文心一言 API
+    # Call Wenxin Yiyan API
     api_url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie-speed-128k?access_token={access_token}"
     
     payload = {
@@ -2429,9 +2431,9 @@ def call_wenxin(prompt, api_key, secret_key):
     response = requests.post(api_url, json=payload)
     return response.json()["result"]
 
-# 使用示例
+# Usage example
 result = call_wenxin(
-    "解释什么是微服务架构",
+    "Explain what microservices architecture is",
     "your_api_key",
     "your_secret_key"
 )
@@ -2439,7 +2441,7 @@ print(result)
 ```
 
 ```python
-# 使用智谱 AI API
+# Using Zhipu AI API
 from zhipuai import ZhipuAI
 
 client = ZhipuAI(api_key="your_api_key")
@@ -2458,121 +2460,121 @@ def call_glm4(prompt):
     )
     return response.choices[0].message.content
 
-# 使用示例
-result = call_glm4("用 Python 实现一个简单的 HTTP 服务器")
+# Usage example
+result = call_glm4("Implement a simple HTTP server in Python")
 print(result)
 ```
 
-### 14.5 中国开发者最佳实践
+### 14.5 Chinese Developer Best Practices
 
 ```markdown
-## 中国开发者 AI 工具使用最佳实践
+## Chinese Developer AI Tool Best Practices
 
-### 1. 工具选择
-- 国际项目：GitHub Copilot + GPT-4o
-- 国内项目：通义灵码 + 通义千问
-- 企业项目：根据合规要求选择国内工具
+### 1. Tool Selection
+- International projects: GitHub Copilot + GPT-4o
+- Domestic projects: Tongyi Lingma + Tongyi Qianwen
+- Enterprise projects: Choose domestic tools based on compliance requirements
 
-### 2. 数据安全
-- 避免将敏感代码上传到第三方 AI 服务
-- 使用本地部署的 AI 模型处理敏感代码
-- 遵守公司的数据安全政策
+### 2. Data Security
+- Avoid uploading sensitive code to third-party AI services
+- Use locally deployed AI models for sensitive code
+- Comply with company data security policies
 
-### 3. 代码质量
-- 不要盲目接受 AI 生成的代码
-- 进行充分的代码审查
-- 运行完整的测试套件
+### 3. Code Quality
+- Do not blindly accept AI-generated code
+- Perform thorough code reviews
+- Run complete test suites
 
-### 4. 持续学习
-- 学习 AI 工具的最佳使用方法
-- 关注 AI 编程的最新发展
-- 培养与 AI 协作的能力
+### 4. Continuous Learning
+- Learn best practices for using AI tools
+- Stay updated on the latest developments in AI programming
+- Develop the ability to collaborate with AI
 ```
 
-### 14.6 AI 编程的未来趋势
+### 14.6 Future Trends in AI Programming
 
 ```markdown
-## AI 编程的未来趋势
+## Future Trends in AI Programming
 
-### 1. 多模态 AI
-- 支持图像、语音、文本等多种输入
-- 从设计图直接生成代码
-- 语音驱动的编程
+### 1. Multimodal AI
+- Support for images, voice, text, and other inputs
+- Generate code directly from design mockups
+- Voice-driven programming
 
-### 2. 自主 Agent
-- AI 能够独立完成复杂的开发任务
-- 自动调试和修复 Bug
-- 自主学习和改进
+### 2. Autonomous Agents
+- AI capable of independently completing complex development tasks
+- Automatic debugging and bug fixing
+- Self-learning and improvement
 
-### 3. 个性化 AI
-- 学习开发者的编码风格
-- 适应项目的特定需求
-- 提供个性化的建议
+### 3. Personalized AI
+- Learn developer coding styles
+- Adapt to specific project needs
+- Provide personalized suggestions
 
-### 4. 协作 AI
-- 多个 AI 协作完成任务
-- AI 与人类开发者深度协作
-- 跨团队的 AI 协作
+### 4. Collaborative AI
+- Multiple AI agents collaborating on tasks
+- Deep collaboration between AI and human developers
+- Cross-team AI collaboration
 
-### 5. 领域专用 AI
-- 针对特定领域的 AI 编程助手
-- 理解领域特定的知识和规范
-- 提供专业的建议和解决方案
+### 5. Domain-Specific AI
+- AI programming assistants for specific domains
+- Understanding domain-specific knowledge and standards
+- Providing professional advice and solutions
 ```
 
 ---
 
-## 总结
+## Summary
 
-### 核心要点回顾
+### Key Takeaways Review
 
-1. **Copilot Workspace** 是 AI 原生的开发环境，将 AI 能力融入整个开发流程
-2. **Agent Mode** 能够自主执行复杂的开发任务
-3. **Copilot Extensions** 允许开发者扩展 Copilot 的能力
-4. **GitHub Models** 提供了便捷的 AI 模型访问
-5. **AI 辅助的 CI/CD** 能够自动化代码审查、测试生成和文档生成
-6. **中国开发者** 有丰富的国产 AI 工具可供选择
-7. **AI 对开源社区** 既有积极影响也有挑战
+1. **Copilot Workspace** is an AI-native development environment that integrates AI capabilities throughout the entire development workflow
+2. **Agent Mode** can autonomously execute complex development tasks
+3. **Copilot Extensions** allow developers to extend Copilot's capabilities
+4. **GitHub Models** provides convenient access to AI models
+5. **AI-assisted CI/CD** can automate code review, test generation, and documentation generation
+6. **Chinese developers** have a rich selection of domestic AI tools to choose from
+7. **AI's impact on open source communities** brings both positive effects and challenges
 
-### 推荐学习路径
+### Recommended Learning Path
 
 ```
-入门阶段：
-├── 1. 使用 GitHub Copilot 基础功能
-├── 2. 了解 Copilot Chat 的使用
-└── 3. 尝试 Copilot for CLI
+Beginner Stage:
+├── 1. Use GitHub Copilot basic features
+├── 2. Learn Copilot Chat usage
+└── 3. Try Copilot for CLI
 
-进阶阶段：
-├── 4. 学习 Copilot Workspace 的使用
-├── 5. 尝试 Agent Mode
-├── 6. 使用 GitHub Models API
-└── 7. 构建简单的 Copilot Extension
+Intermediate Stage:
+├── 4. Learn Copilot Workspace usage
+├── 5. Try Agent Mode
+├── 6. Use GitHub Models API
+└── 7. Build a simple Copilot Extension
 
-高级阶段：
-├── 8. 开发复杂的 Copilot Extension
-├── 9. 构建 AI 辅助的 CI/CD 工作流
-├── 10. 实现自定义的 AI 代码审查系统
-└── 11. 探索 GitHub Next 的实验性功能
+Advanced Stage:
+├── 8. Develop complex Copilot Extensions
+├── 9. Build AI-assisted CI/CD workflows
+├── 10. Implement custom AI code review systems
+└── 11. Explore GitHub Next experimental features
 ```
 
-### 推荐资源
+### Recommended Resources
 
-- [GitHub Copilot 官方文档](https://docs.github.com/en/copilot)
-- [GitHub Next 研究博客](https://githubnext.com/)
-- [GitHub Models 文档](https://docs.github.com/en/github-models)
-- [Copilot Extensions 开发指南](https://docs.github.com/en/copilot/building-copilot-extensions)
+- [GitHub Copilot Official Documentation](https://docs.github.com/en/copilot)
+- [GitHub Next Research Blog](https://githubnext.com/)
+- [GitHub Models Documentation](https://docs.github.com/en/github-models)
+- [Copilot Extensions Development Guide](https://docs.github.com/en/copilot/building-copilot-extensions)
 
-### 下一步学习
+### Next Steps
 
-完成本教程后，建议继续学习：
-- **X13-real-world-project-case-studies.md**：大型开源项目管理案例分析
-- **W7-copilot-advanced.md**：GitHub Copilot 高级使用技巧
-- **W8-copilot-extensions-dev.md**：Copilot Extensions 开发详解
+After completing this tutorial, it is recommended to continue learning:
+- **X13-real-world-project-case-studies.md**: Large-scale open source project management case studies
+- **W7-copilot-advanced.md**: GitHub Copilot advanced usage tips
+- **W8-copilot-extensions-dev.md**: Copilot Extensions development guide
 
 ---
 
-> **文档信息**
-> - 创建日期：2024 年
-> - 最后更新：2024 年
-> - 版本：v1.0
-> - 作者：GitHub 新手指南编写组
+> **Document Information**
+> - Created: 2024
+> - Last Updated: 2024
+> - Version: v1.0
+> - Author: GitHub Beginners Guide Writing Team

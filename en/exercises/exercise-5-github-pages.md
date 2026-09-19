@@ -1,12 +1,12 @@
-# 练习 5：使用 GitHub Pages 部署网站
+# Exercise 5: Deploying Websites with GitHub Pages
 
-## 目标
+## Goal
 
-学习使用 GitHub Pages 部署静态网站。
+Learn to deploy static websites using GitHub Pages.
 
-## 步骤
+## Steps
 
-### 1. 创建练习仓库
+### 1. Create Practice Repository
 
 ```bash
 mkdir github-pages-practice
@@ -14,9 +14,9 @@ cd github-pages-practice
 git init
 ```
 
-### 2. 创建网站文件
+### 2. Create Website Files
 
-创建 `index.html`：
+Create `index.html`:
 
 ```html
 <!DOCTYPE html>
@@ -53,8 +53,8 @@ git init
 <body>
     <div class="container">
         <h1>Hello GitHub Pages!</h1>
-        <p>这是我的第一个 GitHub Pages 网站。</p>
-        <p>部署时间：2024年</p>
+        <p>This is my first GitHub Pages site.</p>
+        <p>Deployed in: 2024</p>
         <div class="footer">
             <p>Built with ❤️ using GitHub Pages</p>
         </div>
@@ -63,55 +63,55 @@ git init
 </html>
 ```
 
-### 3. 提交并推送
+### 3. Commit and Push
 
 ```bash
 git add index.html
 git commit -m "Initial commit"
 
-git remote add origin git@github.com:你的用户名/github-pages-practice.git
+git remote add origin git@github.com:your-username/github-pages-practice.git
 git push -u origin main
 ```
 
-### 4. 启用 GitHub Pages
+### 4. Enable GitHub Pages
 
-1. 进入仓库 **Settings**
-2. 左侧菜单点击 **Pages**
-3. Source 选择 **main** 分支
-4. 点击 **Save**
+1. Go to the repository **Settings**
+2. Click **Pages** in the left sidebar
+3. Select **main** branch under Source
+4. Click **Save**
 
-### 5. 访问网站
+### 5. Access Your Site
 
-等待几分钟后，访问：
+Wait a few minutes, then visit:
 ```
-https://你的用户名.github.io/github-pages-practice/
+https://your-username.github.io/github-pages-practice/
 ```
 
-## 进阶：使用自定义域名
+## Advanced: Using a Custom Domain
 
-### 1. 添加 CNAME 文件
+### 1. Add CNAME File
 
 ```bash
 echo "yourdomain.com" > CNAME
 git add CNAME
-git commit -m "添加自定义域名"
+git commit -m "Add custom domain"
 git push
 ```
 
-### 2. 配置 DNS
+### 2. Configure DNS
 
-在你的域名服务商添加：
-- 类型：CNAME
-- 主机记录：@ 或 www
-- 值：`你的用户名.github.io`
+Add the following at your domain registrar:
+- Type: CNAME
+- Host: @ or www
+- Value: `your-username.github.io`
 
-### 3. 启用 HTTPS
+### 3. Enable HTTPS
 
 **Settings** → **Pages** → ✅ **Enforce HTTPS**
 
-## 进阶：使用 Jekyll
+## Advanced: Using Jekyll
 
-### 1. 创建 `_config.yml`
+### 1. Create `_config.yml`
 
 ```yaml
 title: My Site
@@ -119,9 +119,9 @@ description: A website powered by Jekyll
 theme: minima
 ```
 
-### 2. 创建文章
+### 2. Create a Post
 
-创建 `_posts/2024-01-01-hello-world.md`：
+Create `_posts/2024-01-01-hello-world.md`:
 
 ```markdown
 ---
@@ -131,22 +131,22 @@ date: 2024-01-01
 categories: blog
 ---
 
-这是我的第一篇博客文章。
+This is my first blog post.
 ```
 
-### 3. 提交并推送
+### 3. Commit and Push
 
 ```bash
 git add .
-git commit -m "添加 Jekyll 配置"
+git commit -m "Add Jekyll configuration"
 git push
 ```
 
-## 进阶：使用 GitHub Actions 部署
+## Advanced: Deploying with GitHub Actions
 
-### 1. 创建工作流
+### 1. Create a Workflow
 
-创建 `.github/workflows/pages.yml`：
+Create `.github/workflows/pages.yml`:
 
 ```yaml
 name: Deploy to Pages
@@ -185,17 +185,17 @@ jobs:
       uses: actions/deploy-pages@v4
 ```
 
-### 2. 启用 GitHub Pages
+### 2. Enable GitHub Pages
 
-**Settings** → **Pages** → Source 选择 **GitHub Actions**
+**Settings** → **Pages** → Select **GitHub Actions** as Source
 
-## 知识点
+## Key Takeaways
 
-- GitHub Pages 基本使用
-- 自定义域名配置
-- Jekyll 静态站点生成器
-- GitHub Actions 自动部署
+- Basic GitHub Pages usage
+- Custom domain configuration
+- Jekyll static site generator
+- GitHub Actions automated deployment
 
-## 下一步
+## Next Steps
 
-[练习 6：参与开源项目 →](exercise-6-open-source.md)
+[Exercise 6: Contributing to Open Source Projects →](exercise-6-open-source.md)

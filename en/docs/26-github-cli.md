@@ -76,7 +76,7 @@ curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo 
 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
-# If above address无法访问, can use proxy or mirror
+# If above address is inaccessible, can use proxy or mirror
 # Method 1: Use ghproxy proxy
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://ghproxy.com/https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
@@ -1653,7 +1653,7 @@ curl -H "Authorization: token $GITHUB_TOKEN" \
   https://api.github.com/repos/owner/repo
 
 # 2. Use GitLab CLI (glab)
-# GitLab is relatively stable在国内
+# GitLab is relatively stable domestically
 brew install glab
 
 # 3. Use Gitee API
@@ -1696,7 +1696,7 @@ gh api repos/owner/repo --cache 1h
 
 ## Summary
 
-This chapter comprehensively介绍了 GitHub CLI (gh) usage methods:
+This chapter comprehensively introduces GitHub CLI (gh) usage methods:
 
 1. **Installation Configuration**: Official and domestic multiple installation solutions
 2. **Basic Commands**: Authentication, repository, browser operations
@@ -1706,7 +1706,7 @@ This chapter comprehensively介绍了 GitHub CLI (gh) usage methods:
 6. **Actions Management**: Workflow and run monitoring
 7. **Codespaces Management**: Cloud development environment operations
 8. **API Advanced Usage**: REST and GraphQL calls
-9. **Custom Aliases**: Efficiency快捷 commands
+9. **Custom Aliases**: Efficiency-boosting commands
 10. **Extension System**: Install and create extensions
 11. **Git Coordination**: Collaboration with Git commands
 12. **Practical Tips**: Batch operations, automation scripts

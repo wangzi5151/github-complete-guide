@@ -1,205 +1,205 @@
-# Git Submodules 完全指南
+# Git Submodules Complete Guide
 
-## 1. Submodules 概念与使用场景
+## 1. Submodules Concepts and Use Cases
 
-### 1.1 什么是 Git Submodule
+### 1.1 What is a Git Submodule
 
-Git Submodule（子模块）是 Git 提供的一种仓库嵌套机制，它允许你将一个 Git 仓库作为另一个 Git 仓库的子目录进行引用和管理。父仓库并不直接存储子模块仓库的文件内容，而是存储一个指向子模块特定提交的引用（commit SHA）。这意味着父仓库和子模块仓库各自拥有独立的 `.git` 目录、独立的提交历史和独立的分支管理。
+Git Submodule (submodule) is a repository nesting mechanism provided by Git. It allows you to reference and manage a Git repository as a subdirectory of another Git repository. The parent repository does not directly store the file contents of the submodule repository; instead, it stores a reference (commit SHA) pointing to a specific commit of the submodule. This means the parent repository and the submodule repository each have their own independent `.git` directories, independent commit histories, and independent branch management.
 
-理解 Submodule 的核心概念非常重要：**父仓库记录的是子模块在某个特定时刻的状态（commit hash），而不是子模块的内容本身**。当子模块有新的提交时，父仓库需要显式地更新这个引用，才能指向子模块的最新状态。
+Understanding the core concepts of Submodule is very important: **what the parent repository records is the state of the submodule at a specific moment (commit hash), not the content of the submodule itself**. When the submodule has new commits, the parent repository needs to explicitly update this reference to point to the latest state of the submodule.
 
-### 1.2 典型使用场景
+### 1.2 Typical Use Cases
 
-**场景一：共享库/组件复用**
+**Scenario 1: Shared Library/Component Reuse**
 
-假设你的公司有一个内部 UI 组件库 `ui-components`，多个项目（`web-app`、`admin-panel`、`mobile-web`）都需要使用这个组件库。通过 Submodule，每个项目都可以在自己的 `libs/ui-components` 目录下引用同一个组件库，同时保持各自的版本锁定。
+Suppose your company has an internal UI component library `ui-components` that multiple projects (`web-app`, `admin-panel`, `mobile-web`) all need to use. Through Submodule, each project can reference the same component library in their own `libs/ui-components` directory while maintaining their own version lock.
 
-**场景二：第三方依赖的源码管理**
+**Scenario 2: Source Code Management of Third-Party Dependencies**
 
-某些情况下，你可能需要直接使用某个开源项目的源码，而不是通过包管理器安装。例如，你需要对某个库进行定制化修改，但又希望保持与上游同步的能力。这时可以将该开源项目作为 Submodule 引入，并在自己的 fork 上进行修改。
+In some cases, you may need to directly use the source code of an open-source project rather than installing it through a package manager. For example, you need to make customized modifications to a library while maintaining the ability to sync with upstream. In this case, you can introduce the open-source project as a Submodule and make modifications on your own fork.
 
-**场景三：大型项目的模块化管理**
+**Scenario 3: Modular Management of Large Projects**
 
-对于超大型项目（如操作系统、游戏引擎），不同模块可能由不同的团队维护，拥有独立的发布周期和版本管理。通过 Submodule，可以将这些模块拆分为独立的仓库，同时在主项目中进行统一引用。
+For very large projects (such as operating systems, game engines), different modules may be maintained by different teams, with independent release cycles and version management. Through Submodule, these modules can be split into independent repositories while maintaining unified referencing in the main project.
 
-**场景四：文档与代码分离**
+**Scenario 4: Separating Documentation from Code**
 
-有些项目将文档放在独立的仓库中（如 `project-docs`），通过 Submodule 引入到主项目的 `docs/` 目录，实现文档的独立版本控制和发布。
+Some projects keep documentation in independent repositories (such as `project-docs`), introducing them through Submodule into the main project's `docs/` directory, achieving independent version control and publishing of documentation.
 
-### 1.3 Submodule 的优势与劣势
+### 1.3 Advantages and Disadvantages of Submodule
 
-| 维度 | 优势 | 劣势 |
+| Dimension | Advantages | Disadvantages |
 |------|------|------|
-| **版本控制** | 精确锁定子模块版本 | 更新子模块需要额外步骤 |
-| **仓库独立性** | 子模块有独立的提交历史 | 克隆和初始化流程复杂 |
-| **代码复用** | 多个项目共享同一代码库 | 无法直接在父仓库查看子模块的 diff |
-| **团队协作** | 各团队独立管理自己的仓库 | 新成员学习成本较高 |
-| **离线工作** | 子模块内容已缓存 | 首次克隆需要网络访问 |
+| **Version Control** | Precise submodule version locking | Updating submodules requires extra steps |
+| **Repository Independence** | Submodules have independent commit histories | Clone and initialization process is complex |
+| **Code Reuse** | Multiple projects share the same codebase | Cannot directly view submodule diffs in the parent repository |
+| **Team Collaboration** | Each team independently manages their own repository | Higher learning cost for new members |
+| **Offline Work** | Submodule content is cached | First clone requires network access |
 
-### 1.4 Submodule 与相关概念的区别
+### 1.4 Differences Between Submodule and Related Concepts
 
-| 概念 | 说明 | 存储方式 | 更新方式 |
+| Concept | Description | Storage Method | Update Method |
 |------|------|---------|---------|
-| **Submodule** | 引用外部仓库的特定提交 | 存储 commit hash 引用 | 手动更新引用 |
-| **Subtree** | 将外部仓库合并到子目录 | 直接存储文件内容 | 合并外部仓库的更新 |
-| **Package Manager** | 通过包管理器安装依赖 | 下载打包后的文件 | 更新版本号 |
-| **Symlink** | 符号链接到外部目录 | 存储路径信息 | 自动跟随链接 |
+| **Submodule** | References a specific commit of an external repository | Stores commit hash reference | Manually update reference |
+| **Subtree** | Merges an external repository into a subdirectory | Directly stores file contents | Merge updates from external repository |
+| **Package Manager** | Installs dependencies through a package manager | Downloads packaged files | Update version numbers |
+| **Symlink** | Symbolic link to an external directory | Stores path information | Automatically follows the link |
 
 ---
 
-## 2. 添加、更新、删除 Submodule
+## 2. Adding, Updating, and Deleting Submodules
 
-### 2.1 添加 Submodule
+### 2.1 Adding a Submodule
 
-添加 Submodule 是将外部仓库引入父仓库的过程：
+Adding a Submodule is the process of introducing an external repository into the parent repository:
 
 ```bash
-# 基本语法
-git submodule add <仓库URL> <本地路径>
+# Basic syntax
+git submodule add <repo URL> <local path>
 
-# 示例：添加一个 UI 组件库
+# Example: adding a UI component library
 git submodule add https://github.com/company/ui-components.git libs/ui-components
 
-# 添加指定分支的 Submodule
+# Adding a Submodule for a specific branch
 git submodule add -b main https://github.com/company/ui-components.git libs/ui-components
 
-# 添加指定分支并自定义名称
+# Adding a specific branch with a custom name
 git submodule add -b develop --name ui-lib https://github.com/company/ui-components.git libs/ui-components
 ```
 
-执行 `git submodule add` 命令后，Git 会做以下几件事：
+After executing the `git submodule add` command, Git will do the following:
 
-1. 将子模块仓库克隆到指定的本地路径
-2. 在 `.gitmodules` 文件中添加子模块的配置信息
-3. 在 `.git/config` 文件中添加子模块的配置
-4. 在暂存区中添加子模块的引用（commit hash）
+1. Clone the submodule repository to the specified local path
+2. Add the submodule's configuration information to the `.gitmodules` file
+3. Add the submodule's configuration to the `.git/config` file
+4. Add the submodule's reference (commit hash) to the staging area
 
 ```bash
-# 添加完成后，查看状态
+# After adding, check the status
 git status
 
-# 输出示例：
+# Example output:
 # On branch main
 # Changes to be committed:
 #   new file:   .gitmodules
 #   new file:   libs/ui-components
 ```
 
-### 2.2 更新 Submodule
+### 2.2 Updating a Submodule
 
-更新 Submodule 包含两个层面的含义：一是更新子模块的内容到最新版本，二是更新父仓库对子模块的引用。
+Updating a Submodule has two levels of meaning: one is updating the submodule's content to the latest version, and the other is updating the parent repository's reference to the submodule.
 
 ```bash
-# 方式一：更新子模块到远程最新提交
+# Method 1: Update submodule to the latest remote commit
 git submodule update --remote
 
-# 方式二：更新并合并（推荐）
+# Method 2: Update and merge (recommended)
 git submodule update --remote --merge
 
-# 方式三：更新并变基
+# Method 3: Update and rebase
 git submodule update --remote --rebase
 
-# 方式四：只更新特定子模块
+# Method 4: Update only a specific submodule
 git submodule update --remote libs/ui-components
 
-# 方式五：初始化并更新（适用于新克隆的仓库）
+# Method 5: Initialize and update (for newly cloned repositories)
 git submodule update --init
 
-# 方式六：递归初始化并更新（子模块中还有子模块）
+# Method 6: Recursively initialize and update (when submodules contain submodules)
 git submodule update --init --recursive
 ```
 
-更新子模块后，需要在父仓库中提交这个变更：
+After updating the submodule, you need to commit this change in the parent repository:
 
 ```bash
-# 查看哪些子模块有更新
+# Check which submodules have updates
 git diff --submodule
 
-# 添加子模块引用的变更
+# Add the submodule reference change
 git add libs/ui-components
 
-# 提交变更
+# Commit the change
 git commit -m "chore: update ui-components to latest version"
 
-# 推送到远程
+# Push to remote
 git push
 ```
 
-### 2.3 删除 Submodule
+### 2.3 Deleting a Submodule
 
-删除 Submodule 比添加复杂得多，需要多个步骤：
+Deleting a Submodule is much more complex than adding one, requiring multiple steps:
 
 ```bash
-# 步骤 1：从 .gitmodules 中删除配置
+# Step 1: Remove configuration from .gitmodules
 git submodule deinit -f path/to/submodule
 
-# 步骤 2：从暂存区和 .git/config 中删除
+# Step 2: Remove from staging area and .git/config
 git rm -f path/to/submodule
 
-# 步骤 3：删除 .git/modules 中的缓存
+# Step 3: Delete the cache in .git/modules
 rm -rf .git/modules/path/to/submodule
 
-# 步骤 4：提交变更
+# Step 4: Commit the change
 git add .gitmodules
 git commit -m "chore: remove submodule path/to/submodule"
 ```
 
-> **注意：** 在 Git 2.35+ 版本中，可以使用更简洁的方式：
+> **Note:** In Git 2.35+, you can use a simpler approach:
 > ```bash
 > git rm -f path/to/submodule
-> # Git 会自动处理 .gitmodules 和 .git/config 的更新
+> # Git will automatically handle updating .gitmodules and .git/config
 > ```
 
-### 2.4 批量操作
+### 2.4 Batch Operations
 
 ```bash
-# 更新所有 Submodules
+# Update all Submodules
 git submodule update --remote --merge
 
-# 初始化所有 Submodules
+# Initialize all Submodules
 git submodule init
 
-# 查看所有 Submodules 状态
+# View all Submodules status
 git submodule status
 
-# 查看所有 Submodules 的简要状态
+# View summary of all Submodules
 git submodule summary
 
-# 同步 Submodule 的 URL（当 .gitmodules 中的 URL 变更后）
+# Sync Submodule URLs (when URLs in .gitmodules change)
 git submodule sync
 
-# 递归同步所有 Submodules
+# Recursively sync all Submodules
 git submodule sync --recursive
 ```
 
 ---
 
-## 3. Submodule 工作原理
+## 3. How Submodules Work
 
-### 3.1 Git 如何存储 Submodule
+### 3.1 How Git Stores Submodules
 
-当一个仓库被添加为 Submodule 时，Git 并不会将子模块的文件内容直接存储在父仓库的对象数据库中。相反，Git 存储的是一个特殊的**gitlink**对象，它本质上是一个指向子模块特定提交的引用。
+When a repository is added as a Submodule, Git does not directly store the submodule's file contents in the parent repository's object database. Instead, Git stores a special **gitlink** object, which is essentially a reference to a specific commit of the submodule.
 
 ```bash
-# 查看父仓库中存储的子模块引用
+# View the submodule reference stored in the parent repository
 git ls-tree HEAD libs/ui-components
 
-# 输出示例：
+# Example output:
 # 160000 commit 3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b    libs/ui-components
 ```
 
-这里的 `160000` 是 Git 的特殊文件模式，表示这是一个子模块引用。`3a4b5c6d...` 是子模块仓库中某个提交的 SHA-1 哈希值。
+The `160000` here is Git's special file mode indicating this is a submodule reference. `3a4b5c6d...` is the SHA-1 hash of a commit in the submodule repository.
 
-### 3.2 .git 目录结构
+### 3.2 .git Directory Structure
 
-Submodule 的 `.git` 目录位置取决于 Git 版本和配置：
+The location of a Submodule's `.git` directory depends on the Git version and configuration:
 
-**Git 2.12+（默认行为）：**
+**Git 2.12+ (default behavior):**
 
 ```
 parent-repo/
 ├── .git/
-│   ├── modules/              # 子模块的 Git 数据存储在这里
+│   ├── modules/              # Submodule Git data is stored here
 │   │   └── libs/
 │   │       └── ui-components/
 │   │           ├── HEAD
@@ -210,12 +210,12 @@ parent-repo/
 │   └── ...
 ├── .gitmodules
 └── libs/
-    └── ui-components/        # 子模块的工作目录
-        ├── .git              # 这是一个文件，指向 .git/modules/libs/ui-components
+    └── ui-components/        # Submodule working directory
+        ├── .git              # This is a file pointing to .git/modules/libs/ui-components
         └── ...
 ```
 
-**旧版本 Git 或使用 --separate-git-dir：**
+**Older Git versions or using --separate-git-dir:**
 
 ```
 parent-repo/
@@ -223,65 +223,65 @@ parent-repo/
 ├── .gitmodules
 └── libs/
     └── ui-components/
-        ├── .git/             # 独立的 .git 目录
+        ├── .git/             # Independent .git directory
         │   ├── HEAD
 │   │   ├── config
 │   │   └── ...
         └── ...
 ```
 
-### 3.3 子模块状态管理
+### 3.3 Submodule Status Management
 
-子模块可以处于以下几种状态：
+A submodule can be in the following states:
 
-| 状态 | 说明 | 命令 |
+| State | Description | Command |
 |------|------|------|
-| **未初始化** | 子模块目录存在但内容为空 | `git submodule init` |
-| **已初始化** | 子模块已克隆并检出到指定提交 | `git submodule update` |
-| **修改中** | 子模块有未提交的变更 | 需要进入子模块提交 |
-| **指向新提交** | 子模块指向的提交与父仓库记录的不同 | 需要更新父仓库引用 |
+| **Uninitialized** | Submodule directory exists but is empty | `git submodule init` |
+| **Initialized** | Submodule is cloned and checked out to the specified commit | `git submodule update` |
+| **Modified** | Submodule has uncommitted changes | Need to enter the submodule to commit |
+| **Points to new commit** | Submodule's commit differs from the parent repository's record | Need to update parent repository reference |
 
 ```bash
-# 查看子模块状态
+# View submodule status
 git submodule status
 
-# 输出格式：
-# +abc1234 path/to/submodule (heads/main-0-gabc1234)    # 前缀 + 表示有新提交
-#  abc1234 path/to/submodule (heads/main-0-gabc1234)    # 无前缀表示与记录一致
-# -abc1234 path/to/submodule (heads/main-0-gabc1234)    # 前缀 - 表示未初始化
-# +abc1234 path/to/submodule (heads/main-0-gabc1234-dirty)  # dirty 表示有未提交变更
+# Output format:
+# +abc1234 path/to/submodule (heads/main-0-gabc1234)    # + prefix indicates new commits
+#  abc1234 path/to/submodule (heads/main-0-gabc1234)    # No prefix indicates matches record
+# -abc1234 path/to/submodule (heads/main-0-gabc1234)    # - prefix indicates uninitialized
+# +abc1234 path/to/submodule (heads/main-0-gabc1234-dirty)  # dirty indicates uncommitted changes
 ```
 
-### 3.4 提交流程解析
+### 3.4 Commit Workflow Analysis
 
-当子模块有变更时，需要在两个层面进行提交：
+When a submodule has changes, commits need to be made at two levels:
 
 ```bash
-# 第一步：在子模块中提交变更
+# Step 1: Commit changes in the submodule
 cd libs/ui-components
 git add .
 git commit -m "fix: resolve button alignment issue"
 git push origin main
 
-# 第二步：返回父仓库，更新子模块引用
+# Step 2: Return to the parent repository, update the submodule reference
 cd ../..
 git add libs/ui-components
 git commit -m "chore: update ui-components to include button fix"
 git push origin main
 ```
 
-这个两步提交的过程是理解 Submodule 的关键。如果你只在子模块中提交了变更但没有更新父仓库的引用，其他协作者在拉取父仓库时，他们的子模块仍然指向旧的提交。
+This two-step commit process is key to understanding Submodule. If you only commit changes in the submodule without updating the parent repository's reference, other collaborators pulling the parent repository will still have their submodules pointing to the old commit.
 
 ---
 
-## 4. .gitmodules 文件详解
+## 4. .gitmodules File Details
 
-### 4.1 文件结构
+### 4.1 File Structure
 
-`.gitmodules` 是 Submodule 的核心配置文件，位于父仓库的根目录。它是一个 INI 格式的文件，记录了所有子模块的基本信息。
+`.gitmodules` is the core configuration file for Submodule, located in the root directory of the parent repository. It is an INI format file that records basic information about all submodules.
 
 ```ini
-# .gitmodules 文件示例
+# .gitmodules file example
 
 [submodule "libs/ui-components"]
     path = libs/ui-components
@@ -299,30 +299,30 @@ git push origin main
     branch = v2.0-stable
 ```
 
-### 4.2 配置字段说明
+### 4.2 Configuration Fields
 
-| 字段 | 必填 | 说明 |
+| Field | Required | Description |
 |------|------|------|
-| `path` | 是 | 子模块在父仓库中的相对路径 |
-| `url` | 是 | 子模块仓库的 URL（支持 HTTPS 和 SSH） |
-| `branch` | 否 | 要跟踪的分支（默认为远程仓库的默认分支） |
-| `fetchRecurseSubmodules` | 否 | 是否递归获取子模块（默认 on-demand） |
-| `ignore` | 否 | 忽略策略：none、untracked、dirty、all |
-| `update` | 否 | 更新策略：checkout、rebase、merge、none |
+| `path` | Yes | Relative path of the submodule in the parent repository |
+| `url` | Yes | URL of the submodule repository (supports HTTPS and SSH) |
+| `branch` | No | Branch to track (defaults to the remote repository's default branch) |
+| `fetchRecurseSubmodules` | No | Whether to recursively fetch submodules (default on-demand) |
+| `ignore` | No | Ignore policy: none, untracked, dirty, all |
+| `update` | No | Update strategy: checkout, rebase, merge, none |
 
-### 4.3 更新策略详解
+### 4.3 Update Strategy Details
 
-`update` 字段决定了 `git submodule update` 命令的行为：
+The `update` field determines the behavior of the `git submodule update` command:
 
-| 策略 | 说明 | 适用场景 |
+| Strategy | Description | Use Case |
 |------|------|----------|
-| `checkout` | 默认策略，直接检出到指定提交 | 大多数场景 |
-| `rebase` | 将本地变更变基到远程新提交之上 | 在子模块中进行本地开发 |
-| `merge` | 将远程新提交合并到本地 | 在子模块中进行本地开发 |
-| `none` | 不自动更新 | 手动管理子模块更新 |
+| `checkout` | Default strategy, directly checks out to the specified commit | Most scenarios |
+| `rebase` | Rebases local changes on top of remote new commits | Local development within submodule |
+| `merge` | Merges remote new commits into local | Local development within submodule |
+| `none` | No automatic updates | Manual submodule update management |
 
 ```ini
-# 配置不同的更新策略
+# Configure different update strategies
 [submodule "libs/core"]
     path = libs/core
     url = https://github.com/company/core.git
@@ -334,112 +334,112 @@ git push origin main
     update = none
 ```
 
-### 4.4 忽略策略详解
+### 4.4 Ignore Strategy Details
 
-`ignore` 字段控制子模块的变更如何在父仓库的 `git status` 中显示：
+The `ignore` field controls how submodule changes are displayed in the parent repository's `git status`:
 
-| 策略 | 说明 |
+| Strategy | Description |
 |------|------|
-| `none` | 默认，显示所有变更 |
-| `untracked` | 不显示子模块中未跟踪的文件 |
-| `dirty` | 不显示子模块中的任何本地修改 |
-| `all` | 完全忽略子模块的变更 |
+| `none` | Default, shows all changes |
+| `untracked` | Does not show untracked files in the submodule |
+| `dirty` | Does not show any local modifications in the submodule |
+| `all` | Completely ignores submodule changes |
 
 ```ini
-# 对于不经常修改的第三方库，可以忽略其本地变更
+# For third-party libraries that are rarely modified, ignore their local changes
 [submodule "vendor/stable-lib"]
     path = vendor/stable-lib
     url = https://github.com/vendor/stable-lib.git
     ignore = dirty
 ```
 
-### 4.5 .gitmodules 与 .git/config 的关系
+### 4.5 Relationship Between .gitmodules and .git/config
 
-当执行 `git submodule init` 时，Git 会将 `.gitmodules` 中的配置复制到 `.git/config` 中。你可以在 `.git/config` 中覆盖特定于本地的配置：
+When you execute `git submodule init`, Git copies the configuration from `.gitmodules` to `.git/config`. You can override local-specific configuration in `.git/config`:
 
 ```ini
-# .git/config 中的子模块配置
+# Submodule configuration in .git/config
 [submodule "libs/ui-components"]
-    url = https://github.com/your-fork/ui-components.git  # 使用你自己的 fork
+    url = https://github.com/your-fork/ui-components.git  # Use your own fork
     active = true
 ```
 
 ---
 
-## 5. Submodule 克隆与初始化
+## 5. Submodule Cloning and Initialization
 
-### 5.1 克隆包含 Submodule 的仓库
+### 5.1 Cloning a Repository with Submodules
 
-当你克隆一个包含 Submodule 的仓库时，Submodule 目录默认是空的。你需要额外的步骤来初始化和填充 Submodule。
+When you clone a repository containing Submodules, the Submodule directories are empty by default. You need additional steps to initialize and populate the Submodule.
 
-**方法一：克隆时自动初始化（推荐）**
+**Method 1: Auto-initialize on clone (recommended)**
 
 ```bash
 git clone --recurse-submodules https://github.com/company/main-project.git
 ```
 
-**方法二：克隆后手动初始化**
+**Method 2: Manually initialize after cloning**
 
 ```bash
-# 克隆主仓库
+# Clone the main repository
 git clone https://github.com/company/main-project.git
 cd main-project
 
-# 初始化并更新所有子模块
+# Initialize and update all submodules
 git submodule init
 git submodule update
 
-# 或者使用一条命令
+# Or use a single command
 git submodule update --init
 
-# 如果子模块中还有嵌套的子模块
+# If submodules contain nested submodules
 git submodule update --init --recursive
 ```
 
-**方法三：使用 git clone 的 --remote-submodules 选项**
+**Method 3: Using git clone's --remote-submodules option**
 
 ```bash
-# 克隆时将子模块更新到远程分支的最新提交（而非父仓库记录的提交）
+# Clone and update submodules to the latest commit on the remote branch (rather than the commit recorded by the parent repository)
 git clone --recurse-submodules --remote-submodules https://github.com/company/main-project.git
 ```
 
-### 5.2 配置默认行为
+### 5.2 Configuring Default Behavior
 
-可以通过 Git 配置让 `git clone` 默认递归初始化子模块：
+You can configure Git to automatically recursively initialize submodules for `git clone`:
 
 ```bash
-# 全局配置
+# Global configuration
 git config --global submodule.recurse true
 
-# 配置后，所有 git clone 命令都会自动初始化子模块
+# After configuration, all git clone commands will automatically initialize submodules
 git clone https://github.com/company/main-project.git
-# 子模块会自动初始化
+# Submodules will be automatically initialized
 ```
 
-### 5.3 子模块 URL 变更处理
+### 5.3 Handling Submodule URL Changes
 
-如果 `.gitmodules` 中的子模块 URL 发生变更，需要同步更新：
+If the submodule URL in `.gitmodules` has changed, you need to sync the updates:
 
 ```bash
-# 同步所有子模块的 URL
+# Sync all submodule URLs
 git submodule sync
 
-# 递归同步（包括嵌套子模块）
+# Recursively sync (including nested submodules)
 git submodule sync --recursive
 
-# 同步后重新初始化
+# Reinitialize after syncing
 git submodule update --init
 ```
 
-### 5.4 浅克隆子模块
+### 5.4 Shallow Cloning Submodules
 
-对于大型子模块，可以使用浅克隆来减少下载量：
+For large submodules, you can use shallow cloning to reduce download size:
 
 ```bash
-# 浅克隆子模块（只获取最近的提交）
+# Shallow clone submodules (only fetch recent commits)
 git submodule update --init --depth 1
 
-# 或者在 .gitmodules 中配置
+# Or configure in .gitmodules
 [submodule "large-repo"]
     path = large-repo
     url = https://github.com/org/large-repo.git
@@ -448,11 +448,11 @@ git submodule update --init --depth 1
 
 ---
 
-## 6. Submodule 分支管理
+## 6. Submodule Branch Management
 
-### 6.1 跟踪特定分支
+### 6.1 Tracking a Specific Branch
 
-默认情况下，Submodule 会跟踪父仓库记录的特定提交。如果你想让 Submodule 跟踪某个分支的最新提交，需要在 `.gitmodules` 中配置 `branch` 字段：
+By default, Submodule tracks a specific commit recorded by the parent repository. If you want the Submodule to track the latest commit of a specific branch, you need to configure the `branch` field in `.gitmodules`:
 
 ```ini
 [submodule "libs/ui-components"]
@@ -461,73 +461,73 @@ git submodule update --init --depth 1
     branch = main
 ```
 
-配置后，使用以下命令更新子模块：
+After configuration, use the following command to update the submodule:
 
 ```bash
-# 更新到跟踪分支的最新提交
+# Update to the latest commit of the tracked branch
 git submodule update --remote
 
-# 等同于
+# Equivalent to
 git submodule update --remote --merge
 ```
 
-### 6.2 临时切换子模块分支
+### 6.2 Temporarily Switching Submodule Branches
 
-有时你需要在子模块中切换到不同的分支进行开发：
+Sometimes you need to switch to a different branch in the submodule for development:
 
 ```bash
-# 进入子模块目录
+# Enter the submodule directory
 cd libs/ui-components
 
-# 切换到功能分支
+# Switch to a feature branch
 git checkout feature/new-button
 
-# 进行开发
+# Make development changes
 # ...
 
-# 提交变更
+# Commit changes
 git add .
 git commit -m "feat: add new button component"
 git push origin feature/new-button
 
-# 切换回主分支
+# Switch back to the main branch
 git checkout main
 
-# 返回父仓库
+# Return to the parent repository
 cd ../..
 
-# 此时父仓库会显示子模块有变更
+# The parent repository will now show the submodule has changes
 git diff --submodule
 ```
 
-### 6.3 子模块的分支策略
+### 6.3 Submodule Branch Strategy
 
-在团队协作中，建议为子模块定义明确的分支策略：
+In team collaboration, it is recommended to define a clear branch strategy for submodules:
 
-**策略一：跟踪稳定分支**
+**Strategy 1: Track the stable branch**
 
 ```ini
-# 生产环境使用稳定分支
+# Use the stable branch for production
 [submodule "libs/core"]
     path = libs/core
     url = https://github.com/company/core.git
     branch = release/stable
 ```
 
-**策略二：跟踪开发分支**
+**Strategy 2: Track the development branch**
 
 ```ini
-# 开发环境使用开发分支
+# Use the development branch for development
 [submodule "libs/core"]
     path = libs/core
     url = https://github.com/company/core.git
     branch = develop
 ```
 
-**策略三：使用标签**
+**Strategy 3: Using tags**
 
 ```bash
-# 在子模块中检出特定标签
+# Check out a specific tag in the submodule
 cd libs/core
 git checkout v2.1.0
 cd ../..
@@ -535,423 +535,423 @@ git add libs/core
 git commit -m "chore: pin core to v2.1.0"
 ```
 
-### 6.4 分支与 Submodule 的最佳实践
+### 6.4 Branch and Submodule Best Practices
 
-1. **主分支保持稳定：** 子模块的主分支应该是稳定的，避免频繁的破坏性变更
-2. **使用语义化版本：** 为重要的发布版本打标签，便于回溯
-3. **明确更新策略：** 团队应约定何时更新子模块（如定期、按需、发布前）
-4. **文档化依赖关系：** 在 README 中说明项目依赖哪些子模块及其版本
+1. **Keep the main branch stable:** The main branch of a submodule should be stable, avoiding frequent breaking changes
+2. **Use semantic versioning:** Tag important release versions for easy rollback
+3. **Define a clear update strategy:** Teams should agree on when to update submodules (e.g., periodically, on-demand, before releases)
+4. **Document dependencies:** Explain in the README which submodules the project depends on and their versions
 
 ---
 
-## 7. Subtree 作为替代方案
+## 7. Subtree as an Alternative
 
-### 7.1 什么是 Git Subtree
+### 7.1 What is Git Subtree
 
-Git Subtree 是另一种管理项目依赖的方式，它将外部仓库的内容直接合并到父仓库的子目录中，作为父仓库的一部分进行管理。与 Submodule 不同，Subtree 的代码直接存储在父仓库的对象数据库中，不需要额外的 `.gitmodules` 文件或特殊的初始化步骤。
+Git Subtree is another way to manage project dependencies. It directly merges the contents of an external repository into a subdirectory of the parent repository, managing it as part of the parent repository. Unlike Submodule, Subtree code is stored directly in the parent repository's object database, without requiring an additional `.gitmodules` file or special initialization steps.
 
-### 7.2 Subtree 的基本操作
+### 7.2 Basic Subtree Operations
 
-**添加 Subtree：**
+**Adding a Subtree:**
 
 ```bash
-# 添加子树（不保留历史）
+# Add a subtree (without preserving history)
 git subtree add --prefix=libs/ui-components https://github.com/company/ui-components.git main --squash
 
-# 添加子树（保留完整历史）
+# Add a subtree (preserving full history)
 git subtree add --prefix=libs/ui-components https://github.com/company/ui-components.git main
 ```
 
-**更新 Subtree：**
+**Updating a Subtree:**
 
 ```bash
-# 从远程仓库拉取更新
+# Pull updates from the remote repository
 git subtree pull --prefix=libs/ui-components https://github.com/company/ui-components.git main --squash
 
-# 等同于
+# Equivalent to
 git fetch https://github.com/company/ui-components.git main
 git subtree merge --prefix=libs/ui-components FETCH_HEAD
 ```
 
-**推送修改到上游：**
+**Pushing changes upstream:**
 
 ```bash
-# 将本地修改推送到上游仓库
+# Push local changes to the upstream repository
 git subtree push --prefix=libs/ui-components https://github.com/company/ui-components.git main
 ```
 
-### 7.3 Subtree vs Submodule 详细对比
+### 7.3 Subtree vs Submodule Detailed Comparison
 
-| 特性 | Submodule | Subtree |
+| Feature | Submodule | Subtree |
 |------|-----------|---------|
-| **存储方式** | 存储 commit 引用 | 直接存储文件内容 |
-| **克隆体验** | 需要额外初始化步骤 | 直接可用，无需额外步骤 |
-| **历史记录** | 分离的提交历史 | 可选择保留或压缩历史 |
-| **更新方式** | `git submodule update` | `git subtree pull` |
-| **推送修改** | 需要在子模块中单独推送 | 可直接推送到上游 |
-| **离线工作** | 需要先初始化子模块 | 完全支持离线工作 |
-| **学习成本** | 较高，概念较多 | 较低，使用标准 Git 命令 |
-| **仓库大小** | 父仓库较小 | 父仓库较大（包含子树内容） |
-| **冲突处理** | 在子模块中处理 | 在父仓库中处理 |
-| **IDE 支持** | 需要特殊支持 | 完全透明，无感知 |
+| **Storage Method** | Stores commit reference | Directly stores file contents |
+| **Clone Experience** | Requires extra initialization steps | Immediately available, no extra steps |
+| **History** | Separated commit history | Option to preserve or squash history |
+| **Update Method** | `git submodule update` | `git subtree pull` |
+| **Pushing Changes** | Need to push separately in the submodule | Can push directly to upstream |
+| **Offline Work** | Need to initialize submodules first | Fully supports offline work |
+| **Learning Cost** | Higher, more concepts | Lower, uses standard Git commands |
+| **Repository Size** | Parent repository is smaller | Parent repository is larger (includes subtree contents) |
+| **Conflict Handling** | Handled in the submodule | Handled in the parent repository |
+| **IDE Support** | Requires special support | Completely transparent, no awareness needed |
 
-### 7.4 何时选择 Subtree
+### 7.4 When to Choose Subtree
 
-选择 Subtree 的场景：
+Choose Subtree when:
 
-- 你希望克隆后立即可用，无需额外初始化步骤
-- 你计划对子目录的代码进行大量修改，并希望推送到上游
-- 你希望避免 Submodule 带来的复杂性
-- 你的团队对 Git 不太熟悉，需要更简单的方案
-- 你需要在离线环境下工作
+- You want immediate availability after cloning, with no extra initialization steps
+- You plan to make extensive modifications to the subdirectory code and push them upstream
+- You want to avoid the complexity brought by Submodule
+- Your team is not very familiar with Git and needs a simpler solution
+- You need to work in an offline environment
 
-### 7.5 何时选择 Submodule
+### 7.5 When to Choose Submodule
 
-选择 Submodule 的场景：
+Choose Submodule when:
 
-- 子项目有独立的版本发布周期
-- 子项目非常大，不希望增加父仓库的大小
-- 多个父项目共享同一个子项目
-- 你需要精确锁定子项目的版本
-- 子项目由不同的团队独立维护
+- The subproject has an independent version release cycle
+- The subproject is very large and you don't want to increase the parent repository's size
+- Multiple parent projects share the same subproject
+- You need precise version locking of the subproject
+- The subproject is independently maintained by different teams
 
 ---
 
-## 8. Submodules 常见问题与解决
+## 8. Common Submodule Issues and Solutions
 
-### 8.1 子模块显示为修改状态
+### 8.1 Submodule Shows as Modified
 
-**问题描述：**
+**Problem Description:**
 
 ```bash
 git status
-# 输出：
+# Output:
 # modified:   libs/ui-components (untracked content)
 # modified:   libs/api-client (modified content)
 ```
 
-**原因分析：**
+**Root Cause:**
 
-子模块目录中有未跟踪或已修改的文件。这通常是因为：
+There are untracked or modified files in the submodule directory. This usually happens because:
 
-1. 在子模块中进行了本地修改但未提交
-2. 子模块中有新生成的文件（如构建产物、IDE 配置等）
-3. 子模块的 HEAD 与父仓库记录的提交不一致
+1. Local modifications were made in the submodule but not committed
+2. New files were generated in the submodule (such as build artifacts, IDE configuration, etc.)
+3. The submodule's HEAD differs from the commit recorded by the parent repository
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 方案一：在子模块中丢弃所有本地修改
+# Solution 1: Discard all local modifications in the submodule
 cd libs/ui-components
 git checkout .
 git clean -fd
 cd ../..
 
-# 方案二：在子模块中提交修改
+# Solution 2: Commit modifications in the submodule
 cd libs/ui-components
 git add .
 git commit -m "local changes"
 cd ../..
 
-# 方案三：配置忽略策略
+# Solution 3: Configure ignore policy
 git config submodule.libs/ui-components.ignore dirty
-# 或在 .gitmodules 中设置
+# Or set in .gitmodules
 # [submodule "libs/ui-components"]
 #     ignore = dirty
 
-# 方案四：重置子模块到父仓库记录的提交
+# Solution 4: Reset submodule to the commit recorded by the parent repository
 git submodule update --force libs/ui-components
 ```
 
-### 8.2 子模块指向不存在的提交
+### 8.2 Submodule Points to Non-Existent Commit
 
-**问题描述：**
+**Problem Description:**
 
 ```bash
 git submodule update
-# 错误：fatal: reference is not a tree: abc1234...
+# Error: fatal: reference is not a tree: abc1234...
 ```
 
-**原因分析：**
+**Root Cause:**
 
-父仓库记录的子模块提交在子模块仓库中不存在。可能是因为：
+The submodule commit recorded by the parent repository does not exist in the submodule repository. This may be because:
 
-1. 子模块仓库被强制推送（force push）覆盖了历史
-2. 子模块仓库被重建或迁移
-3. 子模块的分支被删除
+1. The submodule repository was force-pushed, overwriting history
+2. The submodule repository was rebuilt or migrated
+3. The submodule's branch was deleted
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 方案一：更新子模块到远程最新提交
+# Solution 1: Update submodule to the latest remote commit
 git submodule update --remote libs/ui-components
 
-# 方案二：手动指定一个有效的提交
+# Solution 2: Manually specify a valid commit
 cd libs/ui-components
 git checkout main
 cd ../..
 git add libs/ui-components
 git commit -m "fix: update submodule to valid commit"
 
-# 方案三：重新添加子模块
+# Solution 3: Re-add the submodule
 git submodule deinit -f libs/ui-components
 git rm -f libs/ui-components
 rm -rf .git/modules/libs/ui-components
 git submodule add https://github.com/company/ui-components.git libs/ui-components
 ```
 
-### 8.3 克隆后子模块为空
+### 8.3 Submodule is Empty After Cloning
 
-**问题描述：**
+**Problem Description:**
 
 ```bash
 git clone https://github.com/company/main-project.git
 cd main-project
 ls libs/ui-components/
-# 目录为空
+# Directory is empty
 ```
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 方法一：初始化并更新子模块
+# Method 1: Initialize and update submodules
 git submodule update --init
 
-# 方法二：如果子模块中还有嵌套子模块
+# Method 2: If submodules contain nested submodules
 git submodule update --init --recursive
 
-# 方法三：如果仍然为空，检查 URL 是否可访问
+# Method 3: If still empty, check if the URL is accessible
 git submodule sync
 git submodule update --init
 ```
 
-### 8.4 子模块冲突处理
+### 8.4 Submodule Conflict Handling
 
-**问题描述：**
+**Problem Description:**
 
-当两个分支对同一个子模块引用进行了不同的更新时，合并会产生冲突。
+When two branches make different updates to the same submodule reference, a merge conflict occurs.
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 1. 进入子模块目录
+# 1. Enter the submodule directory
 cd libs/ui-components
 
-# 2. 查看冲突的提交
+# 2. View conflicting commits
 git log --oneline HEAD...MERGE_HEAD
 
-# 3. 选择正确的提交或合并
-git checkout main  # 选择主分支的版本
-# 或者
-git merge other-branch  # 合并两个版本
+# 3. Choose the correct commit or merge
+git checkout main  # Choose the main branch version
+# Or
+git merge other-branch  # Merge both versions
 
-# 4. 返回父仓库
+# 4. Return to the parent repository
 cd ../..
 
-# 5. 标记冲突已解决
+# 5. Mark conflict as resolved
 git add libs/ui-components
 
-# 6. 完成合并
+# 6. Complete the merge
 git commit -m "merge: resolve submodule conflict"
 ```
 
-### 8.5 子模块推送失败
+### 8.5 Submodule Push Failure
 
-**问题描述：**
+**Problem Description:**
 
-在子模块中修改后，推送到父仓库时报错。
+After making modifications in the submodule, an error occurs when pushing to the parent repository.
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 确保先在子模块中推送
+# Make sure to push in the submodule first
 cd libs/ui-components
 git push origin main
 
-# 然后在父仓库中推送
+# Then push in the parent repository
 cd ../..
 git push origin main
 ```
 
-### 8.6 子模块 URL 迁移
+### 8.6 Submodule URL Migration
 
-**问题描述：**
+**Problem Description:**
 
-子模块仓库的 URL 变更了（如从 GitHub 迁移到 GitLab）。
+The URL of the submodule repository has changed (e.g., migrated from GitHub to GitLab).
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 1. 更新 .gitmodules 中的 URL
-# 编辑 .gitmodules 文件，修改 url 字段
+# 1. Update the URL in .gitmodules
+# Edit the .gitmodules file, modify the url field
 
-# 2. 同步 URL 变更
+# 2. Sync URL changes
 git submodule sync
 
-# 3. 重新初始化
+# 3. Reinitialize
 git submodule update --init
 
-# 4. 提交变更
+# 4. Commit the change
 git add .gitmodules
 git commit -m "chore: update submodule URL"
 git push
 ```
 
-### 8.7 子模块嵌套过深
+### 8.7 Excessive Submodule Nesting
 
-**问题描述：**
+**Problem Description:**
 
-子模块中还有子模块，形成多层嵌套，管理复杂。
+Submodules contain submodules, forming multi-level nesting that is complex to manage.
 
-**解决方案：**
+**Solutions:**
 
 ```bash
-# 递归初始化所有嵌套子模块
+# Recursively initialize all nested submodules
 git submodule update --init --recursive
 
-# 全局配置自动递归
+# Globally configure automatic recursion
 git config --global submodule.recurse true
 
-# 考虑扁平化结构，减少嵌套层级
+# Consider flattening the structure to reduce nesting levels
 ```
 
 ---
 
-## 9. Monorepo vs Submodules vs Subtree 对比
+## 9. Monorepo vs Submodules vs Subtree Comparison
 
-### 9.1 三种方案概述
+### 9.1 Overview of Three Approaches
 
-| 方案 | 核心理念 | 代表项目 |
+| Approach | Core Concept | Representative Projects |
 |------|---------|---------|
-| **Monorepo** | 所有代码放在一个仓库中 | Google、Facebook、Babel |
-| **Submodules** | 引用外部仓库的特定提交 | Linux Kernel（部分）、CMake 项目 |
-| **Subtree** | 将外部仓库合并到子目录 | Android（部分）、一些中小型项目 |
+| **Monorepo** | All code in one repository | Google, Facebook, Babel |
+| **Submodules** | References specific commits of external repositories | Linux Kernel (partial), CMake projects |
+| **Subtree** | Merges external repository into a subdirectory | Android (partial), some small-to-medium projects |
 
-### 9.2 详细对比
+### 9.2 Detailed Comparison
 
-| 维度 | Monorepo | Submodules | Subtree |
+| Dimension | Monorepo | Submodules | Subtree |
 |------|----------|------------|---------|
-| **仓库数量** | 1 个 | N+1 个 | 1 个 |
-| **克隆复杂度** | 简单（一次克隆） | 复杂（需要初始化） | 简单（一次克隆） |
-| **版本一致性** | 天然一致 | 需要手动同步 | 天然一致 |
-| **独立发布** | 需要额外工具 | 天然支持 | 需要额外步骤 |
-| **代码共享** | 直接引用 | 通过子模块引用 | 直接引用 |
-| **CI/CD** | 统一构建 | 需要协调多个仓库 | 统一构建 |
-| **权限管理** | 粗粒度 | 细粒度 | 粗粒度 |
-| **仓库大小** | 大 | 小 | 大 |
-| **历史记录** | 统一历史 | 分离历史 | 可选择 |
-| **学习成本** | 低 | 高 | 中 |
-| **工具支持** | 丰富（Nx、Turborepo、Bazel） | 原生 Git | 原生 Git |
+| **Repository Count** | 1 | N+1 | 1 |
+| **Clone Complexity** | Simple (single clone) | Complex (requires initialization) | Simple (single clone) |
+| **Version Consistency** | Naturally consistent | Requires manual sync | Naturally consistent |
+| **Independent Releases** | Requires extra tools | Naturally supported | Requires extra steps |
+| **Code Sharing** | Direct reference | Via submodule reference | Direct reference |
+| **CI/CD** | Unified build | Requires coordinating multiple repositories | Unified build |
+| **Permission Management** | Coarse-grained | Fine-grained | Coarse-grained |
+| **Repository Size** | Large | Small | Large |
+| **History** | Unified history | Separated history | Optional |
+| **Learning Cost** | Low | High | Medium |
+| **Tool Support** | Rich (Nx, Turborepo, Bazel) | Native Git | Native Git |
 
-### 9.3 选择建议
+### 9.3 Selection Recommendations
 
-**选择 Monorepo 的场景：**
+**Choose Monorepo when:**
 
-- 项目组件之间有频繁的依赖和交互
-- 需要统一的代码风格和质量标准
-- 团队规模较大，需要统一的构建和发布流程
-- 使用现代化的构建工具（如 Nx、Turborepo）
+- Project components have frequent dependencies and interactions
+- Unified code style and quality standards are needed
+- Large team size requires unified build and release processes
+- Using modern build tools (such as Nx, Turborepo)
 
-**选择 Submodules 的场景：**
+**Choose Submodules when:**
 
-- 子项目有独立的版本发布周期
-- 子项目由不同的团队或组织维护
-- 需要精确锁定子项目的版本
-- 子项目非常大，不适合合并到父仓库
+- The subproject has an independent version release cycle
+- The subproject is maintained by different teams or organizations
+- Precise version locking of the subproject is needed
+- The subproject is very large and not suitable for merging into the parent repository
 
-**选择 Subtree 的场景：**
+**Choose Subtree when:**
 
-- 希望简化克隆和初始化流程
-- 需要对子目录代码进行修改并推送到上游
-- 团队对 Git 不太熟悉
-- 项目规模中等，不需要 Monorepo 的复杂工具
+- You want to simplify the cloning and initialization process
+- You need to modify subdirectory code and push it upstream
+- The team is not very familiar with Git
+- The project is medium-sized and doesn't need the complex tooling of Monorepo
 
-### 9.4 混合使用策略
+### 9.4 Hybrid Usage Strategy
 
-在实际项目中，可以根据需要混合使用这三种方案：
+In real projects, you can use a hybrid approach of these three methods as needed:
 
 ```
-main-project/                    # Monorepo 结构
+main-project/                    # Monorepo structure
 ├── packages/
-│   ├── core/                    # 核心包（Monorepo）
-│   ├── utils/                   # 工具包（Monorepo）
-│   └── ui/                      # UI 组件（Monorepo）
+│   ├── core/                    # Core package (Monorepo)
+│   ├── utils/                   # Utility package (Monorepo)
+│   └── ui/                      # UI components (Monorepo)
 ├── apps/
-│   ├── web/                     # Web 应用（Monorepo）
-│   └── mobile/                  # 移动应用（Monorepo）
+│   ├── web/                     # Web application (Monorepo)
+│   └── mobile/                  # Mobile application (Monorepo)
 ├── vendor/
-│   ├── legacy-system/           # 遗留系统（Subtree）
-│   └── third-party-sdk/         # 第三方 SDK（Submodule）
-└── docs/                        # 文档（Submodule 到独立仓库）
+│   ├── legacy-system/           # Legacy system (Subtree)
+│   └── third-party-sdk/         # Third-party SDK (Submodule)
+└── docs/                        # Documentation (Submodule to independent repo)
 ```
 
-### 9.5 迁移策略
+### 9.5 Migration Strategy
 
-**从 Submodule 迁移到 Subtree：**
+**Migrating from Submodule to Subtree:**
 
 ```bash
-# 1. 删除 Submodule
+# 1. Delete the Submodule
 git submodule deinit -f libs/ui-components
 git rm -f libs/ui-components
 rm -rf .git/modules/libs/ui-components
 
-# 2. 添加为 Subtree
+# 2. Add as Subtree
 git subtree add --prefix=libs/ui-components https://github.com/company/ui-components.git main --squash
 
-# 3. 提交变更
+# 3. Commit the change
 git commit -m "refactor: migrate ui-components from submodule to subtree"
 ```
 
-**从 Submodule 迁移到 Monorepo：**
+**Migrating from Submodule to Monorepo:**
 
 ```bash
-# 1. 克隆子模块仓库
+# 1. Clone the submodule repository
 git clone https://github.com/company/ui-components.git /tmp/ui-components
 
-# 2. 删除 Submodule
+# 2. Delete the Submodule
 git submodule deinit -f libs/ui-components
 git rm -f libs/ui-components
 rm -rf .git/modules/libs/ui-components
 
-# 3. 将子模块代码复制到 Monorepo 的 packages 目录
+# 3. Copy the submodule code to the Monorepo's packages directory
 cp -r /tmp/ui-components/* packages/ui-components/
 
-# 4. 提交变更
+# 4. Commit the change
 git add packages/ui-components
 git commit -m "refactor: migrate ui-components to monorepo"
 ```
 
 ---
 
-## 总结
+## Summary
 
-Git Submodule 是一个强大但复杂的工具，它适用于需要精确管理外部依赖版本的场景。以下是使用 Submodule 的关键要点：
+Git Submodule is a powerful but complex tool suitable for scenarios requiring precise management of external dependency versions. Here are the key points for using Submodule:
 
-1. **理解核心概念：** 父仓库存储的是子模块的 commit 引用，而不是文件内容
-2. **掌握基本操作：** 添加、更新、删除、克隆是日常使用中最频繁的操作
-3. **善用 .gitmodules：** 合理配置分支跟踪、更新策略和忽略策略
-4. **注意两步提交：** 子模块变更需要先在子模块中提交，再更新父仓库引用
-5. **考虑替代方案：** 根据项目需求选择 Submodule、Subtree 或 Monorepo
+1. **Understand core concepts:** The parent repository stores the submodule's commit reference, not the file content itself
+2. **Master basic operations:** Adding, updating, deleting, and cloning are the most frequent operations in daily use
+3. **Make good use of .gitmodules:** Properly configure branch tracking, update strategies, and ignore policies
+4. **Note the two-step commit:** Submodule changes need to be committed in the submodule first, then update the parent repository reference
+5. **Consider alternatives:** Choose Submodule, Subtree, or Monorepo based on project needs
 
-记住，没有最好的方案，只有最适合的方案。理解每种方案的优缺点，根据项目的具体需求做出选择，才是最重要的。
+Remember, there is no best solution, only the most suitable one. Understanding the pros and cons of each approach and making choices based on the specific needs of the project is what matters most.
 
-## 10. Submodules 高级技巧与最佳实践
+## 10. Advanced Submodule Tips and Best Practices
 
-### 10.1 自动化 Submodule 管理
+### 10.1 Automating Submodule Management
 
-使用 Git Hooks 自动化 Submodule 的日常管理：
+Use Git Hooks to automate daily submodule management:
 
 ```bash
 #!/bin/bash
 # .git/hooks/post-merge
-# 在主仓库合并后自动更新子模块
+# Automatically update submodules after merging in the main repository
 
-echo "正在更新子模块..."
+echo "Updating submodules..."
 git submodule update --init --recursive
 
-# 检查子模块是否有更新
+# Check if submodules have updates
 if git submodule status | grep -q '^+'; then
-    echo "检测到子模块有新版本"
+    echo "New version detected in submodule"
     git submodule foreach 'git log --oneline -1'
 fi
 ```
@@ -959,26 +959,26 @@ fi
 ```bash
 #!/bin/bash
 # .git/hooks/pre-push
-# 推送前检查子模块状态
+# Check submodule status before pushing
 
-# 获取所有子模块
+# Get all submodules
 submodules=$(git submodule status | awk '{print $2}')
 
 for submodule in $submodules; do
     status=$(git -C "$submodule" status --porcelain)
     if [ -n "$status" ]; then
-        echo "错误: 子模块 $submodule 有未提交的更改"
+        echo "Error: Submodule $submodule has uncommitted changes"
         echo "$status"
         exit 1
     fi
 done
 
-echo "所有子模块状态正常"
+echo "All submodule statuses are normal"
 ```
 
-### 10.2 子模块的批量更新脚本
+### 10.2 Batch Update Script for Submodules
 
-创建一个脚本来批量更新所有子模块：
+Create a script to batch update all submodules:
 
 ```bash
 #!/bin/bash
@@ -986,43 +986,43 @@ echo "所有子模块状态正常"
 
 set -e
 
-echo "=== 更新所有子模块 ==="
+echo "=== Updating all submodules ==="
 
-# 更新所有子模块到远程最新提交
+# Update all submodules to the latest remote commit
 git submodule update --remote --merge
 
-# 显示更新的子模块
+# Show updated submodules
 echo ""
-echo "=== 子模块更新摘要 ==="
+echo "=== Submodule update summary ==="
 git submodule summary
 
-# 询问是否提交更改
-read -p "是否提交子模块更新? (y/N) " -n 1 -r
+# Ask if changes should be committed
+read -p "Commit submodule updates? (y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     git add .
     git commit -m "chore: update all submodules to latest"
-    echo "已提交子模块更新"
+    echo "Submodule updates committed"
 else
-    echo "子模块更新未提交"
+    echo "Submodule updates not committed"
 fi
 
-echo "=== 完成 ==="
+echo "=== Done ==="
 ```
 
-### 10.3 子模块的版本锁定策略
+### 10.3 Submodule Version Locking Strategy
 
-在生产环境中，建议锁定子模块的版本：
+In production environments, it is recommended to lock submodule versions:
 
 ```bash
-# 锁定子模块到特定标签
+# Lock submodule to a specific tag
 cd libs/core
 git checkout v2.1.0
 cd ../..
 git add libs/core
 git commit -m "chore: pin core to v2.1.0"
 
-# 锁定子模块到特定提交
+# Lock submodule to a specific commit
 cd libs/core
 git checkout abc1234
 cd ../..
@@ -1030,37 +1030,37 @@ git add libs/core
 git commit -m "chore: pin core to commit abc1234"
 ```
 
-在 `.gitmodules` 中配置忽略更新：
+Configure ignore updates in `.gitmodules`:
 
 ```ini
 [submodule "libs/core"]
     path = libs/core
     url = https://github.com/company/core.git
-    update = none  # 不自动更新，手动管理版本
+    update = none  # No automatic updates, manually manage versions
 ```
 
-### 10.4 子模块的分支策略
+### 10.4 Submodule Branch Strategy
 
-为不同的环境使用不同的子模块分支：
+Use different submodule branches for different environments:
 
 ```bash
-# 开发环境：跟踪 develop 分支
+# Development environment: track the develop branch
 git config submodule.libs/core.branch develop
 
-# 生产环境：跟踪 release 分支
+# Production environment: track the release branch
 git config submodule.libs/core.branch release/stable
 
-# 测试环境：跟踪特定版本
+# Testing environment: track a specific version
 cd libs/core
 git checkout v2.0.0-rc1
 cd ../..
 ```
 
-### 10.5 子模块的冲突解决策略
+### 10.5 Submodule Conflict Resolution Strategy
 
-当子模块出现冲突时，有多种解决策略：
+When submodules have conflicts, there are multiple resolution strategies:
 
-**策略一：使用最新版本**
+**Strategy 1: Use the latest version**
 
 ```bash
 cd libs/core
@@ -1071,7 +1071,7 @@ git add libs/core
 git commit -m "resolve: use latest version of core"
 ```
 
-**策略二：使用特定版本**
+**Strategy 2: Use a specific version**
 
 ```bash
 cd libs/core
@@ -1081,7 +1081,7 @@ git add libs/core
 git commit -m "resolve: use core v2.1.0"
 ```
 
-**策略三：合并两个版本**
+**Strategy 3: Merge both versions**
 
 ```bash
 cd libs/core
@@ -1091,120 +1091,120 @@ git add libs/core
 git commit -m "resolve: merge core versions"
 ```
 
-### 10.6 子模块的性能优化
+### 10.6 Submodule Performance Optimization
 
-对于包含大量子模块的项目，可以采取以下性能优化措施：
+For projects with many submodules, you can take the following performance optimization measures:
 
 ```bash
-# 浅克隆子模块（只获取最近的提交）
+# Shallow clone submodules (only fetch recent commits)
 git submodule update --init --depth 1
 
-# 并行初始化子模块
+# Parallel submodule initialization
 git config --global submodule.fetchJobs 4
 
-# 使用 partial clone（Git 2.36+）
+# Use partial clone (Git 2.36+)
 git submodule update --init --filter=blob:none
 
-# 配置 Git 缓存子模块对象
+# Configure Git to cache submodule objects
 git config --global submodule.alternate true
 ```
 
-### 10.7 子模块的安全考虑
+### 10.7 Submodule Security Considerations
 
-使用子模块时需要注意的安全问题：
+Security issues to be aware of when using submodules:
 
 ```bash
-# 验证子模块的完整性
+# Verify submodule integrity
 git submodule status --recursive
 
-# 检查子模块的提交签名
+# Check submodule commit signatures
 cd libs/core
 git log --show-signature -1
 cd ../..
 
-# 使用 HTTPS 而非 SSH（避免中间人攻击）
+# Use HTTPS instead of SSH (to avoid man-in-the-middle attacks)
 git submodule add https://github.com/company/core.git libs/core
 
-# 配置 Git 验证子模块的仓库所有权
+# Configure Git to verify submodule repository ownership
 git config --global protocol.file.allow user
 ```
 
-### 10.8 子模块的迁移指南
+### 10.8 Submodule Migration Guide
 
-从其他方案迁移到 Submodule 的详细步骤：
+Detailed steps for migrating from other approaches to Submodule:
 
-**从 Subtree 迁移到 Submodule：**
+**Migrating from Subtree to Submodule:**
 
 ```bash
-# 1. 备份当前代码
+# 1. Back up current code
 git checkout -b backup/subtree-migration
 git push origin backup/subtree-migration
 
-# 2. 删除子树目录
+# 2. Delete the subtree directory
 git rm -r libs/core
 git commit -m "remove: core subtree"
 
-# 3. 添加为子模块
+# 3. Add as submodule
 git submodule add https://github.com/company/core.git libs/core
 git commit -m "add: core as submodule"
 
-# 4. 更新 CI/CD 配置
-# 修改 .github/workflows/ci.yml
-# 添加 submodule init 步骤
+# 4. Update CI/CD configuration
+# Modify .github/workflows/ci.yml
+# Add submodule init step
 ```
 
-**从包管理器迁移到 Submodule：**
+**Migrating from a package manager to Submodule:**
 
 ```bash
-# 1. 从包管理器中移除依赖
+# 1. Remove dependency from package manager
 npm uninstall internal-lib
 
-# 2. 添加为子模块
+# 2. Add as submodule
 git submodule add https://github.com/company/internal-lib.git libs/internal-lib
 
-# 3. 更新 import 路径
-# 将 import { something } from 'internal-lib'
-# 改为 import { something } from './libs/internal-lib'
+# 3. Update import paths
+# Change import { something } from 'internal-lib'
+# To import { something } from './libs/internal-lib'
 
-# 4. 更新构建配置
-# 修改 webpack.config.js 或 tsconfig.json 中的路径映射
+# 4. Update build configuration
+# Modify path mapping in webpack.config.js or tsconfig.json
 ```
 
-### 10.9 Submodule 的调试技巧
+### 10.9 Submodule Debugging Tips
 
-当 Submodule 出现问题时，使用以下技巧进行调试：
+When Submodule has issues, use the following debugging tips:
 
 ```bash
-# 查看详细的子模块配置
+# View detailed submodule configuration
 git config --list | grep submodule
 
-# 查看子模块的远程 URL
+# View submodule remote URLs
 git config --file .gitmodules --list
 
-# 查看子模块的 Git 目录位置
+# View submodule Git directory location
 git rev-parse --git-dir
 
-# 查看子模块指向的提交
+# View the commit the submodule points to
 git ls-tree HEAD libs/core
 
-# 强制重新初始化子模块
+# Force reinitialize submodule
 git submodule deinit -f libs/core
 git submodule update --init --force libs/core
 
-# 查看子模块的提交历史
+# View submodule commit history
 cd libs/core
 git log --oneline -10
 cd ../..
 
-# 比较子模块的不同版本
+# Compare different versions of the submodule
 git diff --submodule libs/core
 ```
 
-### 10.10 与 CI/CD 系统的集成
+### 10.10 Integration with CI/CD Systems
 
-在主流 CI/CD 系统中正确配置 Submodule：
+Correctly configure Submodule in mainstream CI/CD systems:
 
-**GitHub Actions：**
+**GitHub Actions:**
 
 ```yaml
 - uses: actions/checkout@v4
@@ -1212,14 +1212,14 @@ git diff --submodule libs/core
     submodules: recursive
     token: ${{ secrets.GITHUB_TOKEN }}
 
-# 或者使用 SSH
+# Or use SSH
 - uses: actions/checkout@v4
   with:
     submodules: recursive
     ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 ```
 
-**GitLab CI：**
+**GitLab CI:**
 
 ```yaml
 variables:
@@ -1229,7 +1229,7 @@ before_script:
   - git submodule update --init --recursive
 ```
 
-**Jenkins：**
+**Jenkins:**
 
 ```groovy
 checkout([
@@ -1244,238 +1244,238 @@ checkout([
 ])
 ```
 
-### 10.11 子模块的代码审查最佳实践
+### 10.11 Submodule Code Review Best Practices
 
-在代码审查中关注子模块相关的变更：
+Focus on submodule-related changes during code reviews:
 
-1. **检查子模块引用变更：** 确认子模块版本变更是有意为之
-2. **验证子模块内容：** 检查子模块的新版本是否引入了问题
-3. **评估影响范围：** 评估子模块变更对主项目的影响
-4. **确认测试覆盖：** 确保子模块变更经过了充分测试
-5. **文档更新：** 确认子模块变更是否需要更新文档
+1. **Check submodule reference changes:** Confirm that submodule version changes are intentional
+2. **Verify submodule content:** Check if the new version of the submodule has introduced issues
+3. **Assess impact scope:** Evaluate the impact of submodule changes on the main project
+4. **Confirm test coverage:** Ensure submodule changes have been thoroughly tested
+5. **Update documentation:** Confirm if submodule changes require documentation updates
 
 ```bash
-# 审查子模块变更的脚本
+# Script for reviewing submodule changes
 #!/bin/bash
-echo "=== 子模块变更审查 ==="
+echo "=== Submodule Change Review ==="
 
-# 获取子模块变更
+# Get submodule changes
 changed_submodules=$(git diff --name-only HEAD~1 | grep -E '^[a-zA-Z0-9_-]+/')
 
 for submodule in $changed_submodules; do
     echo ""
     echo "--- $submodule ---"
 
-    # 获取旧版本和新版本
+    # Get old and new versions
     old_commit=$(git rev-parse HEAD~1:$submodule 2>/dev/null)
     new_commit=$(git rev-parse HEAD:$submodule 2>/dev/null)
 
     if [ "$old_commit" != "$new_commit" ]; then
-        echo "版本变更: ${old_commit:0:7} -> ${new_commit:0:7}"
+        echo "Version change: ${old_commit:0:7} -> ${new_commit:0:7}"
 
-        # 显示变更日志
-        echo "变更内容:"
+        # Show changelog
+        echo "Changes:"
         git -C $submodule log --oneline ${old_commit}..${new_commit}
     fi
 done
 ```
 
-### 10.12 子模块的灾难恢复
+### 10.12 Submodule Disaster Recovery
 
-当子模块出现问题时的恢复策略：
+Recovery strategies when submodules have issues:
 
 ```bash
-# 场景一：子模块目录被意外删除
+# Scenario 1: Submodule directory was accidentally deleted
 git submodule update --init --force libs/core
 
-# 场景二：子模块的 .git 目录损坏
+# Scenario 2: Submodule's .git directory is corrupted
 rm -rf .git/modules/libs/core
 git submodule update --init --force libs/core
 
-# 场景三：子模块的远程仓库不可用
-# 使用备用 URL
+# Scenario 3: Submodule's remote repository is unavailable
+# Use a backup URL
 git config submodule.libs/core.url https://backup-url/repo.git
 git submodule update --init libs/core
 
-# 场景四：回滚子模块到之前的版本
-git log --oneline -- libs/core  # 查找之前的版本
-git checkout HEAD~1 -- libs/core  # 回滚到上一个版本
+# Scenario 4: Rollback submodule to a previous version
+git log --oneline -- libs/core  # Find the previous version
+git checkout HEAD~1 -- libs/core  # Rollback to the previous version
 git commit -m "rollback: revert libs/core to previous version"
 ```
 
 ---
 
-## 11. Submodule 的替代方案详细对比
+## 11. Detailed Comparison of Submodule Alternatives
 
-### 11.1 使用包管理器
+### 11.1 Using Package Managers
 
-对于大多数项目，使用包管理器（如 npm、pip、Maven）是管理依赖的首选方案：
+For most projects, using a package manager (such as npm, pip, Maven) is the preferred approach for managing dependencies:
 
-| 对比维度 | Submodule | 包管理器 |
+| Comparison Dimension | Submodule | Package Manager |
 |----------|-----------|----------|
-| 版本管理 | 精确到提交 | 语义化版本 |
-| 更新方式 | 手动更新引用 | 自动解析依赖 |
-| 冲突处理 | 需要手动解决 | 自动处理（大部分情况） |
-| 离线支持 | 需要缓存 | 本地缓存 |
-| 安全性 | 需要验证 | 自动检查漏洞 |
-| 适用场景 | 需要修改源码 | 使用现成功能 |
+| Version Management | Precise to commit | Semantic versioning |
+| Update Method | Manual reference update | Automatic dependency resolution |
+| Conflict Handling | Requires manual resolution | Automatic handling (in most cases) |
+| Offline Support | Requires caching | Local cache |
+| Security | Requires verification | Automatic vulnerability checking |
+| Use Case | Need to modify source code | Use existing functionality |
 
-### 11.2 使用 Monorepo 工具
+### 11.2 Using Monorepo Tools
 
-对于大型项目，Monorepo 工具（如 Nx、Turborepo、Bazel）提供了更好的解决方案：
+For large projects, Monorepo tools (such as Nx, Turborepo, Bazel) provide better solutions:
 
-| 对比维度 | Submodule | Monorepo 工具 |
+| Comparison Dimension | Submodule | Monorepo Tools |
 |----------|-----------|---------------|
-| 代码组织 | 分散在多个仓库 | 集中在一个仓库 |
-| 构建系统 | 独立构建 | 统一构建，增量编译 |
-| 依赖管理 | 手动管理 | 自动解析依赖关系 |
-| 代码共享 | 通过子模块引用 | 直接引用 |
-| 版本管理 | 各自版本 | 统一版本或独立版本 |
-| 适用场景 | 独立发布的组件 | 紧密耦合的项目 |
+| Code Organization | Spread across multiple repositories | Centralized in one repository |
+| Build System | Independent builds | Unified build, incremental compilation |
+| Dependency Management | Manual management | Automatic dependency resolution |
+| Code Sharing | Via submodule reference | Direct reference |
+| Version Management | Individual versions | Unified or independent versions |
+| Use Case | Independently released components | Tightly coupled projects |
 
-### 11.3 使用 Git Subtree
+### 11.3 Using Git Subtree
 
-Git Subtree 是另一种管理项目依赖的方式：
+Git Subtree is another way to manage project dependencies:
 
-| 对比维度 | Submodule | Subtree |
+| Comparison Dimension | Submodule | Subtree |
 |----------|-----------|---------|
-| 存储方式 | 存储引用 | 直接存储内容 |
-| 克隆体验 | 需要初始化 | 直接可用 |
-| 更新方式 | 更新引用 | 合并代码 |
-| 推送修改 | 需要单独推送 | 直接推送 |
-| 学习成本 | 较高 | 较低 |
-| 适用场景 | 独立维护的组件 | 需要修改的依赖 |
+| Storage Method | Stores references | Directly stores contents |
+| Clone Experience | Requires initialization | Immediately available |
+| Update Method | Update references | Merge code |
+| Pushing Changes | Requires separate push | Direct push |
+| Learning Cost | Higher | Lower |
+| Use Case | Independently maintained components | Dependencies needing modification |
 
-### 11.4 选择建议总结
+### 11.4 Selection Recommendation Summary
 
-| 场景 | 推荐方案 | 理由 |
+| Scenario | Recommended Approach | Reason |
 |------|----------|------|
-| 使用第三方库 | 包管理器 | 标准化、自动化 |
-| 公司内部共享库 | Submodule 或 Monorepo | 灵活性、版本控制 |
-| 需要修改源码的依赖 | Subtree | 简单、直接 |
-| 大型项目模块化 | Monorepo 工具 | 构建优化、代码共享 |
-| 独立发布的组件 | Submodule | 独立版本、独立发布 |
-| 文档与代码分离 | Submodule | 独立维护、独立版本 |
+| Using third-party libraries | Package Manager | Standardized, automated |
+| Company internal shared libraries | Submodule or Monorepo | Flexibility, version control |
+| Dependencies needing source modification | Subtree | Simple, direct |
+| Large project modularization | Monorepo tools | Build optimization, code sharing |
+| Independently released components | Submodule | Independent version, independent release |
+| Separating documentation from code | Submodule | Independent maintenance, independent version |
 
 ---
 
-## 12. 附录：Submodule 命令速查表
+## 12. Appendix: Submodule Command Quick Reference
 
-### 12.1 基本操作命令
+### 12.1 Basic Operation Commands
 
-| 命令 | 说明 |
+| Command | Description |
 |------|------|
-| `git submodule add <url> <path>` | 添加子模块 |
-| `git submodule add -b <branch> <url> <path>` | 添加指定分支的子模块 |
-| `git submodule init` | 初始化子模块 |
-| `git submodule update` | 更新子模块 |
-| `git submodule update --init` | 初始化并更新子模块 |
-| `git submodule update --init --recursive` | 递归初始化并更新所有子模块 |
-| `git submodule update --remote` | 更新到远程最新提交 |
-| `git submodule update --remote --merge` | 更新并合并 |
-| `git submodule update --remote --rebase` | 更新并变基 |
-| `git submodule update --force` | 强制更新子模块 |
-| `git submodule deinit <path>` | 反初始化子模块 |
-| `git rm <path>` | 删除子模块 |
+| `git submodule add <url> <path>` | Add a submodule |
+| `git submodule add -b <branch> <url> <path>` | Add a submodule for a specific branch |
+| `git submodule init` | Initialize submodules |
+| `git submodule update` | Update submodules |
+| `git submodule update --init` | Initialize and update submodules |
+| `git submodule update --init --recursive` | Recursively initialize and update all submodules |
+| `git submodule update --remote` | Update to the latest remote commit |
+| `git submodule update --remote --merge` | Update and merge |
+| `git submodule update --remote --rebase` | Update and rebase |
+| `git submodule update --force` | Force update submodules |
+| `git submodule deinit <path>` | De-initialize a submodule |
+| `git rm <path>` | Remove a submodule |
 
-### 12.2 查看信息命令
+### 12.2 Information Commands
 
-| 命令 | 说明 |
+| Command | Description |
 |------|------|
-| `git submodule` | 列出所有子模块及其状态 |
-| `git submodule status` | 查看子模块状态 |
-| `git submodule summary` | 查看子模块变更摘要 |
-| `git submodule foreach <command>` | 在每个子模块中执行命令 |
-| `git submodule foreach 'git status'` | 查看所有子模块的 Git 状态 |
-| `git submodule foreach 'git pull'` | 拉取所有子模块的最新代码 |
-| `git diff --submodule` | 查看子模块的差异 |
-| `git log --submodule` | 查看子模块的提交历史 |
+| `git submodule` | List all submodules and their status |
+| `git submodule status` | View submodule status |
+| `git submodule summary` | View submodule change summary |
+| `git submodule foreach <command>` | Execute a command in each submodule |
+| `git submodule foreach 'git status'` | View Git status of all submodules |
+| `git submodule foreach 'git pull'` | Pull latest code for all submodules |
+| `git diff --submodule` | View submodule differences |
+| `git log --submodule` | View submodule commit history |
 
-### 12.3 配置命令
+### 12.3 Configuration Commands
 
-| 命令 | 说明 |
+| Command | Description |
 |------|------|
-| `git config submodule.<name>.url <url>` | 设置子模块 URL |
-| `git config submodule.<name>.branch <branch>` | 设置子模块跟踪分支 |
-| `git config submodule.<name>.update <strategy>` | 设置子模块更新策略 |
-| `git config submodule.<name>.ignore <policy>` | 设置子模块忽略策略 |
-| `git config --global submodule.recurse true` | 全局启用子模块递归 |
-| `git config --global submodule.fetchJobs 4` | 设置并行获取子模块数量 |
-| `git submodule sync` | 同步子模块 URL |
-| `git submodule sync --recursive` | 递归同步所有子模块 URL |
+| `git config submodule.<name>.url <url>` | Set submodule URL |
+| `git config submodule.<name>.branch <branch>` | Set submodule tracking branch |
+| `git config submodule.<name>.update <strategy>` | Set submodule update strategy |
+| `git config submodule.<name>.ignore <policy>` | Set submodule ignore policy |
+| `git config --global submodule.recurse true` | Globally enable submodule recursion |
+| `git config --global submodule.fetchJobs 4` | Set parallel fetch job count for submodules |
+| `git submodule sync` | Sync submodule URLs |
+| `git submodule sync --recursive` | Recursively sync all submodule URLs |
 
-### 12.4 高级操作命令
+### 12.4 Advanced Operation Commands
 
-| 命令 | 说明 |
+| Command | Description |
 |------|------|
-| `git submodule update --init --depth 1` | 浅克隆子模块 |
-| `git submodule update --init --filter=blob:none` | 使用 partial clone |
-| `git clone --recurse-submodules <url>` | 克隆时自动初始化子模块 |
-| `git clone --recurse-submodules --remote-submodules <url>` | 克隆时更新到远程最新 |
-| `git submodule absorbgitdirs` | 将子模块的 .git 目录移动到父仓库 |
+| `git submodule update --init --depth 1` | Shallow clone submodules |
+| `git submodule update --init --filter=blob:none` | Use partial clone |
+| `git clone --recurse-submodules <url>` | Auto-initialize submodules on clone |
+| `git clone --recurse-submodules --remote-submodules <url>` | Update to latest remote on clone |
+| `git submodule absorbgitdirs` | Move submodule .git directory into the parent repository |
 
-### 12.5 常见场景快速解决
+### 12.5 Quick Solutions for Common Scenarios
 
-| 场景 | 解决方案 |
+| Scenario | Solution |
 |------|----------|
-| 克隆后子模块为空 | `git submodule update --init` |
-| 子模块显示为修改 | `git submodule update --force` |
-| 子模块 URL 变更 | `git submodule sync && git submodule update` |
-| 子模块指向无效提交 | `git submodule update --remote` |
-| 删除子模块 | `git rm <path> && rm -rf .git/modules/<path>` |
-| 子模块有嵌套子模块 | `git submodule update --init --recursive` |
-| 子模块版本过旧 | `cd <path> && git pull && cd - && git add <path>` |
-| 子模块有本地修改 | `cd <path> && git stash && cd -` |
-| 查看子模块差异 | `git diff --submodule` |
-| 批量更新子模块 | `git submodule update --remote --merge` |
+| Submodule is empty after cloning | `git submodule update --init` |
+| Submodule shows as modified | `git submodule update --force` |
+| Submodule URL changed | `git submodule sync && git submodule update` |
+| Submodule points to invalid commit | `git submodule update --remote` |
+| Remove a submodule | `git rm <path> && rm -rf .git/modules/<path>` |
+| Submodule has nested submodules | `git submodule update --init --recursive` |
+| Submodule version is outdated | `cd <path> && git pull && cd - && git add <path>` |
+| Submodule has local modifications | `cd <path> && git stash && cd -` |
+| View submodule differences | `git diff --submodule` |
+| Batch update submodules | `git submodule update --remote --merge` |
 
-### 12.6 .gitmodules 完整配置参考
+### 12.6 Complete .gitmodules Configuration Reference
 
 ```ini
 [submodule "libs/core"]
-    # 子模块在父仓库中的路径
+    # Path of the submodule in the parent repository
     path = libs/core
 
-    # 子模块仓库的 URL
+    # URL of the submodule repository
     url = https://github.com/company/core.git
 
-    # 要跟踪的分支
+    # Branch to track
     branch = main
 
-    # 更新策略：checkout、rebase、merge、none
+    # Update strategy: checkout, rebase, merge, none
     update = checkout
 
-    # 忽略策略：none、untracked、dirty、all
+    # Ignore policy: none, untracked, dirty, all
     ignore = none
 
-    # 是否递归获取子模块
+    # Whether to recursively fetch submodules
     fetchRecurseSubmodules = on-demand
 
-    # 是否浅克隆
+    # Whether to shallow clone
     shallow = false
 ```
 
-### 12.7 Submodule 使用的常见误区
+### 12.7 Common Submodule Misconceptions
 
-在使用 Submodule 时，开发者经常犯以下错误：
+When using Submodule, developers often make the following mistakes:
 
-**误区一：忘记提交子模块引用**
+**Misconception 1: Forgetting to commit the submodule reference**
 
-很多人在子模块中修改并提交后，忘记在父仓库中更新引用。这导致其他开发者拉取代码后，子模块仍然指向旧的提交。
+Many people commit and push changes in the submodule but forget to update the reference in the parent repository. This causes other developers to still have their submodules pointing to the old commit after pulling.
 
 ```bash
-# 错误的做法
+# Wrong approach
 cd libs/core
 git add .
 git commit -m "fix: bug fix"
 git push
 cd ../..
-# 忘记执行以下命令
+# Forgot to run the following commands
 # git add libs/core
 # git commit -m "update core reference"
 # git push
 
-# 正确的做法
+# Correct approach
 cd libs/core
 git add .
 git commit -m "fix: bug fix"
@@ -1486,60 +1486,60 @@ git commit -m "chore: update core to include bug fix"
 git push
 ```
 
-**误区二：直接修改子模块中的代码**
+**Misconception 2: Directly modifying code in the submodule**
 
-如果子模块是第三方库，不应该直接修改其中的代码，而应该 Fork 后修改，然后将子模块指向你的 Fork。
+If the submodule is a third-party library, you should not directly modify its code. Instead, you should fork it, make modifications, and then point the submodule to your fork.
 
 ```bash
-# 错误的做法
+# Wrong approach
 cd vendor/third-party-lib
-# 直接修改代码
+# Directly modify code
 git add .
 git commit -m "custom changes"
 
-# 正确的做法
-# 1. Fork 第三方库到你的账号
-# 2. 在 Fork 中进行修改
-# 3. 将子模块 URL 指向你的 Fork
+# Correct approach
+# 1. Fork the third-party library to your account
+# 2. Make modifications in the fork
+# 3. Point the submodule URL to your fork
 git config submodule.vendor/third-party-lib.url https://github.com/your-fork/third-party-lib.git
 git submodule sync
 ```
 
-**误区三：使用 SSH URL 导致 CI/CD 失败**
+**Misconception 3: Using SSH URLs causing CI/CD failures**
 
-在本地开发时使用 SSH URL 没有问题，但在 CI/CD 环境中可能没有 SSH 密钥。
+Using SSH URLs locally is fine, but CI/CD environments may not have SSH keys.
 
 ```bash
-# 问题：本地使用 SSH URL
+# Problem: Using SSH URL locally
 git submodule add git@github.com:company/core.git libs/core
 
-# 解决方案：使用 HTTPS URL，或在 CI/CD 中配置 SSH 密钥
+# Solution: Use HTTPS URL, or configure SSH keys in CI/CD
 git submodule add https://github.com/company/core.git libs/core
 ```
 
-**误区四：不使用 --recursive 导致嵌套子模块为空**
+**Misconception 4: Not using --recursive causing empty nested submodules**
 
 ```bash
-# 问题：克隆后嵌套子模块为空
+# Problem: Nested submodules are empty after cloning
 git clone https://github.com/company/main-project.git
 cd main-project
-ls libs/core/plugins/  # 目录为空
+ls libs/core/plugins/  # Directory is empty
 
-# 解决方案：使用 --recursive 选项
+# Solution: Use the --recursive option
 git clone --recurse-submodules https://github.com/company/main-project.git
-# 或者克隆后初始化
+# Or initialize after cloning
 git submodule update --init --recursive
 ```
 
-**误区五：子模块版本不一致导致构建失败**
+**Misconception 5: Inconsistent submodule versions causing build failures**
 
 ```bash
-# 问题：不同开发者使用不同版本的子模块
-# 开发者 A 的子模块指向 v1.0
-# 开发者 B 的子模块指向 v2.0
-# 构建结果不一致
+# Problem: Different developers use different submodule versions
+# Developer A's submodule points to v1.0
+# Developer B's submodule points to v2.0
+# Build results are inconsistent
 
-# 解决方案：锁定子模块版本
+# Solution: Lock the submodule version
 cd libs/core
 git checkout v1.0.0
 cd ../..
@@ -1548,41 +1548,41 @@ git commit -m "chore: pin core to v1.0.0"
 git push
 ```
 
-### 12.8 Submodule 的最佳实践清单
+### 12.8 Submodule Best Practices Checklist
 
-在使用 Submodule 时，请遵循以下最佳实践：
+When using Submodule, follow these best practices:
 
-- [ ] 使用 HTTPS URL 而非 SSH URL，便于 CI/CD 使用
-- [ ] 明确指定要跟踪的分支，避免使用默认分支
-- [ ] 在 README 中说明项目使用了 Submodule 及其用途
-- [ ] 为子模块的重要版本打标签，便于回溯
-- [ ] 使用 `.gitmodules` 配置更新策略和忽略策略
-- [ ] 在 CI/CD 中配置自动初始化子模块
-- [ ] 定期更新子模块，保持与上游同步
-- [ ] 在提交前检查子模块状态，确保没有未提交的修改
-- [ ] 使用 Git Hooks 自动化子模块管理
-- [ ] 建立子模块变更的代码审查流程
-- [ ] 为团队提供 Submodule 使用培训
-- [ ] 考虑替代方案，选择最适合项目需求的方案
-
----
-
-**上一篇：[GitHub CLI 命令行工具](26-github-cli.md) | 下一篇：[安全与权限管理](28-security-permissions.md)**
-
-Git Submodule 是一个强大但需要谨慎使用的工具。它通过将外部仓库作为子目录引用，实现了代码复用和版本锁定的精确管理。然而，这种灵活性也带来了复杂性，需要团队成员理解其工作原理和最佳实践。
-
-关键要点回顾：
-
-1. **理解核心概念：** 父仓库存储的是子模块的 commit 引用，而不是文件内容本身
-2. **掌握基本操作：** 添加、更新、删除、克隆是日常使用中最频繁的操作
-3. **善用配置文件：** `.gitmodules` 提供了丰富的配置选项，如分支跟踪、更新策略和忽略策略
-4. **注意两步提交：** 子模块变更需要先在子模块中提交，再更新父仓库引用
-5. **选择合适的方案：** 根据项目需求选择 Submodule、Subtree 或 Monorepo
-6. **自动化管理：** 使用 Git Hooks 和脚本简化 Submodule 的日常维护
-7. **安全与性能：** 注意子模块的安全验证和性能优化
-
-记住，没有最好的方案，只有最适合的方案。理解每种方案的优缺点，根据项目的具体需求和团队的技术水平做出选择，才是最重要的。在实际使用中，建议从小型项目开始实践，逐步积累经验，再应用到大型项目中。
+- [ ] Use HTTPS URLs instead of SSH URLs for easier CI/CD usage
+- [ ] Explicitly specify the branch to track, avoid using the default branch
+- [ ] Explain in the README that the project uses Submodule and its purpose
+- [ ] Tag important versions of submodules for easy rollback
+- [ ] Use `.gitmodules` to configure update strategies and ignore policies
+- [ ] Configure automatic submodule initialization in CI/CD
+- [ ] Update submodules regularly to stay in sync with upstream
+- [ ] Check submodule status before committing to ensure no uncommitted modifications
+- [ ] Use Git Hooks to automate submodule management
+- [ ] Establish a code review process for submodule changes
+- [ ] Provide Submodule usage training for the team
+- [ ] Consider alternatives and choose the approach that best fits the project needs
 
 ---
 
-**上一篇：[GitHub CLI 命令行工具](26-github-cli.md) | 下一篇：[安全与权限管理](28-security-permissions.md)**
+**Previous: [GitHub CLI Command Line Tools](26-github-cli.md) | Next: [Security and Permissions Management](28-security-permissions.md)**
+
+Git Submodule is a powerful tool that requires careful use. It achieves code reuse and precise version locking management by referencing external repositories as subdirectories. However, this flexibility also brings complexity, requiring team members to understand its working principles and best practices.
+
+Key points review:
+
+1. **Understand core concepts:** The parent repository stores the submodule's commit reference, not the file content itself
+2. **Master basic operations:** Adding, updating, deleting, and cloning are the most frequent operations in daily use
+3. **Make good use of configuration files:** `.gitmodules` provides rich configuration options such as branch tracking, update strategies, and ignore policies
+4. **Note the two-step commit:** Submodule changes need to be committed in the submodule first, then update the parent repository reference
+5. **Choose the right approach:** Choose Submodule, Subtree, or Monorepo based on project needs
+6. **Automate management:** Use Git Hooks and scripts to simplify daily Submodule maintenance
+7. **Security and performance:** Pay attention to submodule security verification and performance optimization
+
+Remember, there is no best solution, only the most suitable one. Understanding the pros and cons of each approach and making choices based on the specific needs of the project and the team's technical level is what matters most. In practice, it is recommended to start with small projects to gain experience before applying to large projects.
+
+---
+
+**Previous: [GitHub CLI Command Line Tools](26-github-cli.md) | Next: [Security and Permissions Management](28-security-permissions.md)**

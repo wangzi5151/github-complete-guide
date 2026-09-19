@@ -16,13 +16,13 @@ GitHub's permission model uses a three-layer architecture: organization level, t
 
 Organization Owner has the highest permissions, can perform following operations:
 
-**Manage Organization Settings**: Modify organization name, avatar, description, website and other basic information. Configure organization's security policies, such as强制 enabling two-factor authentication, setting IP whitelist, etc.
+**Manage Organization Settings**: Modify organization name, avatar, description, website and other basic information. Configure organization's security policies, such as enforcing two-factor authentication, setting IP whitelist, etc.
 
 **Manage Teams**: Create, delete teams, manage team members, configure team's repository access permissions. Team Maintainer can manage members within team, but cannot delete teams or modify organization-level settings.
 
 **Manage Repositories**: Create, delete, transfer repositories, configure repository's default settings. Organization owners can set default branch protection rules for all repositories within organization.
 
-**Configure Security Policies**: Set organization-level security policies, such as强制 enabling two-factor authentication, configuring SAML SSO, setting IP whitelist, etc. These policies affect all members and repositories within organization.
+**Configure Security Policies**: Set organization-level security policies, such as enforcing two-factor authentication, configuring SAML SSO, setting IP whitelist, etc. These policies affect all members and repositories within organization.
 
 **Manage Billing**: View and modify organization's subscription plans, manage payment methods, view usage reports.
 
@@ -41,7 +41,7 @@ Team is the permission management unit within organization, used to group member
 Team permission inheritance rules:
 - Team members inherit team's repository permissions
 - If user belongs to multiple teams, takes highest permission
-- Directly granted repository permissions优先于 team permissions
+- Directly granted repository permissions take priority over team permissions
 
 ### 1.4 Repository Level Permissions Details
 
@@ -55,19 +55,19 @@ Repository collaborator permissions are divided into five levels, each level has
 
 **Maintain**: On top of Write permission, adds ability to manage repository settings. Users with this permission can manage branch protection rules, configure Webhooks, manage deploy keys, etc. Suitable for advanced developers who need to manage repository configuration.
 
-**Admin**: Highest level of repository permission. Users with this permission can perform all operations, including deleting repository, managing collaborator permissions, transferring repository ownership, etc. Should be谨慎 granted.
+**Admin**: Highest level of repository permission. Users with this permission can perform all operations, including deleting repository, managing collaborator permissions, transferring repository ownership, etc. Should be granted cautiously.
 
 ## Chapter 2: Repository Visibility
 
 ### 2.1 Three Visibility Types
 
-GitHub provides three repository visibility types, each适用于 different scenarios:
+GitHub provides three repository visibility types, each suitable for different scenarios:
 
 **Public**: Repository visible to everyone, anyone can view code, clone repository. Public repositories suitable for open source projects, personal portfolios, public documentation, etc. Even for public repositories, should be careful not to commit sensitive information.
 
 **Private**: Repository only visible to authorized users, only users added as collaborators or belonging to authorized teams can access. Private repositories suitable for commercial projects, internal tools, projects containing sensitive configurations, etc.
 
-**Internal**: This is a visibility type specific to GitHub Enterprise. Internal repositories visible to all members within organization, but not visible to external users. Suitable for company内部 shared projects, cross-team collaboration documents, etc.
+**Internal**: This is a visibility type specific to GitHub Enterprise. Internal repositories visible to all members within organization, but not visible to external users. Suitable for company internal shared projects, cross-team collaboration documents, etc.
 
 ### 2.2 Set Repository Visibility
 
@@ -85,25 +85,25 @@ gh api repos/{owner}/{repo} -X PATCH -f private=true
 ### 2.3 Visibility Selection Suggestions
 
 **Scenarios suitable for Public**:
-- Open source projects,希望 community contribution
+- Open source projects, hoping for community contribution
 - Personal portfolio, showcasing technical abilities
-- Documentation and tutorials,方便 others learning
-- Public APIs and SDKs,供 developers use
+- Documentation and tutorials, convenient for others learning
+- Public APIs and SDKs, for developers use
 
 **Scenarios suitable for Private**:
 - Commercial project source code, containing core business logic
-- Internal tools and scripts,仅供 internal use
+- Internal tools and scripts, for internal use only
 - Projects containing sensitive configurations
 - Customer projects, needing confidentiality
 
 **Scenarios suitable for Internal**:
-- Company内部 shared projects, such as internal frameworks, tool libraries
+- Company internal shared projects, such as internal frameworks, tool libraries
 - Cross-team collaboration documents, such as technical specifications, design documents
 - Internal standards and specifications, such as code standards, process documents
 
 ### 2.4 Public Repository Security Considerations
 
-Even for public repositories, should注意 security issues:
+Even for public repositories, should pay attention to security issues:
 
 ```bash
 # 1. Never commit sensitive information
@@ -334,11 +334,11 @@ jobs:
 
 ## Chapter 5: GitHub Secrets Management
 
-In modern software development, applications typically need to access various external services and resources, such as databases, cloud services, third-party APIs, etc. These accesses usually require sensitive information (such as passwords, keys, tokens, etc.) for authentication. Writing these sensitive information directly into code is very dangerous做法, because code may be accidentally leaked or made public. GitHub Secrets provides a secure way to store and use these sensitive information.
+In modern software development, applications typically need to access various external services and resources, such as databases, cloud services, third-party APIs, etc. These accesses usually require sensitive information (such as passwords, keys, tokens, etc.) for authentication. Writing these sensitive information directly into code is very dangerous practice, because code may be accidentally leaked or made public. GitHub Secrets provides a secure way to store and use these sensitive information.
 
 ### 5.1 Types of Secrets
 
-GitHub provides多种 types of Secrets for storing sensitive information. Each type of Secrets has different scope and usage, developers need to choose appropriate type based on actual needs:
+GitHub provides multiple types of Secrets for storing sensitive information. Each type of Secrets has different scope and usage, developers need to choose appropriate type based on actual needs:
 
 | Type | Scope | Usage |
 |------|-------|-------|
@@ -389,7 +389,7 @@ gh secret set SHARED_TOKEN --org my-org \
 
 ### 5.4 Use Secrets in Actions
 
-In GitHub Actions workflows, can reference Secrets using special syntax. Secrets are automatically injected into workflow's environment variables for steps to use. Note that Secrets are automatically masked in logs to prevent accidental leakage. However, developers should still avoid printing Secrets to logs, because in某些 situations may bypass this protection mechanism.
+In GitHub Actions workflows, can reference Secrets using special syntax. Secrets are automatically injected into workflow's environment variables for steps to use. Note that Secrets are automatically masked in logs to prevent accidental leakage. However, developers should still avoid printing Secrets to logs, because in some situations may bypass this protection mechanism.
 
 ```yaml
 name: Deploy
@@ -414,7 +414,7 @@ jobs:
 
 ### 5.5 Secrets Security Best Practices
 
-Secrets security management is an important part of overall security strategy. Improper Secrets management may lead to serious security incidents, such as data leakage, service abuse, etc.以下是 practice-verified Secrets security best practices, developers should strictly follow in daily work.
+Secrets security management is an important part of overall security strategy. Improper Secrets management may lead to serious security incidents, such as data leakage, service abuse, etc. The following are practice-verified Secrets security best practices, developers should strictly follow in daily work.
 
 **Principle of Least Privilege**: Only grant necessary Secrets access permissions. Different environments should use different Secrets, avoid cross-environment usage. For example, production environment database password should not be used in test environment.
 
@@ -426,11 +426,11 @@ Secrets security management is an important part of overall security strategy. I
 
 ## Chapter 6: Environment Protection Rules
 
-Environment is a concept in GitHub Actions used to distinguish different deployment targets. By using environments, developers can configure different protection rules and Secrets for different deployment targets (such as development, testing, staging, production). Environment protection rules can help teams control deployment流程, ensure only authorized and verified code can be deployed to important environments.
+Environment is a concept in GitHub Actions used to distinguish different deployment targets. By using environments, developers can configure different protection rules and Secrets for different deployment targets (such as development, testing, staging, production). Environment protection rules can help teams control deployment process, ensure only authorized and verified code can be deployed to important environments.
 
 ### 6.1 Create Environment
 
-Environments can be created in repository settings, or dynamically created through API. Each environment can independently configure protection rules, Secrets and variables. Environment creation and management is usually负责 by repository administrators or DevOps engineers.
+Environments can be created in repository settings, or dynamically created through API. Each environment can independently configure protection rules, Secrets and variables. Environment creation and management is usually handled by repository administrators or DevOps engineers.
 
 ```bash
 # Create environment using CLI
@@ -446,7 +446,7 @@ gh api repos/{owner}/{repo}/environments/production \
 
 ### 6.2 Environment Protection Rules
 
-Environment protection rules define conditions that must be met before deployment to that environment. These rules can help teams implement deployment approval流程, delayed deployment, branch restrictions, etc. By合理 configuring protection rules, can greatly reduce risk of mis-deployment and unauthorized deployment.
+Environment protection rules define conditions that must be met before deployment to that environment. These rules can help teams implement deployment approval process, delayed deployment, branch restrictions, etc. By reasonably configuring protection rules, can greatly reduce risk of mis-deployment and unauthorized deployment.
 
 | Rule | Description |
 |------|-------------|
@@ -496,11 +496,11 @@ jobs:
 
 ## Chapter 7: Dependabot Security Updates
 
-In modern software development, projects typically depend on大量 third-party libraries and frameworks. These dependencies may have security vulnerabilities, if not及时 fixed, may be exploited by attackers. Manually checking and updating dependencies is tedious and容易遗漏 work. Dependabot is GitHub's automated dependency update tool, can help teams timely discover and fix dependency vulnerabilities, maintain project security.
+In modern software development, projects typically depend on large number of third-party libraries and frameworks. These dependencies may have security vulnerabilities, if not fixed in time, may be exploited by attackers. Manually checking and updating dependencies is tedious and easily overlooked work. Dependabot is GitHub's automated dependency update tool, can help teams timely discover and fix dependency vulnerabilities, maintain project security.
 
 ### 7.1 Enable Dependabot
 
-Dependabot configuration is done by creating `.github/dependabot.yml` file in repository. Configuration file defines package managers to monitor, check frequency, reviewers, etc. After enabling Dependabot, it will periodically check project dependencies, when发现 security updates or new versions available, will automatically create Pull Request.
+Dependabot configuration is done by creating `.github/dependabot.yml` file in repository. Configuration file defines package managers to monitor, check frequency, reviewers, etc. After enabling Dependabot, it will periodically check project dependencies, when discovering security updates or new versions available, will automatically create Pull Request.
 
 ```yaml
 # .github/dependabot.yml
@@ -541,7 +541,7 @@ updates:
 
 ### 7.2 Dependabot Configuration Options
 
-Dependabot provides丰富的 configuration options, allowing developers to customize dependency update behavior. By合理 configuring these options, can make Dependabot better adapt to project's specific needs. For example, can set check frequency, limit simultaneous open PR count, specify reviewers and assignees, etc.
+Dependabot provides rich configuration options, allowing developers to customize dependency update behavior. By reasonably configuring these options, can make Dependabot better adapt to project's specific needs. For example, can set check frequency, limit simultaneous open PR count, specify reviewers and assignees, etc.
 
 | Option | Description |
 |--------|-------------|
@@ -575,7 +575,7 @@ gh api repos/{owner}/{repo}/dependabot/alerts/{alert_number} \
 
 ### 7.4 Dependabot Auto-merge
 
-For low-risk dependency updates (such as patch version updates), can configure auto-merge feature. Auto-merge can reduce developers' manual operations, speed up dependency updates. However, auto-merge should be谨慎 used, recommend only enabling auto-merge for update types that have been充分 tested.
+For low-risk dependency updates (such as patch version updates), can configure auto-merge feature. Auto-merge can reduce developers' manual operations, speed up dependency updates. However, auto-merge should be used cautiously, recommend only enabling auto-merge for update types that have been fully tested.
 
 ```yaml
 # .github/workflows/dependabot-auto-merge.yml
@@ -613,11 +613,11 @@ Code Scanning is GitHub's static code analysis feature, can automatically discov
 
 ### 8.1 What is Code Scanning
 
-Code Scanning uses CodeQL engine for deep code analysis. CodeQL is GitHub's semantic code analysis engine, it converts code into queryable database, then uses predefined query rules to detect various security vulnerabilities and code defects. CodeQL can detect多种 types of security issues, including SQL injection, cross-site scripting (XSS), path traversal, hardcoded credentials, etc.
+Code Scanning uses CodeQL engine for deep code analysis. CodeQL is GitHub's semantic code analysis engine, it converts code into queryable database, then uses predefined query rules to detect various security vulnerabilities and code defects. CodeQL can detect multiple types of security issues, including SQL injection, cross-site scripting (XSS), path traversal, hardcoded credentials, etc.
 
 ### 8.2 Enable CodeQL
 
-CodeQL can be enabled through GitHub Actions workflow. After configuring CodeQL scanning, it will automatically run on every code push or Pull Request, analyzing code for security issues. CodeQL supports multiple programming languages, including JavaScript, Python, Java, C/C++, C#, Go, Ruby, etc. For large projects, can configure periodic scans (such as weekly) to持续 monitor code security status.
+CodeQL can be enabled through GitHub Actions workflow. After configuring CodeQL scanning, it will automatically run on every code push or Pull Request, analyzing code for security issues. CodeQL supports multiple programming languages, including JavaScript, Python, Java, C/C++, C#, Go, Ruby, etc. For large projects, can configure periodic scans (such as weekly) to continuously monitor code security status.
 
 ```yaml
 # .github/workflows/codeql.yml
@@ -665,7 +665,7 @@ jobs:
 
 ### 8.3 CodeQL Supported Languages
 
-CodeQL持续 expanding support for different programming languages. Currently, CodeQL has good support for mainstream programming languages, including languages commonly used in frontend, backend and mobile development. Different languages' support levels may vary, recommend checking official documentation for latest support status.
+CodeQL continuously expanding support for different programming languages. Currently, CodeQL has good support for mainstream programming languages, including languages commonly used in frontend, backend and mobile development. Different languages' support levels may vary, recommend checking official documentation for latest support status.
 
 CodeQL supports multiple programming languages, including:
 
@@ -701,7 +701,7 @@ gh api repos/{owner}/{repo}/code-scanning/alerts/{alert_number} \
 
 ## Chapter 9: Secret Scanning
 
-Key leakage is a common security issue in software development. Developers may不小心 commit API keys, database passwords, access tokens and other sensitive information to code repositories. Once this information is leaked, attackers may use them to access sensitive data or perform unauthorized operations. Secret Scanning is GitHub's key leakage detection feature, can automatically scan repositories for sensitive information, helping developers timely discover and fix key leakage issues.
+Key leakage is a common security issue in software development. Developers may accidentally commit API keys, database passwords, access tokens and other sensitive information to code repositories. Once this information is leaked, attackers may use them to access sensitive data or perform unauthorized operations. Secret Scanning is GitHub's key leakage detection feature, can automatically scan repositories for sensitive information, helping developers timely discover and fix key leakage issues.
 
 ### 9.1 What is Secret Scanning
 
@@ -731,7 +731,7 @@ gh api repos/{owner}/{repo} \
 
 ### 9.3 Secret Scanning Features
 
-Secret Scanning provides multiple feature modules, helping developers comprehensively protect key security. These features work together, forming complete key leakage detection and protection system. Developers should充分利用 these features, build multi-layer security protection.
+Secret Scanning provides multiple feature modules, helping developers comprehensively protect key security. These features work together, forming complete key leakage detection and protection system. Developers should fully utilize these features, build multi-layer security protection.
 
 | Feature | Description |
 |---------|-------------|
@@ -742,7 +742,7 @@ Secret Scanning provides multiple feature modules, helping developers comprehens
 
 ### 9.4 Custom Key Patterns
 
-Besides built-in key detection rules, Secret Scanning also supports custom key patterns. This is very useful for detecting specific key formats used within organization. For example, if organization internally uses特定 format API keys, can create custom patterns to detect these keys. Custom patterns use regular expressions, very flexible.
+Besides built-in key detection rules, Secret Scanning also supports custom key patterns. This is very useful for detecting specific key formats used within organization. For example, if organization internally uses specific format API keys, can create custom patterns to detect these keys. Custom patterns use regular expressions, very flexible.
 
 ```bash
 # Create custom key pattern
@@ -778,11 +778,11 @@ gh api repos/{owner}/{repo}/secret-scanning/alerts/{alert_number} \
 
 ## Chapter 10: Security Advisories
 
-Security Advisory is GitHub's security vulnerability disclosure mechanism. When security vulnerability is discovered in project, maintainers can create security advisory to coordinate vulnerability修复 and disclosure. Security advisory provides a secure space for maintainers and security researchers to privately discuss vulnerability details, until fix方案准备好后才公开 disclosure.
+Security Advisory is GitHub's security vulnerability disclosure mechanism. When security vulnerability is discovered in project, maintainers can create security advisory to coordinate vulnerability fix and disclosure. Security advisory provides a secure space for maintainers and security researchers to privately discuss vulnerability details, until fix solution is ready for public disclosure.
 
 ### 10.1 Create Security Advisory
 
-Security advisory creation通常遵循 responsible disclosure process. First, person discovering vulnerability (can be maintainer, security researcher or user) privately reports vulnerability. Then, maintainer creates security advisory draft, collaborates with reporter to develop fix方案. After fix version released, security advisory is公开, disclosing vulnerability information and fix方案 to community.
+Security advisory creation typically follows responsible disclosure process. First, person discovering vulnerability (can be maintainer, security researcher or user) privately reports vulnerability. Then, maintainer creates security advisory draft, collaborates with reporter to develop fix solution. After fix version released, security advisory is publicized, disclosing vulnerability information and fix solution to community.
 
 ```bash
 # Create security advisory draft
@@ -807,13 +807,13 @@ gh api repos/{owner}/{repo}/security-advisories \
 
 ### 10.2 Security Advisory Process
 
-Security advisory release is a严谨 process,需要 coordinate multiple stakeholders.以下是 typical security advisory release process, each step needs careful execution to ensure vulnerability is properly handled, while maximizing user safety.
+Security advisory release is a rigorous process, requires coordinating multiple stakeholders. The following is typical security advisory release process, each step needs careful execution to ensure vulnerability is properly handled, while maximizing user safety.
 
 1. **Discover Vulnerability**: Discover vulnerability through code review, security scanning or external report
 2. **Create Security Advisory Draft**: Create private security advisory draft on GitHub
-3. **Collaborate with Maintainers to Fix**: Collaborate with project maintainers to develop fix方案
+3. **Collaborate with Maintainers to Fix**: Collaborate with project maintainers to develop fix solution
 4. **Release Fix Version**: Release new version containing fix
-5. **Release Security Advisory**: Publicly disclose vulnerability information and fix方案
+5. **Release Security Advisory**: Publicly disclose vulnerability information and fix solution
 6. **CVE Assignment**: If needed, apply for CVE number
 
 ## Chapter 11: 2FA Two-Factor Authentication
@@ -822,7 +822,7 @@ Two-Factor Authentication (2FA) is an important measure to protect account secur
 
 ### 11.1 Enable 2FA
 
-Enabling 2FA is the first step to protect GitHub account security. GitHub supports多种 2FA methods, including TOTP applications, SMS and security keys. Recommend using TOTP application, because it doesn't rely on network connection, and security is higher than SMS. After enabling 2FA,每次 login requires entering dynamic verification code, ensuring only account holder can access account.
+Enabling 2FA is the first step to protect GitHub account security. GitHub supports multiple 2FA methods, including TOTP applications, SMS and security keys. Recommend using TOTP application, because it doesn't rely on network connection, and security is higher than SMS. After enabling 2FA, each login requires entering dynamic verification code, ensuring only account holder can access account.
 
 **Enable Steps**:
 1. Visit Settings → Password and authentication
@@ -833,7 +833,7 @@ Enabling 2FA is the first step to protect GitHub account security. GitHub suppor
 
 ### 11.2 2FA Authentication Methods
 
-GitHub supports多种 2FA authentication methods, each method has different security and convenience. Developers should choose appropriate authentication method based on security needs and usage habits. For high-security requirement accounts, recommend using security keys (like YubiKey) as primary authentication method.
+GitHub supports multiple 2FA authentication methods, each method has different security and convenience. Developers should choose appropriate authentication method based on security needs and usage habits. For high-security requirement accounts, recommend using security keys (like YubiKey) as primary authentication method.
 
 | Method | Security | Convenience | Recommended |
 |--------|----------|-------------|-------------|
@@ -844,7 +844,7 @@ GitHub supports多种 2FA authentication methods, each method has different secu
 
 ### 11.3 Recommended TOTP Applications
 
-TOTP (Time-based One-Time Password) is time-based one-time password algorithm. TOTP applications generate dynamic verification codes based on current time and shared key, verification codes update every 30 seconds.以下是 several commonly used TOTP applications, they all support multi-platform and multi-account management.
+TOTP (Time-based One-Time Password) is time-based one-time password algorithm. TOTP applications generate dynamic verification codes based on current time and shared key, verification codes update every 30 seconds. The following are several commonly used TOTP applications, they all support multi-platform and multi-account management.
 
 - **1Password**: Cross-platform password manager, supports TOTP
 - **Authy**: TOTP application supporting multi-device sync
@@ -857,14 +857,14 @@ Recovery codes are the only recovery method when 2FA is lost. When user cannot u
 
 **Recovery Code Secure Storage Suggestions**:
 - Save recovery codes to password manager
-- Print recovery codes and保存 in secure physical location
+- Print recovery codes and store in secure physical location
 - Don't store recovery codes on devices others can access
 - Don't store recovery codes in GitHub repositories
 - Regularly check if recovery codes are still valid
 
 ### 11.5 Organization Mandatory 2FA
 
-Organization owners can require all members to enable 2FA, this is an important measure to protect organization security. After organization enables mandatory 2FA policy, members who haven't enabled 2FA will not be able to access organization resources. Organization administrators should regularly check members' 2FA status, ensure all members have enabled 2FA. For members who haven't enabled 2FA, should timely提醒 and provide help.
+Organization owners can require all members to enable 2FA, this is an important measure to protect organization security. After organization enables mandatory 2FA policy, members who haven't enabled 2FA will not be able to access organization resources. Organization administrators should regularly check members' 2FA status, ensure all members have enabled 2FA. For members who haven't enabled 2FA, should timely remind and provide help.
 
 ```bash
 # View members who haven't enabled 2FA
@@ -876,11 +876,11 @@ gh api -X DELETE orgs/{org}/members/{username}
 
 ## Chapter 12: SSH Key and PAT Security Management
 
-SSH Key and Personal Access Token (PAT) are two main authentication methods for accessing GitHub. SSH Key is used for Git operations (such as clone, push, pull), PAT is used for API access and HTTPS authentication. Correct management of these credentials is crucial for protecting account security. This chapter will详细介绍 how to securely create, use and manage these credentials.
+SSH Key and Personal Access Token (PAT) are two main authentication methods for accessing GitHub. SSH Key is used for Git operations (such as clone, push, pull), PAT is used for API access and HTTPS authentication. Correct management of these credentials is crucial for protecting account security. This chapter will provide detailed introduction on how to securely create, use and manage these credentials.
 
 ### 12.1 SSH Key Management
 
-SSH Key is a public key encryption-based authentication method, more secure than password authentication. SSH Key consists of public key and private key, public key uploaded to GitHub, private key saved locally. When performing Git operations, SSH client uses private key for authentication,无需 entering password. Recommend using Ed25519 algorithm to generate SSH Key, because it's more secure and faster than RSA.
+SSH Key is a public key encryption-based authentication method, more secure than password authentication. SSH Key consists of public key and private key, public key uploaded to GitHub, private key saved locally. When performing Git operations, SSH client uses private key for authentication, no need to enter password. Recommend using Ed25519 algorithm to generate SSH Key, because it's more secure and faster than RSA.
 
 ```bash
 # Generate SSH key (recommend Ed25519)
@@ -905,7 +905,7 @@ ssh -T git@github.com
 
 ### 12.2 SSH Key Security Best Practices
 
-SSH Key security management is a key part of protecting account security.以下是 practice-verified SSH Key security best practices, developers should strictly follow in daily work. These best practices can help developers avoid common security risks, ensure secure SSH Key usage.
+SSH Key security management is a key part of protecting account security. The following are practice-verified SSH Key security best practices, developers should strictly follow in daily work. These best practices can help developers avoid common security risks, ensure secure SSH Key usage.
 
 **Use Ed25519 Algorithm**: Ed25519 is currently the most secure SSH Key algorithm, more secure and faster than RSA. Recommend all newly generated SSH Keys use Ed25519 algorithm.
 
@@ -913,7 +913,7 @@ SSH Key security management is a key part of protecting account security.以下�
 
 **Regularly Rotate SSH Key**: Regularly changing SSH Key can reduce key leakage risk. Recommend rotating SSH Key every 6-12 months, or immediately when key leakage suspected.
 
-**Use Different Keys for Different Devices**: Generate different SSH Keys for different devices,便于 management and revocation. When某个 device lost or stolen, only need to revoke that device's key, won't affect other devices.
+**Use Different Keys for Different Devices**: Generate different SSH Keys for different devices, convenient for management and revocation. When a device lost or stolen, only need to revoke that device's key, won't affect other devices.
 
 **Use SSH Config File to Simplify Management**: SSH config file (~/.ssh/config) can simplify multi-key management. Through config file, can specify different keys for different GitHub accounts.
 
@@ -934,11 +934,11 @@ Host github-work
 
 ### 12.3 Personal Access Token (PAT) Management
 
-Personal Access Token (PAT) is authentication method for accessing GitHub API. PAT can替代 password for HTTPS authentication, also can be used for API access. GitHub provides two types of PAT: Classic PAT and Fine-grained PAT. Fine-grained PAT provides更精细 permission control, recommended to use.
+Personal Access Token (PAT) is authentication method for accessing GitHub API. PAT can replace password for HTTPS authentication, also can be used for API access. GitHub provides two types of PAT: Classic PAT and Fine-grained PAT. Fine-grained PAT provides more precise permission control, recommended to use.
 
-**Classic PAT**: Classic PAT provides broad permission scopes, such as repo, workflow, admin:org, etc. Each permission scope includes multiple sub-permissions, cannot individually control. Classic PAT适用于 scenarios needing broad access permissions.
+**Classic PAT**: Classic PAT provides broad permission scopes, such as repo, workflow, admin:org, etc. Each permission scope includes multiple sub-permissions, cannot individually control. Classic PAT suitable for scenarios needing broad access permissions.
 
-**Fine-grained PAT**: Fine-grained PAT allows precise control of access permissions for specific repositories. Can individually configure read or write permissions for each repository, greatly improving security. Fine-grained PAT适用于 scenarios only needing access to specific repositories.
+**Fine-grained PAT**: Fine-grained PAT allows precise control of access permissions for specific repositories. Can individually configure read or write permissions for each repository, greatly improving security. Fine-grained PAT suitable for scenarios only needing access to specific repositories.
 
 ```bash
 # Create classic PAT
@@ -954,7 +954,7 @@ gh auth login --with-token <<< "$GITHUB_TOKEN"
 
 ### 12.4 PAT Permission Scopes
 
-Classic PAT permission scopes define token's accessible resource types. Developers should choose minimum necessary permission scopes based on actual needs, avoid granting过多 permissions.以下是 commonly used permission scopes and their descriptions.
+Classic PAT permission scopes define token's accessible resource types. Developers should choose minimum necessary permission scopes based on actual needs, avoid granting excessive permissions. The following are commonly used permission scopes and their descriptions.
 
 | Scope | Description |
 |-------|-------------|
@@ -967,9 +967,9 @@ Classic PAT permission scopes define token's accessible resource types. Develope
 
 ### 12.5 PAT Security Best Practices
 
-PAT security management is equally important as SSH Key. Improper PAT management may lead to unauthorized account access.以下是 PAT security best practices, developers should strictly follow in daily work.
+PAT security management is equally important as SSH Key. Improper PAT management may lead to unauthorized account access. The following are PAT security best practices, developers should strictly follow in daily work.
 
-**Use Fine-grained PAT**: Fine-grained PAT provides更精细 permission control, more secure than classic PAT. Recommend prioritizing fine-grained PAT, only use classic PAT when necessary.
+**Use Fine-grained PAT**: Fine-grained PAT provides more precise permission control, more secure than classic PAT. Recommend prioritizing fine-grained PAT, only use classic PAT when necessary.
 
 **Set Expiration Time**: Set reasonable expiration time for PAT, avoid long-term valid tokens. After expiration, need to recreate token, this can reduce token leakage risk.
 
@@ -981,11 +981,11 @@ PAT security management is equally important as SSH Key. Improper PAT management
 
 ## Chapter 13: Security Best Practices Checklist
 
-Security is a continuous process,需要 protection at multiple levels. This chapter provides a comprehensive security best practices checklist, covering personal account security, repository security, organization security, CI/CD security, etc. Developers and teams should regularly review these checklists, ensure security measures are implemented.
+Security is a continuous process, requires protection at multiple levels. This chapter provides a comprehensive security best practices checklist, covering personal account security, repository security, organization security, CI/CD security, etc. Developers and teams should regularly review these checklists, ensure security measures are implemented.
 
 ### 13.1 Personal Account Security
 
-Personal account security is the foundation of overall security. Every developer should protect their account, avoid unauthorized access.以下是 personal account security best practices checklist.
+Personal account security is the foundation of overall security. Every developer should protect their account, avoid unauthorized access. The following is personal account security best practices checklist.
 
 - [ ] Enable 2FA two-factor authentication
 - [ ] Use strong password (12+ characters, including uppercase, lowercase, numbers, special characters)
@@ -998,7 +998,7 @@ Personal account security is the foundation of overall security. Every developer
 
 ### 13.2 Repository Security
 
-Repository security is key to protecting code and projects. Every repository should configure appropriate security measures, prevent unauthorized access and code leakage.以下是 repository security best practices checklist.
+Repository security is key to protecting code and projects. Every repository should configure appropriate security measures, prevent unauthorized access and code leakage. The following is repository security best practices checklist.
 
 - [ ] Enable branch protection rules
 - [ ] Configure required code reviews
@@ -1013,7 +1013,7 @@ Repository security is key to protecting code and projects. Every repository sho
 
 ### 13.3 Organization Security
 
-Organization security is key to protecting entire team and projects. Organization administrators should configure appropriate security policies, ensure all members and repositories meet security requirements.以下是 organization security best practices checklist.
+Organization security is key to protecting entire team and projects. Organization administrators should configure appropriate security policies, ensure all members and repositories meet security requirements. The following is organization security best practices checklist.
 
 - [ ] Force members to enable 2FA
 - [ ] Configure SAML SSO (Enterprise)
@@ -1027,7 +1027,7 @@ Organization security is key to protecting entire team and projects. Organizatio
 
 ### 13.4 CI/CD Security
 
-CI/CD security is key to protecting automation processes. Improper CI/CD configuration may lead to sensitive information leakage or unauthorized deployment.以下是 CI/CD security best practices checklist.
+CI/CD security is key to protecting automation processes. Improper CI/CD configuration may lead to sensitive information leakage or unauthorized deployment. The following is CI/CD security best practices checklist.
 
 - [ ] Use minimum privilege GITHUB_TOKEN
 - [ ] Configure Environment Protection Rules
@@ -1040,7 +1040,7 @@ CI/CD security is key to protecting automation processes. Improper CI/CD configu
 
 ### 13.5 SECURITY.md Template
 
-SECURITY.md file is project's security policy document, used to inform users and contributors how to report security vulnerabilities. Every open source project should create SECURITY.md file, defining vulnerability reporting process and response time.以下是 SECURITY.md template, developers can modify according to project needs.
+SECURITY.md file is project's security policy document, used to inform users and contributors how to report security vulnerabilities. Every open source project should create SECURITY.md file, defining vulnerability reporting process and response time. The following is SECURITY.md template, developers can modify according to project needs.
 
 ```markdown
 # Security Policy
@@ -1074,7 +1074,7 @@ Please report security vulnerabilities to security@example.com.
 
 ### 13.6 Security Tool Recommendations
 
-Besides GitHub's built-in security features, there are many third-party security tools that can help teams improve code security. These tools can be integrated into CI/CD processes,实现 automated security detection.以下是 commonly used security tool recommendations, developers can choose appropriate tools based on project needs.
+Besides GitHub's built-in security features, there are many third-party security tools that can help teams improve code security. These tools can be integrated into CI/CD processes, achieving automated security detection. The following are commonly used security tool recommendations, developers can choose appropriate tools based on project needs.
 
 | Tool | Purpose | Integration Method |
 |------|---------|-------------------|

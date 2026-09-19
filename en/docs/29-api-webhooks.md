@@ -4,22 +4,22 @@
 
 ### 1.1 REST API and GraphQL API Introduction
 
-GitHub provides two API styles for developers: REST API and GraphQL API. Each API has its characteristics,适用于 different use scenarios. Understanding their differences and applicable scenarios is crucial for choosing the right API.
+GitHub provides two API styles for developers: REST API and GraphQL API. Each API has its characteristics, suitable for different use scenarios. Understanding their differences and applicable scenarios is crucial for choosing the right API.
 
-**REST API** is the earliest API style provided by GitHub, following RESTful architecture design principles. It uses multiple endpoints to access different resources, each endpoint corresponding to a specific URL. REST API uses standard HTTP methods (GET, POST, PATCH, PUT, DELETE) to perform different operations, and HTTP status codes to表示 operation results.
+**REST API** is the earliest API style provided by GitHub, following RESTful architecture design principles. It uses multiple endpoints to access different resources, each endpoint corresponding to a specific URL. REST API uses standard HTTP methods (GET, POST, PATCH, PUT, DELETE) to perform different operations, and HTTP status codes to indicate operation results.
 
-**GraphQL API** is the API style launched by GitHub in 2016, developed by Facebook. It uses a single endpoint (/graphql) to access all resources, and clients can precisely specify which data fields to获取. GraphQL API uses query language to describe data requirements, can获取 multiple related resources in one request.
+**GraphQL API** is the API style launched by GitHub in 2016, developed by Facebook. It uses a single endpoint (/graphql) to access all resources, and clients can precisely specify which data fields to fetch. GraphQL API uses query language to describe data requirements, can fetch multiple related resources in one request.
 
 ### 1.2 REST API vs GraphQL API Comparison
 
 | Feature | REST API | GraphQL API |
 |---------|----------|-------------|
 | Query Method | Multiple endpoints | Single endpoint |
-| Data获取 | Fixed structure | On-demand获取 |
-| Over-fetching | Possible |不会 |
+| Data Fetching | Fixed structure | On-demand fetching |
+| Over-fetching | Possible | Not possible |
 | Learning Difficulty | Low | Medium |
 | Version Management | Simple | Built-in |
-| Cache Support | Good | Needs额外配置 |
+| Cache Support | Good | Needs additional configuration |
 | Real-time Updates | Needs polling | Supports subscriptions |
 
 **REST API Advantages**:
@@ -29,9 +29,9 @@ GitHub provides two API styles for developers: REST API and GraphQL API. Each AP
 - Rich documentation, strong community support
 
 **GraphQL API Advantages**:
-- Precisely获取 needed data, avoid over-fetching
+- Precisely fetch needed data, avoid over-fetching
 - Get multiple related resources in one request
-- Strong type system,减少 errors
+- Strong type system, reduces errors
 - Supports real-time subscriptions
 
 ### 1.3 API Version Control
@@ -71,7 +71,7 @@ Common resource paths:
 
 ## Chapter 2: REST API Basic Usage
 
-REST API is GitHub's most commonly used API style. This chapter will详细介绍 REST API's basic usage, including getting resources, creating resources, updating resources and deleting resources. Through this chapter's learning, developers can master basic skills of using REST API to interact with GitHub.
+REST API is GitHub's most commonly used API style. This chapter will introduce in detail REST API's basic usage, including getting resources, creating resources, updating resources and deleting resources. Through this chapter's learning, developers can master basic skills of using REST API to interact with GitHub.
 
 ### 2.1 Get Repository Information
 
@@ -98,7 +98,7 @@ print(f"Stars: {repo['stargazers_count']}")
 
 ### 2.2 Response Format
 
-GitHub API returns JSON format response data. Response data contains resource's detailed information, developers can parse and use this information as needed. Understanding response data structure is crucial for correctly using API.以下是 repository information API's response example, containing commonly used fields.
+GitHub API returns JSON format response data. Response data contains resource's detailed information, developers can parse and use this information as needed. Understanding response data structure is crucial for correctly using API. Here is the repository information API's response example, containing commonly used fields.
 
 ```json
 {
@@ -127,7 +127,7 @@ GitHub API returns JSON format response data. Response data contains resource's 
 
 ### 2.3 Pagination
 
-When returning results are many, GitHub API uses pagination mechanism. By default, each page returns 30 records, maximum can be set to 100. Developers need to understand pagination mechanism to获取 all data. GitHub API includes pagination information in response headers, developers can use this information to get next page data.
+When returning results are many, GitHub API uses pagination mechanism. By default, each page returns 30 records, maximum can be set to 100. Developers need to understand pagination mechanism to fetch all data. GitHub API includes pagination information in response headers, developers can use this information to get next page data.
 
 ```bash
 # REST API pagination
@@ -163,7 +163,7 @@ def get_all_issues(owner, repo):
 
 ### 2.4 Filtering and Sorting
 
-GitHub API supports rich filtering and sorting parameters, helping developers precisely获取 needed data. By using these parameters, can reduce unnecessary data transfer, improve API call efficiency. Different API endpoints support different filtering and sorting parameters, developers should check API documentation for specific supported parameters.
+GitHub API supports rich filtering and sorting parameters, helping developers precisely fetch needed data. By using these parameters, can reduce unnecessary data transfer, improve API call efficiency. Different API endpoints support different filtering and sorting parameters, developers should check API documentation for specific supported parameters.
 
 ```bash
 # Filter Issues
@@ -181,7 +181,7 @@ curl "https://api.github.com/search/issues?q=repo:octocat/Hello-World+is:issue+i
 
 ### 2.5 Create and Update Resources
 
-Besides getting data, REST API can also be used to create and update resources. By sending POST, PATCH, PUT or DELETE requests, developers can manage various resources on GitHub. When creating and updating resources, need to provide corresponding data in request body.以下是 creating and updating Issues, comments and other resources examples.
+Besides getting data, REST API can also be used to create and update resources. By sending POST, PATCH, PUT or DELETE requests, developers can manage various resources on GitHub. When creating and updating resources, need to provide corresponding data in request body. Here are the creating and updating Issues, comments and other resources examples.
 
 ```bash
 # Create Issue
@@ -208,11 +208,11 @@ curl -X POST \
 
 ## Chapter 3: Authentication Methods
 
-Authentication is prerequisite for accessing GitHub API. GitHub supports多种 authentication methods, each适用于 different scenarios. Choosing appropriate authentication method is important for both security and convenience. This chapter will详细介绍 various authentication methods' characteristics and usage.
+Authentication is prerequisite for accessing GitHub API. GitHub supports various authentication methods, each suitable for different scenarios. Choosing appropriate authentication method is important for both security and convenience. This chapter will introduce in detail various authentication methods' characteristics and usage.
 
 ### 3.1 Personal Access Token (PAT)
 
-Personal Access Token (PAT) is the simplest authentication method, suitable for personal scripts and CI/CD processes. PAT can替代 password usage, provides same access权限 as password. Developers should create different PATs for different purposes, and set合理的 expiration time.
+Personal Access Token (PAT) is the simplest authentication method, suitable for personal scripts and CI/CD processes. PAT can replace password usage, provides same access permissions as password. Developers should create different PATs for different purposes, and set reasonable expiration time.
 
 ```bash
 # Create PAT
@@ -233,7 +233,7 @@ gh auth status
 
 ### 3.2 GitHub App Authentication
 
-GitHub App is a more secure authentication method, suitable for integration applications and automation tools. GitHub App uses JWT (JSON Web Token) for authentication, token has short validity period (1 hour), higher security. GitHub App can be installed on repositories or organizations,拥有 fine-grained permission control.以下是 using Python to implement GitHub App authentication example code.
+GitHub App is a more secure authentication method, suitable for integration applications and automation tools. GitHub App uses JWT (JSON Web Token) for authentication, token has short validity period (1 hour), higher security. GitHub App can be installed on repositories or organizations, with fine-grained permission control. Here is the using Python to implement GitHub App authentication example code.
 
 ```python
 import jwt
@@ -271,7 +271,7 @@ class GitHubApp:
 
 ### 3.3 OAuth App Authentication
 
-OAuth App is适用于 applications needing user authorization. Through OAuth flow, users can authorize applications to access specific resources of their GitHub account, without sharing passwords. OAuth App's authorization flow includes user authorization, getting authorization code, exchanging for access token, etc.以下是 OAuth authentication flow detailed explanation.
+OAuth App is suitable for applications needing user authorization. Through OAuth flow, users can authorize applications to access specific resources of their GitHub account, without sharing passwords. OAuth App's authorization flow includes user authorization, getting authorization code, exchanging for access token, etc. Here is the OAuth authentication flow detailed explanation.
 
 ```bash
 # 1. Create OAuth App
@@ -295,7 +295,7 @@ curl -H "Authorization: token ACCESS_TOKEN" \
 
 ### 3.4 Authentication Method Comparison
 
-Choosing appropriate authentication method requires considering multiple factors, including security, convenience, applicable scenarios, etc.以下是 various authentication methods detailed comparison, helping developers make choices based on actual needs. Generally, personal scripts and CI/CD use PAT, integration applications use GitHub App, third-party applications needing user authorization use OAuth App.
+Choosing appropriate authentication method requires considering multiple factors, including security, convenience, applicable scenarios, etc. Here is the various authentication methods detailed comparison, helping developers make choices based on actual needs. Generally, personal scripts and CI/CD use PAT, integration applications use GitHub App, third-party applications needing user authorization use OAuth App.
 
 | Method | Applicable Scenario | Expiration | Permission Scope |
 |--------|---------------------|------------|------------------|
@@ -310,7 +310,7 @@ GitHub API provides rich endpoints, covering various GitHub features. This chapt
 
 ### 4.1 User Related API
 
-User API is used to get user information, user's repositories, user's organizations, etc. Through these APIs, can build user profile pages, analyze user activities, etc.以下是 commonly used user API endpoint examples.
+User API is used to get user information, user's repositories, user's organizations, etc. Through these APIs, can build user profile pages, analyze user activities, etc. Here are the commonly used user API endpoint examples.
 
 ```bash
 # Get current user info
@@ -331,7 +331,7 @@ gh api users/{username}/gists
 
 ### 4.2 Repository Related API
 
-Repository API is used to manage repositories, including getting repository info, creating repository, deleting repository, getting branch list, etc. These APIs are foundation for building repository management tools.以下是 commonly used repository API endpoint examples.
+Repository API is used to manage repositories, including getting repository info, creating repository, deleting repository, getting branch list, etc. These APIs are foundation for building repository management tools. Here are the commonly used repository API endpoint examples.
 
 ```bash
 # Get repository info
@@ -358,7 +358,7 @@ gh api repos/{owner}/{repo}/branches
 
 ### 4.3 Issue Related API
 
-Issue API is used to manage Issues, including creating, updating, closing Issues, and managing labels and comments. Issues are important tools for project management, through APIs can实现 automated Issue management.以下是 commonly used Issue API endpoint examples.
+Issue API is used to manage Issues, including creating, updating, closing Issues, and managing labels and comments. Issues are important tools for project management, through APIs can achieve automated Issue management. Here are the commonly used Issue API endpoint examples.
 
 ```bash
 # List Issues
@@ -389,7 +389,7 @@ gh api -X DELETE repos/{owner}/{repo}/issues/{issue_number}/labels/{label_name}
 
 ### 4.4 Pull Request Related API
 
-Pull Request API is used to manage Pull Requests, including creating, reviewing, merging PRs. Pull Requests are core functionality of code collaboration, through APIs can实现 automated code review and merge processes.以下是 commonly used Pull Request API endpoint examples.
+Pull Request API is used to manage Pull Requests, including creating, reviewing, merging PRs. Pull Requests are core functionality of code collaboration, through APIs can achieve automated code review and merge processes. Here are the commonly used Pull Request API endpoint examples.
 
 ```bash
 # List PRs
@@ -419,7 +419,7 @@ gh api repos/{owner}/{repo}/pulls/{pull_number}/comments
 
 ### 4.5 Actions Related API
 
-Actions API is used to manage GitHub Actions, including viewing workflows, triggering runs, downloading logs, etc. Through Actions API, can实现 CI/CD process automation management.以下是 commonly used Actions API endpoint examples.
+Actions API is used to manage GitHub Actions, including viewing workflows, triggering runs, downloading logs, etc. Through Actions API, can achieve CI/CD process automation management. Here are the commonly used Actions API endpoint examples.
 
 ```bash
 # List workflows
@@ -444,7 +444,7 @@ gh api -X POST repos/{owner}/{repo}/actions/runs/{run_id}/cancel
 
 ### 4.6 Releases Related API
 
-Releases API is used to manage version releases, including creating, editing, deleting Releases, and uploading release assets. Version release is important part of software delivery, through APIs can实现 automated release process.以下是 commonly used Releases API endpoint examples.
+Releases API is used to manage version releases, including creating, editing, deleting Releases, and uploading release assets. Version release is important part of software delivery, through APIs can achieve automated release process. Here are the commonly used Releases API endpoint examples.
 
 ```bash
 # List Releases
@@ -471,11 +471,11 @@ gh api -X DELETE repos/{owner}/{repo}/releases/{release_id}
 
 ## Chapter 5: GraphQL API Basics
 
-GraphQL is a query language for APIs, developed and open-sourced by Facebook. GitHub launched GraphQL API in 2016, allowing clients to precisely specify which data to获取. Compared to REST API, GraphQL API can reduce data transfer volume, improve query efficiency. This chapter will introduce GraphQL API basics and usage methods.
+GraphQL is a query language for APIs, developed and open-sourced by Facebook. GitHub launched GraphQL API in 2016, allowing clients to precisely specify which data to fetch. Compared to REST API, GraphQL API can reduce data transfer volume, improve query efficiency. This chapter will introduce GraphQL API basics and usage methods.
 
 ### 5.1 Query Syntax
 
-GraphQL uses query language to describe data requirements. Query is a JSON format string, defining resources and fields to获取. GraphQL queries support nesting, can获取 multiple related resources in one request.以下是 GraphQL query basic syntax examples.
+GraphQL uses query language to describe data requirements. Query is a JSON format string, defining resources and fields to fetch. GraphQL queries support nesting, can fetch multiple related resources in one request. Here are the GraphQL query basic syntax examples.
 
 ```graphql
 # Basic query
@@ -516,7 +516,7 @@ query {
 
 ### 5.2 Mutation Operations
 
-Besides querying data, GraphQL also supports mutation operations. Mutations are used to create, update or delete resources. Mutation syntax is similar to queries, but uses `mutation` keyword.以下是 GraphQL mutation operation examples.
+Besides querying data, GraphQL also supports mutation operations. Mutations are used to create, update or delete resources. Mutation syntax is similar to queries, but uses `mutation` keyword. Here are the GraphQL mutation operation examples.
 
 ```graphql
 # Create Issue
@@ -554,7 +554,7 @@ mutation {
 
 ### 5.3 Use gh CLI for GraphQL
 
-gh CLI is the simplest way to use GraphQL API. gh CLI has built-in authentication and formatting features, developers can directly use `gh api graphql` command to execute GraphQL queries.以下是 using gh CLI to execute GraphQL query examples.
+gh CLI is the simplest way to use GraphQL API. gh CLI has built-in authentication and formatting features, developers can directly use `gh api graphql` command to execute GraphQL queries. Here are the using gh CLI to execute GraphQL query examples.
 
 ```bash
 # Basic query
@@ -614,11 +614,11 @@ query {
 
 ### 5.5 GraphQL vs REST Selection Suggestions
 
-Choosing whether to use GraphQL or REST API depends on specific use scenarios. Both API styles have advantages, developers should make choices based on actual needs.以下是 selection suggestions, helping developers make明智 decisions.
+Choosing whether to use GraphQL or REST API depends on specific use scenarios. Both API styles have advantages, developers should make choices based on actual needs. Here are the selection suggestions, helping developers make wise decisions.
 
 **Use GraphQL Scenarios**:
-- Need to获取 multiple related resources
-- Only need部分 fields, reduce data transfer
+- Need to fetch multiple related resources
+- Only need partial fields, reduce data transfer
 - Mobile applications, bandwidth limited
 - Complex nested query requirements
 
@@ -634,7 +634,7 @@ To simplify GitHub API usage, GitHub provides official SDK library Octokit. Octo
 
 ### 6.1 JavaScript/TypeScript Octokit
 
-JavaScript/TypeScript is one of the most commonly used programming languages, Octokit provides complete JavaScript/TypeScript support. Through npm installing `@octokit/rest` package, can use Octokit in project.以下是 using JavaScript Octokit example code.
+JavaScript/TypeScript is one of the most commonly used programming languages, Octokit provides complete JavaScript/TypeScript support. Through npm installing `@octokit/rest` package, can use Octokit in project. Here are the using JavaScript Octokit example code.
 
 ```bash
 # Install
@@ -689,7 +689,7 @@ async function getRepoWithGraphQL() {
 
 ### 6.2 Python PyGithub
 
-Python is the preferred language for data science and automation script development. PyGithub is Python community's most popular GitHub API library, providing complete GitHub API encapsulation. Through pip installing PyGithub, can use in Python projects.以下是 using PyGithub example code.
+Python is the preferred language for data science and automation script development. PyGithub is Python community's most popular GitHub API library, providing complete GitHub API encapsulation. Through pip installing PyGithub, can use in Python projects. Here are the using PyGithub example code.
 
 ```bash
 # Install
@@ -729,7 +729,7 @@ print(f"PR created: {pr.html_url}")
 
 ### 6.3 Go go-github
 
-Go is a popular language for building high-performance server applications. go-github is Go community's GitHub API library, maintained by Google. go-github provides complete GitHub API encapsulation, supporting type-safe API calls.以下是 using go-github example code.
+Go is a popular language for building high-performance server applications. go-github is Go community's GitHub API library, maintained by Google. go-github provides complete GitHub API encapsulation, supporting type-safe API calls. Here are the using go-github example code.
 
 ```go
 package main
@@ -773,7 +773,7 @@ func main() {
 
 ### 6.4 Using gh CLI
 
-gh CLI is GitHub's official command line tool, the simplest way to use GitHub API. gh CLI has built-in authentication, formatting, pagination features, developers don't need to handle complex API details.以下是 using gh CLI common command examples.
+gh CLI is GitHub's official command line tool, the simplest way to use GitHub API. gh CLI has built-in authentication, formatting, pagination features, developers don't need to handle complex API details. Here are the using gh CLI common command examples.
 
 ```bash
 # Get repository info
@@ -797,29 +797,29 @@ gh api repos/{owner}/{repo} --jq '.stargazers_count'
 
 ## Chapter 7: Webhooks Overview and Configuration
 
-Webhook is GitHub's real-time event notification mechanism. By configuring Webhooks, when repository发生 specific events, GitHub will send HTTP POST requests to specified URL. Webhook is foundation for building GitHub integration applications, can实现 automated event processing. This chapter will introduce Webhook's basic concepts and configuration methods.
+Webhook is GitHub's real-time event notification mechanism. By configuring Webhooks, when repository specific events occur, GitHub will send HTTP POST requests to specified URL. Webhook is foundation for building GitHub integration applications, can achieve automated event processing. This chapter will introduce Webhook's basic concepts and configuration methods.
 
 ### 7.1 What is Webhook
 
-Webhook is an HTTP callback mechanism, when GitHub repository发生 specific events, will send HTTP POST request to预先 configured URL. Compared to traditional polling methods, Webhook provides better real-time and higher efficiency event notification mechanism. Developers can process these events on receiving end, implementing various automation features.
+Webhook is an HTTP callback mechanism, when GitHub repository specific events occur, will send HTTP POST request to pre-configured URL. Compared to traditional polling methods, Webhook provides better real-time and higher efficiency event notification mechanism. Developers can process these events on receiving end, implementing various automation features.
 
-Webhook's working principle: First configure Webhook in GitHub repository, specify URL to receive events and event types to monitor. When repository发生 events (like code push, Issue creation, etc.), GitHub will send HTTP POST request to configured URL, request body contains event's detailed information. Receiving server processes request and returns HTTP 200 response, indicating event was successfully processed.
+Webhook's working principle: First configure Webhook in GitHub repository, specify URL to receive events and event types to monitor. When repository events occur (like code push, Issue creation, etc.), GitHub will send HTTP POST request to configured URL, request body contains event's detailed information. Receiving server processes request and returns HTTP 200 response, indicating event was successfully processed.
 
 ### 7.2 Webhook Advantages
 
-Webhook has多个显著 advantages over traditional polling methods, making it the首选 solution for building real-time integration applications.
+Webhook has several notable advantages over traditional polling methods, making it the preferred solution for building real-time integration applications.
 
 **Real-time**: Immediately notifies after event occurs, no need to wait for polling interval. This is very important for scenarios needing real-time response (like automatic deployment, instant notifications).
 
 **Reduce Polling**: No need to periodically check API, save API call quota. GitHub API has rate limits, using Webhook can avoid unnecessary API calls.
 
-**Save Resources**: Only sends requests when events occur, reduces server load. Polling method needs to periodically send requests, even when no new events will消耗 resources.
+**Save Resources**: Only sends requests when events occur, reduces server load. Polling method needs to periodically send requests, even when no new events will consume resources.
 
 **Automation**: Can trigger automation processes, like deployment, notifications, code review, etc. Webhook is foundation for building CI/CD pipelines and automation tools.
 
 ### 7.3 Configure Webhook
 
-Webhook can be configured through GitHub CLI or web interface. When configuring Webhook, need to specify URL to receive events, event types to monitor, content format, etc.以下是 using CLI to create and manage Webhook examples.
+Webhook can be configured through GitHub CLI or web interface. When configuring Webhook, need to specify URL to receive events, event types to monitor, content format, etc. Here are the using CLI to create and manage Webhook examples.
 
 ```bash
 # Create Webhook using CLI
@@ -853,7 +853,7 @@ gh api -X DELETE repos/{owner}/{repo}/hooks/{hook_id}
 
 ### 7.4 Webhook Configuration Options
 
-When configuring Webhook, need to understand each option's meaning and function. Reasonably configuring these options can ensure Webhook works correctly, while ensuring security.以下是 Webhook configuration options detailed explanation.
+When configuring Webhook, need to understand each option's meaning and function. Reasonably configuring these options can ensure Webhook works correctly, while ensuring security. Here is the Webhook configuration options detailed explanation.
 
 | Option | Description |
 |--------|-------------|
@@ -866,7 +866,7 @@ When configuring Webhook, need to understand each option's meaning and function.
 
 ### 7.5 Webhook Event List
 
-GitHub supports多种 Webhook events, covering various repository activities. Developers can选择 monitor specific event types based on needs.以下是 commonly used Webhook event types and their trigger timing detailed explanation.
+GitHub supports various Webhook events, covering various repository activities. Developers can choose to monitor specific event types based on needs. Here are the commonly used Webhook event types and their trigger timing detailed explanation.
 
 | Event | Trigger Timing |
 |-------|----------------|
@@ -903,11 +903,11 @@ GitHub supports多种 Webhook events, covering various repository activities. De
 
 ## Chapter 8: Webhook Event Types Details
 
-Each Webhook event type has its specific data structure and trigger conditions. Understanding event's detailed structure is crucial for correctly processing Webhook events. This chapter will详细介绍 several常用 event types' data structures and processing methods.
+Each Webhook event type has its specific data structure and trigger conditions. Understanding event's detailed structure is crucial for correctly processing Webhook events. This chapter will introduce in detail several commonly used event types' data structures and processing methods.
 
 ### 8.1 Push Event
 
-Push event triggers when code is pushed to repository. This is one of the most commonly used Webhook events, often used to trigger CI/CD pipelines, send notifications, etc. Push event contains pushed branch, commit information, pusher details.以下是 Push event's data structure example.
+Push event triggers when code is pushed to repository. This is one of the most commonly used Webhook events, often used to trigger CI/CD pipelines, send notifications, etc. Push event contains pushed branch, commit information, pusher details. Here is the Push event's data structure example.
 
 ```json
 {
@@ -939,7 +939,7 @@ Push event triggers when code is pushed to repository. This is one of the most c
 
 ### 8.2 Pull Request Event
 
-Pull Request event triggers when PR status changes. PR event's `action` field identifies specific change type, such as `opened` (created), `closed` (closed), `merged` (merged), `reviewed` (reviewed), etc. By monitoring PR events, can实现 automated code review, merge notifications, etc.以下是 PR event's data structure example.
+Pull Request event triggers when PR status changes. PR event's `action` field identifies specific change type, such as `opened` (created), `closed` (closed), `merged` (merged), `reviewed` (reviewed), etc. By monitoring PR events, can achieve automated code review, merge notifications, etc. Here is the PR event's data structure example.
 
 ```json
 {
@@ -968,7 +968,7 @@ Pull Request event triggers when PR status changes. PR event's `action` field id
 
 ### 8.3 Issue Event
 
-Issue event triggers when Issue status changes. Issue event's `action` field identifies specific change type, such as `opened` (created), `closed` (closed), `reopened` (reopened), `edited` (edited), etc. By monitoring Issue events, can实现 automated Issue management, notifications, etc.以下是 Issue event's data structure example.
+Issue event triggers when Issue status changes. Issue event's `action` field identifies specific change type, such as `opened` (created), `closed` (closed), `reopened` (reopened), `edited` (edited), etc. By monitoring Issue events, can achieve automated Issue management, notifications, etc. Here is the Issue event's data structure example.
 
 ```json
 {
@@ -994,7 +994,7 @@ Issue event triggers when Issue status changes. Issue event's `action` field ide
 
 ### 8.4 Workflow Run Event
 
-Workflow Run event triggers when GitHub Actions run completes. By monitoring Workflow Run events, can实现 CI/CD process monitoring and notifications. For example, when workflow fails send alert notification, when workflow succeeds trigger后续 process.以下是 Workflow Run event's data structure example.
+Workflow Run event triggers when GitHub Actions run completes. By monitoring Workflow Run events, can achieve CI/CD process monitoring and notifications. For example, when workflow fails send alert notification, when workflow succeeds trigger subsequent process. Here is the Workflow Run event's data structure example.
 
 ```json
 {
@@ -1016,11 +1016,11 @@ Workflow Run event triggers when GitHub Actions run completes. By monitoring Wor
 
 ## Chapter 9: Webhook Security (Signature Verification)
 
-Webhook security is key to building reliable integration applications. If Webhook requests are not verified, attackers may伪造 Webhook requests, triggering unauthorized operations. GitHub uses HMAC-SHA256 algorithm to sign Webhook requests, developers should verify signatures on receiving end, ensuring requests确实 come from GitHub.
+Webhook security is key to building reliable integration applications. If Webhook requests are not verified, attackers may forge Webhook requests, triggering unauthorized operations. GitHub uses HMAC-SHA256 algorithm to sign Webhook requests, developers should verify signatures on receiving end, ensuring requests indeed come from GitHub.
 
 ### 9.1 Why Signature Verification is Needed
 
-Signature verification is foundation of Webhook security. By verifying signatures, can ensure following几点: First, request确实 comes from GitHub, not伪造. Second, request has not been tampered with during transmission. Finally, prevent replay attacks (attackers intercepting合法 requests and resending). Developers should always verify Webhook signatures, don't skip this security step.
+Signature verification is foundation of Webhook security. By verifying signatures, can ensure the following points: First, request indeed comes from GitHub, not forged. Second, request has not been tampered with during transmission. Finally, prevent replay attacks (attackers intercepting legitimate requests and resending). Developers should always verify Webhook signatures, don't skip this security step.
 
 ### 9.2 Signature Generation Algorithm
 
@@ -1032,7 +1032,7 @@ X-Hub-Signature-256: sha256=abc123...
 
 ### 9.3 Signature Verification Examples
 
-Signature verification implementation varies by programming language, but basic principle is same: use Webhook Secret to perform HMAC-SHA256 calculation on request body, then compare with signature in request header. Comparison should use constant-time comparison function (like Python's `hmac.compare_digest`) to prevent timing attacks.以下是 several常用 languages' signature verification implementations.
+Signature verification implementation varies by programming language, but basic principle is same: use Webhook Secret to perform HMAC-SHA256 calculation on request body, then compare with signature in request header. Comparison should use constant-time comparison function (like Python's `hmac.compare_digest`) to prevent timing attacks. Here are the several commonly used languages' signature verification implementations.
 
 **Python Verification**:
 
@@ -1142,7 +1142,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 
 ### 9.4 Security Best Practices
 
-Webhook security不仅仅是 verifying signatures, includes multiple aspects of security measures.以下是 Webhook security best practices, developers should strictly follow when building integration applications. These best practices can help developers avoid common security risks, ensure Webhook service's security and reliability.
+Webhook security is not only about verifying signatures, includes multiple aspects of security measures. Here are the Webhook security best practices, developers should strictly follow when building integration applications. These best practices can help developers avoid common security risks, ensure Webhook service's security and reliability.
 
 1. **Always verify signatures**: Don't skip signature verification step
 2. **Use constant-time comparison**: Prevent timing attacks, use `hmac.compare_digest` etc. functions
@@ -1152,11 +1152,11 @@ Webhook security不仅仅是 verifying signatures, includes multiple aspects of 
 
 ## Chapter 10: Practice: Build GitHub Integration Application
 
-This chapter will通过 several actual cases, show how to use GitHub API and Webhooks to build integration applications. These cases cover common usage scenarios, including automatic code review, Issue auto-labeling, deployment notifications, etc. Through learning these cases, developers can master basic skills for building GitHub integration applications.
+This chapter will through several actual cases, show how to use GitHub API and Webhooks to build integration applications. These cases cover common usage scenarios, including automatic code review, Issue auto-labeling, deployment notifications, etc. Through learning these cases, developers can master basic skills for building GitHub integration applications.
 
 ### 10.1 Example: Automatic Code Review Bot
 
-Automatic code review bot is a common GitHub integration application. When Pull Request is created, bot automatically analyzes code changes, detects potential issues (like security vulnerabilities, code style problems, etc.), and adds review comments on PR.以下是 using Python Flask to build automatic code review bot example. This bot detects sensitive information and TODO comments in code, and adds corresponding comments on PR.
+Automatic code review bot is a common GitHub integration application. When Pull Request is created, bot automatically analyzes code changes, detects potential issues (like security vulnerabilities, code style problems, etc.), and adds review comments on PR. Here are the using Python Flask to build automatic code review bot example. This bot detects sensitive information and TODO comments in code, and adds corresponding comments on PR.
 
 ```python
 from flask import Flask, request
@@ -1247,7 +1247,7 @@ if __name__ == '__main__':
 
 ### 10.2 Example: Issue Auto-labeling Bot
 
-Issue auto-labeling bot can automatically add labels based on Issue's title and content. This helps Issue classification and management, improving project management efficiency.以下是 using Python Flask to build Issue auto-labeling bot example. This bot analyzes Issue's title and content, automatically adds corresponding labels (like bug, enhancement, documentation, etc.) based on keywords.
+Issue auto-labeling bot can automatically add labels based on Issue's title and content. This helps Issue classification and management, improving project management efficiency. Here are the using Python Flask to build Issue auto-labeling bot example. This bot analyzes Issue's title and content, automatically adds corresponding labels (like bug, enhancement, documentation, etc.) based on keywords.
 
 ```python
 from flask import Flask, request
@@ -1333,7 +1333,7 @@ if __name__ == '__main__':
 
 ### 10.3 Example: Deployment Notification Bot
 
-Deployment notification bot can send notifications when CI/CD process completes. This helps team understand deployment status, timely discover and handle deployment issues.以下是 using Python Flask to build deployment notification bot example. This bot monitors GitHub Actions' workflow_run event, when workflow completes, sends notification消息 to Slack.
+Deployment notification bot can send notifications when CI/CD process completes. This helps team understand deployment status, timely discover and handle deployment issues. Here are the using Python Flask to build deployment notification bot example. This bot monitors GitHub Actions' workflow_run event, when workflow completes, sends notification messages to Slack.
 
 ```python
 from flask import Flask, request
@@ -1411,7 +1411,7 @@ GitHub has rate limits for API calls, to prevent abuse and ensure service stabil
 
 ### 11.1 Rate Limit Rules
 
-GitHub API's rate limits vary by authentication method. Unauthenticated requests have lowest rate limits, GitHub App has highest rate limits. Developers should choose appropriate authentication method based on actual needs, and reasonably plan API calls.以下是 different authentication methods' rate limit details.
+GitHub API's rate limits vary by authentication method. Unauthenticated requests have lowest rate limits, GitHub App has highest rate limits. Developers should choose appropriate authentication method based on actual needs, and reasonably plan API calls. Here are the different authentication methods' rate limit details.
 
 | Authentication Method | Core Limit | Search Limit | GraphQL Points |
 |-----------------------|------------|--------------|----------------|
@@ -1422,7 +1422,7 @@ GitHub API's rate limits vary by authentication method. Unauthenticated requests
 
 ### 11.2 Check Rate Limits
 
-Developers can check current rate limit status through API. Rate limit information includes total limit, used count, remaining count and reset time. By monitoring this information, can avoid exceeding rate limits.以下是 checking rate limit methods.
+Developers can check current rate limit status through API. Rate limit information includes total limit, used count, remaining count and reset time. By monitoring this information, can avoid exceeding rate limits. Here are the checking rate limit methods.
 
 ```bash
 # View current limits
@@ -1455,7 +1455,7 @@ gh api /rate_limit
 
 ### 11.3 Handle Rate Limits
 
-When API calls exceed rate limits, GitHub returns 403 status code. Developers should handle rate limits in code, when encountering rate limits, wait一段时间 then retry.以下是 handling rate limits Python example code, it automatically detects rate limits and waits for reset time.
+When API calls exceed rate limits, GitHub returns 403 status code. Developers should handle rate limits in code, when encountering rate limits, wait a period of time then retry. Here are the handling rate limits Python example code, it automatically detects rate limits and waits for reset time.
 
 ```python
 import requests
@@ -1493,7 +1493,7 @@ def github_api_call(url, token):
 
 ### 11.4 Optimization Strategies
 
-To reduce API call次数 and improve efficiency, developers can采取多种 optimization strategies. These strategies can help applications complete more work within rate limits, while improving response speed and user experience.以下是 commonly used API call optimization strategies.
+To reduce API call count and improve efficiency, developers can adopt various optimization strategies. These strategies can help applications complete more work within rate limits, while improving response speed and user experience. Here are the commonly used API call optimization strategies.
 
 **Use Conditional Requests**:
 
@@ -1568,11 +1568,11 @@ response = requests.get('https://api.github.com/repos/octocat/Hello-World')
 
 ## Chapter 12: GitHub App vs OAuth App Comparison
 
-GitHub App and OAuth App are two different application types,适用于 different use scenarios. Understanding their differences is crucial for choosing appropriate application type. This chapter will详细 compare both application types' characteristics and applicable scenarios.
+GitHub App and OAuth App are two different application types, suitable for different use scenarios. Understanding their differences is crucial for choosing appropriate application type. This chapter will compare in detail both application types' characteristics and applicable scenarios.
 
 ### 12.1 Core Differences
 
-GitHub App and OAuth App have显著 differences in identity model, permission model, rate limits, etc. GitHub App runs with independent identity, has its own permissions; OAuth App runs with user identity, inherits user's permissions. These differences determine their applicable scenarios.
+GitHub App and OAuth App have significant differences in identity model, permission model, rate limits, etc. GitHub App runs with independent identity, has its own permissions; OAuth App runs with user identity, inherits user's permissions. These differences determine their applicable scenarios.
 
 | Feature | GitHub App | OAuth App |
 |---------|------------|-----------|
@@ -1580,12 +1580,12 @@ GitHub App and OAuth App have显著 differences in identity model, permission mo
 | Installation | Installed on repository/organization | User authorization |
 | Permissions | Fine-grained permissions | User scope permissions |
 | Rate Limit | 15000/hour | 5000/hour |
-| Webhook | Bound to installation | Needs单独配置 |
+| Webhook | Bound to installation | Needs separate configuration |
 | Recommended Scenario | Integration applications | User authorization applications |
 
 ### 12.2 GitHub App Advantages
 
-GitHub App is more modern application type, has多个 advantages. These advantages make GitHub App the首选 for building integration applications.以下是 GitHub App's main advantages, developers should consider these factors when choosing application type.
+GitHub App is more modern application type, has several advantages. These advantages make GitHub App the preferred for building integration applications. Here are the GitHub App's main advantages, developers should consider these factors when choosing application type.
 
 **Fine-grained Permissions**: GitHub App can precisely configure needed permissions, only request necessary access. This is more secure than OAuth App's user scope permissions.
 
@@ -1599,7 +1599,7 @@ GitHub App is more modern application type, has多个 advantages. These advantag
 
 ### 12.3 OAuth App Advantages
 
-OAuth App is traditional application type, although in某些方面不如 GitHub App, still has its unique advantages. In some scenarios, OAuth App may be better choice.以下是 OAuth App's main advantages.
+OAuth App is traditional application type, although in certain aspects not as good as GitHub App, still has its unique advantages. In some scenarios, OAuth App may be better choice. Here are the OAuth App's main advantages.
 
 **User Identity**: OAuth App executes operations with user identity, can access all resources user has permission to.
 
@@ -1611,7 +1611,7 @@ OAuth App is traditional application type, although in某些方面不如 GitHub 
 
 ### 12.4 Selection Suggestions
 
-Choosing whether to use GitHub App or OAuth App depends on specific use scenarios. Developers should consider application's needs, security requirements and user experience等因素 to make choices.以下是 selection suggestions, helping developers make明智 decisions.
+Choosing whether to use GitHub App or OAuth App depends on specific use scenarios. Developers should consider application's needs, security requirements and user experience factors to make choices. Here are the selection suggestions, helping developers make wise decisions.
 
 **Choose GitHub App**:
 - Building GitHub integration applications
@@ -1627,7 +1627,7 @@ Choosing whether to use GitHub App or OAuth App depends on specific use scenario
 
 ### 12.5 Create GitHub App
 
-Creating GitHub App requires completing in GitHub settings. Creation process needs configuring application's basic information, permissions, Webhooks, etc.以下是 creating GitHub App detailed steps, developers should follow these steps to complete application creation and configuration.
+Creating GitHub App requires completing in GitHub settings. Creation process needs configuring application's basic information, permissions, Webhooks, etc. Here are the creating GitHub App detailed steps, developers should follow these steps to complete application creation and configuration.
 
 ```bash
 # 1. Visit Settings → Developer settings → GitHub Apps → New GitHub App
@@ -1654,7 +1654,7 @@ Creating GitHub App requires completing in GitHub settings. Creation process nee
 
 ### 12.6 Use GitHub App
 
-Using GitHub App requires implementing JWT authentication and installation token retrieval.以下是 using Python to implement GitHub App authentication complete example code. This example shows how to generate JWT, get installation token, and use installation token to call API. Developers can build their own GitHub App applications based on this example.
+Using GitHub App requires implementing JWT authentication and installation token retrieval. Here are the using Python to implement GitHub App authentication complete example code. This example shows how to generate JWT, get installation token, and use installation token to call API. Developers can build their own GitHub App applications based on this example.
 
 ```python
 import jwt

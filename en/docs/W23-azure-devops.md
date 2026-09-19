@@ -10,9 +10,9 @@ Azure DevOps is Microsoft's enterprise-level DevOps platform, deeply integrated 
 |--------|-------------|
 | Azure Pipelines | Directly use Azure DevOps for build and deploy |
 | GitHub Actions | Use Azure tasks in GitHub |
-| Boards Integration | Azure Boards关联 GitHub Issues |
-| Artifacts | Package management联动 GitHub Packages |
-| Test Plans | Test management关联 PRs |
+| Boards Integration | Azure Boards associates with GitHub Issues |
+| Artifacts | Package management integrates with GitHub Packages |
+| Test Plans | Test management associates with PRs |
 
 ## Azure Pipelines + GitHub
 
@@ -199,9 +199,9 @@ npm publish
 
 | Feature | Description |
 |---------|-------------|
-| Work Item Association | PR关联 Azure Boards |
+| Work Item Association | PR associates with Azure Boards |
 | Status Check | Build status updates to PR |
-| Deployment Tracking | Deployment status显示在 GitHub |
+| Deployment Tracking | Deployment status displayed in GitHub |
 | Security Scan | Code security check |
 
 ## Best Practices

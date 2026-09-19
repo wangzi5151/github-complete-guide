@@ -1,8 +1,8 @@
-# GitHub Actions 高级用法
+# GitHub Actions Advanced Usage
 
-## 复用工作流 (Reusable Workflows)
+## Reusable Workflows
 
-### 创建复用工作流
+### Creating Reusable Workflows
 
 ```yaml
 # .github/workflows/reusable-build.yml
@@ -21,7 +21,7 @@ on:
         default: true
     outputs:
       build-version:
-        description: "构建版本号"
+        description: "Build version number"
         value: ${{ jobs.build.outputs.version }}
     secrets:
       NPM_TOKEN:
@@ -52,7 +52,7 @@ jobs:
       run: npm test
 ```
 
-### 调用复用工作流
+### Calling Reusable Workflows
 
 ```yaml
 # .github/workflows/ci.yml
@@ -74,9 +74,9 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
-## 矩阵策略 (Matrix Strategy)
+## Matrix Strategy
 
-### 基础矩阵
+### Basic Matrix
 
 ```yaml
 jobs:
@@ -97,14 +97,14 @@ jobs:
     - run: npm test
 ```
 
-### 高级矩阵配置
+### Advanced Matrix Configuration
 
 ```yaml
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false  # 一个失败不影响其他
+      fail-fast: false  # One failure doesn't affect others
       matrix:
         os: [ubuntu-latest]
         node-version: [18, 20, 22]
@@ -123,17 +123,17 @@ jobs:
     - run: npm test
 ```
 
-## 并发控制 (Concurrency)
+## Concurrency
 
-### 基础并发
+### Basic Concurrency
 
 ```yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true  # 取消正在运行的旧工作流
+  cancel-in-progress: true  # Cancel currently running old workflows
 ```
 
-### 环境级并发
+### Environment-level Concurrency
 
 ```yaml
 jobs:
@@ -142,7 +142,7 @@ jobs:
     environment: staging
     concurrency:
       group: deploy-staging
-      cancel-in-progress: false  # 部署不允许取消
+      cancel-in-progress: false  # Deployment does not allow cancellation
     
     steps:
     - uses: actions/checkout@v4
@@ -161,31 +161,31 @@ jobs:
     - run: npm run deploy:production
 ```
 
-## 自托管 Runner
+## Self-hosted Runner
 
-### 安装 Runner
+### Installing Runner
 
 ```bash
-# 下载 Runner
+# Download Runner
 mkdir actions-runner && cd actions-runner
 curl -o actions-runner-linux-x64-2.311.0.tar.gz -L \
   https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz
 tar xzf actions-runner-linux-x64-2.311.0.tar.gz
 
-# 配置
+# Configure
 ./config.sh --url https://github.com/your-org/your-repo --token YOUR_TOKEN
 
-# 安装为服务
+# Install as service
 sudo ./svc.sh install
 sudo ./svc.sh start
 ```
 
-### 使用 Runner
+### Using Runner
 
 ```yaml
 jobs:
   build:
-    runs-on: self-hosted  # 使用自托管 Runner
+    runs-on: self-hosted  # Use self-hosted Runner
     
     steps:
     - uses: actions/checkout@v4
@@ -193,7 +193,7 @@ jobs:
     - run: npm run build
 ```
 
-### Runner 标签
+### Runner Labels
 
 ```yaml
 jobs:
@@ -204,9 +204,9 @@ jobs:
     runs-on: [self-hosted, gpu]
 ```
 
-## 环境变量和 Secrets
+## Environment Variables and Secrets
 
-### 环境变量
+### Environment Variables
 
 ```yaml
 env:
@@ -223,7 +223,7 @@ jobs:
     - run: echo "Building version $BUILD_VERSION"
 ```
 
-### Secrets 管理
+### Secrets Management
 
 ```yaml
 jobs:
@@ -246,17 +246,17 @@ jobs:
 jobs:
   deploy-production:
     runs-on: ubuntu-latest
-    environment: production  # 使用环境级 Secrets
+    environment: production  # Use environment-level Secrets
     
     steps:
     - run: echo "Deploying to production"
       env:
-        API_KEY: ${{ secrets.API_KEY }}  # 从 production 环境获取
+        API_KEY: ${{ secrets.API_KEY }}  # Obtain from production environment
 ```
 
-## 工作流优化
+## Workflow Optimization
 
-### 缓存依赖
+### Caching Dependencies
 
 ```yaml
 steps:
@@ -273,7 +273,7 @@ steps:
 - run: npm ci
 ```
 
-### 条件执行
+### Conditional Execution
 
 ```yaml
 steps:
@@ -288,34 +288,34 @@ steps:
   if: github.event_name == 'pull_request'
 ```
 
-### 继续错误
+### Continue on Error
 
 ```yaml
 steps:
 - name: Try something
   run: npm run risky-command
-  continue-on-error: true  # 即使失败也继续
+  continue-on-error: true  # Continue even if it fails
 
 - name: Check result
   if: steps.try.outcome == 'failure'
   run: echo "Previous step failed but we're continuing"
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **使用复用工作流**：减少重复配置
-2. **矩阵测试**：确保兼容性
-3. **并发控制**：避免资源浪费
-4. **缓存依赖**：加速构建
-5. **使用 Secrets**：不要硬编码敏感信息
-6. **环境保护**：生产环境需要审批
+1. **Use Reusable Workflows**: Reduce duplicate configurations
+2. **Matrix Testing**: Ensure compatibility
+3. **Concurrency Control**: Avoid resource waste
+4. **Cache Dependencies**: Speed up builds
+5. **Use Secrets**: Don't hardcode sensitive information
+6. **Environment Protection**: Production environment requires approval
 
-## 相关资源
+## Related Resources
 
-- [复用工作流文档](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
-- [矩阵策略文档](https://docs.github.com/en/actions/using-jobs/using-a-matrix-strategy-for-jobs)
-- [自托管 Runner 文档](https://docs.github.com/en/actions/hosting-your-own-runners)
+- [Reusable Workflows Documentation](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
+- [Matrix Strategy Documentation](https://docs.github.com/en/actions/using-jobs/using-a-matrix-strategy-for-jobs)
+- [Self-hosted Runner Documentation](https://docs.github.com/en/actions/hosting-your-own-runners)
 
 ---
 
-**上一篇：[GitHub Actions 自动化](19-github-actions.md) | 下一篇：[GitHub Advanced Security](W10-advanced-security.md)**
+**Previous: [GitHub Actions Automation](19-github-actions.md) | Next: [GitHub Advanced Security](W10-advanced-security.md)**

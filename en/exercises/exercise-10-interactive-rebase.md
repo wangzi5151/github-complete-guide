@@ -1,19 +1,19 @@
-# 练习 10：Interactive Rebase 实战
+# Exercise 10: Interactive Rebase in Practice
 
-## 学习目标
+## Learning Objectives
 
-- 掌握 `git rebase -i` 的使用
-- 学会压缩提交
-- 理解重排提交顺序
-- 学会修改提交信息
+- Master the use of `git rebase -i`
+- Learn to squash commits
+- Understand how to reorder commits
+- Learn to modify commit messages
 
-## 场景描述
+## Scenario Description
 
-你在开发过程中创建了多个小提交，现在需要在提交 PR 前整理提交历史，使其更清晰。
+During development, you have created multiple small commits. Now you need to clean up the commit history before submitting a PR to make it clearer.
 
-## 步骤
+## Steps
 
-### 步骤 1：创建测试仓库
+### Step 1: Create a Test Repository
 
 ```bash
 mkdir rebase-practice
@@ -21,190 +21,190 @@ cd rebase-practice
 git init
 ```
 
-### 步骤 2：创建初始提交
+### Step 2: Create Initial Commit
 
 ```bash
-echo "# 项目" > README.md
+echo "# Project" > README.md
 git add .
-git commit -m "feat: 初始化项目"
+git commit -m "feat: Initialize project"
 ```
 
-### 步骤 3：创建多个提交
+### Step 3: Create Multiple Commits
 
 ```bash
-# 提交 1
-echo "功能 1" > feature1.js
+# Commit 1
+echo "Feature 1" > feature1.js
 git add .
-git commit -m "feat: 添加功能 1"
+git commit -m "feat: Add feature 1"
 
-# 提交 2（修复拼写错误）
-echo "功能 1 修复" >> feature1.js
+# Commit 2 (Fix Typo)
+echo "Feature 1 fix" >> feature1.js
 git add .
-git commit -m "fix: 修复功能 1 拼写错误"
+git commit -m "fix: Fix feature 1 typo"
 
-# 提交 3
-echo "功能 2" > feature2.js
+# Commit 3
+echo "Feature 2" > feature2.js
 git add .
-git commit -m "feat: 添加功能 2"
+git commit -m "feat: Add feature 2"
 
-# 提交 4（空格修复）
-echo "功能 2 " >> feature2.js
+# Commit 4 (Space Fix)
+echo "Feature 2 " >> feature2.js
 git add .
-git commit -m "chore: 修复空格"
+git commit -m "chore: Fix space"
 
-# 提交 5
-echo "功能 3" > feature3.js
+# Commit 5
+echo "Feature 3" > feature3.js
 git add .
-git commit -m "feat: 添加功能 3"
+git commit -m "feat: Add feature 3"
 ```
 
-### 步骤 4：查看提交历史
+### Step 4: View Commit History
 
 ```bash
 git log --oneline
 ```
 
-### 步骤 5：启动 Interactive Rebase
+### Step 5: Start Interactive Rebase
 
 ```bash
-# 重新排列最近 5 个提交
+# Reorder the last 5 commits
 git rebase -i HEAD~5
 ```
 
-## Interactive Rebase 命令
+## Interactive Rebase Commands
 
-### 常用命令
+### Common Commands
 
-| 命令 | 说明 |
+| Command | Description |
 |------|------|
-| `pick` | 保留提交 |
-| `reword` | 保留提交，修改提交信息 |
-| `edit` | 暂停提交，允许修改内容 |
-| `squash` | 压缩提交到前一个提交 |
-| `fixup` | 压缩提交到前一个提交，丢弃提交信息 |
-| `drop` | 删除提交 |
+| `pick` | Keep the commit |
+| `reword` | Keep the commit, modify commit message |
+| `edit` | Pause the commit, allow modifying content |
+| `squash` | Squash the commit into the previous commit |
+| `fixup` | Squash the commit into the previous commit, discard commit message |
+| `drop` | Delete the commit |
 
-### 操作示例
+### Operation Examples
 
-编辑器会打开并显示：
-
-```
-pick abc1234 feat: 添加功能 1
-pick def5678 fix: 修复功能 1 拼写错误
-pick ghi9012 feat: 添加功能 2
-pick jkl3456 chore: 修复空格
-pick mno7890 feat: 添加功能 3
-```
-
-修改为：
+The editor will open and display:
 
 ```
-pick abc1234 feat: 添加功能 1
-fixup def5678 fix: 修复功能 1 拼写错误
-pick ghi9012 feat: 添加功能 2
-fixup jkl3456 chore: 修复空格
-pick mno7890 feat: 添加功能 3
+pick abc1234 feat: Add feature 1
+pick def5678 fix: Fix feature 1 typo
+pick ghi9012 feat: Add feature 2
+pick jkl3456 chore: Fix space
+pick mno7890 feat: Add feature 3
 ```
 
-## 实战任务
+Change to:
 
-### 任务 1：压缩提交
+```
+pick abc1234 feat: Add feature 1
+fixup def5678 fix: Fix feature 1 typo
+pick ghi9012 feat: Add feature 2
+fixup jkl3456 chore: Fix space
+pick mno7890 feat: Add feature 3
+```
 
-1. 创建 3 个相关提交
-2. 使用 `squash` 将它们压缩成一个提交
-3. 编写新的提交信息
+## Hands-on Tasks
+
+### Task 1: Squash Commits
+
+1. Create 3 related commits
+2. Use `squash` to combine them into one commit
+3. Write a new commit message
 
 ```bash
-# 创建测试提交
-echo "代码 1" > file1.js
-git add . && git commit -m "feat: 添加文件 1"
+# Create test commits
+echo "Code 1" > file1.js
+git add . && git commit -m "feat: Add file 1"
 
-echo "代码 2" > file2.js
-git add . && git commit -m "feat: 添加文件 2"
+echo "Code 2" > file2.js
+git add . && git commit -m "feat: Add file 2"
 
-echo "代码 3" > file3.js
-git add . && git commit -m "feat: 添加文件 3"
+echo "Code 3" > file3.js
+git add . && git commit -m "feat: Add file 3"
 
-# 压缩提交
+# Squash commits
 git rebase -i HEAD~3
 ```
 
-### 任务 2：重排提交顺序
+### Task 2: Reorder Commit Order
 
-1. 创建 3 个独立的提交
-2. 使用 interactive rebase 重排顺序
-3. 验证顺序变化
+1. Create 3 separate commits
+2. Use interactive rebase to reorder them
+3. Verify the order has changed
 
-### 任务 3：修改提交信息
+### Task 3: Modify Commit Message
 
-1. 创建一个提交
-2. 使用 `reword` 修改提交信息
-3. 验证信息已更新
+1. Create a commit
+2. Use `reword` to modify the commit message
+3. Verify the message has been updated
 
-### 任务 4：编辑提交内容
+### Task 4: Edit Commit Content
 
-1. 创建一个提交
-2. 使用 `edit` 暂停提交
-3. 修改文件内容
-4. 继续 rebase
+1. Create a commit
+2. Use `edit` to pause the commit
+3. Modify file content
+4. Continue rebase
 
 ```bash
 git rebase -i HEAD~1
-# 将 pick 改为 edit
-# 保存退出
+# Change pick to edit
+# Save and exit
 
-# 修改文件
-echo "修改后的内容" > file.js
+# Modify file
+echo "Modified content" > file.js
 git add .
 git commit --amend
 
-# 继续 rebase
+# Continue rebase
 git rebase --continue
 ```
 
-## 高级技巧
+## Advanced Tips
 
-### 使用 rebase 合并分支
+### Using rebase to merge branches
 
 ```bash
-# 将 feature 分支变基到 main
+# Rebase feature branch onto main
 git checkout feature
 git rebase main
 
-# 解决冲突后继续
+# Continue after resolving conflicts
 git rebase --continue
 
-# 如果想放弃
+# If you want to abort
 git rebase --abort
 ```
 
-### 自动化 rebase
+### Automated rebase
 
 ```bash
-# 自动压缩最近 3 个提交
+# Auto-squash the last 3 commits
 GIT_SEQUENCE_EDITOR="sed -i '2s/pick/fixup/'" git rebase -i HEAD~3
 ```
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 能够启动 interactive rebase
-- [ ] 能够使用 `pick`、`squash`、`fixup` 命令
-- [ ] 能够重排提交顺序
-- [ ] 能够修改提交信息
-- [ ] 能够编辑提交内容
-- [ ] 理解 `rebase --continue` 和 `rebase --abort`
+- [ ] Can start interactive rebase
+- [ ] Can use `pick`, `squash`, `fixup` commands
+- [ ] Can reorder commit order
+- [ ] Can modify commit messages
+- [ ] Can edit commit content
+- [ ] Understand `rebase --continue` and `rebase --abort`
 
-## 常见问题
+## FAQ
 
-### Q: rebase 和 merge 的区别？
-A: rebase 会重写提交历史，产生线性历史；merge 会保留原始提交历史。
+### Q: What's the difference between rebase and merge?
+A: rebase rewrites commit history, producing a linear history; merge preserves the original commit history.
 
-### Q: 什么时候不应该 rebase？
-A: 不应该对已经推送到远程的公共分支进行 rebase。
+### Q: When should you not rebase?
+A: You should not rebase public branches that have already been pushed to remote.
 
-### Q: 如何处理 rebase 冲突？
-A: 解决冲突后使用 `git add` 标记已解决，然后使用 `git rebase --continue`。
+### Q: How to handle rebase conflicts?
+A: After resolving conflicts, use `git add` to mark them as resolved, then use `git rebase --continue`.
 
-## 下一步
+## Next Steps
 
-完成本练习后，请继续进行 [练习 11：GitHub CLI 深入使用](exercise-11-github-cli.md)
+After completing this exercise, please continue to [Exercise 11: Advanced GitHub CLI Usage](exercise-11-github-cli.md)

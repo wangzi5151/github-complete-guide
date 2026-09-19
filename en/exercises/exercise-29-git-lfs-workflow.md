@@ -1,106 +1,106 @@
-# 练习 29：Git LFS 大文件管理实战
+# Exercise 29: Git LFS Large File Management in Practice
 
-## 学习目标
+## Learning Objectives
 
-完成本练习后，你将能够：
+After completing this exercise, you will be able to:
 
-- 理解 Git LFS（Large File Storage）的工作原理
-- 配置 Git LFS 跟踪大文件
-- 将现有仓库迁移到 Git LFS
-- 在 CI/CD 流程中正确使用 Git LFS
-- 管理 LFS 存储配额和优化存储使用
+- Understand how Git LFS (Large File Storage) works
+- Configure Git LFS to track large files
+- Migrate an existing repository to Git LFS
+- Properly use Git LFS in CI/CD workflows
+- Manage LFS storage quotas and optimize storage usage
 
-## 前置条件
+## Prerequisites
 
-- 已安装 Git 2.15+
-- 已安装 Git LFS 客户端
-- 拥有 GitHub 仓库
-- 了解基本的 Git 操作
+- Git 2.15+ installed
+- Git LFS client installed
+- A GitHub repository
+- Basic understanding of Git operations
 
-## 背景知识
+## Background Knowledge
 
-### 什么是 Git LFS
+### What is Git LFS
 
-Git LFS（Large File Storage）是 Git 的扩展，用于管理大文件。它通过以下方式工作：
+Git LFS (Large File Storage) is an extension for Git that manages large files. It works in the following way:
 
-1. **指针文件**：在 Git 仓库中存储小的指针文件
-2. **外部存储**：实际的大文件存储在 LFS 服务器上
-3. **按需下载**：只在需要时下载大文件
+1. **Pointer files**: Stores small pointer files in the Git repository
+2. **External storage**: The actual large files are stored on the LFS server
+3. **On-demand download**: Large files are only downloaded when needed
 
-### 为什么使用 Git LFS
+### Why Use Git LFS
 
-- **仓库大小**：避免仓库变得过大
-- **克隆速度**：加快克隆和拉取速度
-- **版本控制**：对大文件进行版本控制
-- **协作效率**：减少网络传输量
+- **Repository size**: Prevents the repository from becoming too large
+- **Clone speed**: Speeds up cloning and pulling
+- **Version control**: Enables version control for large files
+- **Collaboration efficiency**: Reduces network transfer volume
 
-### Git LFS 限制
+### Git LFS Limits
 
-- GitHub 免费账户：每月 1GB 存储 + 1GB 带宽
-- GitHub Pro：每月 2GB 存储 + 2GB 带宽
-- GitHub Team：每月 4GB 存储 + 4GB 带宽
-- 文件大小限制：单个文件最大 2GB
+- GitHub free account: 1GB storage + 1GB bandwidth per month
+- GitHub Pro: 2GB storage + 2GB bandwidth per month
+- GitHub Team: 4GB storage + 4GB bandwidth per month
+- File size limit: Maximum 2GB per file
 
 ---
 
-## 练习步骤
+## Exercise Steps
 
-### 第一部分：安装和配置 Git LFS
+### Part 1: Installing and Configuring Git LFS
 
-#### 步骤 1：安装 Git LFS
+#### Step 1: Install Git LFS
 
-**macOS：**
+**macOS:**
 
 ```bash
-# 使用 Homebrew
+# Using Homebrew
 brew install git-lfs
 
-# 或使用 MacPorts
+# Or using MacPorts
 port install git-lfs
 ```
 
-**Linux（Ubuntu/Debian）：**
+**Linux (Ubuntu/Debian):**
 
 ```bash
-# 使用包管理器
+# Using package manager
 sudo apt-get install git-lfs
 
-# 或从 GitHub 下载
+# Or download from GitHub
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 sudo apt-get install git-lfs
 ```
 
-**Windows：**
+**Windows:**
 
 ```bash
-# 使用 Chocolatey
+# Using Chocolatey
 choco install git-lfs
 
-# 或使用 Scoop
+# Or using Scoop
 scoop install git-lfs
 
-# 或从官网下载安装程序
+# Or download installer from the official website
 # https://git-lfs.github.com/
 ```
 
-**验证安装：**
+**Verify installation:**
 
 ```bash
 git lfs version
-# 输出示例：git-lfs/3.4.0 (GitHub; linux amd64; go 1.21.5)
+# Example output: git-lfs/3.4.0 (GitHub; linux amd64; go 1.21.5)
 ```
 
-#### 步骤 2：初始化 Git LFS
+#### Step 2: Initialize Git LFS
 
 ```bash
-# 在仓库中初始化 LFS
+# Initialize LFS in the repository
 git lfs install
 
-# 验证初始化
+# Verify initialization
 git lfs env
 ```
 
-预期输出：
+Expected output:
 
 ```
 git-lfs/3.4.0 (GitHub; linux amd64; go 1.21.5)
@@ -132,10 +132,10 @@ GIT_EXEC_PATH=/usr/lib/git-core
 GIT_LFS_PATH=/usr/bin/git-lfs
 ```
 
-#### 步骤 3：配置 LFS 跟踪规则
+#### Step 3: Configure LFS Tracking Rules
 
 ```bash
-# 跟踪特定文件类型
+# Track specific file types
 git lfs track "*.psd"
 git lfs track "*.zip"
 git lfs track "*.tar.gz"
@@ -161,22 +161,22 @@ git lfs track "*.max"
 git lfs track "*.ma"
 git lfs track "*.mb"
 
-# 跟踪特定目录下的文件
+# Track files in specific directories
 git lfs track "assets/**"
 git lfs track "media/**"
 git lfs track "resources/**"
 
-# 跟踪特定大小的文件（需要配置 pre-commit 钩子）
+# Track files of a specific size (requires pre-commit hook configuration)
 git lfs track "*.bin"
 ```
 
-#### 步骤 4：查看和管理跟踪规则
+#### Step 4: View and Manage Tracking Rules
 
 ```bash
-# 查看当前跟踪规则
+# View current tracking rules
 git lfs track
 
-# 输出示例：
+# Example output:
 # Listing tracked patterns
 #     *.psd (.gitattributes)
 #     *.zip (.gitattributes)
@@ -184,41 +184,41 @@ git lfs track
 #     *.png (.gitattributes)
 #     *.jpg (.gitattributes)
 
-# 查看 LFS 跟踪的文件
+# View LFS tracked files
 git lfs ls-files
 
-# 输出示例：
+# Example output:
 # 2a83d6f5e4 * assets/images/logo.png
 # 8b7c6d5e4a * assets/videos/intro.mp4
 # 5c4b3a2d1e * assets/models/character.fbx
 
-# 查看 LFS 状态
+# View LFS status
 git lfs status
 
-# 查看 LFS 文件大小
+# View LFS file sizes
 git lfs ls-files --size
 ```
 
-### 第二部分：使用 Git LFS 管理大文件
+### Part 2: Using Git LFS to Manage Large Files
 
-#### 步骤 5：创建测试仓库
+#### Step 5: Create a Test Repository
 
 ```bash
-# 创建新仓库
+# Create a new repository
 mkdir lfs-demo && cd lfs-demo
 git init
 
-# 初始化 LFS
+# Initialize LFS
 git lfs install
 
-# 配置跟踪规则
+# Configure tracking rules
 git lfs track "*.bin"
 git lfs track "*.dat"
 git lfs track "*.large"
 
-# 创建 .gitattributes 文件
+# Create .gitattributes file
 cat > .gitattributes << 'EOF'
-# Git LFS 跟踪规则
+# Git LFS tracking rules
 *.bin filter=lfs diff=lfs merge=lfs -text
 *.dat filter=lfs diff=lfs merge=lfs -text
 *.large filter=lfs diff=lfs merge=lfs -text
@@ -229,32 +229,32 @@ cat > .gitattributes << 'EOF'
 *.jpg filter=lfs diff=lfs merge=lfs -text
 EOF
 
-# 提交 .gitattributes
+# Commit .gitattributes
 git add .gitattributes
-git commit -m "初始化 Git LFS 配置"
+git commit -m "Initialize Git LFS configuration"
 ```
 
-#### 步骤 6：添加大文件
+#### Step 6: Add Large Files
 
 ```bash
-# 创建测试大文件
+# Create test large files
 dd if=/dev/urandom of=test-file-1.bin bs=1M count=10
 dd if=/dev/urandom of=test-file-2.bin bs=1M count=20
 dd if=/dev/urandom of=test-data.dat bs=1M count=15
 
-# 创建普通文本文件
-echo "这是一个普通文本文件" > readme.txt
+# Create a normal text file
+echo "This is a normal text file" > readme.txt
 
-# 查看文件状态
+# Check file status
 git status
 
-# 添加文件
+# Add files
 git add .
 
-# 查看 LFS 状态
+# Check LFS status
 git lfs status
 
-# 预期输出：
+# Expected output:
 # On branch main
 #
 # Git LFS objects to be pushed to origin/main:
@@ -263,44 +263,44 @@ git lfs status
 #     test-file-2.bin (20 MB)
 #     test-data.dat (15 MB)
 
-# 提交
-git commit -m "添加大文件测试"
+# Commit
+git commit -m "Add large files for testing"
 ```
 
-#### 步骤 7：查看 LFS 指针文件
+#### Step 7: View LFS Pointer Files
 
 ```bash
-# 查看 LFS 指针文件内容
+# View LFS pointer file content
 cat test-file-1.bin
 
-# 预期输出：
+# Expected output:
 # version https://git-lfs.github.com/spec/v1
 # oid sha256:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
 # size 10485760
 
-# 查看 Git 对象类型
+# View Git object type
 git cat-file -t HEAD:test-file-1.bin
-# 输出：blob
+# Output: blob
 
-# 查看 Git 对象大小
+# View Git object size
 git cat-file -s HEAD:test-file-1.bin
-# 输出：133（指针文件的大小）
+# Output: 133 (size of the pointer file)
 
-# 对比普通文件
+# Compare with normal files
 git cat-file -s HEAD:readme.txt
-# 输出：实际文件大小
+# Output: actual file size
 ```
 
-#### 步骤 8：推送到远程仓库
+#### Step 8: Push to Remote Repository
 
 ```bash
-# 添加远程仓库
+# Add remote repository
 git remote add origin https://github.com/yourusername/lfs-demo.git
 
-# 推送（LFS 文件会自动上传）
+# Push (LFS files will be uploaded automatically)
 git push -u origin main
 
-# 预期输出：
+# Expected output:
 # Uploading LFS objects: 100% (3/3), 45 MB | 0 B/s
 # Enumerating objects: 6
 # Counting objects: 100% (6/6)
@@ -312,34 +312,34 @@ git push -u origin main
 #  * [new branch]      main -> main
 ```
 
-### 第三部分：迁移现有仓库到 Git LFS
+### Part 3: Migrating an Existing Repository to Git LFS
 
-#### 步骤 9：安装 git-lfs-migrate 工具
+#### Step 9: Install the git-lfs-migrate Tool
 
 ```bash
-# 使用 Homebrew 安装（macOS）
+# Install using Homebrew (macOS)
 brew install git-lfs-migrate
 
-# 或从 GitHub 下载
+# Or download from GitHub
 # https://github.com/git-lfs/git-lfs/releases
 
-# 验证安装
+# Verify installation
 git lfs migrate --version
 ```
 
-#### 步骤 10：迁移现有仓库
+#### Step 10: Migrate the Existing Repository
 
 ```bash
-# 进入现有仓库
+# Enter the existing repository
 cd existing-repo
 
-# 初始化 LFS
+# Initialize LFS
 git lfs install
 
-# 查看哪些文件适合迁移到 LFS
+# View which files are suitable for LFS migration
 git lfs migrate info --include="*.psd,*.zip,*.mp4,*.png,*.jpg"
 
-# 预期输出：
+# Expected output:
 # migrate: Fetching remote refs: ..., done
 # migrate: Sorting commits: ..., done
 #
@@ -349,30 +349,30 @@ git lfs migrate info --include="*.psd,*.zip,*.mp4,*.png,*.jpg"
 # *.png   10 MB  50/50 files(s) 100%
 # *.jpg   5 MB   30/30 files(s) 100%
 
-# 执行迁移（不重写历史，只迁移未来的提交）
+# Execute migration (without rewriting history, only migrate future commits)
 git lfs migrate import --include="*.psd,*.zip,*.mp4,*.png,*.jpg"
 
-# 如果需要重写历史（谨慎使用！）
+# If you need to rewrite history (use with caution!)
 # git lfs migrate import --include="*.psd,*.zip,*.mp4,*.png,*.jpg" --everything
 
-# 提交迁移结果
+# Commit the migration results
 git add .gitattributes
-git commit -m "迁移到 Git LFS"
+git commit -m "Migrate to Git LFS"
 
-# 强制推送（如果重写了历史）
+# Force push (if history was rewritten)
 # git push --force origin main
 ```
 
-#### 步骤 11：迁移后的验证
+#### Step 11: Post-Migration Verification
 
 ```bash
-# 验证 LFS 文件
+# Verify LFS files
 git lfs ls-files
 
-# 检查仓库大小
+# Check repository size
 git count-objects -vH
 
-# 预期输出（应该比迁移前小很多）：
+# Expected output (should be much smaller than before migration):
 # count: 50
 # size: 2.50 MiB
 # in-pack: 100
@@ -382,15 +382,15 @@ git count-objects -vH
 # garbage: 0
 # size-garbage: 0 bytes
 
-# 验证文件完整性
+# Verify file integrity
 git lfs fsck
 ```
 
-### 第四部分：在 CI/CD 中使用 Git LFS
+### Part 4: Using Git LFS in CI/CD
 
-#### 步骤 12：GitHub Actions 配置
+#### Step 12: GitHub Actions Configuration
 
-创建文件 `.github/workflows/lfs-build.yml`：
+Create the file `.github/workflows/lfs-build.yml`:
 
 ```yaml
 name: Build with LFS
@@ -406,34 +406,34 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码（包含 LFS）
+      - name: Checkout code (with LFS)
         uses: actions/checkout@v4
         with:
           lfs: true
       
-      - name: 验证 LFS 文件
+      - name: Verify LFS files
         run: |
-          echo "检查 LFS 文件..."
+          echo "Checking LFS files..."
           git lfs ls-files
           
-          echo "验证 LFS 文件完整性..."
+          echo "Verifying LFS file integrity..."
           git lfs fsck
       
-      - name: 构建项目
+      - name: Build project
         run: |
-          echo "使用 LFS 文件进行构建..."
-          # 这里可以添加实际的构建命令
+          echo "Building with LFS files..."
+          # Add actual build commands here
           ls -la assets/
       
-      - name: 运行测试
+      - name: Run tests
         run: |
-          echo "运行测试..."
-          # 使用 LFS 文件进行测试
+          echo "Running tests..."
+          # Run tests using LFS files
 ```
 
-#### 步骤 13：高级 CI/CD 配置
+#### Step 13: Advanced CI/CD Configuration
 
-创建文件 `.github/workflows/lfs-pipeline.yml`：
+Create the file `.github/workflows/lfs-pipeline.yml`:
 
 ```yaml
 name: LFS Pipeline
@@ -445,20 +445,20 @@ on:
     branches: [main]
 
 env:
-  GIT_LFS_SKIP_SMUDGE: 0  # 确保下载 LFS 文件
+  GIT_LFS_SKIP_SMUDGE: 0  # Ensure LFS files are downloaded
 
 jobs:
-  # 测试作业
+  # Test job
   test:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           lfs: true
       
-      - name: 缓存 LFS 文件
+      - name: Cache LFS files
         uses: actions/cache@v4
         with:
           path: .git/lfs
@@ -466,20 +466,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lfs-
       
-      - name: 拉取 LFS 文件
+      - name: Pull LFS files
         run: git lfs pull
       
-      - name: 验证 LFS 文件
+      - name: Verify LFS files
         run: |
           git lfs ls-files --size
           git lfs fsck
       
-      - name: 运行测试
+      - name: Run tests
         run: |
-          # 使用 LFS 文件运行测试
-          echo "运行测试..."
+          # Run tests using LFS files
+          echo "Running tests..."
   
-  # 构建作业
+  # Build job
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -489,42 +489,42 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           lfs: true
       
-      - name: 构建项目
+      - name: Build project
         run: |
-          echo "在 ${{ matrix.os }} 上构建..."
-          # 构建逻辑
+          echo "Building on ${{ matrix.os }}..."
+          # Build logic
   
-  # 部署作业
+  # Deploy job
   deploy:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           lfs: true
       
-      - name: 部署到服务器
+      - name: Deploy to server
         run: |
-          echo "部署包含 LFS 文件的项目..."
-          # 部署逻辑
+          echo "Deploying project with LFS files..."
+          # Deploy logic
 ```
 
-#### 步骤 14：创建 LFS 缓存脚本
+#### Step 14: Create an LFS Cache Script
 
-创建文件 `.github/scripts/cache-lfs.sh`：
+Create the file `.github/scripts/cache-lfs.sh`:
 
 ```bash
 #!/bin/bash
 
-# Git LFS 缓存管理脚本
+# Git LFS cache management script
 
 set -e
 
@@ -533,228 +533,228 @@ REPO_URL=$(git remote get-url origin)
 REPO_HASH=$(echo -n "$REPO_URL" | sha256sum | cut -d' ' -f1)
 CACHE_PATH="${CACHE_DIR}/${REPO_HASH}"
 
-# 创建缓存目录
+# Create cache directory
 mkdir -p "$CACHE_PATH"
 
-# 设置 LFS 缓存路径
+# Set LFS cache path
 export GIT_LFS_CACHE_PATH="$CACHE_PATH"
 
-# 检查缓存是否存在
+# Check if cache exists
 if [ -d "$CACHE_PATH" ] && [ "$(ls -A $CACHE_PATH)" ]; then
-    echo "使用现有 LFS 缓存: $CACHE_PATH"
+    echo "Using existing LFS cache: $CACHE_PATH"
     
-    # 从缓存复制 LFS 文件
+    # Copy LFS files from cache
     if [ -d ".git/lfs" ]; then
         cp -r "$CACHE_PATH/objects" ".git/lfs/" 2>/dev/null || true
     fi
 else
-    echo "创建新的 LFS 缓存"
+    echo "Creating new LFS cache"
 fi
 
-# 拉取 LFS 文件
+# Pull LFS files
 git lfs pull
 
-# 更新缓存
+# Update cache
 if [ -d ".git/lfs/objects" ]; then
-    echo "更新 LFS 缓存..."
+    echo "Updating LFS cache..."
     rsync -a ".git/lfs/objects/" "$CACHE_PATH/objects/"
 fi
 
-echo "LFS 缓存路径: $CACHE_PATH"
-echo "缓存大小: $(du -sh $CACHE_PATH | cut -f1)"
+echo "LFS cache path: $CACHE_PATH"
+echo "Cache size: $(du -sh $CACHE_PATH | cut -f1)"
 ```
 
-### 第五部分：LFS 存储优化
+### Part 5: LFS Storage Optimization
 
-#### 步骤 15：清理 LFS 缓存
+#### Step 15: Clean Up LFS Cache
 
 ```bash
-# 查看 LFS 存储使用情况
-git lfs ls-files --size | awk '{sum += $2} END {print "总大小:", sum/1024/1024, "MB"}'
+# View LFS storage usage
+git lfs ls-files --size | awk '{sum += $2} END {print "Total size:", sum/1024/1024, "MB"}'
 
-# 清理本地 LFS 缓存
+# Clean up local LFS cache
 git lfs prune
 
-# 预期输出：
+# Expected output:
 # prune: 5 local objects removed, 3 retained
 
-# 查看清理后的状态
+# View status after cleanup
 git lfs status
 
-# 强制清理（包括最近使用的文件）
+# Force cleanup (including recently used files)
 # git lfs prune --force
 
-# 清理特定时间之前的文件
-git lfs prune --dry-run  # 先预览会删除什么
-git lfs prune --recent 7d  # 保留最近7天的文件
+# Clean up files older than a specific time
+git lfs prune --dry-run  # Preview what will be deleted
+git lfs prune --recent 7d  # Keep files from the last 7 days
 ```
 
-#### 步骤 16：配置 LFS 存储策略
+#### Step 16: Configure LFS Storage Strategy
 
-创建文件 `.lfsconfig`：
+Create the file `.lfsconfig`:
 
 ```ini
 [lfs]
-    # 存储路径
+    # Storage path
     storage = /path/to/lfs/storage
     
-    # 并发传输数
+    # Number of concurrent transfers
     concurrenttransfers = 8
     
-    # 是否跳过 smudge（用于 CI/CD）
+    # Whether to skip smudge (for CI/CD)
     # skip_smudge = true
     
-    # 批量处理大小
+    # Batch processing size
     batchsize = 100
 
 [lfs "fetch"]
-    # 获取最近的引用
+    # Fetch recent references
     recentrefs = 7d
     
-    # 获取最近的提交
+    # Fetch recent commits
     recentcommits = 0
     
-    # 包含远程引用
+    # Include remote references
     includeremotes = origin
 
 [lfs "prune"]
-    # 保留偏移天数
+    # Retention offset days
     offsetdays = 3
     
-    # 验证远程
+    # Verify remotes
     verifyremotesalways = false
     
-    # 远程名称
+    # Remote name
     remotename = origin
 ```
 
-#### 步骤 17：创建 LFS 管理脚本
+#### Step 17: Create an LFS Management Script
 
-创建文件 `scripts/lfs-manager.sh`：
+Create the file `scripts/lfs-manager.sh`:
 
 ```bash
 #!/bin/bash
 
-# Git LFS 管理脚本
+# Git LFS management script
 
 set -e
 
-# 颜色定义
+# Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# 函数：打印帮助信息
+# Function: Show help
 show_help() {
-    echo "Git LFS 管理工具"
+    echo "Git LFS Management Tool"
     echo ""
-    echo "用法: $0 [命令]"
+    echo "Usage: $0 [command]"
     echo ""
-    echo "命令:"
-    echo "  status    - 显示 LFS 状态"
-    echo "  info      - 显示 LFS 文件信息"
-    echo "  cleanup   - 清理 LFS 缓存"
-    echo "  migrate   - 迁移文件到 LFS"
-    echo "  verify    - 验证 LFS 文件完整性"
-    echo "  help      - 显示此帮助信息"
+    echo "Commands:"
+    echo "  status    - Show LFS status"
+    echo "  info      - Show LFS file information"
+    echo "  cleanup   - Clean LFS cache"
+    echo "  migrate   - Migrate files to LFS"
+    echo "  verify    - Verify LFS file integrity"
+    echo "  help      - Show this help message"
 }
 
-# 函数：显示状态
+# Function: Show status
 show_status() {
-    echo -e "${GREEN}=== Git LFS 状态 ===${NC}"
+    echo -e "${GREEN}=== Git LFS Status ===${NC}"
     echo ""
     
-    echo "LFS 版本:"
+    echo "LFS version:"
     git lfs version
     echo ""
     
-    echo "跟踪的文件类型:"
+    echo "Tracked file types:"
     git lfs track
     echo ""
     
-    echo "LFS 文件列表:"
+    echo "LFS file list:"
     git lfs ls-files --size
     echo ""
     
-    echo "存储使用情况:"
+    echo "Storage usage:"
     if [ -d ".git/lfs" ]; then
         du -sh .git/lfs
     else
-        echo "未找到 LFS 存储"
+        echo "LFS storage not found"
     fi
 }
 
-# 函数：显示文件信息
+# Function: Show file information
 show_info() {
-    echo -e "${GREEN}=== LFS 文件信息 ===${NC}"
+    echo -e "${GREEN}=== LFS File Information ===${NC}"
     echo ""
     
-    echo "按类型统计:"
+    echo "File type statistics:"
     git lfs ls-files | awk -F'.' '{print $NF}' | sort | uniq -c | sort -rn
     echo ""
     
-    echo "按大小排序（前10个）:"
+    echo "Sorted by size (top 10):"
     git lfs ls-files --size | sort -k2 -rn | head -10
     echo ""
     
-    echo "总文件数: $(git lfs ls-files | wc -l)"
-    echo "总大小: $(git lfs ls-files --size | awk '{sum += $2} END {printf "%.2f MB", sum/1024/1024}')"
+    echo "Total files: $(git lfs ls-files | wc -l)"
+    echo "Total size: $(git lfs ls-files --size | awk '{sum += $2} END {printf "%.2f MB", sum/1024/1024}')"
 }
 
-# 函数：清理缓存
+# Function: Clean up cache
 cleanup() {
-    echo -e "${YELLOW}=== 清理 LFS 缓存 ===${NC}"
+    echo -e "${YELLOW}=== Cleaning LFS Cache ===${NC}"
     echo ""
     
-    echo "清理前:"
-    du -sh .git/lfs 2>/dev/null || echo "未找到 LFS 存储"
+    echo "Before cleanup:"
+    du -sh .git/lfs 2>/dev/null || echo "LFS storage not found"
     echo ""
     
-    echo "执行清理..."
+    echo "Running cleanup..."
     git lfs prune
     echo ""
     
-    echo "清理后:"
-    du -sh .git/lfs 2>/dev/null || echo "未找到 LFS 存储"
+    echo "After cleanup:"
+    du -sh .git/lfs 2>/dev/null || echo "LFS storage not found"
 }
 
-# 函数：迁移文件
+# Function: Migrate files
 migrate_files() {
-    echo -e "${YELLOW}=== 迁移文件到 LFS ===${NC}"
+    echo -e "${YELLOW}=== Migrating Files to LFS ===${NC}"
     echo ""
     
-    read -p "请输入要迁移的文件扩展名（用逗号分隔，如 *.psd,*.zip）: " extensions
+    read -p "Enter file extensions to migrate (comma-separated, e.g., *.psd,*.zip): " extensions
     
     if [ -z "$extensions" ]; then
-        echo -e "${RED}未指定扩展名${NC}"
+        echo -e "${RED}No extensions specified${NC}"
         return 1
     fi
     
-    echo "将迁移以下类型的文件: $extensions"
+    echo "Will migrate the following file types: $extensions"
     echo ""
     
-    read -p "确认迁移？(y/N) " confirm
+    read -p "Confirm migration? (y/N) " confirm
     if [[ $confirm =~ ^[Yy]$ ]]; then
         git lfs migrate import --include="$extensions"
-        echo -e "${GREEN}迁移完成${NC}"
+        echo -e "${GREEN}Migration complete${NC}"
     else
-        echo "取消迁移"
+        echo "Migration cancelled"
     fi
 }
 
-# 函数：验证文件
+# Function: Verify files
 verify_files() {
-    echo -e "${GREEN}=== 验证 LFS 文件完整性 ===${NC}"
+    echo -e "${GREEN}=== Verifying LFS File Integrity ===${NC}"
     echo ""
     
     git lfs fsck
     echo ""
     
-    echo -e "${GREEN}验证完成${NC}"
+    echo -e "${GREEN}Verification complete${NC}"
 }
 
-# 主逻辑
+# Main logic
 case "${1:-help}" in
     status)
         show_status
@@ -778,10 +778,10 @@ esac
 ```
 
 ```bash
-# 使脚本可执行
+# Make the script executable
 chmod +x scripts/lfs-manager.sh
 
-# 使用脚本
+# Use the script
 ./scripts/lfs-manager.sh status
 ./scripts/lfs-manager.sh info
 ./scripts/lfs-manager.sh cleanup
@@ -790,38 +790,38 @@ chmod +x scripts/lfs-manager.sh
 
 ---
 
-## 验证练习结果
+## Verify Exercise Results
 
-### 检查清单
+### Checklist
 
-完成练习后，请验证以下内容：
+After completing the exercise, please verify the following:
 
-- [ ] Git LFS 已正确安装和初始化
-- [ ] 跟踪规则已配置在 `.gitattributes` 中
-- [ ] 大文件已正确添加到 LFS
-- [ ] 推送到远程仓库成功
-- [ ] CI/CD 工作流能正确处理 LFS 文件
-- [ ] LFS 缓存清理功能正常
+- [ ] Git LFS is correctly installed and initialized
+- [ ] Tracking rules are configured in `.gitattributes`
+- [ ] Large files are correctly added to LFS
+- [ ] Push to remote repository is successful
+- [ ] CI/CD workflow can correctly handle LFS files
+- [ ] LFS cache cleanup works properly
 
-### 验证命令
+### Verification Commands
 
 ```bash
-# 检查 LFS 安装
+# Check LFS installation
 git lfs version
 
-# 查看跟踪规则
+# View tracking rules
 git lfs track
 
-# 查看 LFS 文件
+# View LFS files
 git lfs ls-files
 
-# 验证文件完整性
+# Verify file integrity
 git lfs fsck
 
-# 检查仓库大小
+# Check repository size
 git count-objects -vH
 
-# 测试克隆（在新目录）
+# Test cloning (in a new directory)
 cd /tmp
 git clone https://github.com/yourusername/lfs-demo.git lfs-test
 cd lfs-test
@@ -830,20 +830,20 @@ git lfs ls-files
 
 ---
 
-## 进阶挑战
+## Advanced Challenges
 
-### 挑战 1：创建 LFS 存储监控脚本
+### Challenge 1: Create an LFS Storage Monitoring Script
 
-创建监控 LFS 存储使用情况的脚本：
+Create a script to monitor LFS storage usage:
 
 ```bash
 #!/bin/bash
 
-# 监控 LFS 存储使用情况
+# Monitor LFS storage usage
 
-THRESHOLD_MB=100  # 警告阈值
+THRESHOLD_MB=100  # Warning threshold
 
-# 获取 LFS 存储大小
+# Get LFS storage size
 get_lfs_size() {
     if [ -d ".git/lfs" ]; then
         du -sm .git/lfs | cut -f1
@@ -852,20 +852,20 @@ get_lfs_size() {
     fi
 }
 
-# 检查大小
+# Check size
 LFS_SIZE=$(get_lfs_size)
 
 if [ "$LFS_SIZE" -gt "$THRESHOLD_MB" ]; then
-    echo "警告: LFS 存储使用 ${LFS_SIZE}MB，超过阈值 ${THRESHOLD_MB}MB"
+    echo "Warning: LFS storage is using ${LFS_SIZE}MB, exceeding threshold of ${THRESHOLD_MB}MB"
     
-    # 发送通知
-    # 可以集成 Slack、邮件等通知方式
+    # Send notification
+    # Can integrate with Slack, email, etc.
 fi
 ```
 
-### 挑战 2：实现 LFS 文件去重
+### Challenge 2: Implement LFS File Deduplication
 
-创建检测和删除重复 LFS 文件的工具：
+Create a tool to detect and remove duplicate LFS files:
 
 ```python
 #!/usr/bin/env python3
@@ -875,13 +875,13 @@ import os
 from collections import defaultdict
 
 def find_duplicate_lfs_files():
-    """查找重复的 LFS 文件"""
+    """Find duplicate LFS files"""
     
     lfs_dir = ".git/lfs/objects"
     if not os.path.exists(lfs_dir):
         return {}
     
-    # 按文件大小分组
+    # Group files by size
     size_groups = defaultdict(list)
     
     for root, dirs, files in os.walk(lfs_dir):
@@ -890,18 +890,18 @@ def find_duplicate_lfs_files():
             size = os.path.getsize(filepath)
             size_groups[size].append(filepath)
     
-    # 查找可能重复的文件
+    # Find potentially duplicate files
     duplicates = {}
     for size, files in size_groups.items():
         if len(files) > 1:
-            # 计算文件哈希
+            # Calculate file hashes
             hash_groups = defaultdict(list)
             for filepath in files:
                 with open(filepath, 'rb') as f:
                     file_hash = hashlib.sha256(f.read()).hexdigest()
                 hash_groups[file_hash].append(filepath)
             
-            # 保存重复文件
+            # Save duplicate files
             for file_hash, hash_files in hash_groups.items():
                 if len(hash_files) > 1:
                     duplicates[file_hash] = {
@@ -915,58 +915,58 @@ if __name__ == "__main__":
     duplicates = find_duplicate_lfs_files()
     
     if duplicates:
-        print("发现重复的 LFS 文件:")
+        print("Duplicate LFS files found:")
         for file_hash, info in duplicates.items():
-            print(f"\n哈希: {file_hash}")
-            print(f"大小: {info['size']} bytes")
-            print("文件:")
+            print(f"\nHash: {file_hash}")
+            print(f"Size: {info['size']} bytes")
+            print("Files:")
             for filepath in info['files']:
                 print(f"  - {filepath}")
     else:
-        print("未发现重复的 LFS 文件")
+        print("No duplicate LFS files found")
 ```
 
-### 挑战 3：创建 LFS 备份工具
+### Challenge 3: Create an LFS Backup Tool
 
-创建自动备份 LFS 文件的工具：
+Create a tool to automatically back up LFS files:
 
 ```bash
 #!/bin/bash
 
-# LFS 备份脚本
+# LFS backup script
 
 BACKUP_DIR="/path/to/backup"
 REPO_NAME=$(basename $(git rev-parse --show-toplevel))
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 BACKUP_PATH="${BACKUP_DIR}/${REPO_NAME}_${TIMESTAMP}"
 
-# 创建备份目录
+# Create backup directory
 mkdir -p "$BACKUP_PATH"
 
-# 备份 LFS 文件
-echo "备份 LFS 文件..."
+# Back up LFS files
+echo "Backing up LFS files..."
 if [ -d ".git/lfs/objects" ]; then
     cp -r ".git/lfs/objects" "$BACKUP_PATH/"
 fi
 
-# 备份配置
+# Back up configuration
 cp .gitattributes "$BACKUP_PATH/" 2>/dev/null || true
 cp .lfsconfig "$BACKUP_PATH/" 2>/dev/null || true
 
-# 压缩备份
-echo "压缩备份..."
+# Compress backup
+echo "Compressing backup..."
 tar -czf "${BACKUP_PATH}.tar.gz" -C "$BACKUP_DIR" "$(basename $BACKUP_PATH)"
 
-# 清理临时目录
+# Clean up temporary directory
 rm -rf "$BACKUP_PATH"
 
-echo "备份完成: ${BACKUP_PATH}.tar.gz"
-echo "备份大小: $(du -sh ${BACKUP_PATH}.tar.gz | cut -f1)"
+echo "Backup complete: ${BACKUP_PATH}.tar.gz"
+echo "Backup size: $(du -sh ${BACKUP_PATH}.tar.gz | cut -f1)"
 ```
 
-### 挑战 4：实现 LFS 文件版本管理
+### Challenge 4: Implement LFS File Version Management
 
-创建管理 LFS 文件版本的工具：
+Create a tool to manage LFS file versions:
 
 ```python
 #!/usr/bin/env python3
@@ -976,9 +976,9 @@ import json
 from datetime import datetime
 
 def get_lfs_file_versions(filepath):
-    """获取 LFS 文件的所有版本"""
+    """Get all versions of an LFS file"""
     
-    # 获取文件的提交历史
+    # Get commit history for the file
     result = subprocess.run(
         ['git', 'log', '--pretty=format:%H|%ai|%s', '--follow', '--', filepath],
         capture_output=True,
@@ -998,7 +998,7 @@ def get_lfs_file_versions(filepath):
     return versions
 
 def get_file_size_at_commit(filepath, commit):
-    """获取特定提交时的文件大小"""
+    """Get file size at a specific commit"""
     
     result = subprocess.run(
         ['git', 'cat-file', '-s', f'{commit}:{filepath}'],
@@ -1012,136 +1012,136 @@ def get_file_size_at_commit(filepath, commit):
         return 0
 
 if __name__ == "__main__":
-    filepath = input("请输入文件路径: ")
+    filepath = input("Enter file path: ")
     versions = get_lfs_file_versions(filepath)
     
-    print(f"\n文件 {filepath} 的版本历史:")
+    print(f"\nVersion history for {filepath}:")
     print("-" * 60)
     
     for version in versions:
         size = get_file_size_at_commit(filepath, version['commit'])
-        print(f"提交: {version['commit'][:8]}")
-        print(f"日期: {version['date']}")
-        print(f"说明: {version['message']}")
-        print(f"大小: {size / 1024 / 1024:.2f} MB")
+        print(f"Commit: {version['commit'][:8]}")
+        print(f"Date: {version['date']}")
+        print(f"Message: {version['message']}")
+        print(f"Size: {size / 1024 / 1024:.2f} MB")
         print("-" * 60)
 ```
 
 ---
 
-## 常见问题
+## Frequently Asked Questions
 
-### Q1：Git LFS 和 Git 子模块有什么区别？
+### Q1: What is the difference between Git LFS and Git submodules?
 
-| 特性 | Git LFS | Git 子模块 |
-|------|---------|-----------|
-| 用途 | 管理大文件 | 引用其他仓库 |
-| 存储 | 外部存储 | 独立仓库 |
-| 克隆 | 按需下载 | 需要额外克隆 |
-| 版本 | 与主仓库同步 | 独立版本 |
+| Feature | Git LFS | Git Submodules |
+|---------|---------|----------------|
+| Purpose | Manage large files | Reference other repositories |
+| Storage | External storage | Independent repository |
+| Clone | Download on demand | Requires additional cloning |
+| Version | Synchronized with main repository | Independent versions |
 
-### Q2：如何查看 LFS 存储配额？
+### Q2: How do I check my LFS storage quota?
 
 ```bash
-# 查看 GitHub LFS 使用情况
+# View GitHub LFS usage
 gh api user/settings/billing/summary --jq '.plans[].name'
 
-# 或访问 GitHub 网页：
+# Or visit the GitHub web interface:
 # Settings → Billing and plans → Usage
 ```
 
-### Q3：LFS 文件被意外删除怎么办？
+### Q3: What should I do if LFS files are accidentally deleted?
 
 ```bash
-# 从 LFS 缓存恢复
+# Restore from LFS cache
 git lfs checkout
 
-# 从远程重新下载
+# Re-download from remote
 git lfs pull
 
-# 查看 LFS 文件状态
+# Check LFS file status
 git lfs status
 ```
 
-### Q4：如何优化 LFS 克隆速度？
+### Q4: How do I optimize LFS clone speed?
 
 ```bash
-# 浅克隆 + LFS
+# Shallow clone + LFS
 git clone --depth 1 --filter=blob:none https://github.com/user/repo.git
 
-# 只克隆特定分支
+# Clone only a specific branch
 git clone -b main --single-branch https://github.com/user/repo.git
 
-# 跳过 LFS 文件（后续按需下载）
+# Skip LFS files (download on demand later)
 GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/user/repo.git
 git lfs pull --include="specific-file"
 ```
 
 ---
 
-## Git LFS 深入理解与最佳实践
+## In-Depth Understanding and Best Practices of Git LFS
 
-### LFS 的内部工作机制
+### How LFS Works Internally
 
-理解 Git LFS 的内部工作机制有助于更好地使用和排查问题。当你执行 `git add` 命令添加一个被 LFS 跟踪的文件时，Git LFS 的过滤器会自动介入。首先，LFS 会计算文件的 SHA-256 哈希值，这个哈希值作为文件的唯一标识。然后，LFS 将实际的文件内容存储到本地的 `.git/lfs/objects` 目录中，按照哈希值的前两位作为子目录进行组织。最后，在 Git 仓库中存储一个指针文件，这个指针文件非常小，通常只有一百多字节，包含了版本信息、哈希值和文件大小。
+Understanding Git LFS's internal mechanism helps with better usage and troubleshooting. When you execute the `git add` command to add a file tracked by LFS, Git LFS's filter automatically intervenes. First, LFS calculates the file's SHA-256 hash, which serves as the file's unique identifier. Then, LFS stores the actual file content in the local `.git/lfs/objects` directory, organized by the first two characters of the hash as subdirectories. Finally, a pointer file is stored in the Git repository, which is very small, typically only about a hundred bytes, containing version information, hash, and file size.
 
-当你执行 `git push` 命令时，Git LFS 会将本地存储的大文件上传到 LFS 服务器。上传完成后，LFS 服务器会返回一个确认信息。当你执行 `git clone` 或 `git pull` 命令时，Git 会先获取指针文件，然后通过 smudge 过滤器自动下载对应的大文件。如果设置了 `GIT_LFS_SKIP_SMUDGE` 环境变量，LFS 文件不会自动下载，需要手动执行 `git lfs pull` 命令来获取。
+When you execute the `git push` command, Git LFS uploads the locally stored large files to the LFS server. After uploading, the LFS server returns a confirmation. When you execute `git clone` or `git pull`, Git first fetches the pointer files, then automatically downloads the corresponding large files through the smudge filter. If the `GIT_LFS_SKIP_SMUDGE` environment variable is set, LFS files will not be downloaded automatically, and you need to manually execute `git lfs pull` to fetch them.
 
-### 何时使用 Git LFS
+### When to Use Git LFS
 
-并非所有大文件都需要使用 Git LFS 管理。判断是否需要使用 LFS 可以从以下几个维度考虑。文件大小是一个重要因素，通常超过 1MB 的二进制文件建议使用 LFS 管理。文件变更频率也很关键，频繁变更的大文件会导致仓库体积快速增长，使用 LFS 可以避免这个问题。文件类型决定了压缩效率，已经压缩过的文件格式如 ZIP、JPEG、MP4 等，Git 的增量压缩效果很差，使用 LFS 更为合适。团队协作规模也影响决策，大团队中每个人克隆仓库的成本更高，使用 LFS 可以显著减少克隆时间。
+Not all large files need to be managed with Git LFS. You can consider the following dimensions to determine whether LFS is needed. File size is an important factor; binary files over 1MB are generally recommended for LFS management. File change frequency is also critical; frequently changing large files will cause the repository to grow rapidly, and using LFS can avoid this issue. File type determines compression efficiency; already compressed formats like ZIP, JPEG, MP4, etc., have poor incremental compression in Git, making LFS more suitable. Team collaboration scale also affects the decision; in large teams where each person's clone cost is higher, using LFS can significantly reduce clone times.
 
-适合使用 LFS 管理的文件类型包括图像素材文件，例如 PSD 源文件、AI 设计文件、TIFF 高清图片等。视频和音频文件，例如 MP4 视频、WAV 音频、工程项目的音频工程文件等。三维模型文件，例如 FBX、OBJ、Blend、Maya 等格式的模型文件。游戏资源文件，例如 Unity 的 AssetBundle、Unreal 的 Pak 文件等。编译产物，例如大型二进制安装包、编译后的动态链接库等。数据集文件，例如机器学习的训练数据、大型 CSV 数据文件等。
+File types suitable for LFS management include image assets such as PSD source files, AI design files, and TIFF high-resolution images. Video and audio files such as MP4 video, WAV audio, and project audio engineering files. 3D model files such as FBX, OBJ, Blend, and Maya format model files. Game resource files such as Unity's AssetBundle and Unreal's Pak files. Build artifacts such as large binary installers and compiled dynamic link libraries. Dataset files such as machine learning training data and large CSV data files.
 
-不太适合使用 LFS 的文件包括文本源代码文件，Git 对文本文件的版本管理效率很高。小型配置文件，这些文件体积小且压缩效果好。已经被 Git 高效管理的历史文件，除非仓库体积已经过大需要瘦身。
+Files less suitable for LFS include text source code files, as Git has high efficiency in versioning text files. Small configuration files, which are small and compress well. History files already efficiently managed by Git, unless the repository is already too large and needs to be trimmed.
 
-### 团队协作中的 LFS 工作流
+### LFS Workflow in Team Collaboration
 
-在团队协作中使用 LFS 需要建立统一的工作流规范。首先，团队所有成员都需要安装 Git LFS 客户端，可以在项目文档中说明安装方法。其次，LFS 的跟踪规则应该提交到仓库的 `.gitattributes` 文件中，确保所有人使用相同的配置。第三，在代码审查时注意检查是否有新的大文件被添加但未被 LFS 跟踪。第四，建立大文件的命名和组织规范，避免文件散落在仓库各处。
+Using LFS in team collaboration requires establishing unified workflow standards. First, all team members need to install the Git LFS client; installation instructions can be provided in the project documentation. Second, LFS tracking rules should be committed to the repository's `.gitattributes` file to ensure everyone uses the same configuration. Third, during code reviews, pay attention to checking whether new large files are added but not tracked by LFS. Fourth, establish naming and organization standards for large files to avoid files being scattered throughout the repository.
 
-对于设计师和内容创作者等非开发人员，需要提供简化的操作指南。可以创建图形化的操作手册，说明如何安装 LFS、如何提交大文件和如何获取最新版本。考虑使用 Git 图形化工具，例如 GitKraken、SourceTree 或 GitHub Desktop，这些工具对 LFS 有良好的支持。建立定期同步机制，确保设计师的工作成果能够及时集成到项目中。
+For non-developers such as designers and content creators, simplified operational guides should be provided. You can create graphical operation manuals explaining how to install LFS, how to commit large files, and how to get the latest version. Consider using Git GUI tools such as GitKraken, SourceTree, or GitHub Desktop, which have good support for LFS. Establish a regular synchronization mechanism to ensure designers' work can be integrated into the project in a timely manner.
 
-### LFS 存储成本管理
+### LFS Storage Cost Management
 
-GitHub 对 LFS 存储和带宽有配额限制，合理管理存储成本非常重要。定期审查 LFS 中的文件，删除不再需要的历史版本。使用 `git lfs prune` 命令清理本地不再需要的 LFS 文件缓存。对于大型项目，考虑使用自建的 LFS 服务器或第三方存储服务。配置 LFS 服务器使用对象存储服务，例如 AWS S3、Azure Blob Storage 或阿里云 OSS，利用这些服务的成本优势。
+GitHub has quota limits on LFS storage and bandwidth, so managing storage costs properly is very important. Regularly review files in LFS and delete history versions that are no longer needed. Use the `git lfs prune` command to clean up local LFS file caches that are no longer needed. For large projects, consider using a self-hosted LFS server or third-party storage services. Configure the LFS server to use object storage services such as AWS S3, Azure Blob Storage, or Alibaba Cloud OSS to leverage their cost advantages.
 
-监控 LFS 的使用情况，设置存储和带宽使用的告警阈值。在 CI/CD 流程中优化 LFS 文件的下载，只下载当前构建需要的文件。使用缓存机制避免重复下载相同的 LFS 文件。对于大型二进制文件，考虑是否可以在构建时生成，而不是存储在仓库中。
+Monitor LFS usage and set alert thresholds for storage and bandwidth usage. In CI/CD workflows, optimize LFS file downloads to only download files needed for the current build. Use caching mechanisms to avoid downloading the same LFS files repeatedly. For large binary files, consider whether they can be generated at build time instead of being stored in the repository.
 
-### 从 LFS 迁移回 Git
+### Migrating Back from LFS to Git
 
-在某些情况下，可能需要将 LFS 管理的文件迁移回普通的 Git 管理。这通常发生在文件体积较小、变更不频繁或不再需要 LFS 的场景。迁移过程需要使用 `git lfs migrate export` 命令，这个命令会将 LFS 指针文件替换为实际的文件内容。迁移完成后需要强制推送到远程仓库，因为这会重写 Git 历史。
+In some cases, you may need to migrate LFS-managed files back to regular Git management. This typically happens when file sizes are small, changes are infrequent, or LFS is no longer needed. The migration process requires using the `git lfs migrate export` command, which replaces LFS pointer files with actual file contents. After migration, you need to force push to the remote repository, as this rewrites Git history.
 
-需要注意的是，迁移回 Git 会增加仓库体积，影响克隆和拉取速度。在迁移前应该评估仓库体积的变化，确保在可接受范围内。建议在迁移前创建备份分支，以便在出现问题时可以回滚。迁移后需要通知团队所有成员重新克隆仓库，以避免历史冲突。
+Note that migrating back to Git will increase repository size and affect clone and pull speeds. Before migration, you should assess the repository size change to ensure it is within an acceptable range. It is recommended to create a backup branch before migration so you can roll back if issues occur. After migration, all team members need to be notified to re-clone the repository to avoid history conflicts.
 
-### LFS 与 Git 子模块的配合
+### LFS and Git Submodules Integration
 
-在使用 Git 子模块的项目中，LFS 的配置需要特别注意。子模块需要单独初始化 LFS，每个子模块都有独立的 LFS 配置。在克隆包含子模块的仓库时，需要使用 `git submodule update --init --recursive` 命令并确保 LFS 已初始化。如果子模块中使用了 LFS，需要在子模块目录中执行 `git lfs install` 和 `git lfs pull`。
+In projects using Git submodules, special attention is needed for LFS configuration. Submodules need to initialize LFS separately, and each submodule has its own independent LFS configuration. When cloning a repository with submodules, use `git submodule update --init --recursive` and ensure LFS is initialized. If LFS is used in a submodule, you need to run `git lfs install` and `git lfs pull` in the submodule directory.
 
-建议在主仓库的文档中说明子模块的 LFS 配置要求。可以创建初始化脚本，自动化完成子模块的克隆和 LFS 初始化过程。在 CI/CD 流程中，确保工作流包含子模块和 LFS 的初始化步骤。
+It is recommended to document the LFS configuration requirements for submodules in the main repository's documentation. You can create initialization scripts to automate the cloning and LFS initialization process for submodules. In CI/CD workflows, ensure the workflow includes submodule and LFS initialization steps.
 
-### LFS 文件的二进制差异
+### Binary Differences in LFS Files
 
-Git LFS 不支持二进制文件的增量差异，每次修改都会存储完整的文件副本。这意味着频繁修改的大文件会快速消耗存储配额。为了优化存储使用，可以考虑以下策略。对于可以拆分的大型文件，将其拆分为多个较小的文件，只更新变更的部分。对于图像文件，保留源文件的同时生成优化后的版本。对于视频文件，使用版本号管理而不是每次修改都提交。对于数据文件，考虑使用增量更新机制，只存储变化的数据。定期清理旧版本的 LFS 文件，只保留最近几个版本。
-
----
-
-## 延伸阅读
-
-- [Git LFS 官方文档](https://git-lfs.github.com/)
-- [GitHub LFS 文档](https://docs.github.com/en/repositories/working-with-files/managing-large-files)
-- [Git LFS 最佳实践](https://github.com/git-lfs/git-lfs/wiki/Tutorial)
+Git LFS does not support incremental diffs for binary files; every modification stores a complete file copy. This means frequently modified large files will quickly consume storage quota. To optimize storage usage, consider the following strategies. For large files that can be split, split them into multiple smaller files and only update the changed parts. For image files, keep the source files while generating optimized versions. For video files, use version numbering instead of committing every modification. For data files, consider using incremental update mechanisms to store only the changed data. Regularly clean up old versions of LFS files, keeping only the most recent versions.
 
 ---
 
-## 练习总结
+## Further Reading
 
-通过本练习，你已经学会了：
+- [Git LFS Official Documentation](https://git-lfs.github.com/)
+- [GitHub LFS Documentation](https://docs.github.com/en/repositories/working-with-files/managing-large-files)
+- [Git LFS Best Practices](https://github.com/git-lfs/git-lfs/wiki/Tutorial)
 
-1. ✅ 安装和配置 Git LFS
-2. ✅ 设置文件跟踪规则
-3. ✅ 使用 LFS 管理大文件
-4. ✅ 迁移现有仓库到 LFS
-5. ✅ 在 CI/CD 中集成 LFS
-6. ✅ 优化 LFS 存储使用
+---
 
-Git LFS 是管理大型二进制文件的重要工具，建议在项目早期就配置好 LFS，避免后期迁移的麻烦。
+## Exercise Summary
+
+Through this exercise, you have learned:
+
+1. ✅ Installing and configuring Git LFS
+2. ✅ Setting up file tracking rules
+3. ✅ Using LFS to manage large files
+4. ✅ Migrating existing repositories to LFS
+5. ✅ Integrating LFS in CI/CD
+6. ✅ Optimizing LFS storage usage
+
+Git LFS is an important tool for managing large binary files. It is recommended to configure LFS early in the project to avoid the hassle of later migration.

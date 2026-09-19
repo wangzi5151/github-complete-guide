@@ -8,7 +8,7 @@
 
 ### New Projects vs Classic Projects
 
-GitHub launched全新的 Projects (also called Projects V2) in 2022, with qualitative leap compared to classic version.
+GitHub launched the new Projects (also called Projects V2) in 2022, with a qualitative leap compared to the classic version.
 
 | Feature | Classic Projects | New Projects (V2) |
 |---------|-----------------|-------------------|
@@ -26,7 +26,7 @@ GitHub launched全新的 Projects (also called Projects V2) in 2022, with qualit
 - **Rich Custom Fields**: Support single select, multi select, date, number, iteration and other field types
 - **Powerful Automation**: Multiple built-in automation rules, reducing manual operations
 - **Deep Integration**: Seamless integration with Issues, Pull Requests, GitHub Actions
-- **Real-time Collaboration**:多人 simultaneous editing, real-time sync updates
+- **Real-time Collaboration**: Multiple people can edit simultaneously with real-time sync updates
 
 ### Applicable Scenarios
 
@@ -37,7 +37,7 @@ GitHub launched全新的 Projects (also called Projects V2) in 2022, with qualit
 
 ### Core Concepts of GitHub Projects
 
-Before deep learning, need to understand following core concepts:
+Before deep learning, need to understand the following core concepts:
 
 **Project**: A project is a container for organizing and managing a group of related work items. Projects can belong to personal accounts, organizations or repositories. Each project has independent field definitions, view configurations and automation rules.
 
@@ -102,11 +102,11 @@ gh project list --owner @me
 
 ### Basic Project Configuration
 
-After creating project, recommend performing following configurations:
+After creating project, recommend performing the following configurations:
 
 **1. Set Project Fields**
 
-After entering project, click **+** in top right corner to add custom fields. Recommend creating following basic fields:
+After entering project, click **+** in top right corner to add custom fields. Recommend creating the following basic fields:
 
 | Field Name | Type | Description |
 |------------|------|-------------|
@@ -119,7 +119,7 @@ After entering project, click **+** in top right corner to add custom fields. Re
 
 **2. Configure Workflow**
 
-Click **Workflows** button to set automation rules. Recommend enabling following basic rules:
+Click **Workflows** button to set automation rules. Recommend enabling the following basic rules:
 
 - When Issue is added to project, automatically set Status to "To Do"
 - When Issue is closed, automatically set Status to "Done"
@@ -154,7 +154,7 @@ Create commonly used views based on team needs:
 
 ## 3. Project Views
 
-GitHub Projects provides three core views, each view适用于 different scenarios.
+GitHub Projects provides three core views, each view is suitable for different scenarios.
 
 ### Table View
 
@@ -184,7 +184,7 @@ Filter: Assignee = @me
 
 **Advanced Features of Table View:**
 
-- **Column Width Adjustment**: Drag column边界 to adjust width, double-click to auto-fit content
+- **Column Width Adjustment**: Drag column border to adjust width, double-click to auto-fit content
 - **Inline Editing**: Directly click cell to edit field value, no need to open detail panel
 - **Batch Selection**: Hold Shift or Ctrl to multi-select rows, batch modify field values
 - **Export Data**: Export table data to CSV format for offline analysis
@@ -201,7 +201,7 @@ Filter: Assignee = @me
 
 ### Board View
 
-Board view displays tasks in card形式, update task status by dragging cards.
+Board view displays tasks in card format, update task status by dragging cards.
 
 **Core Concepts:**
 
@@ -231,13 +231,13 @@ Backlog → Ready → Development → Testing → Staging → Production
 
 **Card Information in Board View:**
 
-Each card can display following information, helping team members quickly understand task overview:
+Each card can display the following information, helping team members quickly understand task overview:
 
 - **Title**: Brief task description
 - **Status Label**: Current work stage
-- **Priority标识**: Use colors to distinguish priority高低
+- **Priority Indicator**: Use colors to distinguish priority levels
 - **Assignee Avatar**: Which team member assigned to
-- **Due Date**: Task到期 time
+- **Due Date**: Task due time
 - **Labels**: Classification labels, like Bug, Feature etc.
 - **Linked PR**: Number of associated Pull Requests
 
@@ -247,7 +247,7 @@ Each column in board corresponds to an option of Status field. You can customize
 
 | Column Name | Color Suggestion | Description |
 |-------------|------------------|-------------|
-| Backlog | Grey | Task pool待 planning |
+| Backlog | Grey | Task pool pending planning |
 | To Do | Blue | Tasks to start in this iteration |
 | In Progress | Yellow | Tasks in progress |
 | In Review | Purple | Tasks waiting for code review |
@@ -259,11 +259,11 @@ Board view supports intuitive drag operations:
 
 - **Horizontal Drag**: Drag card from one column to another, automatically updates Status field
 - **Vertical Drag**: Adjust card order within same column
-- **Batch Drag**: Select multiple cards and drag together (部分 versions support)
+- **Batch Drag**: Select multiple cards and drag together (some versions support)
 
 ### Roadmap View
 
-Roadmap view displays project plans in timeline形式, suitable for long-term planning and milestone management.
+Roadmap view displays project plans in timeline format, suitable for long-term planning and milestone management.
 
 **Main Features:**
 
@@ -296,7 +296,7 @@ Roadmap view displays project plans in timeline形式, suitable for long-term pl
 **Tips for Using Roadmap View:**
 
 - **Set Milestones**: Mark important project nodes on roadmap, like version release dates, review meetings etc.
-- **Color Coding**: Use different colors to distinguish task types or priorities,便于 quick identification
+- **Color Coding**: Use different colors to distinguish task types or priorities, for quick identification
 - **Zoom Operations**: Through zoom control to adjust time range display granularity, view overall or details
 - **Filter Display**: Filter by assignee, priority and other conditions, only show related tasks
 - **Export Share**: Screenshot or export roadmap, for meeting presentations and reports
@@ -479,8 +479,8 @@ People field is used to specify people related to work items. Unlike Assignees f
 **Common Usage:**
 
 - **Reviewer**: Code reviewer
-- **QA Owner**: Test负责人
-- **Stakeholder**: Stakeholder or需求方
+- **QA Owner**: Test person in charge
+- **Stakeholder**: Stakeholder or demand side
 
 #### Field Usage Scenario Comparison Table
 
@@ -538,7 +538,7 @@ Action: Set End Date to current date
 
 ```yaml
 Rule: Archive completed items
-Trigger: Status is "Done" and超过 14 days
+Trigger: Status is "Done" and more than 14 days
 Action: Archive that project item
 ```
 
@@ -627,16 +627,16 @@ jobs:
 ### Automation Workflow Best Practices
 
 1. **Start Simple**: First use built-in rules, gradually expand
-2. **Test Rules**: Test automation behavior before正式 project
+2. **Test Rules**: Test automation behavior before the official project
 3. **Document**: Record automation rules' logic and purpose
 4. **Regular Review**: Check if automation works as expected
-5. **Avoid Over-automation**: Some manual operations may be more灵活
+5. **Avoid Over-automation**: Some manual operations may be more flexible
 
 ---
 
 ## 6. Integration with Issues and Pull Requests
 
-GitHub Projects deeply integrates with Issues and Pull Requests,实现 seamless connection between code development and project management.
+GitHub Projects deeply integrates with Issues and Pull Requests, achieving seamless connection between code development and project management.
 
 ### Add Issue to Project
 
@@ -669,13 +669,13 @@ Action: Add to project and set Status to "To Do"
 
 #### Association Methods
 
-Pull Request can be associated to project through以下方式:
+Pull Request can be associated to project through the following methods:
 
 1. **Manual Add**: Add in PR page's Projects section
 2. **Auto Add**: When PR's associated Issue is in project, automatically add
 3. **Label Trigger**: Use label auto-add rules
 
-#### PR and Issue联动
+#### PR and Issue Linkage
 
 When Pull Request is associated with Issue:
 
@@ -734,7 +734,7 @@ GitHub Projects supports creating draft items, these entries are not yet associa
 
 ### Field Sync
 
-某些 fields can sync between project and Issue/PR:
+Some fields can sync between project and Issue/PR:
 
 | Project Field | Issue/PR Field | Sync Direction |
 |--------------|----------------|----------------|
@@ -823,7 +823,7 @@ Daily stand-up is an important meeting for team sync, recommend controlling with
 
 1. **Open Board View**: Filter current Sprint tasks
 2. **Update One by One**: Each member shares yesterday's completed tasks, today's plans and encountered blockers
-3. **Identify Blocks**: Focus on tasks in In Review column that长时间未 processed
+3. **Identify Blocks**: Focus on tasks in In Review column that have not been processed for a long time
 4. **Update Status**: Directly drag to update task status on board during meeting
 
 **Progress Tracking:**
@@ -838,7 +838,7 @@ Display Fields: Title, Assignee, Story Points, Priority
 
 **Sprint Progress Monitoring Metrics:**
 
-During Sprint execution, need to focus on following metrics to judge project health:
+During Sprint execution, need to focus on the following metrics to judge project health:
 
 | Metric | Calculation | Healthy Range |
 |--------|-------------|---------------|
@@ -853,7 +853,7 @@ During Sprint execution, need to focus on following metrics to judge project hea
 
 ```
 View Name: Sprint Review
-Filter: Sprint = Past iteration (最近 completed iteration)
+Filter: Sprint = Past iteration (most recently completed iteration)
 Group: Status
 Display Fields: Title, Assignee, Story Points, Actual Hours
 ```
@@ -868,10 +868,10 @@ Display Fields: Title, Assignee, Story Points, Actual Hours
 
 Sprint review meeting is an important part for team reflection and improvement, usually held at the end of each Sprint:
 
-1. **Data Review**: Use project charts to display Sprint completion情况
+1. **Data Review**: Use project charts to display Sprint completion status
 2. **What Went Well**: Discuss aspects where team performed well in this Sprint
 3. **What Needs Improvement**: Identify work processes or collaboration methods that can be improved
-4. **Action Plan**:制定 specific improvement measures, assign to next Sprint
+4. **Action Plan**: Formulate specific improvement measures, assign to next Sprint
 
 **Velocity Trend Analysis:**
 
@@ -889,7 +889,7 @@ Based on average velocity, team can more accurately plan task volume for subsequ
 
 ### Multi-team Sprint Management
 
-For multiple teams的情况, can:
+For multiple teams situation, can:
 
 1. **Use Labels to Distinguish Teams**: Team-A, Team-B
 2. **Create Team Views**: Each team has a filtered view
@@ -1221,7 +1221,7 @@ Views:
 - **Seamless Integration**: Deep integration with GitHub's Issues, PR, Actions, no need to switch tools
 - **Zero Cost Entry**: Public projects completely free, private projects also free in Pro plan
 - **Simple and Easy to Use**: Intuitive interface, low learning cost, new members can quickly get started
-- **Real-time Collaboration**:多人 simultaneous editing, changes sync in real-time
+- **Real-time Collaboration**: Multiple people can edit simultaneously, changes sync in real-time
 - **Developer Friendly**: High automation through GraphQL API and GitHub Actions
 
 **GitHub Projects Disadvantages:**
@@ -1250,7 +1250,7 @@ Views:
 **Choose GitHub Projects If:**
 
 - Team is already using GitHub
-- Project规模 small or medium
+- Project scale is small or medium
 - Want simple and easy to use tool
 - Limited budget
 - Open source project
@@ -1320,7 +1320,7 @@ UAT → Ready to Deploy → Deployed → Done
 
 **Workflow Design Principles:**
 
-When designing workflow, should follow following principles to ensure process is clear and efficient:
+When designing workflow, should follow the following principles to ensure process is clear and efficient:
 
 1. **Limited States**: Each workflow should not have too many states, recommend 4-7 states
 2. **One-way Flow**: Tasks usually flow from left to right, avoid frequent rollbacks
@@ -1400,7 +1400,7 @@ Examples:
 
 **Sprint Review:**
 
-1. Analyze completion情况
+1. Analyze completion status
 2. Identify improvement points
 3. Adjust next Sprint plan
 
@@ -1446,7 +1446,7 @@ Group Field: Status
 **Interpretation:**
 
 - **Bandwidth Widening**: Tasks in that status are increasing, may have bottleneck
-- **Bandwidth Stable**: Workflow平稳
+- **Bandwidth Stable**: Workflow is stable
 - **Bandwidth Narrowing**: Tasks in that status are decreasing
 
 #### Pie Chart
@@ -1464,7 +1464,7 @@ Filter: -status:done
 **Common Analysis:**
 
 - Distribution by priority: Understand current incomplete tasks' priority distribution, identify if need to adjust resources
-- Distribution by assignee: View each member's task assignment情况, balance workload
+- Distribution by assignee: View each member's task assignment situation, balance workload
 - Distribution by type: Analyze proportion of Bug, Feature, Enhancement etc. types
 - Distribution by label: Identify task's technical domain distribution, like frontend, backend, database etc.
 
@@ -1495,7 +1495,7 @@ Through combining multiple charts, can build complete project dashboard:
 
 | Chart | Type | Purpose |
 |-------|------|---------|
-| Task Status Distribution | Pie | View各 status task proportion |
+| Task Status Distribution | Pie | View each status task proportion |
 | Priority Distribution | Pie | Identify high priority task count |
 | Team Workload | Bar | Compare each member's workload |
 | Sprint Progress | Burndown | Track Sprint completion trend |
@@ -1558,15 +1558,15 @@ query {
 |--------|-------------------|--------|
 | Velocity | Average completed story points over past 3-5 Sprints | Stable |
 | Completion Rate | Completed story points / Planned story points | > 80% |
-| Cycle Time | Average time from start to completion |尽量 short |
-| Cumulative Flow | Task count per status |保持 stable |
+| Cycle Time | Average time from start to completion | As short as possible |
+| Cumulative Flow | Task count per status | Keep stable |
 
 **Quality Metrics:**
 
 | Metric | Calculation Method | Target |
 |--------|-------------------|--------|
-| Defect Density | Bug count / Feature count |尽量 low |
-| Fix Time | Average time from发现 to fix |尽量 short |
+| Defect Density | Bug count / Feature count | As low as possible |
+| Fix Time | Average time from discovery to fix | As short as possible |
 | Regression Rate | Reopened Bugs / Total Bugs | < 5% |
 
 ---
@@ -1625,7 +1625,7 @@ Filter: -status:done
 
 ### Cross-repo Automation
 
-Use GitHub Actions to实现 cross-repo automation:
+Use GitHub Actions to achieve cross-repo automation:
 
 ```yaml
 # .github/workflows/sync-project.yml
@@ -1676,13 +1676,13 @@ jobs:
 ### Cross-repo Project Best Practices
 
 1. **Unified Labels**: Use unified label system across repos, ensure classification consistency
-2. **Standardized Issue Templates**: Use similar Issue templates in each repo,便于 summary analysis
+2. **Standardized Issue Templates**: Use similar Issue templates in each repo, for summary analysis
 3. **Clear Naming**: Project and view naming clear and easy to understand, reflecting cross-repo characteristics
 4. **Regular Sync**: Ensure all repos' Issues are synced to project
 5. **Permission Management**: Reasonably set cross-repo access permissions, ensure team members can access needed repos
 6. **Use Repository Field**: Use auto-added Repository field for filtering and grouping
 7. **Create Repo-specific Views**: Create independent views for each repo, convenient for each team to view
-8. **Unified Workflow**:尽量 use unified status fields and workflow, reduce management complexity
+8. **Unified Workflow**: Try to use unified status fields and workflow, reduce management complexity
 
 **Cross-repo Project Challenges and Solutions:**
 
@@ -1699,7 +1699,7 @@ jobs:
 
 ### Automation Scenarios
 
-GitHub Projects integration with GitHub Actions can实现 complex automation workflows. Here are some common automation scenarios:
+GitHub Projects integration with GitHub Actions can achieve complex automation workflows. Here are some common automation scenarios:
 
 #### Auto-add Issue to Project
 
@@ -2016,7 +2016,7 @@ jobs:
 
 ### Scenario Setup
 
-Suppose you are managing an open source project called `awesome-app`, need to use GitHub Projects for project management. The project has following characteristics:
+Suppose you are managing an open source project called `awesome-app`, need to use GitHub Projects for project management. The project has the following characteristics:
 
 - **Project Type**: Full-stack Web application
 - **Team Size**: 5 core maintainers + community contributors
@@ -2035,7 +2035,7 @@ gh project create --title "Awesome App Development" --owner my-org
 
 **2. Configure Fields**
 
-Add following custom fields:
+Add the following custom fields:
 
 | Field Name | Type | Options |
 |------------|------|---------|
@@ -2080,7 +2080,7 @@ View 5: Roadmap (Roadmap View)
 ```
 Rule 1: Issue added to project → Status = Triage
 Rule 2: Issue labeled "accepted" → Status = Accepted
-Rule 3: PR created and关联 Issue → Status = In Progress
+Rule 3: PR created and linked Issue → Status = In Progress
 Rule 4: PR merged → Status = Done
 Rule 5: Issue closed → Status = Done
 ```
@@ -2197,7 +2197,7 @@ body:
 
 **Sprint Review (Friday):**
 
-1. Analyze completion情况
+1. Analyze completion status
 2. Calculate velocity and completion rate
 3. Identify improvement points
 4. Plan next Sprint
@@ -2233,7 +2233,7 @@ Managing open source project community contributions requires special attention 
    - `help wanted`: Tasks needing community help
    - `documentation`: Documentation related tasks
    - `bug`: Defect fix tasks
-5. **Contributing Guide**: Maintain CONTRIBUTING.md file in repository,说明 contribution process and code standards
+5. **Contributing Guide**: Maintain CONTRIBUTING.md file in repository, explaining contribution process and code standards
 6. **Recognize Contributors**: Thank contributors in release notes, build positive community atmosphere
 
 **Contributor Label System Design:**
@@ -2292,11 +2292,11 @@ GitHub Projects is a powerful and easy-to-use project management tool, especiall
 3. **Use Different Views**: Table, Board, Roadmap
 4. **Custom Fields**: Create various field types based on needs
 5. **Configure Automation**: Reduce manual operations, improve efficiency
-6. **Integrate Issues and PRs**:实现 seamless connection between code development and project management
+6. **Integrate Issues and PRs**: Achieving seamless connection between code development and project management
 7. **Manage Iterations**: Support agile development processes
 8. **Analyze Project Data**: Use charts and reports to track progress
 9. **Cross-repo Management**: Manage projects across multiple repositories
-10. **Integrate with Actions**:实现 advanced automation
+10. **Integrate with Actions**: Achieving advanced automation
 
 ### Further Learning
 

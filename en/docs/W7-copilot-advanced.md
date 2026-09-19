@@ -1,210 +1,210 @@
-# GitHub Copilot 进阶功能
+# GitHub Copilot Advanced Features
 
-## Copilot 功能矩阵
+## Copilot Feature Matrix
 
-| 功能 | Free | Pro | Business | Enterprise |
-|------|------|-----|----------|------------|
-| 代码补全 | ✅ 有限 | ✅ | ✅ | ✅ |
-| Copilot Chat | ✅ 有限 | ✅ | ✅ | ✅ |
-| Agent 模式 | ❌ | ✅ | ✅ | ✅ |
+| Feature | Free | Pro | Business | Enterprise |
+|---------|------|-----|----------|------------|
+| Code Completion | ✅ Limited | ✅ | ✅ | ✅ |
+| Copilot Chat | ✅ Limited | ✅ | ✅ | ✅ |
+| Agent Mode | ❌ | ✅ | ✅ | ✅ |
 | Extensions | ❌ | ✅ | ✅ | ✅ |
 | Workspace | ❌ | ❌ | ✅ | ✅ |
 | Audit Log | ❌ | ❌ | ❌ | ✅ |
 
-## Agent 模式
+## Agent Mode
 
-Agent 模式让 Copilot 不仅能写代码，还能执行多步骤任务。
+Agent Mode allows Copilot to not only write code but also execute multi-step tasks.
 
-### 使用方法
+### Usage
 
-在 VS Code 中启用 Agent 模式：
+Enable Agent Mode in VS Code:
 
 ```
 Ctrl+Shift+P → "Copilot: Enable Agent Mode"
 ```
 
-### Agent 能力
+### Agent Capabilities
 
 ```bash
-# 让 Agent 创建完整的项目结构
-"创建一个 Express API 项目，包含用户认证、数据库连接和 Docker 配置"
+# Let the Agent create a complete project structure
+"Create an Express API project with user authentication, database connection, and Docker configuration"
 
-# 让 Agent 修复 CI/CD
-"查看 GitHub Actions 失败日志并修复工作流"
+# Let the Agent fix CI/CD
+"Review GitHub Actions failure logs and fix the workflow"
 
-# 让 Agent 重构代码
-"将这个函数重构为更清晰的结构，添加错误处理"
+# Let the Agent refactor code
+"Refactor this function into a clearer structure with error handling"
 ```
 
-### Agent 常用命令
+### Common Agent Commands
 
-| 命令 | 说明 |
-|------|------|
-| `#file` | 引用文件 |
-| `#selection` | 引用选中代码 |
-| `#terminalLastCommand` | 引用上次终端命令 |
-| `#changes` | 引用当前更改 |
-| `#codebase` | 搜索整个代码库 |
-| `#problems` | 引用代码问题 |
-| `#exec` | 执行终端命令 |
+| Command | Description |
+|---------|-------------|
+| `#file` | Reference a file |
+| `#selection` | Reference selected code |
+| `#terminalLastCommand` | Reference the last terminal command |
+| `#changes` | Reference current changes |
+| `#codebase` | Search the entire codebase |
+| `#problems` | Reference code issues |
+| `#exec` | Execute a terminal command |
 
-### 示例工作流
+### Example Workflow
 
 ```bash
-# 1. 分析项目
-"分析这个项目的架构和依赖关系"
+# 1. Analyze the project
+"Analyze this project's architecture and dependencies"
 
-# 2. 添加功能
-"为用户管理模块添加 CRUD API，使用 Prisma 连接 PostgreSQL"
+# 2. Add a feature
+"Add CRUD API for the user management module using Prisma to connect to PostgreSQL"
 
-# 3. 编写测试
-"为用户 API 编写单元测试和集成测试"
+# 3. Write tests
+"Write unit and integration tests for the user API"
 
-# 4. 更新 CI
-"更新 GitHub Actions 工作流以运行这些测试"
+# 4. Update CI
+"Update the GitHub Actions workflow to run these tests"
 
-# 5. 更新文档
-"更新 README 中的 API 文档"
+# 5. Update documentation
+"Update the API documentation in the README"
 ```
 
 ## Copilot Extensions
 
-### 什么是 Extensions？
+### What are Extensions?
 
-Extensions 让 Copilot 可以调用外部服务和 API，扩展其能力。
+Extensions allow Copilot to call external services and APIs, extending its capabilities.
 
-### 内置 Extensions
+### Built-in Extensions
 
-| Extension | 功能 |
-|-----------|------|
-| `@terminal` | 终端命令辅助 |
-| `@workspace` | 项目工作区搜索 |
-| `@vscode` | VS Code 功能 |
-| `@github` | GitHub 平台操作 |
+| Extension | Function |
+|-----------|----------|
+| `@terminal` | Terminal command assistance |
+| `@workspace` | Project workspace search |
+| `@vscode` | VS Code functionality |
+| `@github` | GitHub platform operations |
 
-### 安装第三方 Extensions
+### Installing Third-party Extensions
 
 ```bash
-# 在 VS Code 中
-1. 打开 Copilot Chat
-2. 点击 Extensions 图标
-3. 搜索并安装需要的 Extension
+# In VS Code
+1. Open Copilot Chat
+2. Click the Extensions icon
+3. Search for and install the desired Extension
 ```
 
-### 常用 Extensions
+### Common Extensions
 
-| Extension | 用途 |
-|-----------|------|
-| Docker | Docker 配置辅助 |
-| Kubernetes | K8s YAML 生成 |
-| Sentry | 错误追踪集成 |
-| Vercel | 部署配置 |
-| PlanetScale | 数据库操作 |
+| Extension | Purpose |
+|-----------|---------|
+| Docker | Docker configuration assistance |
+| Kubernetes | K8s YAML generation |
+| Sentry | Error tracking integration |
+| Vercel | Deployment configuration |
+| PlanetScale | Database operations |
 
 ## Copilot Workspace
 
-### 功能概览
+### Overview
 
-Copilot Workspace 是一个基于 AI 的开发环境，可以直接从 Issue 生成代码变更。
+Copilot Workspace is an AI-powered development environment that can generate code changes directly from an Issue.
 
-### 工作流程
+### Workflow
 
-1. **从 Issue 开始**：在 Issue 页面点击 "Open in Workspace"
-2. **AI 分析**：Copilot 理解 Issue 需求
-3. **生成计划**：自动创建实现计划
-4. **编写代码**：AI 生成代码变更
-5. **验证测试**：自动运行测试
-6. **创建 PR**：一键创建 Pull Request
+1. **Start from an Issue**: Click "Open in Workspace" on the Issue page
+2. **AI Analysis**: Copilot understands the Issue requirements
+3. **Generate Plan**: Automatically create an implementation plan
+4. **Write Code**: AI generates code changes
+5. **Verify Tests**: Automatically run tests
+6. **Create PR**: Create a Pull Request with one click
 
-### 使用场景
+### Use Cases
 
 ```bash
-# 从 Issue 到 PR 的完整流程
-Issue: "添加用户导出 CSV 功能"
+# Complete flow from Issue to PR
+Issue: "Add CSV export feature for users"
     ↓
 Copilot Workspace:
-    1. 分析现有代码结构
-    2. 生成导出逻辑
-    3. 添加 API 端点
-    4. 编写测试
-    5. 更新文档
-    6. 创建 PR
+    1. Analyze existing code structure
+    2. Generate export logic
+    3. Add API endpoint
+    4. Write tests
+    5. Update documentation
+    6. Create PR
 ```
 
-## 最佳实践
+## Best Practices
 
-### 提示词优化
+### Prompt Optimization
 
 ```bash
-# 差的提示
-"修复这个 bug"
+# Bad prompt
+"Fix this bug"
 
-# 好的提示
-"在 src/api/users.ts 中，getUser 函数在用户不存在时返回 500 错误，应该返回 404"
+# Good prompt
+"In src/api/users.ts, the getUser function returns a 500 error when the user does not exist, it should return 404"
 
-# 差的提示
-"添加认证"
+# Bad prompt
+"Add authentication"
 
-# 好的提示
-"使用 JWT 实现用户认证，包含登录、注册、刷新 token 三个端点，密码使用 bcrypt 加密"
+# Good prompt
+"Implement user authentication with JWT, including three endpoints: login, register, and token refresh. Use bcrypt for password encryption"
 ```
 
-### 利用上下文
+### Using Context
 
 ```bash
-# 引用相关文件
-"参考 @src/models/user.ts 的结构，创建 @src/models/product.ts"
+# Reference related files
+"Following the structure of @src/models/user.ts, create @src/models/product.ts"
 
-# 引用终端输出
-"@terminalLastCommand 显示测试失败，请修复"
+# Reference terminal output
+"@terminalLastCommand shows test failures, please fix"
 
-# 引用代码问题
-"@problems 中的 TypeScript 错误，请修复"
+# Reference code issues
+"Fix the TypeScript errors in @problems"
 ```
 
-### 团队协作
+### Team Collaboration
 
 ```yaml
 # .github/copilot-instructions.md
-# 项目级 Copilot 配置
+# Project-level Copilot configuration
 
-## 代码风格
-- 使用 TypeScript strict 模式
-- 函数命名使用 camelCase
-- 组件命名使用 PascalCase
-- 测试文件使用 .test.ts 后缀
+## Code Style
+- Use TypeScript strict mode
+- Function naming uses camelCase
+- Component naming uses PascalCase
+- Test files use .test.ts suffix
 
-## 技术栈
-- 前端：React + TypeScript
-- 后端：Node.js + Express
-- 数据库：PostgreSQL + Prisma
-- 测试：Vitest + Playwright
+## Tech Stack
+- Frontend: React + TypeScript
+- Backend: Node.js + Express
+- Database: PostgreSQL + Prisma
+- Testing: Vitest + Playwright
 ```
 
-## 常见问题
+## FAQ
 
-### Q: Copilot 生成的代码安全吗？
-A: Copilot 不会直接发送你的代码到外部服务，但建议：
-- 审查生成的代码
-- 不要在提示中包含敏感信息
-- 使用 Business/Enterprise 版本获得更好的隐私保护
+### Q: Is the code generated by Copilot secure?
+A: Copilot does not send your code directly to external services, but it is recommended to:
+- Review generated code
+- Do not include sensitive information in prompts
+- Use Business/Enterprise versions for better privacy protection
 
-### Q: 如何提高 Copilot 准确率？
+### Q: How to improve Copilot accuracy?
 A:
-- 提供清晰的上下文
-- 使用类型注解
-- 编写清晰的注释
-- 保持代码结构清晰
+- Provide clear context
+- Use type annotations
+- Write clear comments
+- Maintain clean code structure
 
-### Q: Copilot 支持哪些语言？
-A: 支持几乎所有主流编程语言，对 Python、JavaScript、TypeScript、Java、Go、Rust 支持最好。
+### Q: Which languages does Copilot support?
+A: It supports almost all major programming languages, with the best support for Python, JavaScript, TypeScript, Java, Go, and Rust.
 
-## 相关资源
+## Related Resources
 
-- [Copilot 官方文档](https://docs.github.com/en/copilot)
+- [Copilot Official Documentation](https://docs.github.com/en/copilot)
 - [Copilot Extensions](https://github.com/marketplace?type=apps&query=copilot)
-- [Copilot 政策](https://docs.github.com/en/copilot/overview-of-github-copilot/about-github-copilot-business)
+- [Copilot Policies](https://docs.github.com/en/copilot/overview-of-github-copilot/about-github-copilot-business)
 
 ---
 
-**上一篇：[GitHub Marketplace](N-marketplace.md) | 下一篇：[GitHub Copilot Extensions 开发](W8-copilot-extensions-dev.md)**
+**Previous: [GitHub Marketplace](N-marketplace.md) | Next: [GitHub Copilot Extensions Development](W8-copilot-extensions-dev.md)**

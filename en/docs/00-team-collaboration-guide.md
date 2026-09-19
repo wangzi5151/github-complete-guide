@@ -1,194 +1,194 @@
-# 第六章：团队协作与开源贡献
+# Chapter 6: Team Collaboration and Open Source Contribution
 
-## 6.1 团队协作基础
+## 6.1 Team Collaboration Basics
 
-### 团队协作流程
+### Team Collaboration Workflow
 
 ```
-1. 克隆仓库
+1. Clone repository
    ↓
-2. 创建功能分支
+2. Create feature branch
    ↓
-3. 开发和测试
+3. Develop and test
    ↓
-4. 推送分支
+4. Push branch
    ↓
-5. 创建 Pull Request
+5. Create Pull Request
    ↓
-6. 代码审查
+6. Code review
    ↓
-7. 合并到主分支
+7. Merge to main branch
    ↓
-8. 部署
+8. Deploy
 ```
 
-### 分支策略
+### Branching Strategy
 
-**Git Flow：**
+**Git Flow:**
 ```
-main (生产分支)
-├── develop (开发分支)
-│   ├── feature/xxx (功能分支)
-│   └── release/xxx (发布分支)
-└── hotfix/xxx (紧急修复)
-```
-
-**GitHub Flow：**
-```
-main (主分支)
-└── feature/xxx (功能分支)
+main (production branch)
+├── develop (development branch)
+│   ├── feature/xxx (feature branch)
+│   └── release/xxx (release branch)
+└── hotfix/xxx (hotfix)
 ```
 
-**Trunk-Based Development：**
+**GitHub Flow:**
 ```
-main (主分支，频繁提交)
-```
-
-### 提交信息规范
-
-**格式：**
-```
-类型(范围): 描述
-
-详细描述（可选）
-
-关联 Issue（可选）
+main (main branch)
+└── feature/xxx (feature branch)
 ```
 
-**类型说明：**
+**Trunk-Based Development:**
+```
+main (main branch, frequent commits)
+```
 
-| 类型 | 说明 | 示例 |
-|------|------|------|
-| `feat` | 新功能 | `feat: 添加用户登录功能` |
-| `fix` | Bug 修复 | `fix: 修复登录页面样式问题` |
-| `docs` | 文档更新 | `docs: 更新 README 安装说明` |
-| `style` | 代码格式 | `style: 格式化代码` |
-| `refactor` | 重构 | `refactor: 重构用户服务` |
-| `test` | 测试 | `test: 添加单元测试` |
-| `chore` | 构建/工具 | `chore: 更新依赖` |
-| `perf` | 性能优化 | `perf: 优化查询性能` |
+### Commit Message Convention
 
-**示例：**
+**Format:**
+```
+type(scope): description
+
+Detailed description (optional)
+
+Related Issue (optional)
+```
+
+**Type Descriptions:**
+
+| Type | Description | Example |
+|------|-------------|---------|
+| `feat` | New feature | `feat: add user login feature` |
+| `fix` | Bug fix | `fix: fix login page style issue` |
+| `docs` | Documentation update | `docs: update README installation instructions` |
+| `style` | Code formatting | `style: format code` |
+| `refactor` | Refactoring | `refactor: refactor user service` |
+| `test` | Tests | `test: add unit tests` |
+| `chore` | Build/tools | `chore: update dependencies` |
+| `perf` | Performance optimization | `perf: optimize query performance` |
+
+**Examples:**
 ```bash
-git commit -m "feat: 添加用户登录功能"
-git commit -m "fix: 修复登录页面样式问题"
-git commit -m "docs: 更新 README 安装说明"
+git commit -m "feat: add user login feature"
+git commit -m "fix: fix login page style issue"
+git commit -m "docs: update README installation instructions"
 ```
 
-## 6.2 代码审查
+## 6.2 Code Review
 
-### 审查流程
+### Review Process
 
-**第 1 步：** 打开 PR 的 **Files changed** 页面
+**Step 1:** Open the PR's **Files changed** page
 
-**第 2 步：** 查看代码差异
+**Step 2:** Review code changes
 
-**第 3 步：** 添加行内评论
+**Step 3:** Add inline comments
 
-**第 4 步：** 提交审查
+**Step 4:** Submit review
 
-### 审查要点
+### Review Checklist
 
-| 类别 | 检查项 |
-|------|--------|
-| **功能** | 逻辑是否正确，边界情况 |
-| **设计** | 架构是否合理 |
-| **可读性** | 命名、注释、结构 |
-| **性能** | 有无性能问题 |
-| **安全** | 有无安全漏洞 |
-| **测试** | 测试是否充分 |
-| **文档** | 是否需要更新文档 |
+| Category | Items to Check |
+|----------|----------------|
+| **Functionality** | Is the logic correct, edge cases |
+| **Design** | Is the architecture sound |
+| **Readability** | Naming, comments, structure |
+| **Performance** | Any performance issues |
+| **Security** | Any security vulnerabilities |
+| **Testing** | Is testing sufficient |
+| **Documentation** | Does documentation need updating |
 
-### 提供好的反馈
+### Providing Good Feedback
 
-**好的反馈：**
-- 具体指出问题位置
-- 解释为什么有问题
-- 提供改进建议
-- 使用代码建议
+**Good feedback:**
+- Point out the specific location of the problem
+- Explain why it is a problem
+- Provide improvement suggestions
+- Use code suggestions
 
-**示例：**
+**Example:**
 ```
-这里的类名 "new" 不够描述性，建议改为 "primary"
-以表示这是一个主要按钮。
+The class name "new" here is not descriptive enough, suggest changing it to "primary"
+to indicate this is a primary button.
 
 ```suggestion
 className="primary"
 ```
 ```
 
-### 审查结果
+### Review Outcomes
 
-| 选项 | 说明 | 何时使用 |
-|------|------|----------|
-| **Comment** | 仅评论 | 不反对合并，只是提建议 |
-| **Approve** | 批准 | 代码质量好，可以合并 |
-| **Request changes** | 要求修改 | 有问题需要修复 |
+| Option | Description | When to Use |
+|--------|-------------|-------------|
+| **Comment** | Comment only | Don't oppose merging, just providing suggestions |
+| **Approve** | Approved | Code quality is good, can be merged |
+| **Request changes** | Request changes | Issues need to be fixed |
 
-## 6.3 Fork 与开源贡献
+## 6.3 Fork and Open Source Contribution
 
-### 什么是 Fork？
+### What is a Fork?
 
-Fork 是将别人的仓库复制到你的 GitHub 账号下，这样你可以自由修改而不影响原仓库。
+A Fork is copying someone else's repository to your GitHub account so you can freely modify it without affecting the original repository.
 
-### Fork 工作流程
+### Fork Workflow
 
 ```
-1. Fork 仓库（网页操作）
+1. Fork repository (web UI)
    ↓
-2. 克隆 Fork 的仓库（命令行）
+2. Clone the Forked repository (command line)
    ↓
-3. 添加上游仓库（命令行）
+3. Add upstream repository (command line)
    ↓
-4. 创建功能分支（命令行）
+4. Create feature branch (command line)
    ↓
-5. 开发和提交（命令行）
+5. Develop and commit (command line)
    ↓
-6. 推送到 Fork 的仓库（命令行）
+6. Push to your Fork (command line)
    ↓
-7. 创建 Pull Request（网页操作）
+7. Create Pull Request (web UI)
 ```
 
-### Fork 仓库
+### Fork a Repository
 
-**第 1 步：** 打开源仓库页面
+**Step 1:** Open the source repository page
 
-**第 2 步：** 点击右上角的 **Fork** 按钮
+**Step 2:** Click the **Fork** button in the top right corner
 
 ```
 ┌─────────────────────────────────────────────┐
 │  owner/repo                                  │
 │                                             │
-│  [Fork]  ← 点击这个按钮                      │
+│  [Fork]  ← click this button                │
 │  ⭐ 1.2k  👁 345                             │
 └─────────────────────────────────────────────┘
 ```
 
-**第 3 步：** 选择 Fork 的目标（通常是你的账号）
+**Step 3:** Select the Fork destination (usually your account)
 
-**第 4 点：** 等待 Fork 完成
+**Step 4:** Wait for the Fork to complete
 
-### 克隆 Fork 的仓库
+### Clone the Forked Repository
 
 ```bash
-# 克隆你 Fork 的仓库
+# Clone your Forked repository
 git clone https://github.com/your-username/repo.git
 
-# 进入仓库目录
+# Enter repository directory
 cd repo
 ```
 
-### 添加上游仓库
+### Add Upstream Repository
 
 ```bash
-# 添加原仓库为上游
+# Add the original repository as upstream
 git remote add upstream https://github.com/owner/repo.git
 
-# 查看远程仓库
+# View remote repositories
 git remote -v
 ```
 
-**输出示例：**
+**Output Example:**
 ```
 origin    https://github.com/your-username/repo.git (fetch)
 origin    https://github.com/your-username/repo.git (push)
@@ -196,48 +196,48 @@ upstream  https://github.com/owner/repo.git (fetch)
 upstream  https://github.com/owner/repo.git (push)
 ```
 
-### 同步 Fork
+### Syncing Fork
 
 ```bash
-# 获取上游更新
+# Fetch upstream updates
 git fetch upstream
 
-# 合并上游 main 分支
+# Merge upstream main branch
 git checkout main
 git merge upstream/main
 
-# 推送到你的 Fork
+# Push to your Fork
 git push origin main
 ```
 
-### 创建功能分支
+### Create Feature Branch
 
 ```bash
-# 创建功能分支
+# Create feature branch
 git checkout -b feature-your-feature
 ```
 
-### 开发和提交
+### Develop and Commit
 
 ```bash
-# 修改文件...
+# Modify files...
 git add .
-git commit -m "feat: 添加新功能"
+git commit -m "feat: add new feature"
 ```
 
-### 推送到 Fork
+### Push to Fork
 
 ```bash
 git push origin feature-your-feature
 ```
 
-### 创建 Pull Request
+### Create Pull Request
 
-**第 1 步：** 打开你的 Fork 页面
+**Step 1:** Open your Fork page
 
-**第 2 步：** 点击 **Compare & pull request**
+**Step 2:** Click **Compare & pull request**
 
-**第 3 步：** 确认 PR 信息
+**Step 3:** Confirm PR information
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -245,74 +245,74 @@ git push origin feature-your-feature
 │                                             │
 │  base: owner:main  ← compare: your:feature  │
 │                                             │
-│  Title: [feat: 添加新功能           ]         │
+│  Title: [feat: add new feature            ]  │
 │                                             │
 │  Description:                                │
 │  ┌─────────────────────────────────────┐    │
-│  │ ## 变更说明                         │    │
-│  │ 添加了一个新功能                     │    │
+│  │ ## Change Description              │    │
+│  │ Added a new feature                │    │
 │  │                                     │    │
-│  │ ## 测试                             │    │
-│  │ - [x] 已通过所有测试                │    │
+│  │ ## Testing                         │    │
+│  │ - [x] All tests passed            │    │
 │  └─────────────────────────────────────┘    │
 │                                             │
 │        [Create pull request]                │
 └─────────────────────────────────────────────┘
 ```
 
-**第 4 步：** 点击 **Create pull request**
+**Step 4:** Click **Create pull request**
 
-### 保持 Fork 同步
+### Keeping Fork in Sync
 
 ```bash
-# 获取上游更新
+# Fetch upstream updates
 git fetch upstream
 
-# 切换到 main 分支
+# Switch to main branch
 git checkout main
 
-# 合并上游更新
+# Merge upstream updates
 git merge upstream/main
 
-# 推送到你的 Fork
+# Push to your Fork
 git push origin main
 ```
 
-## 6.4 开源项目运营
+## 6.4 Open Source Project Management
 
-### 创建开源项目
+### Creating an Open Source Project
 
-**准备工作：**
-- [ ] 编写 README
-- [ ] 添加 LICENSE
-- [ ] 创建 CONTRIBUTING.md
-- [ ] 创建 CODE_OF_CONDUCT.md
-- [ ] 设置 Issue 模板
-- [ ] 设置 PR 模板
-- [ ] 配置 CI/CD
+**Preparation:**
+- [ ] Write README
+- [ ] Add LICENSE
+- [ ] Create CONTRIBUTING.md
+- [ ] Create CODE_OF_CONDUCT.md
+- [ ] Set up Issue templates
+- [ ] Set up PR templates
+- [ ] Configure CI/CD
 
-### README 模板
+### README Template
 
 ```markdown
-# 项目名称
+# Project Name
 
-> 简短描述
+> Short description
 
-## 特性
+## Features
 
-- 特性 1
-- 特性 2
-- 特性 3
+- Feature 1
+- Feature 2
+- Feature 3
 
-## 快速开始
+## Quick Start
 
-### 安装
+### Installation
 
 ```bash
 npm install your-package
 ```
 
-### 使用
+### Usage
 
 ```javascript
 import { yourFunction } from 'your-package';
@@ -320,173 +320,173 @@ import { yourFunction } from 'your-package';
 yourFunction();
 ```
 
-## 文档
+## Documentation
 
-- [文档链接](docs/)
+- [Documentation link](docs/)
 
-## 贡献指南
+## Contributing
 
-欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md)。
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 许可证
+## License
 
 [MIT](LICENSE)
 ```
 
-### CONTRIBUTING.md 模板
+### CONTRIBUTING.md Template
 
 ```markdown
-# 贡献指南
+# Contributing Guide
 
-感谢你对项目的关注！
+Thank you for your interest in the project!
 
-## 如何贡献
+## How to Contribute
 
-### 报告 Bug
+### Reporting Bugs
 
-1. 搜索现有的 Issues
-2. 创建新的 Issue
-3. 使用 Bug Report 模板
+1. Search existing Issues
+2. Create a new Issue
+3. Use the Bug Report template
 
-### 提交代码
+### Submitting Code
 
-1. Fork 仓库
-2. 创建功能分支
-3. 提交更改
-4. 推送到 Fork
-5. 创建 Pull Request
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to your Fork
+5. Create a Pull Request
 
-### 代码规范
+### Code Standards
 
-- 遵循现有代码风格
-- 添加必要的注释
-- 确保测试通过
+- Follow the existing code style
+- Add necessary comments
+- Ensure tests pass
 
-### 提交信息规范
+### Commit Message Convention
 
-使用 Conventional Commits 规范：
+Follow the Conventional Commits specification:
 
 ```
-类型(范围): 描述
+type(scope): description
 
-详细描述（可选）
+Detailed description (optional)
 ```
 ```
 
-### 社区建设
+### Community Building
 
-**渠道：**
-- GitHub Issues：问题追踪
-- GitHub Discussions：社区讨论
-- Discord/Slack：即时通讯
-- Twitter：项目动态
+**Channels:**
+- GitHub Issues: Issue tracking
+- GitHub Discussions: Community discussions
+- Discord/Slack: Instant messaging
+- Twitter: Project updates
 
-**活动：**
-- 定期发布更新
-- 回复 Issue 和 PR
-- 组织线上活动
-- 撰写博客文章
+**Activities:**
+- Regular release updates
+- Respond to Issues and PRs
+- Organize online events
+- Write blog posts
 
-### 项目推广
+### Project Promotion
 
-**方法：**
-- 在社交媒体分享
-- 写博客介绍
-- 参与开源活动
-- 与其他项目合作
-- 提交到 awesome 列表
+**Methods:**
+- Share on social media
+- Write blog introductions
+- Participate in open source events
+- Collaborate with other projects
+- Submit to awesome lists
 
-## 6.5 开源许可证
+## 6.5 Open Source Licenses
 
-### 常用许可证
+### Common Licenses
 
-| 许可证 | 说明 | 限制 |
-|--------|------|------|
-| **MIT** | 最宽松，允许任何使用 | 需要保留版权声明 |
-| **Apache 2.0** | 宽松，需要注明修改 | 需要保留版权声明 |
-| **GPL** | 需要开源衍生作品 | 衍生作品必须开源 |
-| **LGPL** | 允许库被闭源使用 | 库本身需要开源 |
-| **BSD** | 类似 MIT，有附加限制 | 需要保留版权声明 |
+| License | Description | Restrictions |
+|---------|-------------|--------------|
+| **MIT** | Most permissive, allows any use | Must retain copyright notice |
+| **Apache 2.0** | Permissive, requires noting modifications | Must retain copyright notice |
+| **GPL** | Requires derivative works to be open source | Derivative works must be open source |
+| **LGPL** | Allows libraries to be used in closed source | Library itself must be open source |
+| **BSD** | Similar to MIT, with additional restrictions | Must retain copyright notice |
 
-### 选择许可证
+### Choosing a License
 
-**推荐：**
-- 个人项目：MIT
-- 企业项目：Apache 2.0
-- 希望衍生作品开源：GPL
+**Recommendations:**
+- Personal projects: MIT
+- Enterprise projects: Apache 2.0
+- Want derivative works to be open source: GPL
 
-### 添加许可证
+### Adding a License
 
-**方法一：网页添加**
+**Method 1: Add via Web UI**
 
-1. 进入仓库页面
-2. 点击 **Add file** → **Create new file**
-3. 输入文件名 `LICENSE`
-4. 选择模板
-5. 点击 **Commit changes**
+1. Go to repository page
+2. Click **Add file** → **Create new file**
+3. Enter filename `LICENSE`
+4. Select template
+5. Click **Commit changes**
 
-**方法二：命令行添加**
+**Method 2: Add via Command Line**
 
 ```bash
-# 使用 GitHub CLI
+# Using GitHub CLI
 gh api repos/{owner}/{repo}/license \
   --method PUT \
   -f license='mit'
 ```
 
-## 6.6 最佳实践
+## 6.6 Best Practices
 
-### 团队协作最佳实践
+### Team Collaboration Best Practices
 
-1. **使用清晰的分支命名**
+1. **Use clear branch naming**
    - `feature/user-login`
    - `bugfix/fix-crash`
    - `hotfix/security-patch`
 
-2. **编写好的提交信息**
-   - 使用 Conventional Commits 规范
-   - 描述清晰，说明做了什么
+2. **Write good commit messages**
+   - Follow the Conventional Commits specification
+   - Be clear and describe what was done
 
-3. **保持 PR 小而专注**
-   - 一个 PR 只做一件事
-   - 便于审查和理解
+3. **Keep PRs small and focused**
+   - One PR should do one thing
+   - Easier to review and understand
 
-4. **及时响应审查**
-   - 不要让 PR 放太久
-   - 认真考虑每条反馈
+4. **Respond to reviews promptly**
+   - Don't leave PRs sitting for too long
+   - Consider each piece of feedback carefully
 
-### 开源贡献最佳实践
+### Open Source Contribution Best Practices
 
-1. **从简单任务开始**
-   - 查找 `good first issue` 标签
-   - 修复文档错误
+1. **Start with simple tasks**
+   - Look for `good first issue` labels
+   - Fix documentation errors
 
-2. **阅读贡献指南**
-   - 了解项目规范
-   - 遵循代码风格
+2. **Read the contributing guide**
+   - Understand project conventions
+   - Follow code style
 
-3. **保持沟通**
-   - 在 Issue 中讨论想法
-   - 及时回复反馈
+3. **Maintain communication**
+   - Discuss ideas in Issues
+   - Respond to feedback promptly
 
-4. **保持耐心**
-   - 审查需要时间
-   - 被拒绝不要气馁
+4. **Be patient**
+   - Reviews take time
+   - Don't be discouraged by rejections
 
-## 6.7 本章小结
+## 6.7 Chapter Summary
 
-本章详细介绍了团队协作和开源贡献的内容，包括：
+This chapter provided a detailed introduction to team collaboration and open source contribution, including:
 
-- 团队协作流程
-- 代码审查方法
-- Fork 与开源贡献
-- 开源项目运营
-- 开源许可证
+- Team collaboration workflow
+- Code review methods
+- Fork and open source contribution
+- Open source project management
+- Open source licenses
 
-**关键要点：**
-- 良好的协作习惯是团队成功的基础
-- 参与开源可以提升技术能力
-- 尊重他人，保持友好
+**Key Takeaways:**
+- Good collaboration habits are the foundation of team success
+- Participating in open source can improve technical skills
+- Respect others and maintain friendliness
 
-**下一步：**
-[安全与 DevOps →](28-security-permissions.md)
+**Next:**
+[Security and DevOps →](28-security-permissions.md)

@@ -1,129 +1,129 @@
-# GitHub Enterprise 企业版功能
+# GitHub Enterprise Features
 
-> 本章将详细介绍 GitHub Enterprise 的企业级功能，包括版本对比、SAML SSO 配置、审计日志、IP 允许列表、合规和治理、安全功能、管理 API 以及最佳实践。
-
----
-
-## 目录
-
-1. [Enterprise 版本对比](#enterprise-版本对比)
-2. [SAML SSO 配置](#saml-sso-配置)
-3. [审计日志](#审计日志)
-4. [IP 允许列表](#ip-允许列表)
-5. [合规和治理](#合规和治理)
-6. [安全功能](#安全功能)
-7. [管理 API](#管理-api)
-8. [企业级部署](#企业级部署)
-9. [成本优化](#成本优化)
-10. [最佳实践](#最佳实践)
-11. [相关资源](#相关资源)
+> This chapter provides a detailed introduction to GitHub Enterprise's enterprise-level features, including version comparison, SAML SSO configuration, audit logs, IP allow lists, compliance and governance, security features, administration APIs, and best practices.
 
 ---
 
-## Enterprise 版本对比
+## Table of Contents
 
-GitHub 提供三种主要版本，满足不同规模团队的需求。
+1. [Enterprise Version Comparison](#enterprise-version-comparison)
+2. [SAML SSO Configuration](#saml-sso-configuration)
+3. [Audit Logs](#audit-logs)
+4. [IP Allow List](#ip-allow-list)
+5. [Compliance and Governance](#compliance-and-governance)
+6. [Security Features](#security-features)
+7. [Administration API](#administration-api)
+8. [Enterprise Deployment](#enterprise-deployment)
+9. [Cost Optimization](#cost-optimization)
+10. [Best Practices](#best-practices)
+11. [Related Resources](#related-resources)
 
-### 版本功能对比
+---
 
-| 功能 | Free | Team ($4/月) | Enterprise ($21/月) |
+## Enterprise Version Comparison
+
+GitHub offers three main versions to meet the needs of teams of different sizes.
+
+### Version Feature Comparison
+
+| Feature | Free | Team ($4/month) | Enterprise ($21/month) |
 |------|------|--------------|---------------------|
-| 仓库 | 无限 | 无限 | 无限 |
-| 协作者 | 无限 | 无限 | 无限 |
+| Repositories | Unlimited | Unlimited | Unlimited |
+| Collaborators | Unlimited | Unlimited | Unlimited |
 | GitHub Pages | ✅ | ✅ | ✅ |
-| GitHub Actions | 2000分钟/月 | 3000分钟/月 | 50000分钟/月 |
-| 容量限制 | 1GB | 2GB | 50GB |
+| GitHub Actions | 2000 minutes/month | 3000 minutes/month | 50000 minutes/month |
+| Storage Limit | 1GB | 2GB | 50GB |
 | SAML SSO | ❌ | ❌ | ✅ |
-| 审计日志 | ❌ | ❌ | ✅ |
-| IP 允许列表 | ❌ | ❌ | ✅ |
-| 高级安全 | ❌ | ❌ | ✅ |
-| 支持 | 社区 | 优先支持 | 24/7 支持 |
+| Audit Logs | ❌ | ❌ | ✅ |
+| IP Allow List | ❌ | ❌ | ✅ |
+| Advanced Security | ❌ | ❌ | ✅ |
+| Support | Community | Priority Support | 24/7 Support |
 | SLA | ❌ | ❌ | 99.9% |
 
-### 选择合适的版本
+### Choosing the Right Version
 
-**Free 版本适合**：
-- 个人开发者
-- 开源项目
-- 小型团队（<10人）
-- 学习和实验
+**Free version is suitable for**:
+- Individual developers
+- Open source projects
+- Small teams (<10 people)
+- Learning and experimentation
 
-**Team 版本适合**：
-- 中小型团队（10-50人）
-- 需要优先支持
-- 需要更多 Actions 分钟数
-- 需要代码审查功能
+**Team version is suitable for**:
+- Small to medium teams (10-50 people)
+- Need priority support
+- Need more Actions minutes
+- Need code review features
 
-**Enterprise 版本适合**：
-- 大型企业（>50人）
-- 需要 SSO/SAML
-- 需要审计日志
-- 需要合规性支持
-- 需要高级安全功能
+**Enterprise version is suitable for**:
+- Large enterprises (>50 people)
+- Need SSO/SAML
+- Need audit logs
+- Need compliance support
+- Need advanced security features
 
-### 成本计算
+### Cost Calculation
 
-**Actions 分钟数成本**：
+**Actions minutes cost**:
 ```
-Free: 2000分钟/月（免费）
-Team: 3000分钟/月（$4/用户/月）
-Enterprise: 50000分钟/月（$21/用户/月）
+Free: 2000 minutes/month (free)
+Team: 3000 minutes/month ($4/user/month)
+Enterprise: 50000 minutes/month ($21/user/month)
 
-额外分钟数：$0.008/分钟
-```
-
-**存储成本**：
-```
-Free: 1GB（免费）
-Team: 2GB（$4/用户/月）
-Enterprise: 50GB（$21/用户/月）
-
-额外存储：$0.008/MB/月
+Additional minutes: $0.008/minute
 ```
 
-**示例计算**：
+**Storage cost**:
 ```
-团队规模：100人
-Actions 分钟数：100,000分钟/月
-存储需求：100GB
+Free: 1GB (free)
+Team: 2GB ($4/user/month)
+Enterprise: 50GB ($21/user/month)
 
-Enterprise 成本：
-- 基础费用：100 × $21 = $2,100/月
-- 额外分钟数：(100,000 - 50,000) × $0.008 = $400/月
-- 额外存储：(100GB - 50GB) × $0.008 × 1024 = $409.6/月
-- 总计：$2,100 + $400 + $409.6 = $2,909.6/月
+Additional storage: $0.008/MB/month
 ```
 
-## SAML SSO 配置
+**Example calculation**:
+```
+Team size: 100 people
+Actions minutes: 100,000 minutes/month
+Storage requirement: 100GB
 
-SAML SSO（安全断言标记语言单点登录）允许企业使用现有的身份提供商（IdP）管理 GitHub 访问。
+Enterprise cost:
+- Base fee: 100 × $21 = $2,100/month
+- Additional minutes: (100,000 - 50,000) × $0.008 = $400/month
+- Additional storage: (100GB - 50GB) × $0.008 × 1024 = $409.6/month
+- Total: $2,100 + $400 + $409.6 = $2,909.6/month
+```
 
-### 配置 SAML
+## SAML SSO Configuration
 
-**手动配置步骤**：
+SAML SSO (Security Assertion Markup Language Single Sign-On) allows enterprises to use their existing identity providers (IdP) to manage GitHub access.
+
+### Configuring SAML
+
+**Manual configuration steps**:
 1. **Settings** → **Authentication security** → **SAML single sign-on**
-2. 配置以下信息：
-   - **Sign on URL**：身份提供商的登录 URL
-   - **Issuer**：身份提供商的实体 ID
-   - **Public certificate**：上传身份提供商的公共证书
-   - **Signature method**：选择签名算法（推荐 SHA-256）
-   - **Digest method**：选择摘要算法（推荐 SHA-256）
+2. Configure the following information:
+   - **Sign on URL**: The login URL of the identity provider
+   - **Issuer**: The entity ID of the identity provider
+   - **Public certificate**: Upload the public certificate of the identity provider
+   - **Signature method**: Select the signature algorithm (SHA-256 recommended)
+   - **Digest method**: Select the digest algorithm (SHA-256 recommended)
 
-**支持的身份提供商**：
+**Supported identity providers**:
 - Azure Active Directory
 - Okta
 - OneLogin
 - PingIdentity
 - Google Workspace
-- LDAP（通过 SAML 桥接）
+- LDAP (via SAML bridge)
 
-### 自动配置 SCIM
+### Automatic Configuration with SCIM
 
-SCIM（跨域身份管理）可以自动同步用户和团队信息。
+SCIM (System for Cross-domain Identity Management) can automatically synchronize user and team information.
 
-**使用 GitHub CLI 配置**：
+**Using GitHub CLI to configure**:
 ```bash
-# 配置 SAML SSO
+# Configure SAML SSO
 gh api orgs/{org}/identity-provider \
   --method PUT \
   -f type='saml' \
@@ -131,161 +131,161 @@ gh api orgs/{org}/identity-provider \
   -f issuer='your-entity-id' \
   -f certificate='-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----'
 
-# 配置 SCIM
+# Configure SCIM
 gh api orgs/{org}/scim/v2 \
   --method PUT \
   -f scim_url='https://your-idp.com/scim/v2' \
   -f token='your-scim-token'
 ```
 
-**SCIM 功能**：
-- 自动创建用户账户
-- 自动禁用用户账户
-- 自动同步团队成员
-- 自动更新用户信息
-- 支持组映射
+**SCIM features**:
+- Automatically create user accounts
+- Automatically disable user accounts
+- Automatically synchronize team members
+- Automatically update user information
+- Support group mapping
 
-### SAML SSO 最佳实践
+### SAML SSO Best Practices
 
-**安全配置**：
-- 使用强加密算法（SHA-256）
-- 定期轮换证书
-- 启用双因素认证
-- 限制 SSO 管理员权限
+**Security configuration**:
+- Use strong encryption algorithms (SHA-256)
+- Regularly rotate certificates
+- Enable two-factor authentication
+- Limit SSO administrator permissions
 
-**用户管理**：
-- 使用 SCIM 自动同步
-- 定期审查用户权限
-- 及时禁用离职员工账户
-- 使用团队管理权限
+**User management**:
+- Use SCIM for automatic synchronization
+- Regularly review user permissions
+- Promptly disable accounts of departed employees
+- Use teams to manage permissions
 
-**故障排除**：
+**Troubleshooting**:
 ```bash
-# 测试 SAML 配置
+# Test SAML configuration
 gh api orgs/{org}/identity-provider
 
-# 查看 SAML 事件
+# View SAML events
 gh api orgs/{org}/audit-log --jq '.[] | select(.action | startswith("saml"))'
 
-# 重置 SAML 配置
+# Reset SAML configuration
 gh api orgs/{org}/identity-provider --method DELETE
 ```
 
-### SAML SSO 集成示例
+### SAML SSO Integration Examples
 
-**Azure Active Directory 集成**：
+**Azure Active Directory integration**:
 ```yaml
-# Azure AD 应用配置
+# Azure AD application configuration
 Application ID: your-app-id
 Entity ID: https://github.com/orgs/your-org
 Reply URL: https://github.com/orgs/your-org/saml/consume
 Sign on URL: https://github.com/login
 ```
 
-**Okta 集成**：
+**Okta integration**:
 ```yaml
-# Okta 应用配置
+# Okta application configuration
 Single sign-on URL: https://github.com/orgs/your-org/saml/consume
 Audience URI: https://github.com/orgs/your-org
 Name ID format: emailAddress
 Application username: Email
 ```
 
-## 审计日志
+## Audit Logs
 
-审计日志记录了组织中的所有重要操作，用于安全监控和合规性检查。
+Audit logs record all important operations in an organization, used for security monitoring and compliance checks.
 
-### 访问审计日志
+### Accessing Audit Logs
 
-**使用 GitHub CLI**：
+**Using GitHub CLI**:
 ```bash
-# 获取所有审计日志
+# Get all audit logs
 gh api orgs/{org}/audit-log
 
-# 按事件类型过滤
+# Filter by event type
 gh api orgs/{org}/audit-log \
   --method GET \
   -f phrase='action:repo.create' \
   -f created='>=2024-01-01'
 
-# 按用户过滤
+# Filter by user
 gh api orgs/{org}/audit-log \
   --method GET \
   -f phrase='actor:username'
 
-# 按仓库过滤
+# Filter by repository
 gh api orgs/{org}/audit-log \
   --method GET \
   -f phrase='repo:org/repo'
 ```
 
-**使用 API**：
+**Using API**:
 ```bash
-# 使用 curl
+# Using curl
 curl -H "Authorization: Bearer $TOKEN" \
   "https://api.github.com/orgs/{org}/audit-log?phrase=action:repo.create"
 
-# 使用分页
+# Using pagination
 curl -H "Authorization: Bearer $TOKEN" \
   "https://api.github.com/orgs/{org}/audit-log?per_page=100&page=1"
 ```
 
-**使用 Web 界面**：
-1. 访问组织设置
-2. 点击 **Audit log**
-3. 使用过滤器搜索事件
+**Using the Web interface**:
+1. Go to organization settings
+2. Click **Audit log**
+3. Use filters to search for events
 
-### 审计日志事件类型
+### Audit Log Event Types
 
-**仓库事件**：
-| 事件 | 说明 |
+**Repository events**:
+| Event | Description |
 |------|------|
-| `repo.create` | 创建仓库 |
-| `repo.destroy` | 删除仓库 |
-| `repo.rename` | 重命名仓库 |
-| `repo.transfer` | 转移仓库所有权 |
-| `repo.visibility_change` | 更改仓库可见性 |
-| `repo.archived` | 归档仓库 |
-| `repo.unarchived` | 取消归档仓库 |
+| `repo.create` | Create repository |
+| `repo.destroy` | Delete repository |
+| `repo.rename` | Rename repository |
+| `repo.transfer` | Transfer repository ownership |
+| `repo.visibility_change` | Change repository visibility |
+| `repo.archived` | Archive repository |
+| `repo.unarchived` | Unarchive repository |
 
-**成员事件**：
-| 事件 | 说明 |
+**Member events**:
+| Event | Description |
 |------|------|
-| `org.invite_member` | 邀请成员 |
-| `org.remove_member` | 移除成员 |
-| `member.role_change` | 更改成员角色 |
-| `member.invite` | 邀请成员 |
-| `member.remove` | 移除成员 |
+| `org.invite_member` | Invite member |
+| `org.remove_member` | Remove member |
+| `member.role_change` | Change member role |
+| `member.invite` | Invite member |
+| `member.remove` | Remove member |
 
-**团队事件**：
-| 事件 | 说明 |
+**Team events**:
+| Event | Description |
 |------|------|
-| `team.create` | 创建团队 |
-| `team.destroy` | 删除团队 |
-| `team.rename` | 重命名团队 |
-| `team.member_add` | 添加团队成员 |
-| `team.member_remove` | 移除团队成员 |
+| `team.create` | Create team |
+| `team.destroy` | Delete team |
+| `team.rename` | Rename team |
+| `team.member_add` | Add team member |
+| `team.member_remove` | Remove team member |
 
-**安全事件**：
-| 事件 | 说明 |
+**Security events**:
+| Event | Description |
 |------|------|
-| `protected_branch.create` | 创建保护分支 |
-| `protected_branch.destroy` | 删除保护分支 |
-| `protected_branch.update_config` | 更新保护分支配置 |
-| `secret_scanning_alert.create` | 创建密钥扫描警报 |
-| `dependabot_alert.create` | 创建 Dependabot 警报 |
+| `protected_branch.create` | Create protected branch |
+| `protected_branch.destroy` | Delete protected branch |
+| `protected_branch.update_config` | Update protected branch configuration |
+| `secret_scanning_alert.create` | Create secret scanning alert |
+| `dependabot_alert.create` | Create Dependabot alert |
 
-### 导出审计日志
+### Exporting Audit Logs
 
-**使用 GitHub Actions 自动导出**：
+**Using GitHub Actions for automatic export**:
 ```yaml
 # .github/workflows/audit-export.yml
 name: Export Audit Log
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天执行
-  workflow_dispatch:  # 手动触发
+    - cron: '0 0 * * *'  # Execute daily
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   export:
@@ -298,13 +298,13 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # 导出当天的审计日志
+        # Export today's audit log
         gh api orgs/{org}/audit-log \
           --method GET \
           -f phrase='created:>=2024-01-01' \
           -q '.[] | @json' > audit-log-$(date +%Y%m%d).json
         
-        # 压缩文件
+        # Compress the file
         gzip audit-log-$(date +%Y%m%d).json
 
     - name: Upload artifact
@@ -314,7 +314,7 @@ jobs:
         path: audit-log-*.json.gz
 ```
 
-**使用 Python 脚本导出**：
+**Using Python script to export**:
 ```python
 #!/usr/bin/env python3
 import requests
@@ -322,7 +322,7 @@ import json
 import gzip
 from datetime import datetime, timedelta
 
-# 配置
+# Configuration
 ORG = "your-org"
 TOKEN = "your-token"
 HEADERS = {
@@ -331,7 +331,7 @@ HEADERS = {
 }
 
 def export_audit_log(start_date, end_date):
-    """导出审计日志"""
+    """Export audit log"""
     url = f"https://api.github.com/orgs/{ORG}/audit-log"
     params = {
         "phrase": f"created:{start_date}..{end_date}",
@@ -352,153 +352,153 @@ def export_audit_log(start_date, end_date):
         all_events.extend(events)
         page += 1
     
-    # 保存到文件
+    # Save to file
     filename = f"audit-log-{start_date}-{end_date}.json.gz"
     with gzip.open(filename, 'wt', encoding='utf-8') as f:
         json.dump(all_events, f, indent=2)
     
-    print(f"导出了 {len(all_events)} 个事件到 {filename}")
+    print(f"Exported {len(all_events)} events to {filename}")
     return all_events
 
 if __name__ == "__main__":
-    # 导出最近30天的日志
+    # Export logs from the last 30 days
     end_date = datetime.now().strftime("%Y-%m-%d")
     start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
     export_audit_log(start_date, end_date)
 ```
 
-### 审计日志分析
+### Audit Log Analysis
 
-**使用 jq 分析**：
+**Using jq for analysis**:
 ```bash
-# 统计事件类型
+# Count event types
 gh api orgs/{org}/audit-log --jq '.[] | .action' | sort | uniq -c | sort -rn
 
-# 统计活跃用户
+# Count active users
 gh api orgs/{org}/audit-log --jq '.[] | .actor.login' | sort | uniq -c | sort -rn
 
-# 查找失败事件
+# Find failed events
 gh api orgs/{org}/audit-log --jq '.[] | select(.status == "failed")'
 
-# 导出为 CSV
+# Export as CSV
 gh api orgs/{org}/audit-log --jq '.[] | [.created_at, .action, .actor.login, .repo.name] | @csv'
 ```
 
-**使用 Python 分析**：
+**Using Python for analysis**:
 ```python
 import json
 import pandas as pd
 from collections import Counter
 
 def analyze_audit_log(filename):
-    """分析审计日志"""
+    """Analyze audit log"""
     with open(filename, 'r') as f:
         events = json.load(f)
     
-    # 转换为 DataFrame
+    # Convert to DataFrame
     df = pd.DataFrame(events)
     
-    # 统计事件类型
+    # Count event types
     event_counts = df['action'].value_counts()
-    print("事件类型统计:")
+    print("Event type statistics:")
     print(event_counts.head(10))
     
-    # 统计活跃用户
+    # Count active users
     user_counts = df['actor'].apply(lambda x: x['login']).value_counts()
-    print("\n活跃用户统计:")
+    print("\nActive user statistics:")
     print(user_counts.head(10))
     
-    # 统计时间分布
+    # Count time distribution
     df['created_at'] = pd.to_datetime(df['created_at'])
     daily_counts = df.groupby(df['created_at'].dt.date).size()
-    print("\n每日事件统计:")
+    print("\nDaily event statistics:")
     print(daily_counts.tail(7))
     
     return df
 ```
 
-### 审计日志最佳实践
+### Audit Log Best Practices
 
-**存储策略**：
-- 保留至少 180 天的审计日志
-- 定期归档旧日志
-- 使用压缩存储节省空间
-- 建立日志索引便于查询
+**Storage strategy**:
+- Retain audit logs for at least 180 days
+- Regularly archive old logs
+- Use compressed storage to save space
+- Establish log indexes for easy querying
 
-**监控策略**：
-- 设置关键事件警报
-- 监控异常活动模式
-- 定期审查安全事件
-- 建立事件响应流程
+**Monitoring strategy**:
+- Set up alerts for critical events
+- Monitor abnormal activity patterns
+- Regularly review security events
+- Establish incident response procedures
 
-**合规要求**：
-- 满足 GDPR 要求
-- 满足 SOC 2 要求
-- 满足 HIPAA 要求（如适用）
-- 定期进行合规性审计
+**Compliance requirements**:
+- Meet GDPR requirements
+- Meet SOC 2 requirements
+- Meet HIPAA requirements (where applicable)
+- Regularly conduct compliance audits
 
-## IP 允许列表
+## IP Allow List
 
-IP 允许列表可以限制只有特定 IP 地址才能访问组织资源。
+IP allow lists can restrict access to organization resources to specific IP addresses.
 
-### 配置 IP 允许列表
+### Configuring IP Allow Lists
 
-**手动配置步骤**：
+**Manual configuration steps**:
 1. **Settings** → **Authentication security** → **IP allow list**
-2. 添加 IP 地址或 CIDR 范围
-3. 启用 **Enable IP allow list**
+2. Add IP addresses or CIDR ranges
+3. Enable **Enable IP allow list**
 
-**支持的 IP 格式**：
-- 单个 IP 地址：`192.168.1.1`
-- CIDR 范围：`192.168.1.0/24`
-- IPv6 地址：`2001:db8::1`
-- IPv6 范围：`2001:db8::/32`
+**Supported IP formats**:
+- Single IP address: `192.168.1.1`
+- CIDR range: `192.168.1.0/24`
+- IPv6 address: `2001:db8::1`
+- IPv6 range: `2001:db8::/32`
 
-**常见配置示例**：
+**Common configuration examples**:
 ```
-# 办公网络
+# Office network
 192.168.1.0/24
 10.0.0.0/8
 
-# VPN 网络
+# VPN network
 172.16.0.0/12
 
-# 云服务 IP
+# Cloud service IPs
 52.167.144.0/20  # Azure
 35.180.0.0/16    # AWS
 ```
 
-### API 配置
+### API Configuration
 
-**使用 GitHub CLI**：
+**Using GitHub CLI**:
 ```bash
-# 启用 IP 允许列表
+# Enable IP allow list
 gh api orgs/{org}/actions/allowed-actions \
   --method PUT \
   -f enabled_all=true
 
-# 只允许已验证的 Action
+# Only allow verified Actions
 gh api orgs/{org}/actions/allowed-actions \
   --method PUT \
   -f enabled_verified_only=true
 
-# 添加 IP 到允许列表
+# Add IP to allow list
 gh api orgs/{org}/ip-allowlist \
   --method POST \
   -f ip="192.168.1.0/24" \
   -f name="Office Network"
 
-# 删除 IP 从允许列表
+# Remove IP from allow list
 gh api orgs/{org}/ip-allowlist/{id} \
   --method DELETE
 ```
 
-**使用 API 批量管理**：
+**Using API for batch management**:
 ```python
 import requests
 
 def manage_ip_allowlist(org, token, action, ips):
-    """管理 IP 允许列表"""
+    """Manage IP allow list"""
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github.v3+json"
@@ -510,7 +510,7 @@ def manage_ip_allowlist(org, token, action, ips):
             data = {"ip": ip, "name": f"Auto-added {ip}"}
             response = requests.post(url, headers=headers, json=data)
         elif action == "remove":
-            # 先获取 ID
+            # First get the ID
             url = f"https://api.github.com/orgs/{org}/ip-allowlist"
             response = requests.get(url, headers=headers)
             for item in response.json():
@@ -520,49 +520,49 @@ def manage_ip_allowlist(org, token, action, ips):
         
         print(f"{action}: {ip} - {response.status_code}")
 
-# 使用示例
+# Usage example
 ips = ["192.168.1.0/24", "10.0.0.0/8"]
 manage_ip_allowlist("your-org", "your-token", "add", ips)
 ```
 
-### IP 允许列表最佳实践
+### IP Allow List Best Practices
 
-**安全建议**：
-- 只允许必要的 IP 范围
-- 定期审查和更新 IP 列表
-- 使用 VPN 集中管理访问
-- 监控异常访问尝试
+**Security recommendations**:
+- Only allow necessary IP ranges
+- Regularly review and update the IP list
+- Use VPN to centrally manage access
+- Monitor abnormal access attempts
 
-**组织网络架构**：
+**Organizational network architecture**:
 ```
 ┌─────────────────────────────────────────┐
-│           企业网络架构                     │
+│           Enterprise Network Architecture│
 ├─────────────────────────────────────────┤
-│  办公网络 (192.168.1.0/24)               │
-│    ├── 开发团队                          │
-│    ├── 测试团队                          │
-│    └── 管理团队                          │
+│  Office Network (192.168.1.0/24)        │
+│    ├── Development Team                 │
+│    ├── Testing Team                     │
+│    └── Management Team                  │
 ├─────────────────────────────────────────┤
-│  VPN 网络 (172.16.0.0/12)                │
-│    ├── 远程办公                          │
-│    └── 外部合作伙伴                      │
+│  VPN Network (172.16.0.0/12)            │
+│    ├── Remote Work                      │
+│    └── External Partners                │
 ├─────────────────────────────────────────┤
-│  云服务网络                              │
-│    ├── AWS (52.167.144.0/20)             │
-│    ├── Azure (35.180.0.0/16)            │
+│  Cloud Service Network                  │
+│    ├── AWS (52.167.144.0/20)            │
+│    ├── Azure (35.180.0.0/16)           │
 │    └── GCP (35.190.0.0/16)             │
 └─────────────────────────────────────────┘
 ```
 
-## 合规和治理
+## Compliance and Governance
 
-合规和治理功能帮助企业满足法规要求和内部政策。
+Compliance and governance features help enterprises meet regulatory requirements and internal policies.
 
-### 配置分支保护
+### Configuring Branch Protection
 
-**组织级分支保护**：
+**Organization-level branch protection**:
 ```yaml
-# 使用 Rulesets（推荐）
+# Using Rulesets (recommended)
 gh api orgs/{org}/rulesets \
   --method POST \
   -f name='Production Branch Protection' \
@@ -576,9 +576,9 @@ gh api orgs/{org}/rulesets \
   ]'
 ```
 
-**仓库级分支保护**：
+**Repository-level branch protection**:
 ```yaml
-# 使用 Branch Protection Rules
+# Using Branch Protection Rules
 gh api repos/{owner}/{repo}/branches/main/protection \
   --method PUT \
   -f required_status_checks='{"strict":true,"contexts":["ci/test"]}' \
@@ -587,45 +587,45 @@ gh api repos/{owner}/{repo}/branches/main/protection \
   -f restrictions='{"users":["admin-user"],"teams":["core-team"]}'
 ```
 
-### 代码所有者
+### Code Owners
 
-**CODEOWNERS 文件配置**：
+**CODEOWNERS file configuration**:
 ```yaml
 # .github/CODEOWNERS
 
-# 默认所有者
+# Default owners
 * @your-org/core-team
 
-# 文档团队
+# Documentation team
 /docs/ @your-org/docs-team
 *.md @your-org/docs-team
 
-# 安全团队
+# Security team
 /src/security/ @your-org/security-team
 /security/ @your-org/security-team
 
-# DevOps 团队
+# DevOps team
 /.github/ @your-org/devops-team
 Dockerfile @your-org/devops-team
 docker-compose.yml @your-org/devops-team
 *.yml @your-org/devops-team
 
-# 前端团队
+# Frontend team
 /src/frontend/ @your-org/frontend-team
 *.js @your-org/frontend-team
 *.ts @your-org/frontend-team
 *.jsx @your-org/frontend-team
 *.tsx @your-org/frontend-team
 
-# 后端团队
+# Backend team
 /src/backend/ @your-org/backend-team
 *.py @your-org/backend-team
 *.java @your-org/backend-team
 ```
 
-### 合规性检查
+### Compliance Checks
 
-**自动合规性检查**：
+**Automated compliance checks**:
 ```yaml
 # .github/workflows/compliance-check.yml
 name: Compliance Check
@@ -640,12 +640,12 @@ jobs:
     steps:
     - name: Check branch protection
       run: |
-        # 检查分支保护规则
+        # Check branch protection rules
         gh api repos/{owner}/{repo}/branches/main/protection
         
     - name: Check CODEOWNERS
       run: |
-        # 检查 CODEOWNERS 文件
+        # Check CODEOWNERS file
         if [ ! -f .github/CODEOWNERS ]; then
           echo "ERROR: CODEOWNERS file missing"
           exit 1
@@ -653,93 +653,94 @@ jobs:
         
     - name: Check security policy
       run: |
-        # 检查安全策略
+        # Check security policy
         if [ ! -f SECURITY.md ]; then
           echo "WARNING: SECURITY.md file missing"
         fi
 ```
 
-### 治理策略
+### Governance Strategy
 
-**组织治理框架**：
+**Organizational governance framework**:
 ```
 ┌─────────────────────────────────────────┐
-│           组织治理框架                     │
+│           Organizational Governance     │
+│           Framework                     │
 ├─────────────────────────────────────────┤
-│  策略层                                  │
-│    ├── 安全策略                          │
-│    ├── 访问控制策略                      │
-│    ├── 数据保护策略                      │
-│    └── 合规性策略                        │
+│  Policy Layer                           │
+│    ├── Security Policy                  │
+│    ├── Access Control Policy            │
+│    ├── Data Protection Policy           │
+│    └── Compliance Policy                │
 ├─────────────────────────────────────────┤
-│  执行层                                  │
-│    ├── 权限管理                          │
-│    ├── 分支保护                          │
-│    ├── 代码审查                          │
-│    └── 安全扫描                          │
+│  Execution Layer                        │
+│    ├── Permission Management            │
+│    ├── Branch Protection                │
+│    ├── Code Review                      │
+│    └── Security Scanning                │
 ├─────────────────────────────────────────┤
-│  监控层                                  │
-│    ├── 审计日志                          │
-│    ├── 安全警报                          │
-│    ├── 合规性报告                        │
-│    └── 性能监控                          │
+│  Monitoring Layer                       │
+│    ├── Audit Logs                       │
+│    ├── Security Alerts                  │
+│    ├── Compliance Reports               │
+│    └── Performance Monitoring           │
 └─────────────────────────────────────────┘
 ```
 
-**治理最佳实践**：
-- 建立清晰的治理策略
-- 自动化合规性检查
-- 定期审查和更新策略
-- 培训团队成员
-- 建立事件响应流程
+**Governance best practices**:
+- Establish clear governance policies
+- Automate compliance checks
+- Regularly review and update policies
+- Train team members
+- Establish incident response procedures
 
-## 安全功能
+## Security Features
 
 ### Secret Scanning
 
-**启用 Secret Scanning**：
+**Enable Secret Scanning**:
 ```bash
-# 启用 Push Protection
+# Enable Push Protection
 gh api repos/{org}/{repo}/secret-scanning/push-protection \
   --method PUT \
   -f status='enabled'
 
-# 启用 Secret Scanning
+# Enable Secret Scanning
 gh api repos/{org}/{repo}/secret-scanning \
   --method PUT \
   -f status='enabled'
 ```
 
-**自定义 Secret Scanning 模式**：
+**Custom Secret Scanning patterns**:
 ```yaml
 # .github/secret-scanning.yml
 patterns:
-  - name: "内部API密钥"
+  - name: "Internal API Key"
     pattern: "internal-api-[a-zA-Z0-9]{32}"
     alert: true
-  - name: "数据库密码"
+  - name: "Database Password"
     pattern: "db_password:\\s*[a-zA-Z0-9!@#$%^&*]{16,}"
     alert: true
 ```
 
-### 依赖图
+### Dependency Graph
 
-**启用依赖图**：
+**Enable dependency graph**:
 ```bash
-# 启用依赖图
+# Enable dependency graph
 gh api repos/{org}/{repo}/vulnerability-alerts \
   --method PUT \
   -f enabled='true'
 
-# 启用自动安全更新
+# Enable automated security updates
 gh api repos/{org}/{repo}/automated-security-fixes \
   --method PUT \
   -f enabled='true'
 ```
 
-### 代码扫描
+### Code Scanning
 
-**配置 CodeQL**：
+**Configure CodeQL**:
 ```yaml
 # .github/workflows/codeql.yml
 name: "CodeQL"
@@ -750,7 +751,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 0 * * 1'  # 每周一执行
+    - cron: '0 0 * * 1'  # Execute every Monday
 
 jobs:
   analyze:
@@ -785,245 +786,246 @@ jobs:
         category: "/language:${{matrix.language}}"
 ```
 
-## 管理 API
+## Administration API
 
-### 组织管理
+### Organization Management
 
-**获取组织信息**：
+**Get organization information**:
 ```bash
-# 获取组织详细信息
+# Get organization details
 gh api orgs/{org}
 
-# 获取组织设置
+# Get organization settings
 gh api orgs/{org}/settings/billing
 
-# 获取组织成员
+# Get organization members
 gh api orgs/{org}/members
 
-# 获取组织团队
+# Get organization teams
 gh api orgs/{org}/teams
 
-# 获取组织仓库
+# Get organization repositories
 gh api orgs/{org}/repos --paginate
 ```
 
-**管理组织成员**：
+**Manage organization members**:
 ```bash
-# 邀请成员
+# Invite members
 gh api orgs/{org}/invitations \
   --method POST \
   -f email='user@example.com' \
   -f role='direct_member'
 
-# 移除成员
+# Remove members
 gh api orgs/{org}/members/{username} \
   --method DELETE
 
-# 更改成员角色
+# Change member role
 gh api orgs/{org}/memberships/{username} \
   --method PUT \
   -f role='admin'
 ```
 
-### 仓库管理
+### Repository Management
 
-**获取仓库信息**：
+**Get repository information**:
 ```bash
-# 列出仓库
+# List repositories
 gh api orgs/{org}/repos --paginate
 
-# 获取仓库详细信息
+# Get repository details
 gh api repos/{owner}/{repo}
 
-# 获取仓库安全功能
+# Get repository security features
 gh api repos/{owner}/{repo}/vulnerability-alerts
 
-# 获取仓库密钥
+# Get repository secrets
 gh api repos/{owner}/{repo}/actions/secrets
 
-# 获取仓库变量
+# Get repository variables
 gh api repos/{owner}/{repo}/actions/variables
 ```
 
-**管理仓库设置**：
+**Manage repository settings**:
 ```bash
-# 更新仓库设置
+# Update repository settings
 gh api repos/{owner}/{repo} \
   --method PATCH \
   -f has_issues=true \
   -f has_projects=true \
   -f has_wiki=true
 
-# 设置仓库可见性
+# Set repository visibility
 gh api repos/{owner}/{repo} \
   --method PATCH \
   -f visibility='private'
 
-# 归档仓库
+# Archive repository
 gh api repos/{owner}/{repo} \
   --method PATCH \
   -f archived=true
 ```
 
-### 团队管理
+### Team Management
 
-**管理团队**：
+**Manage teams**:
 ```bash
-# 创建团队
+# Create team
 gh api orgs/{org}/teams \
   --method POST \
   -f name='new-team' \
   -f description='New team description' \
   -f privacy='closed'
 
-# 删除团队
+# Delete team
 gh api orgs/{org}/teams/{team_slug} \
   --method DELETE
 
-# 添加团队成员
+# Add team member
 gh api orgs/{org}/teams/{team_slug}/memberships/{username} \
   --method PUT \
   -f role='member'
 
-# 获取团队仓库
+# Get team repositories
 gh api orgs/{org}/teams/{team_slug}/repos
 ```
 
-## 企业级部署
+## Enterprise Deployment
 
-### 部署选项
+### Deployment Options
 
-**GitHub Enterprise Cloud**：
-- 托管在 GitHub 云上
-- 无需维护基础设施
-- 自动扩展和更新
-- 适合大多数企业
+**GitHub Enterprise Cloud**:
+- Hosted on GitHub cloud
+- No infrastructure maintenance required
+- Automatic scaling and updates
+- Suitable for most enterprises
 
-**GitHub Enterprise Server**：
-- 自托管部署
-- 完全控制基础设施
-- 需要自行维护
-- 适合有严格合规要求的企业
+**GitHub Enterprise Server**:
+- Self-hosted deployment
+- Full control over infrastructure
+- Requires self-maintenance
+- Suitable for enterprises with strict compliance requirements
 
-**GitHub AE（GitHub Enterprise 的 Azure 版本）：
-- 托管在 Azure 上
-- 与 Azure 服务集成
-- 适合 Azure 用户
+**GitHub AE (Azure version of GitHub Enterprise):
+- Hosted on Azure
+- Integrates with Azure services
+- Suitable for Azure users
 
-### 部署架构
+### Deployment Architecture
 
-**企业级部署架构**：
+**Enterprise deployment architecture**:
 ```
 ┌─────────────────────────────────────────┐
-│           企业级部署架构                   │
+│           Enterprise Deployment         │
+│           Architecture                  │
 ├─────────────────────────────────────────┤
-│  用户层                                  │
-│    ├── 开发人员                          │
-│    ├── 测试人员                          │
-│    ├── 运维人员                          │
-│    └── 管理人员                          │
+│  User Layer                             │
+│    ├── Developers                       │
+│    ├── Testers                          │
+│    ├── Operations Staff                 │
+│    └── Management                       │
 ├─────────────────────────────────────────┤
-│  访问层                                  │
+│  Access Layer                           │
 │    ├── SSO/SAML                         │
-│    ├── IP 允许列表                      │
+│    ├── IP Allow List                    │
 │    ├── VPN                              │
-│    └── 防火墙                           │
+│    └── Firewall                         │
 ├─────────────────────────────────────────┤
-│  应用层                                  │
+│  Application Layer                      │
 │    ├── GitHub Enterprise                │
 │    ├── GitHub Actions                   │
 │    ├── GitHub Packages                  │
 │    └── GitHub Pages                     │
 ├─────────────────────────────────────────┤
-│  数据层                                  │
-│    ├── Git 仓库                         │
-│    ├── 数据库                           │
-│    ├── 缓存                             │
-│    └── 存储                             │
+│  Data Layer                             │
+│    ├── Git Repositories                 │
+│    ├── Database                         │
+│    ├── Cache                            │
+│    └── Storage                          │
 ├─────────────────────────────────────────┤
-│  基础设施层                              │
-│    ├── 计算资源                         │
-│    ├── 网络资源                         │
-│    ├── 存储资源                         │
-│    └── 安全资源                         │
+│  Infrastructure Layer                   │
+│    ├── Compute Resources                │
+│    ├── Network Resources                │
+│    ├── Storage Resources                │
+│    └── Security Resources               │
 └─────────────────────────────────────────┘
 ```
 
-### 部署最佳实践
+### Deployment Best Practices
 
-**高可用性**：
-- 部署多个实例
-- 使用负载均衡
-- 配置故障转移
-- 定期备份数据
+**High availability**:
+- Deploy multiple instances
+- Use load balancing
+- Configure failover
+- Regularly back up data
 
-**性能优化**：
-- 优化网络配置
-- 使用 CDN
-- 配置缓存
-- 监控性能指标
+**Performance optimization**:
+- Optimize network configuration
+- Use CDN
+- Configure caching
+- Monitor performance metrics
 
-**安全加固**：
-- 启用所有安全功能
-- 配置网络隔离
-- 定期安全审计
-- 建立安全监控
+**Security hardening**:
+- Enable all security features
+- Configure network isolation
+- Regular security audits
+- Establish security monitoring
 
-## 成本优化
+## Cost Optimization
 
-### 成本分析
+### Cost Analysis
 
-**主要成本项**：
-- 用户许可证费用
-- Actions 分钟数费用
-- 存储费用
-- 带宽费用
-- 支持费用
+**Main cost items**:
+- User license fees
+- Actions minutes fees
+- Storage fees
+- Bandwidth fees
+- Support fees
 
-**成本优化策略**：
-1. **用户管理**：
-   - 定期审查用户权限
-   - 移除不活跃用户
-   - 使用团队管理权限
-   - 优化许可证分配
+**Cost optimization strategies**:
+1. **User management**:
+   - Regularly review user permissions
+   - Remove inactive users
+   - Use teams to manage permissions
+   - Optimize license allocation
 
-2. **Actions 优化**：
-   - 使用缓存减少构建时间
-   - 优化工作流配置
-   - 使用自托管运行器
-   - 监控使用情况
+2. **Actions optimization**:
+   - Use caching to reduce build times
+   - Optimize workflow configuration
+   - Use self-hosted runners
+   - Monitor usage
 
-3. **存储优化**：
-   - 定期清理旧数据
-   - 使用 Git LFS 管理大文件
-   - 压缩构建产物
-   - 监控存储使用
+3. **Storage optimization**:
+   - Regularly clean up old data
+   - Use Git LFS for large files
+   - Compress build artifacts
+   - Monitor storage usage
 
-### 成本监控
+### Cost Monitoring
 
-**使用 GitHub API 监控成本**：
+**Using GitHub API to monitor costs**:
 ```bash
-# 获取计费信息
+# Get billing information
 gh api orgs/{org}/settings/billing
 
-# 获取 Actions 使用情况
+# Get Actions usage
 gh api orgs/{org}/settings/billing/actions
 
-# 获取 Packages 使用情况
+# Get Packages usage
 gh api orgs/{org}/settings/billing/packages
 
-# 获取存储使用情况
+# Get storage usage
 gh api orgs/{org}/settings/billing/storage
 ```
 
-**自动化成本报告**：
+**Automated cost reports**:
 ```yaml
 # .github/workflows/cost-report.yml
 name: Cost Report
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # 每月1日执行
+    - cron: '0 0 1 * *'  # Execute on the 1st of every month
 
 jobs:
   report:
@@ -1033,43 +1035,43 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # 获取计费信息
+        # Get billing information
         gh api orgs/{org}/settings/billing > billing.json
         
-        # 生成报告
-        echo "成本报告 - $(date +%Y-%m)" > cost-report.md
+        # Generate report
+        echo "Cost Report - $(date +%Y-%m)" > cost-report.md
         echo "=========================" >> cost-report.md
         echo "" >> cost-report.md
         
-        # 解析 JSON 并生成报告
+        # Parse JSON and generate report
         jq -r '.actions_minutes_used_used // 0' billing.json >> cost-report.md
         
-        # 发送报告
+        # Send report
         gh api repos/{owner}/{repo}/issues \
           --method POST \
-          -f title="成本报告 - $(date +%Y-%m)" \
+          -f title="Cost Report - $(date +%Y-%m)" \
           -f body="$(cat cost-report.md)"
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **启用 SSO**：统一身份认证，提高安全性
-2. **配置审计日志**：跟踪所有操作，满足合规要求
-3. **设置 IP 允许列表**：限制访问来源，增强安全性
-4. **使用 CODEOWNERS**：明确代码责任，提高代码质量
-5. **定期审查权限**：确保最小权限原则，降低安全风险
-6. **优化成本**：定期审查使用情况，优化资源分配
-7. **建立治理策略**：制定清晰的治理策略，确保合规性
-8. **培训团队**：定期培训团队成员，提高安全意识
+1. **Enable SSO**: Unify identity authentication, improve security
+2. **Configure audit logs**: Track all operations, meet compliance requirements
+3. **Set up IP allow lists**: Restrict access sources, enhance security
+4. **Use CODEOWNERS**: Clarify code ownership, improve code quality
+5. **Regularly review permissions**: Ensure principle of least privilege, reduce security risks
+6. **Optimize costs**: Regularly review usage, optimize resource allocation
+7. **Establish governance strategy**: Define clear governance policies, ensure compliance
+8. **Train the team**: Regularly train team members, improve security awareness
 
-## 相关资源
+## Related Resources
 
-- [GitHub Enterprise 文档](https://docs.github.com/en/enterprise-cloud@latest)
-- [SAML SSO 文档](https://docs.github.com/en/enterprise-cloud@latest/organizations/managing-saml-single-sign-on-for-your-organization)
-- [审计日志文档](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-the-audit-log-for-your-enterprise)
-- [IP 允许列表文档](https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-allowed-ip-addresses-for-your-organization)
-- [成本优化指南](https://docs.github.com/en/enterprise-cloud@latest/billing/managing-billing-for-your-github-account/about-billing-for-github)
+- [GitHub Enterprise Documentation](https://docs.github.com/en/enterprise-cloud@latest)
+- [SAML SSO Documentation](https://docs.github.com/en/enterprise-cloud@latest/organizations/managing-saml-single-sign-on-for-your-organization)
+- [Audit Log Documentation](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-the-audit-log-for-your-enterprise)
+- [IP Allow List Documentation](https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-allowed-ip-addresses-for-your-organization)
+- [Cost Optimization Guide](https://docs.github.com/en/enterprise-cloud@latest/billing/managing-billing-for-your-github-account/about-billing-for-github)
 
 ---
 
-**上一篇：[DevOps 实战](W15-devops.md) | 下一篇：[Docker + GitHub Actions 容器化](W17-docker-actions.md)**
+**Previous: [DevOps in Practice](W15-devops.md) | Next: [Docker + GitHub Actions Containerization](W17-docker-actions.md)**

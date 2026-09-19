@@ -1,6 +1,6 @@
 # GitHub Security Best Practices
 
-> This chapter will详细介绍 how to protect your GitHub account and repository security, covering account security, repository security, CI/CD security, dependency security and team security.
+> This chapter will explain in detail how to protect your GitHub account and repository security, covering account security, repository security, CI/CD security, dependency security and team security.
 
 ---
 
@@ -41,14 +41,14 @@ Two-factor authentication is the first line of defense for account security. Eve
 - Can be used even when phone is offline
 
 **Backup Recovery Codes**:
-After enabling 2FA, GitHub will provide a set of recovery codes.务必 store them securely in multiple locations:
+After enabling 2FA, GitHub will provide a set of recovery codes. Be sure to store them securely in multiple locations:
 - Password manager
 - Encrypted USB drive
 - Paper backup (stored in secure location)
 
 ### 2. Use SSH Keys
 
-SSH keys are more secure than passwords, and无需 enter password every time.
+SSH keys are more secure than passwords, and you don't need to enter a password every time.
 
 **Generate SSH Key**:
 ```bash
@@ -82,7 +82,7 @@ ssh-add -D
 
 ### 3. Use Personal Access Token (PAT)
 
-PAT is used to替代 password for API authentication and Git operations.
+PAT is used to replace the password for API authentication and Git operations.
 
 **Create Token**:
 1. **Settings** → **Developer settings** → **Personal access tokens**

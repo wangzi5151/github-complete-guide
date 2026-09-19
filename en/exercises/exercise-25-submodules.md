@@ -1,103 +1,103 @@
-# 练习 25：Git Submodules 实战
+# Exercise 25: Git Submodules in Practice
 
-## 学习目标
+## Learning Objectives
 
-通过本次练习，你将掌握以下技能：
+Through this exercise, you will master the following skills:
 
-- 理解 Git Submodules 的概念和使用场景
-- 添加 Submodule 到项目中
-- 更新和同步 Submodule
-- 删除 Submodule
-- 处理 Submodule 的常见问题
-- 对比 Submodules 和 Subtree 的优缺点
+- Understand the concept and use cases of Git Submodules
+- Add a Submodule to a project
+- Update and synchronize Submodules
+- Remove a Submodule
+- Handle common Submodule issues
+- Compare the pros and cons of Submodules vs Subtree
 
-## 前置要求
+## Prerequisites
 
-- 已安装 Git（版本 2.22 以上推荐）
-- 拥有 GitHub 账号
-- 熟悉基本的 Git 操作（commit、push、pull、branch）
-- 了解 Git 的分支和合并概念
+- Git installed (version 2.22 or above recommended)
+- A GitHub account
+- Familiarity with basic Git operations (commit, push, pull, branch)
+- Understanding of Git branching and merging concepts
 
-## 第一部分：理解 Git Submodules
+## Part 1: Understanding Git Submodules
 
-### 什么是 Git Submodules？
+### What Are Git Submodules?
 
-Git Submodules 允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。这对于以下场景非常有用：
+Git Submodules allow you to include a Git repository as a subdirectory of another Git repository. This is very useful in the following scenarios:
 
-1. **共享库管理**：将公共代码库作为独立仓库维护，多个项目引用
-2. **第三方依赖**：将第三方库的特定版本锁定在项目中
-3. **大型项目拆分**：将大型项目拆分为多个独立仓库
-4. **组件化开发**：不同团队独立开发和维护各自的组件
+1. **Shared library management**: Maintaining common code libraries as independent repositories, referenced by multiple projects
+2. **Third-party dependencies**: Locking specific versions of third-party libraries within a project
+3. **Large project decomposition**: Splitting large projects into multiple independent repositories
+4. **Component-based development**: Different teams independently developing and maintaining their respective components
 
-### Submodules 的工作原理
+### How Submodules Work
 
-当你添加一个 Submodule 时，Git 实际上做了以下事情：
+When you add a Submodule, Git actually does the following:
 
-1. 在项目的 `.gitmodules` 文件中记录 Submodule 的 URL 和路径
-2. 在指定路径克隆 Submodule 仓库
-3. 在主项目的 Git 索引中记录 Submodule 当前指向的特定提交（commit hash）
+1. Records the Submodule's URL and path in the `.gitmodules` file
+2. Clones the Submodule repository at the specified path
+3. Records the specific commit (commit hash) that the Submodule currently points to in the main project's Git index
 
 ```
-主项目 (parent-repo)
+parent-repo
 ├── .git/
-├── .gitmodules          ← 记录 Submodule 配置
+├── .gitmodules          ← Records Submodule configuration
 ├── src/
 │   └── main.py
 └── libs/
-    └── shared-library/  ← Submodule 目录
-        ├── .git/        ← Submodule 自己的 Git 仓库
+    └── shared-library/  ← Submodule directory
+        ├── .git/        ← Submodule's own Git repository
         ├── lib.py
         └── tests/
 ```
 
-## 第二部分：添加 Submodule
+## Part 2: Adding a Submodule
 
-在实际项目开发中，使用 Submodule 的典型场景包括：将公司的公共组件库作为 Submodule 引入到各个业务项目中；将第三方开源库的特定版本引入项目中，避免上游更新带来的兼容性问题；将大型项目的不同模块拆分为独立仓库，由不同团队分别维护。在添加 Submodule 之前，你需要确保已经拥有 Submodule 仓库的访问权限。如果 Submodule 仓库是私有的，你还需要配置好相应的认证信息。接下来，我们将通过一个完整的示例来演示如何添加和使用 Submodule。
+In real project development, typical use cases for Submodules include: introducing a company's shared component library as a Submodule into various business projects; importing a specific version of a third-party open-source library into a project to avoid compatibility issues caused by upstream updates; splitting different modules of a large project into independent repositories maintained by different teams. Before adding a Submodule, you need to ensure you have access to the Submodule repository. If the Submodule repository is private, you also need to configure the appropriate authentication information. Next, we will demonstrate how to add and use a Submodule through a complete example.
 
-### 步骤 1：创建主项目
+### Step 1: Create the Parent Project
 
-首先创建一个主项目仓库：
+First, create a parent project repository:
 
 ```bash
-# 创建主项目目录
+# Create the parent project directory
 mkdir parent-project
 cd parent-project
 
-# 初始化 Git 仓库
+# Initialize Git repository
 git init
 
-# 创建初始文件
-echo "# 主项目" > README.md
+# Create initial files
+echo "# Parent Project" > README.md
 echo "print('Hello from parent project')" > main.py
 
-# 提交初始代码
+# Commit initial code
 git add .
 git commit -m "Initial commit"
 ```
 
-### 步骤 2：创建要作为 Submodule 的仓库
+### Step 2: Create the Repository to Use as a Submodule
 
 ```bash
-# 返回到上级目录
+# Go back to the parent directory
 cd ..
 
-# 创建 Submodule 仓库
+# Create the Submodule repository
 mkdir shared-library
 cd shared-library
 git init
 
-# 创建共享库代码
+# Create shared library code
 cat > lib.py << 'EOF'
 def greet(name):
-    """返回问候语"""
-    return f"你好, {name}!"
+    """Return a greeting"""
+    return f"Hello, {name}!"
 
 def add(a, b):
-    """两数相加"""
+    """Add two numbers"""
     return a + b
 
 def multiply(a, b):
-    """两数相乘"""
+    """Multiply two numbers"""
     return a * b
 EOF
 
@@ -105,7 +105,7 @@ cat > test_lib.py << 'EOF'
 from lib import greet, add, multiply
 
 def test_greet():
-    assert greet("世界") == "你好, 世界!"
+    assert greet("World") == "Hello, World!"
 
 def test_add():
     assert add(2, 3) == 5
@@ -117,36 +117,36 @@ if __name__ == "__main__":
     test_greet()
     test_add()
     test_multiply()
-    print("所有测试通过!")
+    print("All tests passed!")
 EOF
 
-# 提交 Submodule 代码
+# Commit Submodule code
 git add .
 git commit -m "Initial shared library"
 ```
 
-如果你要在 GitHub 上操作，需要先创建远程仓库：
+If you are working on GitHub, you need to create a remote repository first:
 
 ```bash
-# 在 GitHub 上创建仓库后，添加远程并推送
+# After creating the repository on GitHub, add remote and push
 git remote add origin https://github.com/your-username/shared-library.git
 git push -u origin main
 ```
 
-### 步骤 3：将仓库添加为 Submodule
+### Step 3: Add the Repository as a Submodule
 
 ```bash
-# 回到主项目目录
+# Go back to the parent project directory
 cd ../parent-project
 
-# 添加 Submodule
-# 语法: git submodule add <仓库URL> <本地路径>
+# Add the Submodule
+# Syntax: git submodule add <repository-url> <local-path>
 git submodule add https://github.com/your-username/shared-library.git libs/shared-library
 
-# 查看操作结果
+# View the result
 ```
 
-执行后你会看到类似输出：
+After running this, you will see output similar to:
 
 ```
 Cloning into '/path/to/parent-project/libs/shared-library'...
@@ -156,14 +156,14 @@ remote: Compressing objects: 100% (3/3), done.
 Receiving objects: 100% (6/6), done.
 ```
 
-### 步骤 4：查看 Submodule 状态
+### Step 4: View Submodule Status
 
 ```bash
-# 查看 .gitmodules 文件
+# View the .gitmodules file
 cat .gitmodules
 ```
 
-输出内容：
+Output:
 
 ```ini
 [submodule "libs/shared-library"]
@@ -172,26 +172,26 @@ cat .gitmodules
 ```
 
 ```bash
-# 查看 Submodule 状态
+# View Submodule status
 git submodule status
 ```
 
-输出内容：
+Output:
 
 ```
  abc1234567890abcdef1234567890abcdef123456 libs/shared-library (heads/main)
 ```
 
-前面的哈希值是 Submodule 当前指向的提交 ID。
+The hash value at the beginning is the commit ID that the Submodule currently points to.
 
-### 步骤 5：提交 Submodule 引用
+### Step 5: Commit the Submodule Reference
 
 ```bash
-# 查看当前 Git 状态
+# View current Git status
 git status
 ```
 
-输出：
+Output:
 
 ```
 On branch main
@@ -202,128 +202,128 @@ Changes to be committed:
 ```
 
 ```bash
-# 提交 Submodule 添加
+# Commit the Submodule addition
 git commit -m "Add shared-library as submodule"
 
-# 推送到远程
+# Push to remote
 git push origin main
 ```
 
-### 步骤 6：在主项目中使用 Submodule
+### Step 6: Using the Submodule in the Parent Project
 
 ```python
 # main.py
 import sys
 import os
 
-# 添加 Submodule 路径到 Python 路径
+# Add Submodule path to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs', 'shared-library'))
 
 from lib import greet, add, multiply
 
 if __name__ == "__main__":
-    print(greet("开发者"))
+    print(greet("Developer"))
     print(f"2 + 3 = {add(2, 3)}")
     print(f"4 × 5 = {multiply(4, 5)}")
 ```
 
-运行测试：
+Run the test:
 
 ```bash
 python main.py
 ```
 
-输出：
+Output:
 
 ```
-你好, 开发者!
+Hello, Developer!
 2 + 3 = 5
 4 × 5 = 20
 ```
 
-## 第三部分：克隆包含 Submodule 的项目
+## Part 3: Cloning a Project Containing Submodules
 
-当团队中的其他成员需要克隆包含 Submodule 的项目时，他们需要了解正确的克隆方式。如果使用普通的 `git clone` 命令，Submodule 目录将会是空的，这往往会导致项目无法正常构建和运行。因此，你需要向团队成员说明如何正确地初始化和更新 Submodule。建议在项目的 README 文件中添加相关的说明，或者在项目的 Makefile 中提供相应的初始化命令。在一些集成开发环境中，克隆包含 Submodule 的仓库时会自动提示是否初始化 Submodule，开发者应该注意这些提示并选择正确的选项。
+When other team members need to clone a project containing Submodules, they need to know the correct way to clone. If you use the regular `git clone` command, the Submodule directories will be empty, which often prevents the project from building and running properly. Therefore, you need to explain to team members how to properly initialize and update Submodules. It is recommended to add relevant instructions in the project's README file or provide corresponding initialization commands in the project's Makefile. In some integrated development environments, cloning a repository with Submodules will automatically prompt whether to initialize Submodules, and developers should pay attention to these prompts and select the correct option.
 
-### 步骤 1：普通克隆（不包含 Submodule 内容）
+### Step 1: Regular Clone (Without Submodule Contents)
 
 ```bash
-# 回到上级目录
+# Go back to the parent directory
 cd ..
 
-# 普通克隆
+# Regular clone
 git clone https://github.com/your-username/parent-project.git parent-project-clone
 
-# 查看 libs 目录
+# View the libs directory
 ls parent-project-clone/libs/shared-library/
-# 输出为空，Submodule 内容没有被自动拉取
+# Output is empty, Submodule contents were not automatically fetched
 ```
 
-### 步骤 2：使用 --recurse-submodules 克隆
+### Step 2: Clone with --recurse-submodules
 
 ```bash
-# 删除刚才的克隆
+# Remove the previous clone
 rm -rf parent-project-clone
 
-# 使用 --recurse-submodules 参数克隆
+# Clone with --recurse-submodules option
 git clone --recurse-submodules https://github.com/your-username/parent-project.git parent-project-clone
 
-# 查看 Submodule 内容
+# View Submodule contents
 ls parent-project-clone/libs/shared-library/
-# 输出: lib.py  test_lib.py
+# Output: lib.py  test_lib.py
 ```
 
-### 步骤 3：为已克隆的项目初始化 Submodule
+### Step 3: Initialize Submodules for an Already Cloned Project
 
-如果你已经克隆了项目但没有使用 `--recurse-submodules`：
+If you have already cloned the project without using `--recurse-submodules`:
 
 ```bash
-# 进入已克隆的项目目录
+# Enter the cloned project directory
 cd parent-project
 
-# 初始化并拉取 Submodule
+# Initialize and fetch Submodules
 git submodule init
 git submodule update
 
-# 或者使用一条命令完成
+# Or do it in one command
 git submodule update --init
 
-# 如果有嵌套的 Submodule，使用递归初始化
+# If there are nested Submodules, use recursive initialization
 git submodule update --init --recursive
 ```
 
-## 第四部分：更新 Submodule
+## Part 4: Updating Submodules
 
-Submodule 的更新是日常开发中最常见的操作之一。当 Submodule 仓库有新的提交时，主项目需要更新其对 Submodule 的引用。这个过程涉及到两个层面的操作：首先是在 Submodule 仓库中拉取最新代码，然后是在主项目中提交 Submodule 引用的变更。理解这个两步更新流程对于正确使用 Submodule 至关重要。如果只在 Submodule 中拉取了最新代码而没有在主项目中提交引用变更，其他团队成员就无法获取到最新的 Submodule 版本。因此，建议团队建立明确的 Submodule 更新规范，确保每次 Submodule 更新都能被正确地提交和推送。
+Updating Submodules is one of the most common operations in daily development. When the Submodule repository has new commits, the main project needs to update its reference to the Submodule. This process involves two levels of operations: first, fetching the latest code in the Submodule repository, then committing the Submodule reference changes in the main project. Understanding this two-step update process is crucial for correctly using Submodules. If you only fetch the latest code in the Submodule without committing the reference change in the main project, other team members won't be able to get the latest Submodule version. Therefore, it is recommended that teams establish clear Submodule update guidelines to ensure every Submodule update is properly committed and pushed.
 
-### 步骤 1：在 Submodule 中进行修改
+### Step 1: Make Changes in the Submodule
 
 ```bash
-# 进入 Submodule 目录
+# Enter the Submodule directory
 cd libs/shared-library
 
-# 查看当前分支（默认是 detached HEAD 状态）
+# View the current branch (default is detached HEAD state)
 git status
 # HEAD detached at abc1234
 
-# 切换到 main 分支
+# Switch to the main branch
 git checkout main
 
-# 添加新功能
+# Add new functionality
 cat >> lib.py << 'EOF'
 
 def subtract(a, b):
-    """两数相减"""
+    """Subtract two numbers"""
     return a - b
 
 def divide(a, b):
-    """两数相除"""
+    """Divide two numbers"""
     if b == 0:
-        raise ValueError("除数不能为零")
+        raise ValueError("Divisor cannot be zero")
     return a / b
 EOF
 
-# 更新测试文件
+# Update the test file
 cat >> test_lib.py << 'EOF'
 
 def test_subtract():
@@ -334,41 +334,41 @@ def test_divide():
 
 try:
     divide(1, 0)
-    print("错误：应该抛出异常")
+    print("Error: An exception should have been raised")
 except ValueError:
-    print("除零异常处理正确")
+    print("Division by zero exception handled correctly")
 EOF
 
-# 提交修改
+# Commit changes
 git add .
 git commit -m "Add subtract and divide functions"
 
-# 推送到远程
+# Push to remote
 git push origin main
 ```
 
-### 步骤 2：在主项目中更新 Submodule 引用
+### Step 2: Update Submodule Reference in the Parent Project
 
 ```bash
-# 回到主项目根目录
+# Go back to the parent project root directory
 cd ../..
 
-# 查看 Submodule 状态（会显示新的提交）
+# View Submodule status (will show new commits)
 git submodule status
 ```
 
-输出（注意哈希值变化和 `+` 号表示有更新）：
+Output (note the hash change and the `+` sign indicating an update):
 
 ```
 +def4567890abcdef1234567890abcdef12345678 libs/shared-library (heads/main)
 ```
 
 ```bash
-# 查看主项目状态
+# View the parent project status
 git status
 ```
 
-输出：
+Output:
 
 ```
 On branch main
@@ -379,40 +379,40 @@ Changes not staged for commit:
 ```
 
 ```bash
-# 提交 Submodule 更新
+# Commit the Submodule update
 git add libs/shared-library
 git commit -m "Update shared-library to latest version"
 git push origin main
 ```
 
-### 步骤 3：拉取主项目时同步 Submodule 更新
+### Step 3: Synchronize Submodule Updates When Pulling the Parent Project
 
-当其他人更新了 Submodule 引用后，你需要：
+When others have updated the Submodule reference, you need to:
 
 ```bash
-# 拉取主项目更新
+# Pull parent project updates
 git pull
 
-# 同步 Submodule 到主项目记录的版本
+# Synchronize the Submodule to the version recorded in the parent project
 git submodule update
 
-# 或者一步完成拉取和同步
+# Or do both in one step
 git pull --recurse-submodules
 ```
 
-## 第五部分：Submodule 的不同更新策略
+## Part 5: Different Submodule Update Strategies
 
-选择合适的更新策略对于有效管理 Submodule 非常重要。不同的项目和团队可能需要不同的策略。如果你的项目需要使用 Submodule 的最新稳定版本，可以选择跟踪远程分支的方式；如果你的项目需要使用经过验证的特定版本，可以选择手动指定版本的方式。在选择策略时，需要考虑团队的工作流程、发布周期、以及对稳定性的要求。通常建议在生产环境中使用明确的版本号，而在开发环境中可以使用跟踪分支的方式获取最新的功能更新。
+Choosing the right update strategy is very important for effectively managing Submodules. Different projects and teams may need different strategies. If your project needs to use the latest stable version of the Submodule, you can choose to track a remote branch; if your project needs to use a verified specific version, you can choose to manually specify the version. When choosing a strategy, you need to consider the team's workflow, release cycle, and stability requirements. It is generally recommended to use explicit version numbers in production environments, while in development environments you can track branches to get the latest feature updates.
 
-### 策略一：跟踪远程分支
+### Strategy 1: Track a Remote Branch
 
-默认情况下，Submodule 处于 "detached HEAD" 状态。要让 Submodule 跟踪特定分支：
+By default, Submodules are in a "detached HEAD" state. To make a Submodule track a specific branch:
 
 ```bash
-# 编辑 .gitmodules 文件
+# Edit the .gitmodules file
 ```
 
-在 `.gitmodules` 中添加 `branch` 配置：
+Add the `branch` configuration in `.gitmodules`:
 
 ```ini
 [submodule "libs/shared-library"]
@@ -422,248 +422,248 @@ git pull --recurse-submodules
 ```
 
 ```bash
-# 同步配置到 Git config
+# Sync configuration to Git config
 git submodule sync
 
-# 使用跟踪分支更新 Submodule
+# Update Submodule using the tracked branch
 git submodule update --remote
 ```
 
-### 策略二：手动指定版本
+### Strategy 2: Manually Specify the Version
 
 ```bash
-# 进入 Submodule 目录
+# Enter the Submodule directory
 cd libs/shared-library
 
-# 切换到特定的提交或标签
+# Switch to a specific commit or tag
 git checkout v1.0.0
 
-# 回到主项目目录
+# Go back to the parent project directory
 cd ../..
 
-# 提交版本变更
+# Commit the version change
 git add libs/shared-library
 git commit -m "Pin shared-library to v1.0.0"
 ```
 
-## 第六部分：删除 Submodule
+## Part 6: Removing a Submodule
 
-在项目演进过程中，有时需要移除不再使用的 Submodule。可能的原因包括：某个组件已经被重写不再需要外部依赖、Submodule 已经被替换为其他方案、或者项目架构发生了调整。无论出于何种原因，正确地删除 Submodule 都非常重要。如果不完整地删除 Submodule，可能会导致仓库状态异常，给后续的开发工作带来困扰。需要注意的是，删除 Submodule 的过程比添加要复杂得多，涉及多个配置文件和目录的清理。因此，建议在删除前先备份相关配置，并确保所有团队成员都了解即将进行的变更。
+During the evolution of a project, there are times when you need to remove a Submodule that is no longer used. Possible reasons include: a component has been rewritten and no longer requires an external dependency, the Submodule has been replaced by another solution, or the project architecture has been restructured. Regardless of the reason, properly removing a Submodule is very important. If the Submodule is not completely removed, it may cause abnormal repository state, leading to problems in subsequent development work. It is worth noting that the process of removing a Submodule is more complex than adding one, involving the cleanup of multiple configuration files and directories. Therefore, it is recommended to back up relevant configurations before removal and ensure all team members are aware of the upcoming changes.
 
-删除 Submodule 的过程比添加要复杂一些，需要执行多个步骤：
+The process of removing a Submodule is more complex than adding one, requiring several steps:
 
-### 步骤 1：从 .gitmodules 中移除配置
+### Step 1: Remove Configuration from .gitmodules
 
 ```bash
-# 方法一：手动编辑 .gitmodules
-# 删除对应的 [submodule "xxx"] 配置块
+# Method 1: Manually edit .gitmodules
+# Delete the corresponding [submodule "xxx"] configuration block
 
-# 方法二：使用命令（Git 2.35+）
+# Method 2: Use command (Git 2.35+)
 git submodule deinit -f libs/shared-library
 ```
 
-### 步骤 2：从 Git 索引中移除
+### Step 2: Remove from Git Index
 
 ```bash
-# 从暂存区和磁盘上移除 Submodule
+# Remove Submodule from staging area and disk
 git rm -f libs/shared-library
 ```
 
-### 步骤 3：清理 .git/modules 目录
+### Step 3: Clean Up the .git/modules Directory
 
 ```bash
-# 删除 Submodule 的本地仓库数据
+# Delete the Submodule's local repository data
 rm -rf .git/modules/libs/shared-library
 ```
 
-### 步骤 4：提交删除
+### Step 4: Commit the Removal
 
 ```bash
-# 提交变更
+# Commit changes
 git commit -m "Remove shared-library submodule"
 
-# 推送
+# Push
 git push origin main
 ```
 
-### 完整的删除脚本
+### Complete Removal Script
 
-将以下内容保存为 `remove-submodule.sh` 以备后用：
+Save the following content as `remove-submodule.sh` for future use:
 
 ```bash
 #!/bin/bash
-# 用法: ./remove-submodule.sh <submodule-path>
+# Usage: ./remove-submodule.sh <submodule-path>
 
 SUBMODULE_PATH=$1
 
 if [ -z "$SUBMODULE_PATH" ]; then
-    echo "请提供 Submodule 路径"
-    echo "用法: $0 <submodule-path>"
+    echo "Please provide the Submodule path"
+    echo "Usage: $0 <submodule-path>"
     exit 1
 fi
 
-echo "正在删除 Submodule: $SUBMODULE_PATH"
+echo "Removing Submodule: $SUBMODULE_PATH"
 
-# 步骤1: 取消初始化
+# Step 1: Deinitialize
 git submodule deinit -f "$SUBMODULE_PATH"
 
-# 步骤2: 从 Git 索引移除
+# Step 2: Remove from Git index
 git rm -f "$SUBMODULE_PATH"
 
-# 步骤3: 清理 .git/modules
+# Step 3: Clean up .git/modules
 rm -rf ".git/modules/$SUBMODULE_PATH"
 
-# 步骤4: 提交
+# Step 4: Commit
 git commit -m "Remove submodule: $SUBMODULE_PATH"
 
-echo "Submodule $SUBMODULE_PATH 已删除"
+echo "Submodule $SUBMODULE_PATH has been removed"
 ```
 
-## 第七部分：处理 Submodule 的常见问题
+## Part 7: Handling Common Submodule Issues
 
-在使用 Submodule 的过程中，开发者经常会遇到一些问题。了解这些问题的原因和解决方法，可以帮助你更顺畅地使用 Submodule。最常见的问题包括分离头指针状态、远程地址变更、合并冲突、以及递归克隆失败等。这些问题通常都有明确的解决方案，但如果不了解其原理，可能会花费大量时间来排查。建议团队将 Submodule 相关的问题和解决方案记录在项目文档中，方便其他成员参考。此外，定期对团队成员进行 Submodule 使用培训也是非常有必要的。
+When using Submodules, developers often encounter some issues. Understanding the causes and solutions of these issues can help you use Submodules more smoothly. The most common issues include detached HEAD state, remote URL changes, merge conflicts, and recursive clone failures. These issues usually have clear solutions, but if you don't understand the underlying principles, you may spend a lot of time troubleshooting. It is recommended that teams document Submodule-related issues and solutions in the project documentation for other members to reference. Additionally, it is also very important to regularly conduct Submodule usage training for team members.
 
-### 问题一：Submodule 处于 Detached HEAD 状态
+### Issue 1: Submodule in Detached HEAD State
 
 ```bash
-# 进入 Submodule
+# Enter the Submodule
 cd libs/shared-library
 
-# 查看状态
+# View status
 git status
 # HEAD detached at abc1234
 
-# 切换到需要的分支
+# Switch to the desired branch
 git checkout main
 
-# 现在可以正常提交和推送了
+# Now you can commit and push normally
 ```
 
-### 问题二：Submodule 的远程 URL 变更
+### Issue 2: Submodule Remote URL Changed
 
 ```bash
-# 更新 .gitmodules 中的 URL
+# Update the URL in .gitmodules
 git submodule sync
 
-# 重新初始化
+# Re-initialize
 git submodule update --init
 ```
 
-### 问题三：合并冲突
+### Issue 3: Merge Conflicts
 
-当两个分支对同一个 Submodule 指向不同的提交时会产生合并冲突：
+Merge conflicts occur when two branches point to different commits for the same Submodule:
 
 ```bash
-# 查看冲突
+# View conflicts
 git status
 # both modified: libs/shared-library
 
-# 进入 Submodule 解决冲突
+# Enter the Submodule to resolve conflicts
 cd libs/shared-library
 
-# 选择要使用的版本
-git checkout main  # 选择当前分支的版本
-# 或
-git checkout feature-branch  # 选择另一个分支的版本
+# Choose the version to use
+git checkout main  # Choose the current branch's version
+# Or
+git checkout feature-branch  # Choose the other branch's version
 
-# 回到主项目
+# Go back to the parent project
 cd ../..
 
-# 标记冲突已解决
+# Mark the conflict as resolved
 git add libs/shared-library
 git commit -m "Resolve submodule merge conflict"
 ```
 
-### 问题四：递归克隆失败
+### Issue 4: Recursive Clone Failed
 
 ```bash
-# 如果 --recurse-submodules 失败，分步执行
+# If --recurse-submodules fails, execute step by step
 git clone https://github.com/your-username/parent-project.git
 cd parent-project
 git submodule init
 git submodule update
 ```
 
-## 第八部分：对比 Submodules 和 Subtree
+## Part 8: Comparing Submodules and Subtree
 
-### 什么是 Git Subtree？
+### What Is Git Subtree?
 
-Git Subtree 是另一种管理项目依赖的方式，它将外部仓库的代码直接合并到主项目中。
+Git Subtree is another way to manage project dependencies. It merges code from an external repository directly into the parent project.
 
-### 创建 Subtree
+### Creating a Subtree
 
 ```bash
-# 添加 Subtree
+# Add Subtree
 git subtree add --prefix=libs/shared-library https://github.com/your-username/shared-library.git main --squash
 
-# 拉取 Subtree 更新
+# Pull Subtree updates
 git subtree pull --prefix=libs/shared-library https://github.com/your-username/shared-library.git main --squash
 
-# 推送修改回 Subtree 源仓库
+# Push changes back to the Subtree source repository
 git subtree push --prefix=libs/shared-library https://github.com/your-username/shared-library.git main
 ```
 
-### 对比表格
+### Comparison Table
 
-| 特性 | Git Submodules | Git Subtree |
+| Feature | Git Submodules | Git Subtree |
 |------|---------------|-------------|
-| 代码存储 | 只存储引用（commit hash） | 代码直接存储在主项目中 |
-| 克隆速度 | 需要额外拉取 Submodule | 一次克隆包含所有代码 |
-| 提交历史 | Submodule 保持独立历史 | 代码合并到主项目历史中 |
-| 修改推送 | 在 Submodule 目录内推送 | 使用 subtree push 命令 |
-| 学习难度 | 相对复杂 | 相对简单 |
-| 适用场景 | 大型独立组件、需要精确版本控制 | 小型共享代码、不需要独立版本控制 |
-| 仓库大小 | 主项目较小 | 主项目较大 |
-| 离线工作 | 需要先初始化 Submodule | 可以直接工作 |
-| 代码复用 | 多个项目可共享同一 Submodule | 每个项目都有代码副本 |
+| Code Storage | Only stores references (commit hash) | Code is directly stored in the parent project |
+| Clone Speed | Requires additional fetch for Submodules | One-time clone includes all code |
+| Commit History | Submodule maintains independent history | Code is merged into the parent project history |
+| Pushing Changes | Push within the Submodule directory | Use the subtree push command |
+| Learning Curve | Relatively complex | Relatively simple |
+| Use Cases | Large independent components, precise version control needed | Small shared code, no independent version control needed |
+| Repository Size | Parent project stays smaller | Parent project becomes larger |
+| Offline Work | Submodules need to be initialized first | Can work directly |
+| Code Reuse | Multiple projects can share the same Submodule | Each project has its own copy of the code |
 
-### 何时使用 Submodules
+### When to Use Submodules
 
-- 组件有独立的发布周期和版本号
-- 需要精确控制使用的版本
-- 组件由不同团队独立维护
-- 组件被多个项目共享
-- 需要保持清晰的代码所有权
+- The component has an independent release cycle and version numbers
+- Precise control over the version used is required
+- The component is independently maintained by different teams
+- The component is shared across multiple projects
+- Clear code ownership needs to be maintained
 
-### 何时使用 Subtree
+### When to Use Subtree
 
-- 想要简化工作流程
-- 不想处理 Submodule 的复杂性
-- 依赖更新不频繁
-- 希望所有代码在同一个仓库中
-- 需要在主项目中直接修改依赖代码
+- You want to simplify the workflow
+- You don't want to deal with Submodule complexity
+- Dependencies are not updated frequently
+- You want all code in a single repository
+- You need to directly modify dependency code in the parent project
 
-## 第九部分：进阶挑战
+## Part 9: Advanced Challenges
 
-完成基础的 Submodule 操作后，你可以尝试以下进阶挑战来提高你的 Submodule 管理能力。这些挑战涵盖了自动化配置、嵌套管理、脚本编写、以及替代方案的比较。通过这些实践，你将能够根据项目的具体需求选择最合适的依赖管理策略，并建立高效的团队工作流程。
+After completing the basic Submodule operations, you can try the following advanced challenges to improve your Submodule management skills. These challenges cover automated configuration, nested management, script writing, and comparison of alternative approaches. Through these practices, you will be able to choose the most appropriate dependency management strategy based on the specific needs of your project and establish an efficient team workflow.
 
-### 挑战 1：配置 Submodule 自动初始化
+### Challenge 1: Configure Automatic Submodule Initialization
 
-在项目根目录创建 `.gitconfig` 文件或配置 Git 属性：
+Create a `.gitconfig` file in the project root directory or configure Git attributes:
 
 ```bash
-# 全局配置：克隆时自动初始化 Submodule
+# Global configuration: Automatically initialize Submodules when cloning
 git config --global submodule.recurse true
 
-# 全局配置：pull 时自动更新 Submodule
+# Global configuration: Automatically update Submodules when pulling
 git config --global pull.rebase true
 ```
 
-### 挑战 2：管理嵌套的 Submodules
+### Challenge 2: Managing Nested Submodules
 
-处理多层嵌套的 Submodule：
+Handling multi-level nested Submodules:
 
 ```bash
-# 递归初始化所有嵌套的 Submodule
+# Recursively initialize all nested Submodules
 git submodule update --init --recursive
 
-# 查看所有嵌套 Submodule 的状态
+# View the status of all nested Submodules
 git submodule status --recursive
 ```
 
-### 挑战 3：创建 Submodule 管理脚本
+### Challenge 3: Create a Submodule Management Script
 
-编写一个脚本来简化日常的 Submodule 操作：
+Write a script to simplify daily Submodule operations:
 
 ```bash
 #!/bin/bash
@@ -671,110 +671,110 @@ git submodule status --recursive
 
 case "$1" in
     "update-all")
-        echo "更新所有 Submodules..."
+        echo "Updating all Submodules..."
         git submodule update --remote --merge
         ;;
     "status")
-        echo "Submodule 状态:"
+        echo "Submodule status:"
         git submodule status
         ;;
     "init-all")
-        echo "初始化所有 Submodules..."
+        echo "Initializing all Submodules..."
         git submodule update --init --recursive
         ;;
     "push")
-        echo "推送所有 Submodules 的修改..."
+        echo "Pushing all Submodule changes..."
         git submodule foreach 'git push origin main'
         ;;
     "pull")
-        echo "拉取所有 Submodules 的更新..."
+        echo "Pulling all Submodule updates..."
         git submodule foreach 'git pull origin main'
         ;;
     *)
-        echo "用法: $0 {update-all|status|init-all|push|pull}"
+        echo "Usage: $0 {update-all|status|init-all|push|pull}"
         exit 1
         ;;
 esac
 ```
 
-使用方法：
+Usage:
 
 ```bash
-# 添加执行权限
+# Add execute permission
 chmod +x submodule-manager.sh
 
-# 使用脚本
+# Use the script
 ./submodule-manager.sh status
 ./submodule-manager.sh update-all
 ```
 
-### 挑战 4：使用 Git Subtree 替代 Submodule
+### Challenge 4: Use Git Subtree Instead of Submodule
 
-尝试使用 Subtree 方式管理同一个依赖，对比两种方式的工作流程差异：
+Try managing the same dependency using the Subtree approach and compare the workflow differences between the two methods:
 
 ```bash
-# 删除现有的 Submodule（按前面的步骤）
+# Remove the existing Submodule (following the steps above)
 
-# 使用 Subtree 添加
+# Add using Subtree
 git subtree add --prefix=libs/shared-library https://github.com/your-username/shared-library.git main --squash
 
-# 修改代码后推送回源仓库
+# After modifying code, push back to the source repository
 git subtree push --prefix=libs/shared-library origin main
 ```
 
-## 验证清单
+## Verification Checklist
 
-完成练习后，请确认以下事项：
+After completing the exercise, please confirm the following:
 
-- [ ] 成功添加了一个 Submodule
-- [ ] 理解了 `.gitmodules` 文件的作用
-- [ ] 能够克隆包含 Submodule 的项目
-- [ ] 能够更新 Submodule 到最新版本
-- [ ] 能够删除一个 Submodule
-- [ ] 了解 Submodules 和 Subtree 的区别和适用场景
+- [ ] Successfully added a Submodule
+- [ ] Understand the purpose of the `.gitmodules` file
+- [ ] Can clone a project containing Submodules
+- [ ] Can update a Submodule to the latest version
+- [ ] Can remove a Submodule
+- [ ] Understand the differences and use cases of Submodules vs Subtree
 
-## 常见问题
+## Common Questions
 
-### Q1：为什么 Submodule 处于 detached HEAD 状态？
+### Q1: Why is the Submodule in a detached HEAD state?
 
-这是 Git Submodule 的默认行为。Submodule 指向一个特定的提交，而不是分支。要切换到分支，进入 Submodule 目录执行 `git checkout main`。
+This is the default behavior of Git Submodules. The Submodule points to a specific commit, not a branch. To switch to a branch, enter the Submodule directory and run `git checkout main`.
 
-### Q2：如何查看 Submodule 指向哪个提交？
+### Q2: How to view which commit a Submodule points to?
 
 ```bash
-# 查看 Submodule 状态
+# View Submodule status
 git submodule status
 
-# 查看主项目记录的 Submodule 提交
+# View the Submodule commit recorded in the parent project
 git ls-tree HEAD libs/shared-library
 ```
 
-### Q3：Submodule 的修改丢失了怎么办？
+### Q3: What if my Submodule changes are lost?
 
 ```bash
-# 进入 Submodule 目录
+# Enter the Submodule directory
 cd libs/shared-library
 
-# 查看 Git reflog
+# View Git reflog
 git reflog
 
-# 恢复到丢失前的提交
+# Restore to the commit before the loss
 git checkout <commit-hash>
 ```
 
-### Q4：如何批量管理多个 Submodule？
+### Q4: How to batch manage multiple Submodules?
 
 ```bash
-# 查看所有 Submodule
+# View all Submodules
 git submodule status
 
-# 递归更新所有 Submodule
+# Recursively update all Submodules
 git submodule update --init --recursive
 
-# 遍历所有 Submodule 执行命令
+# Iterate over all Submodules and execute commands
 git submodule foreach 'echo $name: $(git rev-parse HEAD)'
 ```
 
-## 总结
+## Summary
 
-通过本次练习，你学会了如何使用 Git Submodules 来管理项目的外部依赖。Submodules 提供了一种精确控制依赖版本的方式，特别适合管理独立开发的组件。虽然 Submodules 的使用有一定的复杂性，但掌握它对于管理大型项目和多仓库协作非常有价值。同时，你也了解了 Subtree 作为替代方案的使用方式，可以根据项目需求选择合适的工具。在实际工作中，建议根据项目的规模、团队的工作流程、以及依赖的特性来选择合适的方案。对于需要独立版本控制和清晰代码边界的组件，Submodules 是更好的选择；对于简单的代码共享需求，Subtree 可能更加方便。无论选择哪种方案，都需要在团队中建立明确的使用规范和文档，确保所有成员都能正确地使用这些工具。持续学习和实践这些 Git 高级功能，将帮助你成为一名更出色的软件工程师。
+Through this exercise, you have learned how to use Git Submodules to manage external dependencies in your project. Submodules provide a way to precisely control dependency versions, making them particularly suitable for managing independently developed components. Although using Submodules has a certain level of complexity, mastering them is very valuable for managing large projects and multi-repository collaboration. At the same time, you have also learned how to use Subtree as an alternative approach, and can choose the appropriate tool based on project requirements. In practice, it is recommended to choose the appropriate solution based on the project's scale, the team's workflow, and the characteristics of the dependencies. For components that need independent version control and clear code boundaries, Submodules are a better choice; for simple code sharing needs, Subtree may be more convenient. Regardless of which solution you choose, you need to establish clear usage guidelines and documentation within the team to ensure all members can correctly use these tools. Continuously learning and practicing these advanced Git features will help you become a more outstanding software engineer.

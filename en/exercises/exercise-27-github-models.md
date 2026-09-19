@@ -1,100 +1,100 @@
-# 练习 27：使用 GitHub Models 测试 AI 模型
+# Exercise 27: Testing AI Models with GitHub Models
 
-## 学习目标
+## Learning Objectives
 
-完成本练习后，你将能够：
+After completing this exercise, you will be able to:
 
-- 理解 GitHub Models 的概念和用途
-- 使用 GitHub Models API 调用各种 AI 模型
-- 比较不同模型的性能和输出质量
-- 构建基于 AI 模型的简单应用程序
-- 了解模型评估和选择的最佳实践
+- Understand the concept and purpose of GitHub Models
+- Call various AI models using the GitHub Models API
+- Compare the performance and output quality of different models
+- Build simple applications based on AI models
+- Learn best practices for model evaluation and selection
 
-## 前置条件
+## Prerequisites
 
-- 拥有 GitHub 账户
-- 已安装 Python 3.10+ 或 Node.js 18+
-- 基本的 API 调用知识
-- 了解 JSON 数据格式
+- Have a GitHub account
+- Have Python 3.10+ or Node.js 18+ installed
+- Basic knowledge of API calls
+- Understanding of JSON data format
 
-## 背景知识
+## Background Knowledge
 
-### 什么是 GitHub Models
+### What are GitHub Models
 
-GitHub Models 是 GitHub 提供的 AI 模型测试平台，允许开发者：
+GitHub Models is an AI model testing platform provided by GitHub that allows developers to:
 
-1. **免费测试 AI 模型**：无需付费即可体验各种大语言模型
-2. **比较不同模型**：在同一平台上测试多个模型的输出
-3. **快速原型开发**：使用 API 快速构建 AI 应用原型
-4. **集成到工作流**：将模型集成到 GitHub Actions 和应用程序中
+1. **Test AI models for free**: Experience various large language models without paying
+2. **Compare different models**: Test multiple models' outputs on the same platform
+3. **Rapid prototyping**: Use the API to quickly build AI application prototypes
+4. **Integrate into workflows**: Integrate models into GitHub Actions and applications
 
-### 支持的模型类型
+### Supported Model Types
 
-GitHub Models 提供多种模型供测试：
+GitHub Models offers multiple models for testing:
 
-- **语言模型**：GPT-4、Claude、Llama 等
-- **嵌入模型**：用于文本向量化
-- **图像模型**：用于图像生成和理解
-- **多模态模型**：支持文本和图像输入
+- **Language models**: GPT-4, Claude, Llama, etc.
+- **Embedding models**: For text vectorization
+- **Image models**: For image generation and understanding
+- **Multimodal models**: Support text and image input
 
 ---
 
-## 练习步骤
+## Exercise Steps
 
-### 第一部分：设置 GitHub Models 访问
+### Part 1: Setting Up GitHub Models Access
 
-#### 步骤 1：获取 GitHub Personal Access Token
+#### Step 1: Get a GitHub Personal Access Token
 
-1. 访问 GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
-2. 点击 "Generate new token"
-3. 选择权限：`read:user` 和 `models:read`
-4. 生成并保存令牌
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Click "Generate new token"
+3. Select permissions: `read:user` and `models:read`
+4. Generate and save the token
 
 ```bash
-# 设置环境变量
+# Set environment variable
 export GITHUB_TOKEN="your_github_token_here"
 ```
 
-#### 步骤 2：安装必要的依赖
+#### Step 2: Install Required Dependencies
 
-**Python 环境：**
+**Python Environment:**
 
 ```bash
-# 创建虚拟环境
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-# 或 venv\Scripts\activate  # Windows
+# or venv\Scripts\activate  # Windows
 
-# 安装依赖
+# Install dependencies
 pip install openai requests python-dotenv
 ```
 
-**Node.js 环境：**
+**Node.js Environment:**
 
 ```bash
-# 初始化项目
+# Initialize project
 mkdir github-models-demo && cd github-models-demo
 npm init -y
 
-# 安装依赖
+# Install dependencies
 npm install openai dotenv
 ```
 
-### 第二部分：使用 Python 调用 GitHub Models
+### Part 2: Using Python to Call GitHub Models
 
-#### 步骤 3：创建基础调用脚本
+#### Step 3: Create a Basic Call Script
 
-创建文件 `basic_call.py`：
+Create file `basic_call.py`:
 
 ```python
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# 加载环境变量
+# Load environment variables
 load_dotenv()
 
-# 配置 GitHub Models 客户端
+# Configure GitHub Models client
 client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
     api_key=os.getenv("GITHUB_TOKEN"),
@@ -102,16 +102,16 @@ client = OpenAI(
 
 def call_model(model_name, messages, temperature=0.7, max_tokens=1000):
     """
-    调用指定的 AI 模型
+    Call the specified AI model
     
     Args:
-        model_name: 模型名称
-        messages: 消息列表
-        temperature: 温度参数（控制随机性）
-        max_tokens: 最大生成令牌数
+        model_name: Model name
+        messages: List of messages
+        temperature: Temperature parameter (controls randomness)
+        max_tokens: Maximum number of tokens to generate
     
     Returns:
-        模型的响应文本
+        Model response text
     """
     try:
         response = client.chat.completions.create(
@@ -123,29 +123,29 @@ def call_model(model_name, messages, temperature=0.7, max_tokens=1000):
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"调用失败: {str(e)}"
+        return f"Call failed: {str(e)}"
 
-# 测试调用
+# Test the call
 if __name__ == "__main__":
     messages = [
-        {"role": "system", "content": "你是一个有用的助手，用中文回答问题。"},
-        {"role": "user", "content": "请解释什么是 GitHub Actions？"}
+        {"role": "system", "content": "You are a helpful assistant. Answer questions in English."},
+        {"role": "user", "content": "What is GitHub Actions?"}
     ]
     
     response = call_model("gpt-4o-mini", messages)
-    print("模型响应：")
+    print("Model response:")
     print(response)
 ```
 
-#### 步骤 4：创建环境配置文件
+#### Step 4: Create Environment Configuration File
 
-创建文件 `.env`：
+Create file `.env`:
 
-```env
+```
 GITHUB_TOKEN=your_github_token_here
 ```
 
-创建文件 `.gitignore`：
+Create file `.gitignore`:
 
 ```
 .env
@@ -154,31 +154,31 @@ node_modules/
 __pycache__/
 ```
 
-#### 步骤 5：运行基础调用
+#### Step 5: Run the Basic Call
 
 ```bash
 python basic_call.py
 ```
 
-预期输出：
+Expected output:
 
 ```
-模型响应：
-GitHub Actions 是 GitHub 提供的持续集成和持续部署（CI/CD）平台。它允许开发者自动化软件开发工作流，包括构建、测试和部署等任务。
+Model response:
+GitHub Actions is a continuous integration and continuous deployment (CI/CD) platform provided by GitHub. It allows developers to automate software development workflows, including building, testing, and deploying tasks.
 
-主要特点：
-1. 基于事件触发：可以在 push、pull request、issue 等事件发生时自动运行
-2. YAML 配置：使用 YAML 文件定义工作流
-3. 矩阵构建：支持在多个操作系统和语言版本上并行测试
-4. 市场共享：可以通过 GitHub Marketplace 共享和复用 Actions
-5. 免费额度：公开仓库免费使用，私有仓库有免费额度
+Key features:
+1. Event-triggered: Can automatically run when push, pull request, issue, and other events occur
+2. YAML configuration: Uses YAML files to define workflows
+3. Matrix builds: Supports parallel testing across multiple operating systems and language versions
+4. Marketplace sharing: Actions can be shared and reused through GitHub Marketplace
+5. Free tier: Free for public repositories, with free tier available for private repositories
 ```
 
-### 第三部分：比较不同模型
+### Part 3: Comparing Different Models
 
-#### 步骤 6：创建模型比较脚本
+#### Step 6: Create a Model Comparison Script
 
-创建文件 `compare_models.py`：
+Create file `compare_models.py`:
 
 ```python
 import os
@@ -195,7 +195,7 @@ client = OpenAI(
     api_key=os.getenv("GITHUB_TOKEN"),
 )
 
-# 可用模型列表
+# List of available models
 AVAILABLE_MODELS = [
     "gpt-4o-mini",
     "gpt-4o",
@@ -208,21 +208,21 @@ AVAILABLE_MODELS = [
 def compare_models(
     prompt: str,
     models: List[str] = None,
-    system_prompt: str = "你是一个有用的助手，用中文回答问题。",
+    system_prompt: str = "You are a helpful assistant. Answer questions in English.",
 ) -> Dict[str, Any]:
     """
-    比较多个模型对同一提示的响应
+    Compare multiple models' responses to the same prompt
     
     Args:
-        prompt: 用户提示
-        models: 要比较的模型列表
-        system_prompt: 系统提示
+        prompt: User prompt
+        models: List of models to compare
+        system_prompt: System prompt
     
     Returns:
-        包含各模型响应的字典
+        Dictionary containing each model's response
     """
     if models is None:
-        models = AVAILABLE_MODELS[:3]  # 默认比较前3个模型
+        models = AVAILABLE_MODELS[:3]  # Compare first 3 models by default
     
     results = {}
     messages = [
@@ -231,7 +231,7 @@ def compare_models(
     ]
     
     for model in models:
-        print(f"\n正在测试模型: {model}")
+        print(f"\nTesting model: {model}")
         print("-" * 50)
         
         start_time = time.time()
@@ -258,9 +258,9 @@ def compare_models(
                 "success": True,
             }
             
-            print(f"响应时间: {elapsed_time:.2f} 秒")
-            print(f"令牌使用: {response.usage.total_tokens}")
-            print(f"响应预览: {content[:200]}...")
+            print(f"Response time: {elapsed_time:.2f}s")
+            print(f"Tokens used: {response.usage.total_tokens}")
+            print(f"Response preview: {content[:200]}...")
             
         except Exception as e:
             elapsed_time = time.time() - start_time
@@ -270,77 +270,77 @@ def compare_models(
                 "error": str(e),
                 "success": False,
             }
-            print(f"错误: {str(e)}")
+            print(f"Error: {str(e)}")
     
     return results
 
 def format_comparison_report(results: Dict[str, Any]) -> str:
-    """生成比较报告"""
-    report = "# 模型比较报告\n\n"
+    """Generate comparison report"""
+    report = "# Model Comparison Report\n\n"
     
-    # 性能摘要
-    report += "## 性能摘要\n\n"
-    report += "| 模型 | 响应时间 | 令牌数 | 状态 |\n"
-    report += "|------|---------|--------|------|\n"
+    # Performance summary
+    report += "## Performance Summary\n\n"
+    report += "| Model | Response Time | Tokens | Status |\n"
+    report += "|-------|---------------|--------|--------|\n"
     
     for model, data in results.items():
-        status = "✅ 成功" if data["success"] else "❌ 失败"
+        status = "✅ Success" if data["success"] else "❌ Failed"
         time_str = f"{data['time']}s"
         tokens = data.get("tokens", {}).get("total", "N/A")
         report += f"| {model} | {time_str} | {tokens} | {status} |\n"
     
-    # 详细响应
-    report += "\n## 详细响应\n\n"
+    # Detailed responses
+    report += "\n## Detailed Responses\n\n"
     for model, data in results.items():
         report += f"### {model}\n\n"
         if data["success"]:
             report += f"{data['response']}\n\n"
         else:
-            report += f"错误: {data.get('error', '未知错误')}\n\n"
+            report += f"Error: {data.get('error', 'Unknown error')}\n\n"
         report += "---\n\n"
     
     return report
 
-# 主程序
+# Main program
 if __name__ == "__main__":
-    test_prompt = "请用简洁的语言解释机器学习、深度学习和人工智能之间的关系。"
+    test_prompt = "Explain the relationship between machine learning, deep learning, and artificial intelligence in simple terms."
     
     print("=" * 60)
-    print("GitHub Models 比较测试")
+    print("GitHub Models Comparison Test")
     print("=" * 60)
-    print(f"\n测试提示: {test_prompt}\n")
+    print(f"\nTest prompt: {test_prompt}\n")
     
     results = compare_models(test_prompt)
     
-    # 生成报告
+    # Generate report
     report = format_comparison_report(results)
     
-    # 保存报告
+    # Save report
     with open("model_comparison_report.md", "w", encoding="utf-8") as f:
         f.write(report)
     
     print("\n" + "=" * 60)
-    print("比较报告已保存到 model_comparison_report.md")
+    print("Comparison report saved to model_comparison_report.md")
     print("=" * 60)
     
-    # 保存原始数据
+    # Save raw data
     with open("model_comparison_data.json", "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     
-    print("原始数据已保存到 model_comparison_data.json")
+    print("Raw data saved to model_comparison_data.json")
 ```
 
-#### 步骤 7：运行模型比较
+#### Step 7: Run Model Comparison
 
 ```bash
 python compare_models.py
 ```
 
-### 第四部分：构建简单的 AI 应用
+### Part 4: Building a Simple AI Application
 
-#### 步骤 8：创建代码审查助手
+#### Step 8: Create a Code Review Assistant
 
-创建文件 `code_reviewer.py`：
+Create file `code_reviewer.py`:
 
 ```python
 import os
@@ -356,22 +356,22 @@ client = OpenAI(
 )
 
 class CodeReviewer:
-    """AI 代码审查助手"""
+    """AI Code Review Assistant"""
     
     def __init__(self, model: str = "gpt-4o-mini"):
         self.model = model
-        self.system_prompt = """你是一个专业的代码审查专家。你的任务是：
-1. 检查代码中的潜在问题和bug
-2. 评估代码的可读性和可维护性
-3. 提供改进建议
-4. 检查安全漏洞
-5. 优化性能建议
+        self.system_prompt = """You are a professional code review expert. Your task is to:
+1. Check for potential issues and bugs in the code
+2. Evaluate code readability and maintainability
+3. Provide improvement suggestions
+4. Check for security vulnerabilities
+5. Offer performance optimization suggestions
 
-请用中文回答，并按照以下格式输出：
-- 严重问题（必须修复）
-- 建议改进（推荐修复）
-- 代码风格（可选优化）
-- 总体评价
+Please respond in English and output in the following format:
+- Critical Issues (must fix)
+- Suggested Improvements (recommended fixes)
+- Code Style (optional optimizations)
+- Overall Assessment
 """
     
     def review_code(
@@ -381,20 +381,20 @@ class CodeReviewer:
         context: Optional[str] = None,
     ) -> str:
         """
-        审查代码
+        Review code
         
         Args:
-            code: 要审查的代码
-            language: 编程语言
-            context: 额外上下文信息
+            code: Code to review
+            language: Programming language
+            context: Additional context information
         
         Returns:
-            审查结果
+            Review result
         """
-        user_message = f"请审查以下 {language} 代码：\n\n```{language}\n{code}\n```"
+        user_message = f"Please review the following {language} code:\n\n```{language}\n{code}\n```"
         
         if context:
-            user_message += f"\n\n上下文信息：{context}"
+            user_message += f"\n\nContext: {context}"
         
         messages = [
             {"role": "system", "content": self.system_prompt},
@@ -405,32 +405,32 @@ class CodeReviewer:
             response = client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                temperature=0.3,  # 低温度以获得更一致的输出
+                temperature=0.3,  # Low temperature for more consistent output
                 max_tokens=2000,
             )
             return response.choices[0].message.content
         except Exception as e:
-            return f"审查失败: {str(e)}"
+            return f"Review failed: {str(e)}"
     
     def suggest_fixes(self, code: str, issues: str) -> str:
         """
-        根据发现的问题提供修复建议
+        Provide fix suggestions based on discovered issues
         
         Args:
-            code: 原始代码
-            issues: 发现的问题描述
+            code: Original code
+            issues: Description of discovered issues
         
         Returns:
-            修复后的代码
+            Fixed code
         """
         messages = [
             {
                 "role": "system",
-                "content": "你是一个代码修复专家。根据提供的问题描述，给出修复后的完整代码。",
+                "content": "You are a code fix expert. Based on the provided issue description, provide the complete fixed code.",
             },
             {
                 "role": "user",
-                "content": f"原始代码：\n```python\n{code}\n```\n\n发现的问题：\n{issues}\n\n请提供修复后的完整代码。",
+                "content": f"Original code:\n```python\n{code}\n```\n\nDiscovered issues:\n{issues}\n\nPlease provide the complete fixed code.",
             },
         ]
         
@@ -443,14 +443,14 @@ class CodeReviewer:
             )
             return response.choices[0].message.content
         except Exception as e:
-            return f"修复建议失败: {str(e)}"
+            return f"Fix suggestion failed: {str(e)}"
 
 
-# 示例使用
+# Example usage
 if __name__ == "__main__":
     reviewer = CodeReviewer()
     
-    # 示例代码
+    # Sample code
     sample_code = '''
 def get_user_data(user_id):
     import sqlite3
@@ -482,26 +482,26 @@ class UserManager:
 '''
     
     print("=" * 60)
-    print("AI 代码审查助手")
+    print("AI Code Review Assistant")
     print("=" * 60)
     
-    # 审查代码
-    print("\n正在审查代码...\n")
-    review_result = reviewer.review_code(sample_code, "python", "这是一个用户管理模块")
+    # Review code
+    print("\nReviewing code...\n")
+    review_result = reviewer.review_code(sample_code, "python", "This is a user management module")
     print(review_result)
     
     print("\n" + "=" * 60)
-    print("获取修复建议...")
+    print("Getting fix suggestions...")
     print("=" * 60)
     
-    # 获取修复建议
+    # Get fix suggestions
     fix_suggestion = reviewer.suggest_fixes(sample_code, review_result)
     print(f"\n{fix_suggestion}")
 ```
 
-#### 步骤 9：创建文本摘要工具
+#### Step 9: Create a Text Summarization Tool
 
-创建文件 `text_summarizer.py`：
+Create file `text_summarizer.py`:
 
 ```python
 import os
@@ -516,7 +516,7 @@ client = OpenAI(
 )
 
 class TextSummarizer:
-    """AI 文本摘要工具"""
+    """AI Text Summarization Tool"""
     
     def __init__(self, model: str = "gpt-4o-mini"):
         self.model = model
@@ -528,20 +528,20 @@ class TextSummarizer:
         style: str = "concise",
     ) -> str:
         """
-        生成文本摘要
+        Generate text summary
         
         Args:
-            text: 原始文本
-            max_length: 摘要最大长度（字数）
-            style: 摘要风格 ('concise', 'detailed', 'bullet_points')
+            text: Original text
+            max_length: Maximum summary length (in words)
+            style: Summary style ('concise', 'detailed', 'bullet_points')
         
         Returns:
-            生成的摘要
+            Generated summary
         """
         style_prompts = {
-            "concise": f"请用简洁的语言总结以下内容，不超过{max_length}字：",
-            "detailed": f"请详细总结以下内容，包含关键信息，不超过{max_length}字：",
-            "bullet_points": f"请用要点列表的形式总结以下内容，每个要点简洁明了：",
+            "concise": f"Summarize the following content concisely, no more than {max_length} words:",
+            "detailed": f"Summarize the following content in detail, including key information, no more than {max_length} words:",
+            "bullet_points": f"Summarize the following content in bullet point format, each point concise and clear:",
         }
         
         system_prompt = style_prompts.get(style, style_prompts["concise"])
@@ -560,22 +560,22 @@ class TextSummarizer:
             )
             return response.choices[0].message.content
         except Exception as e:
-            return f"摘要生成失败: {str(e)}"
+            return f"Summary generation failed: {str(e)}"
     
     def extract_key_points(self, text: str) -> list:
         """
-        提取文本关键点
+        Extract key points from text
         
         Args:
-            text: 原始文本
+            text: Original text
         
         Returns:
-            关键点列表
+            List of key points
         """
         messages = [
             {
                 "role": "system",
-                "content": "请从文本中提取关键点，每行一个，用 '-' 开头。",
+                "content": "Extract key points from the text, one per line, prefixed with '-'.",
             },
             {"role": "user", "content": text},
         ]
@@ -590,60 +590,60 @@ class TextSummarizer:
             points = response.choices[0].message.content.strip().split("\n")
             return [p.strip("- ").strip() for p in points if p.strip()]
         except Exception as e:
-            return [f"提取失败: {str(e)}"]
+            return [f"Extraction failed: {str(e)}"]
 
 
-# 示例使用
+# Example usage
 if __name__ == "__main__":
     summarizer = TextSummarizer()
     
     sample_text = """
-    GitHub Actions 是 GitHub 提供的持续集成和持续部署（CI/CD）服务。
-    它允许开发者自动化软件开发工作流程，包括构建、测试、打包、发布和部署等任务。
+    GitHub Actions is a continuous integration and continuous deployment (CI/CD) service provided by GitHub.
+    It allows developers to automate software development workflows, including building, testing, packaging, releasing, and deploying tasks.
     
-    GitHub Actions 使用 YAML 语法定义工作流文件，这些文件存放在仓库的
-    .github/workflows 目录下。每个工作流由一个或多个作业（jobs）组成，
-    每个作业包含一系列步骤（steps）。
+    GitHub Actions uses YAML syntax to define workflow files, which are stored in the repository's
+    .github/workflows directory. Each workflow consists of one or more jobs,
+    and each job contains a series of steps.
     
-    工作流可以在特定事件发生时自动触发，例如代码推送到仓库、创建拉取请求、
-    定时任务等。开发者也可以手动触发工作流。
+    Workflows can be automatically triggered when specific events occur, such as code pushes to the repository,
+    pull request creation, scheduled tasks, etc. Developers can also manually trigger workflows.
     
-    GitHub Actions 提供了丰富的内置 Actions，可以通过 GitHub Marketplace
-    获取社区共享的 Actions。这大大简化了 CI/CD 流程的配置。
+    GitHub Actions provides a rich set of built-in Actions, and community-shared Actions can be
+    obtained through the GitHub Marketplace. This greatly simplifies CI/CD pipeline configuration.
     
-    此外，GitHub Actions 支持矩阵构建，可以在多个操作系统和语言版本上
-    并行运行测试，确保代码的兼容性。
+    Additionally, GitHub Actions supports matrix builds, which can run tests in parallel
+    across multiple operating systems and language versions, ensuring code compatibility.
     """
     
     print("=" * 60)
-    print("AI 文本摘要工具")
+    print("AI Text Summarization Tool")
     print("=" * 60)
     
-    # 生成不同风格的摘要
-    print("\n1. 简洁摘要：")
+    # Generate summaries in different styles
+    print("\n1. Concise Summary:")
     print("-" * 40)
     print(summarizer.summarize(sample_text, max_length=100, style="concise"))
     
-    print("\n2. 详细摘要：")
+    print("\n2. Detailed Summary:")
     print("-" * 40)
     print(summarizer.summarize(sample_text, max_length=200, style="detailed"))
     
-    print("\n3. 要点列表：")
+    print("\n3. Bullet Points:")
     print("-" * 40)
     print(summarizer.summarize(sample_text, style="bullet_points"))
     
-    print("\n4. 关键点提取：")
+    print("\n4. Key Points Extraction:")
     print("-" * 40)
     key_points = summarizer.extract_key_points(sample_text)
     for i, point in enumerate(key_points, 1):
         print(f"{i}. {point}")
 ```
 
-### 第五部分：在 GitHub Actions 中使用 GitHub Models
+### Part 5: Using GitHub Models in GitHub Actions
 
-#### 步骤 10：创建使用 GitHub Models 的工作流
+#### Step 10: Create a Workflow Using GitHub Models
 
-创建文件 `.github/workflows/ai-review.yml`：
+Create file `.github/workflows/ai-review.yml`:
 
 ```yaml
 name: AI Code Review
@@ -661,19 +661,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 设置 Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
-      - name: 安装依赖
+      - name: Install dependencies
         run: |
           pip install openai requests PyGithub
       
-      - name: 获取 PR 变更
+      - name: Get PR changes
         id: changes
         uses: actions/github-script@v7
         with:
@@ -690,11 +690,11 @@ jobs:
                 filename: f.filename,
                 patch: f.patch || '',
               }))
-              .slice(0, 10);  // 限制最多10个文件
+              .slice(0, 10);  // Limit to max 10 files
             
             core.setOutput('changes', JSON.stringify(changes));
       
-      - name: AI 代码审查
+      - name: AI Code Review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -718,11 +718,11 @@ jobs:
               messages = [
                   {
                       "role": "system",
-                      "content": "你是代码审查专家。请用中文简要指出代码中的问题，每条不超过50字。如果没有问题，回复'代码看起来不错'。"
+                      "content": "You are a code review expert. Briefly point out issues in the code in English, no more than 50 words per issue. If there are no issues, reply 'Code looks good'."
                   },
                   {
                       "role": "user",
-                      "content": f"文件: {change['filename']}\n\n变更:\n{change['patch']}"
+                      "content": f"File: {change['filename']}\n\nChanges:\n{change['patch']}"
                   }
               ]
               
@@ -736,16 +736,16 @@ jobs:
                   review = response.choices[0].message.content
                   reviews.append(f"**{change['filename']}**:\n{review}")
               except Exception as e:
-                  reviews.append(f"**{change['filename']}**: 审查失败 - {str(e)}")
+                  reviews.append(f"**{change['filename']}**: Review failed - {str(e)}")
           
-          # 输出结果
+          # Output results
           with open('review_result.md', 'w') as f:
-              f.write("## AI 代码审查结果\n\n")
+              f.write("## AI Code Review Results\n\n")
               f.write("\n\n---\n\n".join(reviews))
           
           EOF
       
-      - name: 发布审查评论
+      - name: Post review comment
         uses: actions/github-script@v7
         with:
           script: |
@@ -762,60 +762,60 @@ jobs:
 
 ---
 
-## 验证练习结果
+## Verifying Exercise Results
 
-### 检查清单
+### Checklist
 
-完成练习后，请验证以下内容：
+After completing the exercise, verify the following:
 
-- [ ] 成功配置 GitHub Token
-- [ ] 能够调用 GitHub Models API
-- [ ] 模型比较脚本正常运行并生成报告
-- [ ] 代码审查助手能够分析代码
-- [ ] 文本摘要工具能够生成摘要
-- [ ] GitHub Actions 工作流能够自动审查 PR
+- [ ] Successfully configured GitHub Token
+- [ ] Able to call the GitHub Models API
+- [ ] Model comparison script runs normally and generates reports
+- [ ] Code review assistant can analyze code
+- [ ] Text summarization tool can generate summaries
+- [ ] GitHub Actions workflow can automatically review PRs
 
-### 验证命令
+### Verification Commands
 
 ```bash
-# 测试 API 连接
+# Test API connection
 python -c "
 from openai import OpenAI
 import os
 client = OpenAI(base_url='https://models.inference.ai.azure.com', api_key=os.getenv('GITHUB_TOKEN'))
 response = client.chat.completions.create(model='gpt-4o-mini', messages=[{'role': 'user', 'content': 'Hello'}], max_tokens=10)
-print('API 连接成功:', response.choices[0].message.content)
+print('API connection successful:', response.choices[0].message.content)
 "
 
-# 运行模型比较
+# Run model comparison
 python compare_models.py
 
-# 检查生成的报告
+# Check the generated report
 cat model_comparison_report.md
 ```
 
 ---
 
-## 进阶挑战
+## Advanced Challenges
 
-### 挑战 1：构建多语言翻译助手
+### Challenge 1: Build a Multilingual Translation Assistant
 
-创建支持多种语言互译的工具：
+Create a tool that supports translation between multiple languages:
 
 ```python
 class TranslationAssistant:
     def translate(self, text, source_lang, target_lang):
-        # 实现翻译功能
+        # Implement translation functionality
         pass
     
     def detect_language(self, text):
-        # 实现语言检测
+        # Implement language detection
         pass
 ```
 
-### 挑战 2：实现对话式 AI 助手
+### Challenge 2: Implement a Conversational AI Assistant
 
-创建支持多轮对话的助手：
+Create an assistant that supports multi-turn conversations:
 
 ```python
 class ConversationalAssistant:
@@ -823,43 +823,43 @@ class ConversationalAssistant:
         self.conversation_history = []
     
     def chat(self, message):
-        # 维护对话历史
-        # 调用模型生成响应
-        # 返回响应并更新历史
+        # Maintain conversation history
+        # Call model to generate response
+        # Return response and update history
         pass
     
     def clear_history(self):
         self.conversation_history = []
 ```
 
-### 挑战 3：创建文档生成器
+### Challenge 3: Create a Documentation Generator
 
-使用 AI 自动生成 API 文档：
+Use AI to automatically generate API documentation:
 
 ```python
 def generate_api_docs(code):
     """
-    从代码自动生成 API 文档
+    Automatically generate API documentation from code
     """
-    # 解析代码结构
-    # 生成文档
-    # 格式化输出
+    # Parse code structure
+    # Generate documentation
+    # Format output
     pass
 ```
 
-### 挑战 4：实现情感分析工具
+### Challenge 4: Implement a Sentiment Analysis Tool
 
-创建分析文本情感的工具：
+Create a tool that analyzes text sentiment:
 
 ```python
 class SentimentAnalyzer:
     def analyze(self, text):
         """
-        分析文本情感
-        返回: {
+        Analyze text sentiment
+        Returns: {
             'sentiment': 'positive' | 'negative' | 'neutral',
             'confidence': 0.95,
-            'keywords': ['关键词1', '关键词2']
+            'keywords': ['keyword1', 'keyword2']
         }
         """
         pass
@@ -867,60 +867,60 @@ class SentimentAnalyzer:
 
 ---
 
-## 提示词工程最佳实践
+## Prompt Engineering Best Practices
 
-### 提示词的基本结构
+### Basic Structure of Prompts
 
-提示词工程是使用大语言模型的核心技能。一个好的提示词通常包含以下几个部分：系统提示词用于设定模型的角色和行为规范，例如指定模型扮演代码审查专家或技术文档翻译员。用户提示词包含具体的任务描述和输入数据。上下文信息为模型提供必要的背景知识，帮助模型更好地理解任务。输出格式要求明确指定期望的输出结构，例如使用表格、列表或特定的标记语言。
+Prompt engineering is a core skill for using large language models. A good prompt typically contains several components: the system prompt defines the model's role and behavioral rules, such as specifying the model as a code review expert or technical documentation translator. The user prompt contains the specific task description and input data. Context information provides the model with necessary background knowledge to better understand the task. Output format requirements explicitly specify the desired output structure, such as using tables, lists, or specific markup languages.
 
-### 提示词优化技巧
+### Prompt Optimization Techniques
 
-提升模型输出质量有几个关键技巧。首先是具体化指令，避免模糊的描述，例如将"写一篇文章"改为"用300字介绍GitHub Actions的核心概念，面向初学者"。其次是提供示例，在提示词中给出输入输出的示例对，让模型学习期望的格式和风格。第三是分步思考，对于复杂任务，引导模型逐步推理，而不是直接给出答案。第四是角色设定，为模型指定一个专业角色，可以显著提升输出的专业性和一致性。第五是约束条件，明确指定输出的长度、语言、风格等限制条件。
+There are several key techniques for improving model output quality. First, be specific in instructions and avoid vague descriptions, for example, change "write an article" to "introduce GitHub Actions core concepts in 300 words for beginners". Second, provide examples by giving input-output example pairs in the prompt to help the model learn the expected format and style. Third, use step-by-step thinking for complex tasks, guiding the model to reason step by step rather than providing answers directly. Fourth, role assignment by specifying a professional role for the model can significantly improve output professionalism and consistency. Fifth, constraint conditions by clearly specifying output length, language, style, and other limitations.
 
-### 模型选择指南
+### Model Selection Guide
 
-不同的模型适合不同的任务场景。对于简单的文本分类和信息提取任务，小型模型如 GPT-4o-mini 就足够，它的响应速度快且成本低。对于复杂的推理和创意写作任务，建议使用大型模型如 GPT-4o 或 Claude。对于代码生成和代码审查任务，需要选择在代码数据上训练过的模型。对于多语言任务，需要选择支持目标语言的模型。在实际应用中，建议先用小型模型进行原型验证，在确认效果后再考虑是否需要升级到大型模型。
+Different models are suitable for different task scenarios. For simple text classification and information extraction tasks, small models like GPT-4o-mini are sufficient, offering fast response times and low costs. For complex reasoning and creative writing tasks, it's recommended to use large models like GPT-4o or Claude. For code generation and code review tasks, models trained on code data should be selected. For multilingual tasks, models that support the target languages should be chosen. In practice, it's recommended to first use small models for prototype validation, then consider upgrading to large models only after confirming effectiveness.
 
-### 令牌管理与成本控制
+### Token Management and Cost Control
 
-使用大语言模型时，令牌消耗直接影响成本。输入令牌包括系统提示词、用户提示词和上下文信息的总长度。输出令牌是模型生成的响应长度。为了优化成本，可以采取以下措施：精简系统提示词，去除冗余的描述。控制输出长度，使用 `max_tokens` 参数限制生成长度。使用上下文窗口管理，只保留最近几轮的对话历史。对于结构化输出任务，使用 JSON 模式可以减少无效的格式化文本。对于批量处理任务，合并请求减少调用次数。
+When using large language models, token consumption directly impacts costs. Input tokens include the total length of system prompts, user prompts, and context information. Output tokens are the length of the model's generated response. To optimize costs, you can take the following measures: streamline system prompts by removing redundant descriptions. Control output length by using the `max_tokens` parameter to limit generation length. Use context window management by keeping only the most recent few rounds of conversation history. For structured output tasks, using JSON mode can reduce ineffective formatted text. For batch processing tasks, merge requests to reduce the number of API calls.
 
-### 错误处理与重试策略
+### Error Handling and Retry Strategies
 
-在生产环境中调用 AI 模型需要健壮的错误处理机制。常见的错误类型包括速率限制错误、服务不可用错误、上下文长度超限错误和内容过滤错误。对于速率限制错误，建议使用指数退避策略进行重试。对于服务不可用错误，可以配置多个模型作为备选方案。对于上下文长度超限，需要实现自动截断或摘要机制。对于内容过滤错误，需要调整输入内容或修改提示词。建议实现统一的错误处理中间件，集中管理所有模型调用的错误处理逻辑。
+Calling AI models in production environments requires robust error handling mechanisms. Common error types include rate limit errors, service unavailable errors, context length exceeded errors, and content filtering errors. For rate limit errors, it's recommended to use exponential backoff strategy for retries. For service unavailable errors, you can configure multiple models as fallback options. For context length exceeded, you need to implement automatic truncation or summarization mechanisms. For content filtering errors, you need to adjust input content or modify prompts. It's recommended to implement unified error handling middleware to centrally manage error handling logic for all model calls.
 
-### 评估指标体系
+### Evaluation Metrics System
 
-建立科学的模型评估体系对于选择和优化模型至关重要。常见的评估指标包括准确性指标，衡量模型输出的正确性。相关性指标，衡量模型输出与用户需求的匹配程度。流畅性指标，衡量模型输出的语言质量。安全性指标，衡量模型输出是否存在有害或不当内容。效率指标，包括响应时间、令牌消耗和并发处理能力。建议构建一个包含多种类型测试用例的评估数据集，定期对模型进行基准测试。
+Establishing a scientific model evaluation system is crucial for selecting and optimizing models. Common evaluation metrics include accuracy metrics that measure the correctness of model output. Relevance metrics that measure how well model output matches user needs. Fluency metrics that measure the language quality of model output. Safety metrics that measure whether model output contains harmful or inappropriate content. Efficiency metrics include response time, token consumption, and concurrent processing capability. It's recommended to build an evaluation dataset containing various types of test cases and conduct regular benchmark testing of models.
 
-### 数据隐私与安全
+### Data Privacy and Security
 
-在使用 AI 模型时，数据隐私和安全是需要特别关注的问题。不要在提示词中包含敏感的个人信息、商业机密或凭证数据。了解模型提供商的数据使用政策，确认输入数据是否会被用于模型训练。对于企业应用场景，建议使用企业级 API 服务，通常提供更严格的数据保护承诺。实现数据脱敏机制，在发送给模型之前对敏感信息进行匿名化处理。定期审查模型的使用日志，确保没有敏感数据泄露。
+When using AI models, data privacy and security are issues that require special attention. Do not include sensitive personal information, trade secrets, or credential data in prompts. Understand the model provider's data usage policies and confirm whether input data will be used for model training. For enterprise application scenarios, it's recommended to use enterprise-level API services, which typically provide stricter data protection commitments. Implement data anonymization mechanisms to anonymize sensitive information before sending to models. Regularly review model usage logs to ensure no sensitive data leakage.
 
-### 本地模型与云端模型的权衡
+### Trade-offs Between Local and Cloud Models
 
-选择本地部署模型还是使用云端 API 需要综合考虑多个因素。本地部署的优势包括数据不出本地网络、无网络延迟、无调用费用和完全可控。云端 API 的优势包括无需管理基础设施、持续获得模型更新、支持更大规模的并发和无需投入 GPU 硬件成本。对于开发和测试阶段，建议使用云端 API 快速验证。对于生产环境中的敏感数据处理，可以考虑本地部署。混合架构也是一种选择，将非敏感任务路由到云端 API，敏感任务使用本地模型。
+Choosing between deploying models locally or using cloud APIs requires considering multiple factors. Advantages of local deployment include data staying within the local network, no network latency, no call costs, and complete controllability. Advantages of cloud APIs include no need to manage infrastructure, continuous model updates, support for larger-scale concurrency, and no need to invest in GPU hardware costs. For development and testing phases, it's recommended to use cloud APIs for rapid validation. For sensitive data processing in production environments, consider local deployment. A hybrid architecture is also an option, routing non-sensitive tasks to cloud APIs and using local models for sensitive tasks.
 
 ---
 
-## 常见问题
+## Frequently Asked Questions
 
-### Q1：GitHub Models 有使用限制吗？
+### Q1: Does GitHub Models have usage limits?
 
-是的，GitHub Models 有速率限制：
-- 每分钟请求数限制
-- 每天请求数限制
-- 具体限制取决于你的 GitHub 计划
+Yes, GitHub Models has rate limits:
+- Per-minute request limits
+- Daily request limits
+- Specific limits depend on your GitHub plan
 
-### Q2：如何选择合适的模型？
+### Q2: How to choose the right model?
 
-选择模型时考虑：
-- **任务类型**：简单任务用小模型，复杂任务用大模型
-- **响应速度**：小模型通常更快
-- **成本**：大模型消耗更多令牌
-- **质量**：在测试数据上比较不同模型
+Consider the following when choosing a model:
+- **Task type**: Use small models for simple tasks, large models for complex tasks
+- **Response speed**: Small models are generally faster
+- **Cost**: Large models consume more tokens
+- **Quality**: Compare different models on test data
 
-### Q3：如何处理 API 调用失败？
+### Q3: How to handle API call failures?
 
 ```python
 import time
@@ -931,31 +931,31 @@ def call_model_with_retry(client, model, messages):
     return client.chat.completions.create(model=model, messages=messages)
 ```
 
-### Q4：如何优化模型调用成本？
+### Q4: How to optimize model call costs?
 
-1. 使用缓存避免重复调用
-2. 选择合适的模型大小
-3. 限制输出令牌数
-4. 批量处理请求
-
----
-
-## 延伸阅读
-
-- [GitHub Models 官方文档](https://docs.github.com/en/github-models)
-- [OpenAI API 文档](https://platform.openai.com/docs)
-- [Prompt Engineering 指南](https://docs.github.com/en/github-models/prototyping-with-ai-models)
+1. Use caching to avoid redundant calls
+2. Choose the appropriate model size
+3. Limit output token count
+4. Batch process requests
 
 ---
 
-## 练习总结
+## Further Reading
 
-通过本练习，你已经学会了：
+- [GitHub Models Official Documentation](https://docs.github.com/en/github-models)
+- [OpenAI API Documentation](https://platform.openai.com/docs)
+- [Prompt Engineering Guide](https://docs.github.com/en/github-models/prototyping-with-ai-models)
 
-1. ✅ 配置 GitHub Models 访问权限
-2. ✅ 使用 Python 调用 GitHub Models API
-3. ✅ 比较不同模型的性能和输出质量
-4. ✅ 构建代码审查助手和文本摘要工具
-5. ✅ 在 GitHub Actions 中集成 AI 模型
+---
 
-GitHub Models 为开发者提供了一个便捷的 AI 模型测试平台，建议多尝试不同的模型和提示词，找到最适合你用例的解决方案。
+## Exercise Summary
+
+Through this exercise, you have learned to:
+
+1. ✅ Configure GitHub Models access
+2. ✅ Use Python to call the GitHub Models API
+3. ✅ Compare the performance and output quality of different models
+4. ✅ Build a code review assistant and text summarization tool
+5. ✅ Integrate AI models into GitHub Actions
+
+GitHub Models provides developers with a convenient AI model testing platform. It's recommended to experiment with different models and prompts to find the solution that best fits your use case.

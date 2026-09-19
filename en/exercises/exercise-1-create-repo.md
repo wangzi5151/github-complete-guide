@@ -1,85 +1,85 @@
-# 练习 1：创建你的第一个仓库
+# Exercise 1: Create Your First Repository
 
-## 目标
+## Goal
 
-学习如何在 GitHub 上创建仓库并进行基本操作。
+Learn how to create a repository on GitHub and perform basic operations.
 
-## 步骤
+## Steps
 
-### 1. 在 GitHub 上创建仓库
+### 1. Create a repository on GitHub
 
-1. 登录 GitHub
-2. 点击右上角 **+** → **New repository**
-3. 填写信息：
+1. Log in to GitHub
+2. Click the **+** in the top right corner → **New repository**
+3. Fill in the information:
    - Repository name: `my-first-repo`
-   - Description: "我的第一个 GitHub 仓库"
-   - 选择 **Public**
+   - Description: "My first GitHub repository"
+   - Select **Public**
    - ✅ Add a README file
-4. 点击 **Create repository**
+4. Click **Create repository**
 
-### 2. 克隆仓库到本地
+### 2. Clone the repository to your local machine
 
 ```bash
-git clone git@github.com:你的用户名/my-first-repo.git
+git clone git@github.com:your-username/my-first-repo.git
 cd my-first-repo
 ```
 
-### 3. 创建文件并提交
+### 3. Create a file and commit
 
 ```bash
-# 创建新文件
+# Create a new file
 echo "# My First Repo" > index.html
 
-# 查看状态
+# Check the status
 git status
 
-# 添加文件
+# Add the file
 git add index.html
 
-# 提交
-git commit -m "feat: 添加首页文件"
+# Commit
+git commit -m "feat: add homepage file"
 
-# 推送
+# Push
 git push
 ```
 
-### 4. 创建新分支
+### 4. Create a new branch
 
 ```bash
-# 创建并切换到新分支
+# Create and switch to a new branch
 git checkout -b feature/add-about
 
-# 创建 About 页面
+# Create the About page
 echo "<h1>About Me</h1>" > about.html
 
-# 提交并推送
+# Commit and push
 git add about.html
-git commit -m "feat: 添加关于页面"
+git commit -m "feat: add about page"
 git push -u origin feature/add-about
 ```
 
-### 5. 创建 Pull Request
+### 5. Create a Pull Request
 
-1. 在 GitHub 上打开仓库
-2. 点击 **Pull requests**
-3. 点击 **New pull request**
-4. 选择 `feature/add-about` 分支
-5. 填写标题和描述
-6. 点击 **Create pull request**
+1. Open the repository on GitHub
+2. Click **Pull requests**
+3. Click **New pull request**
+4. Select the `feature/add-about` branch
+5. Fill in the title and description
+6. Click **Create pull request**
 
-### 6. 合并 Pull Request
+### 6. Merge the Pull Request
 
-1. 等待检查通过
-2. 点击 **Merge pull request**
-3. 点击 **Confirm merge**
+1. Wait for checks to pass
+2. Click **Merge pull request**
+3. Click **Confirm merge**
 
-## 验证
+## Verification
 
-完成上述步骤后，你应该看到：
-- GitHub 上有一个名为 `my-first-repo` 的仓库
-- 仓库中有 `index.html` 和 `about.html` 文件
-- 有一个已合并的 Pull Request
+After completing the steps above, you should see:
+- A repository named `my-first-repo` on GitHub
+- The repository contains `index.html` and `about.html` files
+- A merged Pull Request
 
-## 下一步
+## Next Step
 
-[练习 2：分支与合并练习 →](exercise-2-branch-merge.md)
+[Exercise 2: Branching and Merging Exercise →](exercise-2-branch-merge.md)

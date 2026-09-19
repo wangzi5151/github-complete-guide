@@ -28,7 +28,7 @@
 
 ### 15.1.1 First Impression Determines Everything
 
-On GitHub, README file is the first content visitors see. Research shows that when users visit a new project, they only spend an average of **7 seconds** deciding whether to continue了解 this project. This means your README must capture readers' attention within this短短几 seconds.
+On GitHub, README file is the first content visitors see. Research shows that when users visit a new project, they only spend an average of **7 seconds** deciding whether to continue learning about this project. This means your README must capture readers' attention within these few short seconds.
 
 An excellent README can:
 
@@ -43,7 +43,7 @@ An excellent README can:
 Think of README as your project's "facade". Just like a store's window display, README needs to:
 
 1. **Clearly convey value**: Users should understand what this project can do within a few seconds
-2. **Show project status**: Through badges展示 build status, version number, test coverage, etc.
+2. **Show project status**: Through badges, display build status, version number, test coverage, etc.
 3. **Provide quick entry**: Let users quickly install and experience the project
 4. **Build trust**: Show active community, timely maintenance and professional attitude
 
@@ -1117,7 +1117,7 @@ Use GitHub Issues to report Bugs, please include:
 ### Propose New Feature
 
 1. First discuss your idea in Issues
-2. Start implementation after获得 maintainer's approval
+2. Start implementation after obtaining maintainer's approval
 3. Follow project's code style
 
 ### Submit Code
@@ -1359,11 +1359,11 @@ SOFTWARE.
 ### 15.10.4 How to Choose
 
 ```
-Do you希望 modifications must be open source?
+Do you want modifications to must be open source?
 ├── Yes → GPL 3.0 / AGPL 3.0
 └── No → Do you need patent protection?
     ├── Yes → Apache 2.0
-    └── No → Do you在意保留 copyright notice when modifying?
+    └── No → Do you care about retaining the copyright notice when modifying?
         ├── Yes → BSD 3-Clause
         └── No → MIT
 ```

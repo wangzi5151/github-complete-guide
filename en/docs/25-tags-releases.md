@@ -2,7 +2,7 @@
 
 ## Overview
 
-In software development, version management is crucial. Git Tags and GitHub Releases are core tools for marking project milestones and managing release versions. This chapter will deeply explain various Git tag usages, complete GitHub Releases operation流程, and how to build automated release systems.
+In software development, version management is crucial. Git Tags and GitHub Releases are core tools for marking project milestones and managing release versions. This chapter will deeply explain various Git tag usages, complete GitHub Releases operation workflow, and how to build automated release systems.
 
 ---
 
@@ -12,7 +12,7 @@ In software development, version management is crucial. Git Tags and GitHub Rele
 
 Tags are references in Git used to mark specific commits, typically used to identify version release points. Unlike branches, the commit pointed to by a tag is fixed and does not move with new commits.
 
-The本质 of a tag is an immutable pointer to a specific commit, giving that commit a human-readable name for easy future reference and citation.
+The essence of a tag is an immutable pointer to a specific commit, giving that commit a human-readable name for easy future reference and citation.
 
 ### 1.2 Lightweight Tags
 
@@ -762,7 +762,7 @@ curl -X POST \
 
 ### 8.3 Pre-release Version Display
 
-- On Releases page, pre-release versions will have明显标识
+- On Releases page, pre-release versions will have obvious markers
 - By default not shown in latest Release
 - npm and other package managers can install via `@beta` tag
 
@@ -781,7 +781,7 @@ npm versions --json
 
 ### 9.1 Uses of Draft
 
-- Prepare Release content in advance, publish when时机成熟
+- Prepare Release content in advance, publish when the time is ripe
 - Coordinate with CI/CD to auto-fill Release Notes
 - Team collaboration to review Release content
 - Batch prepare Releases for multiple versions
@@ -806,7 +806,7 @@ gh release edit v1.1.0 \
   --title "v1.1.0 - New Version" \
   --notes-file RELEASE_NOTES.md
 
-# Publish Draft Release (取消 draft status)
+# Publish Draft Release (cancel draft status)
 gh release edit v1.1.0 --draft=false
 
 # Delete Draft Release
@@ -1646,7 +1646,7 @@ jobs:
 ### Release
 - [ ] Release Notes reviewed
 - [ ] Binary files built and tested
-- [ ] Package manager发布 successful
+- [ ] Package manager published successful
 - [ ] Docker image pushed
 
 ### Post-release
@@ -1686,7 +1686,7 @@ gh release create v1.2.1 \
 
 ## Summary
 
-This chapter详细介绍 Git Tags and GitHub Releases complete knowledge system:
+This chapter details Git Tags and GitHub Releases complete knowledge system:
 
 1. **Git Tags**: Differences and usage scenarios of lightweight and annotated tags
 2. **Tag Management**: Complete operations for creating, listing, deleting, renaming tags
@@ -1696,7 +1696,7 @@ This chapter详细介绍 Git Tags and GitHub Releases complete knowledge system:
 6. **Release Assets**: Binary file attachment management
 7. **Pre-release Versions**: alpha, beta, rc version management
 8. **Draft Release**: Usage scenarios of draft releases
-9. **Semantic Versioning**: SemVer specification详解
+9. **Semantic Versioning**: SemVer specification detailed explanation
 10. **Automated Release**: Complete CI/CD release process
 11. **Changelog Auto-generation**: Multiple tools and solutions
 12. **Multi-platform Release**: Cross-platform build and multi-registry release

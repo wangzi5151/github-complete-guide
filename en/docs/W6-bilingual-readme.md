@@ -1,67 +1,67 @@
-# 双语 README 指南
+# Bilingual README Guide
 
-## 1. 为什么需要双语 README
+## 1. Why You Need a Bilingual README
 
-### 1.1 全球化背景下的文档需求
+### 1.1 Documentation Needs in the Age of Globalization
 
-在当今开源社区蓬勃发展的时代，一个项目的受众往往不仅仅局限于某个国家或地区。对于中国开发者来说，创建双语（中英文）README 文档有以下几个核心价值：
+In today's era of thriving open-source communities, a project's audience often extends beyond a single country or region. For Chinese developers, creating a bilingual (Chinese-English) README document offers several core benefits:
 
-**扩大项目影响力：** 英文是全球开发者社区的通用语言，一份优秀的英文 README 可以让你的项目被全球开发者发现和使用。根据 GitHub 的统计数据，超过 70% 的开源项目使用英文作为主要文档语言。如果你的项目只有中文 README，就等于主动放弃了大部分潜在用户和贡献者。
+**Expand project reach:** English is the universal language of the global developer community. An excellent English README can make your project discoverable and usable by developers worldwide. According to GitHub statistics, over 70% of open-source projects use English as their primary documentation language. If your project only has a Chinese README, you are effectively giving up a large pool of potential users and contributors.
 
-**降低参与门槛：** 对于中文母语的开发者来说，中文 README 可以大幅降低理解和上手的门槛。即使是英语水平不错的开发者，在阅读技术文档时，母语的理解速度和准确性仍然更高。提供中文版本可以让更多国内开发者快速理解项目价值，并决定是否参与贡献。
+**Lower the barrier to participation:** For native Chinese speakers, a Chinese README significantly lowers the barrier to understanding and getting started. Even for developers with good English proficiency, comprehension speed and accuracy are still higher when reading technical documentation in their native language. Providing a Chinese version allows more domestic developers to quickly understand the project's value and decide whether to contribute.
 
-**展示专业性：** 一个维护良好的双语 README 向外界传递了项目团队的专业态度和国际化视野。这在商业开源项目中尤为重要，它可以帮助建立品牌信任度，吸引企业用户和赞助商。
+**Demonstrate professionalism:** A well-maintained bilingual README signals the project team's professional attitude and international perspective to the outside world. This is especially important for commercial open-source projects, as it helps build brand trust and attracts enterprise users and sponsors.
 
-**改善 SEO：** 搜索引擎会分别索引不同语言的文档。当用户用中文搜索相关技术时，你的中文 README 有机会出现在搜索结果中，从而带来更多的自然流量。
+**Improve SEO:** Search engines index documents in different languages separately. When users search for related technologies in Chinese, your Chinese README has a chance to appear in search results, bringing more organic traffic.
 
-### 1.2 双语 README 的挑战
+### 1.2 Challenges of Bilingual READMEs
 
-虽然双语 README 有很多好处，但也面临一些挑战：
+Although bilingual READMEs have many benefits, they also face some challenges:
 
-| 挑战 | 说明 | 解决方案 |
+| Challenge | Description | Solution |
 |------|------|----------|
-| **内容同步** | 两个语言版本需要保持一致 | 建立翻译工作流，使用自动化工具 |
-| **维护成本** | 每次更新都需要翻译两次 | 使用机器翻译加人工校对的模式 |
-| **排版差异** | 中英文排版习惯不同 | 制定统一的排版规范 |
-| **长度差异** | 中文通常比英文更简洁 | 适当调整布局和格式 |
-| **术语一致性** | 技术术语翻译需要统一 | 建立术语表 |
+| **Content Synchronization** | Two language versions need to stay consistent | Establish a translation workflow, use automation tools |
+| **Maintenance Cost** | Every update requires translating twice | Use machine translation combined with human proofreading |
+| **Typesetting Differences** | Chinese and English have different formatting conventions | Establish unified typesetting standards |
+| **Length Differences** | Chinese is generally more concise than English | Adjust layout and formatting accordingly |
+| **Terminology Consistency** | Technical terminology translations need to be unified | Create a glossary |
 
-### 1.3 什么项目需要双语 README
+### 1.3 Which Projects Need a Bilingual README
 
-并非所有项目都需要双语 README。以下情况建议创建双语版本：
+Not all projects need a bilingual README. The following situations are recommended for creating bilingual versions:
 
-- 项目面向全球开发者（如开源工具、框架、库）
-- 项目有国际化的用户群体
-- 项目团队有多语言成员
-- 项目希望吸引海外贡献者
-- 项目有商业化的潜力
+- Projects targeting global developers (such as open-source tools, frameworks, and libraries)
+- Projects with an international user base
+- Project teams with multilingual members
+- Projects hoping to attract overseas contributors
+- Projects with commercialization potential
 
-以下情况可以暂时不需要双语 README：
+The following situations may not need a bilingual README for the time being:
 
-- 项目仅面向特定地区的用户
-- 项目是内部使用的工具
-- 项目维护资源有限，无法保证翻译质量
+- Projects targeting users in a specific region only
+- Projects that are internal-use tools
+- Projects with limited maintenance resources that cannot guarantee translation quality
 
-### 1.4 双语 README 的实际案例
+### 1.4 Real-World Examples of Bilingual READMEs
 
-许多知名开源项目都采用了双语或多语 README 策略：
+Many well-known open-source projects have adopted bilingual or multilingual README strategies:
 
-- **Vue.js：** 提供了多种语言版本的文档，包括简体中文、日语、韩语等
-- **React：** 社区维护了多种语言的翻译版本
-- **Flutter：** 官方文档支持多种语言
-- **Ant Design：** 中英文双语文档是其一大特色
+- **Vue.js:** Provides documentation in multiple languages, including Simplified Chinese, Japanese, Korean, and more
+- **React:** The community maintains translated versions in multiple languages
+- **Flutter:** Official documentation supports multiple languages
+- **Ant Design:** Bilingual Chinese-English documentation is one of its distinctive features
 
-这些项目的成功经验证明，双语 README 不仅可行，而且能够显著提升项目的国际影响力。
+The success of these projects demonstrates that bilingual READMEs are not only feasible but can also significantly enhance a project's international influence.
 
 ---
 
-## 2. 双语 README 排版方案
+## 2. Bilingual README Layout Approaches
 
-### 2.1 方案一：同一文件，语言分区
+### 2.1 Approach One: Single File, Language Sections
 
-将两种语言的内容放在同一个 README 文件中，通过明显的分隔符区分。这种方式适合小型项目或文档内容较少的场景。
+Place both language contents in the same README file, separated by clear dividers. This approach is suitable for small projects or documentation with less content.
 
-结构示例：
+Structure example:
 
 ```markdown
 # Project Name / 项目名称
@@ -103,26 +103,26 @@ npm install -g my-tool
 ```
 ```
 
-**优点：** 维护简单，只有一个文件；用户可以在同一页面切换语言；不需要额外的文件管理。
+**Pros:** Simple to maintain, only one file; users can switch languages on the same page; no extra file management needed.
 
-**缺点：** 文件较长；GitHub 的语言检测可能不准确（可能识别为非英语项目）；不利于 SEO；当文档内容很多时，文件会变得非常长。
+**Cons:** The file becomes long; GitHub's language detection may be inaccurate (may identify it as a non-English project); not good for SEO; when the documentation is extensive, the file becomes very long.
 
-### 2.2 方案二：独立文件，互相链接（推荐）
+### 2.2 Approach Two: Separate Files, Cross-Linked (Recommended)
 
-为每种语言创建独立的 README 文件，并在文件顶部添加语言切换链接。这是最推荐的方案。
+Create a separate README file for each language, with language switch links at the top of each file. This is the most recommended approach.
 
-目录结构：
+Directory structure:
 
 ```
 project-root/
-├── README.md           # 英文版（主 README）
-├── README.zh-CN.md     # 简体中文版
-├── README.zh-TW.md     # 繁体中文版（可选）
-├── README.ja.md        # 日文版（可选）
-└── README.ko.md        # 韩文版（可选）
+├── README.md           # English version (main README)
+├── README.zh-CN.md     # Simplified Chinese version
+├── README.zh-TW.md     # Traditional Chinese version (optional)
+├── README.ja.md        # Japanese version (optional)
+└── README.ko.md        # Korean version (optional)
 ```
 
-英文 README.md 示例：
+English README.md example:
 
 ```markdown
 # Project Name
@@ -160,7 +160,7 @@ We welcome contributions! Please read our Contributing Guide first.
 MIT
 ```
 
-中文 README.zh-CN.md 示例：
+Chinese README.zh-CN.md example:
 
 ```markdown
 # 项目名称
@@ -198,13 +198,13 @@ my-tool deploy
 MIT
 ```
 
-**优点：** 文件结构清晰；GitHub 语言检测准确；有利于 SEO；每个文件大小适中；便于独立维护。
+**Pros:** Clear file structure; accurate GitHub language detection; good for SEO; each file is a reasonable size; easy to maintain independently.
 
-**缺点：** 维护成本稍高；需要在多个文件之间切换；需要确保内容同步。
+**Cons:** Slightly higher maintenance cost; requires switching between multiple files; content synchronization must be ensured.
 
-### 2.3 方案三：使用 GitHub 原生多语言支持
+### 2.3 Approach Three: Using GitHub Native Multilingual Support
 
-GitHub 支持为不同语言的用户提供本地化内容。在仓库的 .github 目录下创建语言特定的文件：
+GitHub supports providing localized content for users of different languages. Create language-specific files in the `.github` directory of the repository:
 
 ```
 .github/
@@ -217,15 +217,15 @@ GitHub 支持为不同语言的用户提供本地化内容。在仓库的 .githu
     └── bug_report.zh-CN.yml
 ```
 
-这种方式适合需要为多种文档提供多语言支持的项目。
+This approach is suitable for projects that need multilingual support for multiple documents.
 
-### 2.4 方案四：使用文档站点工具
+### 2.4 Approach Four: Using Documentation Site Tools
 
-对于文档量较大的项目，可以考虑使用专门的文档工具来管理多语言文档：
+For projects with extensive documentation, consider using specialized documentation tools to manage multilingual documentation:
 
 ```
 project-root/
-├── README.md                 # 简短的项目介绍
+├── README.md                 # Brief project introduction
 ├── docs/
 │   ├── en/
 │   │   ├── getting-started.md
@@ -235,54 +235,54 @@ project-root/
 │       ├── getting-started.md
 │       ├── api-reference.md
 │       └── examples.md
-└── docusaurus.config.js      # 或 VuePress、MkDocs 等配置
+└── docusaurus.config.js      # Or VuePress, MkDocs, etc. configuration
 ```
 
-常用的多语言文档工具：
+Common multilingual documentation tools:
 
-| 工具 | 特点 | 适用场景 |
+| Tool | Features | Use Case |
 |------|------|----------|
-| **Docusaurus** | React 生态，内置多语言支持 | 大型项目文档 |
-| **VuePress** | Vue 生态，简洁易用 | 中小型项目文档 |
-| **MkDocs** | Python 生态，Markdown 友好 | 技术文档 |
-| **GitBook** | 在线编辑，团队协作 | 商业文档 |
-| **VitePress** | Vue 3 生态，速度极快 | 现代项目文档 |
+| **Docusaurus** | React ecosystem, built-in multilingual support | Large project documentation |
+| **VuePress** | Vue ecosystem, simple and easy to use | Small to medium project documentation |
+| **MkDocs** | Python ecosystem, Markdown-friendly | Technical documentation |
+| **GitBook** | Online editing, team collaboration | Commercial documentation |
+| **VitePress** | Vue 3 ecosystem, extremely fast | Modern project documentation |
 
-### 2.5 方案选择建议
+### 2.5 Approach Selection Guide
 
-| 项目规模 | 推荐方案 | 理由 |
+| Project Scale | Recommended Approach | Reason |
 |----------|----------|------|
-| 小型项目（< 1000 行文档） | 方案一 | 维护简单，一个文件搞定 |
-| 中型项目（1000-10000 行） | 方案二 | 结构清晰，便于维护 |
-| 大型项目（> 10000 行） | 方案四 | 专业工具支持，功能完善 |
-| 开源库/框架 | 方案二 + 方案四 | README 用方案二，详细文档用方案四 |
+| Small projects (< 1000 lines of documentation) | Approach One | Simple to maintain, one file does it all |
+| Medium projects (1000-10000 lines) | Approach Two | Clear structure, easy to maintain |
+| Large projects (> 10000 lines) | Approach Four | Professional tool support, comprehensive features |
+| Open-source libraries/frameworks | Approach Two + Approach Four | README uses Approach Two, detailed documentation uses Approach Four |
 
 ---
 
-## 3. GitHub 自动语言检测
+## 3. GitHub Automatic Language Detection
 
-### 3.1 语言检测机制
+### 3.1 Language Detection Mechanism
 
-GitHub 使用 Linguist 库来检测仓库中使用的编程语言。Linguist 会分析文件扩展名、文件名和文件内容来确定语言类型。
+GitHub uses the Linguist library to detect programming languages used in repositories. Linguist analyzes file extensions, file names, and file content to determine language types.
 
-对于 README 文件，GitHub 会根据文件名中的语言代码来识别：
+For README files, GitHub identifies them based on the language code in the file name:
 
-| 文件名 | 语言 | 显示 |
+| File Name | Language | Display |
 |--------|------|------|
-| README.md | 英语（默认） | 主 README |
-| README.zh-CN.md | 简体中文 | 中文版 |
-| README.zh-TW.md | 繁体中文 | 繁体中文版 |
-| README.ja.md | 日语 | 日文版 |
-| README.ko.md | 韩语 | 韩文版 |
-| README.fr.md | 法语 | 法文版 |
-| README.de.md | 德语 | 德文版 |
-| README.es.md | 西班牙语 | 西班牙文版 |
-| README.pt-BR.md | 巴西葡萄牙语 | 巴西葡语版 |
-| README.ru.md | 俄语 | 俄文版 |
+| README.md | English (default) | Main README |
+| README.zh-CN.md | Simplified Chinese | Chinese version |
+| README.zh-TW.md | Traditional Chinese | Traditional Chinese version |
+| README.ja.md | Japanese | Japanese version |
+| README.ko.md | Korean | Korean version |
+| README.fr.md | French | French version |
+| README.de.md | German | German version |
+| README.es.md | Spanish | Spanish version |
+| README.pt-BR.md | Brazilian Portuguese | Brazilian Portuguese version |
+| README.ru.md | Russian | Russian version |
 
-### 3.2 优化语言检测
+### 3.2 Optimizing Language Detection
 
-如果你的仓库中有大量非英语文件，可能会影响 GitHub 的语言统计（导致仓库被标记为"中文项目"而非"英语项目"）。可以通过 .gitattributes 文件来调整：
+If your repository has a large number of non-English files, it may affect GitHub's language statistics (causing the repository to be labeled as a "Chinese project" rather than an "English project"). You can adjust this through a `.gitattributes` file:
 
 ```gitattributes
 # 将特定语言的 README 标记为文档（不计入语言统计）
@@ -301,11 +301,11 @@ src/generated/** linguist-generated=true
 vendor/** linguist-vendored=true
 ```
 
-### 3.3 在仓库主页显示语言切换
+### 3.3 Displaying Language Switching on the Repository Homepage
 
-GitHub 会自动在仓库主页显示 README.md 的内容。要让用户能够切换到其他语言版本，可以在 README 顶部添加语言切换链接。
+GitHub automatically displays the content of README.md on the repository homepage. To allow users to switch to other language versions, you can add language switch links at the top of the README.
 
-使用 HTML 格式创建居中的语言切换器：
+Create a centered language switcher using HTML format:
 
 ```html
 <p align="center">
@@ -316,9 +316,9 @@ GitHub 会自动在仓库主页显示 README.md 的内容。要让用户能够�
 </p>
 ```
 
-### 3.4 使用 shields.io 徽章
+### 3.4 Using shields.io Badges
 
-使用 shields.io 创建语言切换徽章，更加美观和醒目：
+Use shields.io to create language switch badges for a more visually appealing and prominent look:
 
 ```markdown
 [![English](https://img.shields.io/badge/English-blue?style=for-the-badge)](README.md)
@@ -327,7 +327,7 @@ GitHub 会自动在仓库主页显示 README.md 的内容。要让用户能够�
 [![한국어](https://img.shields.io/badge/한국어-orange?style=for-the-badge)](README.ko.md)
 ```
 
-还可以使用 flat、plastic 等不同样式：
+You can also use different styles such as flat, plastic, etc.:
 
 ```markdown
 ![English](https://img.shields.io/badge/English-flat?style=flat-square&logo=googletranslate&logoColor=white&color=blue)
@@ -336,39 +336,39 @@ GitHub 会自动在仓库主页显示 README.md 的内容。要让用户能够�
 
 ---
 
-## 4. 多语言 README 组织方式
+## 4. Multilingual README Organization
 
-### 4.1 文件命名规范
+### 4.1 File Naming Conventions
 
-遵循以下命名规范可以保持一致性：
+Follow these naming conventions to maintain consistency:
 
 ```
-# 基本格式
+# Basic format
 README.<language-code>.md
 
-# 语言代码参考（ISO 639-1 或 IETF BCP 47）
-README.zh-CN.md    # 简体中文
-README.zh-TW.md    # 繁体中文
-README.zh-HK.md    # 香港繁体
-README.en.md       # 英语（通常使用 README.md）
-README.ja.md       # 日语
-README.ko.md       # 韩语
-README.fr.md       # 法语
-README.de.md       # 德语
-README.es.md       # 西班牙语
-README.pt-BR.md    # 巴西葡萄牙语
-README.ru.md       # 俄语
-README.ar.md       # 阿拉伯语
-README.it.md       # 意大利语
-README.nl.md       # 荷兰语
-README.pl.md       # 波兰语
-README.th.md       # 泰语
-README.vi.md       # 越南语
+# Language code reference (ISO 639-1 or IETF BCP 47)
+README.zh-CN.md    # Simplified Chinese
+README.zh-TW.md    # Traditional Chinese
+README.zh-HK.md    # Hong Kong Traditional Chinese
+README.en.md       # English (usually use README.md)
+README.ja.md       # Japanese
+README.ko.md       # Korean
+README.fr.md       # French
+README.de.md       # German
+README.es.md       # Spanish
+README.pt-BR.md    # Brazilian Portuguese
+README.ru.md       # Russian
+README.ar.md       # Arabic
+README.it.md       # Italian
+README.nl.md       # Dutch
+README.pl.md       # Polish
+README.th.md       # Thai
+README.vi.md       # Vietnamese
 ```
 
-### 4.2 目录结构方案
+### 4.2 Directory Structure Approaches
 
-**方案 A：平铺结构（推荐）**
+**Approach A: Flat Structure (Recommended)**
 
 ```
 project-root/
@@ -378,9 +378,9 @@ project-root/
 └── README.ko.md
 ```
 
-优点：结构简单，GitHub 能够正确识别，文件易于查找。
+Pros: Simple structure, GitHub can correctly identify files, easy to find.
 
-**方案 B：translations 目录结构**
+**Approach B: Translations Directory Structure**
 
 ```
 project-root/
@@ -391,11 +391,11 @@ project-root/
     └── README.ko.md
 ```
 
-优点：根目录整洁，翻译文件集中管理。
+Pros: Clean root directory, translation files are centrally managed.
 
-缺点：GitHub 不会自动识别 translations 目录中的 README，需要在主 README 中手动链接。
+Cons: GitHub will not automatically recognize READMEs in the `translations` directory; they need to be manually linked in the main README.
 
-**方案 C：docs 目录结构**
+**Approach C: Docs Directory Structure**
 
 ```
 project-root/
@@ -406,16 +406,16 @@ project-root/
     └── README.ko.md
 ```
 
-适合已经使用 docs 目录存放文档的项目。
+Suitable for projects that already use the `docs` directory to store documentation.
 
-**推荐使用方案 A**，因为它最简单，且 GitHub 能够正确识别文件名中的语言代码。
+**Approach A is recommended** because it is the simplest, and GitHub can correctly identify the language code in the file name.
 
-### 4.3 多语言文档的内部链接
+### 4.3 Internal Links in Multilingual Documentation
 
-确保每个语言版本的文档中的链接都指向正确语言的文件：
+Ensure that links in each language version of the documentation point to files in the correct language:
 
 ```markdown
-<!-- 英文 README.md -->
+<!-- English README.md -->
 ## Documentation
 
 - [Getting Started](docs/en/getting-started.md)
@@ -425,7 +425,7 @@ project-root/
 ```
 
 ```markdown
-<!-- 中文 README.zh-CN.md -->
+<!-- Chinese README.zh-CN.md -->
 ## 文档
 
 - [快速开始](docs/zh-CN/getting-started.md)
@@ -434,13 +434,13 @@ project-root/
 - [English Documentation](docs/en/getting-started.md)
 ```
 
-### 4.4 图片和媒体的多语言处理
+### 4.4 Multilingual Handling of Images and Media
 
-对于包含截图或图表的文档，可以采用以下策略：
+For documents containing screenshots or diagrams, you can adopt the following strategies:
 
-**策略一：使用通用图片**
+**Strategy One: Use Universal Images**
 
-使用不包含文字的图片，或者使用代码生成的图表。例如使用 Mermaid 图表，因为 Mermaid 可以通过代码生成图表，天然支持多语言：
+Use images that do not contain text, or use code-generated diagrams. For example, use Mermaid diagrams, as Mermaid can generate diagrams through code and naturally supports multilingualism:
 
 ```mermaid
 graph TD
@@ -450,7 +450,7 @@ graph TD
     D --> C
 ```
 
-**策略二：为每种语言提供本地化图片**
+**Strategy Two: Provide Localized Images for Each Language**
 
 ```
 docs/
@@ -463,47 +463,47 @@ docs/
 │       └── architecture.svg
 ```
 
-**策略三：使用动态图片生成**
+**Strategy Three: Use Dynamic Image Generation**
 
-使用 GitHub Actions 自动生成不同语言版本的截图和图表。
+Use GitHub Actions to automatically generate screenshots and diagrams for different language versions.
 
 ---
 
-## 5. 翻译工作流与工具
+## 5. Translation Workflow and Tools
 
-### 5.1 翻译工作流
+### 5.1 Translation Workflow
 
-建立一个高效的翻译工作流是维护双语 README 的关键。推荐的工作流程如下：
+Establishing an efficient translation workflow is key to maintaining a bilingual README. The recommended workflow is as follows:
 
 ```
-原始文档更新 -> 检测变更 -> 机器翻译 -> 人工校对 -> 提交 PR -> 审查合并
+Original document update -> Detect changes -> Machine translation -> Human proofreading -> Submit PR -> Review and merge
 ```
 
-**详细步骤：**
+**Detailed steps:**
 
-1. **原始文档更新：** 维护者更新英文 README（或主要语言版本）
-2. **检测变更：** 使用工具检测哪些内容发生了变化，生成 diff
-3. **机器翻译：** 使用机器翻译工具生成初稿
-4. **人工校对：** 团队成员或社区贡献者校对翻译质量，修正不准确的翻译
-5. **提交 PR：** 将校对后的翻译作为 PR 提交
-6. **审查合并：** 维护者审查并合并翻译 PR
+1. **Original document update:** The maintainer updates the English README (or primary language version)
+2. **Detect changes:** Use tools to detect what content has changed, generating a diff
+3. **Machine translation:** Use machine translation tools to generate an initial draft
+4. **Human proofreading:** Team members or community contributors proofread the translation quality, correcting inaccurate translations
+5. **Submit PR:** Submit the proofread translation as a PR
+6. **Review and merge:** Maintainers review and merge the translation PR
 
-### 5.2 机器翻译工具对比
+### 5.2 Comparison of Machine Translation Tools
 
-| 工具 | 翻译质量 | 价格 | 特点 | 适用场景 |
+| Tool | Translation Quality | Price | Features | Use Case |
 |------|----------|------|------|----------|
-| **DeepL** | 极高 | 付费 API | 支持术语表，翻译最自然 | 专业文档翻译 |
-| **Google Translate** | 高 | 免费/付费 | 支持语言最多 | 快速初稿 |
-| **OpenAI GPT-4** | 极高 | 付费 API | 上下文理解强，可定制 | 复杂技术内容 |
-| **Claude** | 极高 | 付费 API | 长文本处理好 | 长文档翻译 |
-| **百度翻译** | 高 | 免费/付费 | 中文翻译质量好 | 中英互译 |
-| **有道翻译** | 高 | 免费/付费 | 中文翻译自然 | 中英互译 |
-| **腾讯翻译** | 高 | 免费/付费 | 国内访问快 | 中英互译 |
-| **阿里翻译** | 高 | 免费/付费 | 国内访问快 | 中英互译 |
+| **DeepL** | Extremely high | Paid API | Supports glossaries, most natural translation | Professional document translation |
+| **Google Translate** | High | Free/Paid | Supports the most languages | Quick drafts |
+| **OpenAI GPT-4** | Extremely high | Paid API | Strong context understanding, customizable | Complex technical content |
+| **Claude** | Extremely high | Paid API | Excellent long text processing | Long document translation |
+| **Baidu Translate** | High | Free/Paid | Good Chinese translation quality | Chinese-English translation |
+| **Youdao Translate** | High | Free/Paid | Natural Chinese translation | Chinese-English translation |
+| **Tencent Translate** | High | Free/Paid | Fast access within China | Chinese-English translation |
+| **Alibaba Translate** | High | Free/Paid | Fast access within China | Chinese-English translation |
 
-### 5.3 使用 GPT 进行翻译的脚本
+### 5.3 Translation Script Using GPT
 
-使用 OpenAI API 进行翻译的 Python 示例脚本：
+A Python example script for translation using the OpenAI API:
 
 ```python
 #!/usr/bin/env python3
@@ -586,9 +586,9 @@ if __name__ == "__main__":
     main()
 ```
 
-### 5.4 翻译术语表
+### 5.4 Translation Glossary
 
-建立术语表和翻译记忆库，确保翻译一致性：
+Establish a glossary and translation memory to ensure translation consistency:
 
 ```yaml
 # glossary.yml - 技术术语翻译对照表
@@ -682,9 +682,9 @@ terms:
     note: 持续集成/持续部署，通常不翻译
 ```
 
-### 5.5 翻译质量检查脚本
+### 5.5 Translation Quality Check Script
 
-使用脚本检查翻译质量，确保两个版本的文档结构一致：
+Use a script to check translation quality, ensuring the document structure is consistent between both versions:
 
 ```python
 #!/usr/bin/env python3
@@ -773,11 +773,11 @@ if __name__ == "__main__":
 
 ---
 
-## 6. GitHub Actions 自动翻译
+## 6. GitHub Actions Automated Translation
 
-### 6.1 自动翻译工作流
+### 6.1 Automated Translation Workflow
 
-创建一个 GitHub Actions 工作流，当英文 README 更新时自动触发翻译：
+Create a GitHub Actions workflow that automatically triggers translation when the English README is updated:
 
 ```yaml
 # .github/workflows/translate-readme.yml
@@ -838,9 +838,9 @@ jobs:
           delete-branch: true
 ```
 
-### 6.2 使用 DeepL API 翻译
+### 6.2 Using DeepL API for Translation
 
-DeepL 是目前翻译质量最高的机器翻译工具之一，特别适合技术文档翻译：
+DeepL is currently one of the machine translation tools with the highest translation quality, especially suitable for technical document translation:
 
 ```yaml
 # .github/workflows/translate-deepl.yml
@@ -878,7 +878,7 @@ jobs:
           git push
 ```
 
-### 6.3 使用 GitHub Actions Marketplace 的翻译 Action
+### 6.3 Using GitHub Actions Marketplace Translation Actions
 
 ```yaml
 # .github/workflows/translate-action.yml
@@ -904,9 +904,9 @@ jobs:
           output: 'README.zh-CN.md'
 ```
 
-### 6.4 翻译质量自动检查
+### 6.4 Automated Translation Quality Check
 
-在 PR 中自动检查翻译质量：
+Automatically check translation quality in PRs:
 
 ```yaml
 # .github/workflows/check-translation.yml
@@ -947,25 +947,25 @@ jobs:
 
 ---
 
-## 7. 双语文档的维护策略
+## 7. Bilingual Documentation Maintenance Strategy
 
-### 7.1 维护原则
+### 7.1 Maintenance Principles
 
-**原则一：单一事实来源**
+**Principle One: Single Source of Truth**
 
-确定一个主要语言版本作为"事实来源"（通常是英文），其他语言版本基于它进行翻译。避免在不同语言版本中添加独立的内容，这会导致版本不一致。
+Designate one primary language version as the "source of truth" (usually English), and base other language versions on it for translation. Avoid adding independent content in different language versions, as this will cause version inconsistency.
 
-**原则二：同步更新**
+**Principle Two: Synchronized Updates**
 
-当主要语言版本更新时，应在合理的时间内（如 1-2 周）更新其他语言版本。可以设置自动化提醒机制。
+When the primary language version is updated, other language versions should be updated within a reasonable timeframe (e.g., 1-2 weeks). Automated reminder mechanisms can be set up.
 
-**原则三：质量优先**
+**Principle Three: Quality First**
 
-宁可不提供翻译，也不要提供低质量的翻译。低质量的机器翻译会误导用户，损害项目声誉。建议采用"机器翻译 + 人工校对"的模式。
+It is better to not provide a translation than to provide a low-quality one. Low-quality machine translations can mislead users and damage the project's reputation. It is recommended to adopt a "machine translation + human proofreading" model.
 
-**原则四：社区参与**
+**Principle Four: Community Involvement**
 
-鼓励社区贡献翻译，并为翻译贡献者提供认可。可以在 README 中列出翻译贡献者：
+Encourage community contributions to translations and provide recognition for translation contributors. Translation contributors can be listed in the README:
 
 ```markdown
 ## 翻译贡献者
@@ -977,25 +977,25 @@ jobs:
 - [@contributor3](https://github.com/contributor3) - 韩文翻译
 ```
 
-### 7.2 版本控制策略
+### 7.2 Version Control Strategy
 
-为不同语言版本的文档建立清晰的版本控制策略：
+Establish a clear version control strategy for documentation in different languages:
 
-**策略一：同一分支（推荐）**
+**Strategy One: Same Branch (Recommended)**
 
-所有语言版本在同一个分支中维护，变更通过 PR 进行审查。
+All language versions are maintained in the same branch, with changes reviewed through PRs.
 
-**策略二：独立分支**
+**Strategy Two: Independent Branches**
 
-每种语言版本在独立的分支中维护，适合大型团队。
+Each language version is maintained in an independent branch, suitable for large teams.
 
-**策略三：使用标签**
+**Strategy Three: Use Tags**
 
-为每个发布版本打标签，确保文档版本与软件版本对应。
+Tag each release to ensure documentation versions correspond to software versions.
 
-### 7.3 翻译更新提醒
+### 7.3 Translation Update Reminders
 
-使用 GitHub Actions 定期检查翻译是否过期：
+Use GitHub Actions to periodically check if translations are outdated:
 
 ```yaml
 # .github/workflows/translation-reminder.yml
@@ -1042,9 +1042,9 @@ jobs:
           check_freshness README.md README.ko.md "韩文" 14
 ```
 
-### 7.4 贡献者指南中的翻译说明
+### 7.4 Translation Notes in the Contributing Guide
 
-在 CONTRIBUTING.md 中添加翻译相关的说明：
+Add translation-related instructions in CONTRIBUTING.md:
 
 ```markdown
 ## 翻译贡献
@@ -1074,13 +1074,13 @@ jobs:
 
 ---
 
-## 8. 中英文排版规范
+## 8. Chinese-English Typesetting Standards
 
-### 8.1 中文排版基本规则
+### 8.1 Basic Rules for Chinese Typesetting
 
-在中文技术文档中，遵循以下排版规范可以提升文档的可读性和专业性：
+In Chinese technical documentation, following these typesetting standards can improve readability and professionalism:
 
-**中英文之间加空格：**
+**Add spaces between Chinese and English:**
 
 ```markdown
 # 不推荐
@@ -1090,7 +1090,7 @@ jobs:
 这是一个 GitHub 项目
 ```
 
-**数字与中文之间加空格：**
+**Add spaces between numbers and Chinese:**
 
 ```markdown
 # 不推荐
@@ -1100,7 +1100,7 @@ jobs:
 项目有 3 个主要功能
 ```
 
-**标点符号使用中文全角：**
+**Use full-width Chinese punctuation:**
 
 ```markdown
 # 不推荐
@@ -1110,7 +1110,7 @@ jobs:
 这是一个项目。它有很多功能。
 ```
 
-**专有名词保持原样：**
+**Keep proper nouns as-is:**
 
 ```markdown
 # 不推荐
@@ -1120,25 +1120,25 @@ jobs:
 使用 Git 进行版本控制
 ```
 
-**完整的标点符号对照：**
+**Complete punctuation reference:**
 
-| 中文 | 英文 | 说明 |
+| Chinese | English | Description |
 |------|------|------|
-| ， | , | 逗号 |
-| 。 | . | 句号 |
-| ； | ; | 分号 |
-| ： | : | 冒号 |
-| ？ | ? | 问号 |
-| ！ | ! | 感叹号 |
-| （ ） | ( ) | 括号 |
-| 「 」 | " " | 引号 |
-| 《 》 | < > | 书名号 |
-| —— | -- | 破折号 |
-| …… | ... | 省略号 |
+| ， | , | Comma |
+| 。 | . | Period |
+| ； | ; | Semicolon |
+| ： | : | Colon |
+| ？ | ? | Question mark |
+| ！ | ! | Exclamation mark |
+| （ ） | ( ) | Parentheses |
+| 「 」 | " " | Quotation marks |
+| 《 》 | < > | Book title marks |
+| —— | -- | Dash |
+| …… | ... | Ellipsis |
 
-### 8.2 英文排版基本规则
+### 8.2 Basic Rules for English Typesetting
 
-**句子首字母大写：**
+**Capitalize the first letter of sentences:**
 
 ```markdown
 # 不推荐
@@ -1148,7 +1148,7 @@ this is a project.
 This is a project.
 ```
 
-**专有名词正确大小写：**
+**Correct capitalization of proper nouns:**
 
 ```markdown
 # 不推荐
@@ -1158,48 +1158,48 @@ github, javascript, typescript
 GitHub, JavaScript, TypeScript
 ```
 
-**常见的大小写错误：**
+**Common capitalization errors:**
 
-| 错误 | 正确 | 说明 |
+| Incorrect | Correct | Description |
 |------|------|------|
-| github | GitHub | 公司名 |
-| javascript | JavaScript | 语言名 |
-| typescript | TypeScript | 语言名 |
-| nodejs | Node.js | 运行时名 |
-| npm | npm | 全小写（官方规范） |
-| webpack | webpack | 全小写（官方规范） |
-| vuejs | Vue.js | 框架名 |
-| reactjs | React | 框架名 |
-| angularjs | Angular | 框架名 |
-| docker | Docker | 容器平台 |
-| kubernetes | Kubernetes | 容器编排 |
-| json | JSON | 数据格式 |
-| yaml | YAML | 数据格式 |
-| api | API | 缩写全大写 |
-| cli | CLI | 缩写全大写 |
-| ide | IDE | 缩写全大写 |
-| html | HTML | 缩写全大写 |
-| css | CSS | 缩写全大写 |
-| url | URL | 缩写全大写 |
-| http | HTTP | 缩写全大写 |
-| https | HTTPS | 缩写全大写 |
-| ssh | SSH | 缩写全大写 |
-| git | Git | 版本控制 |
-| linux | Linux | 操作系统 |
-| macos | macOS | 操作系统 |
-| windows | Windows | 操作系统 |
-| ios | iOS | 操作系统 |
-| android | Android | 操作系统 |
+| github | GitHub | Company name |
+| javascript | JavaScript | Language name |
+| typescript | TypeScript | Language name |
+| nodejs | Node.js | Runtime name |
+| npm | npm | All lowercase (official convention) |
+| webpack | webpack | All lowercase (official convention) |
+| vuejs | Vue.js | Framework name |
+| reactjs | React | Framework name |
+| angularjs | Angular | Framework name |
+| docker | Docker | Container platform |
+| kubernetes | Kubernetes | Container orchestration |
+| json | JSON | Data format |
+| yaml | YAML | Data format |
+| api | API | All-caps abbreviation |
+| cli | CLI | All-caps abbreviation |
+| ide | IDE | All-caps abbreviation |
+| html | HTML | All-caps abbreviation |
+| css | CSS | All-caps abbreviation |
+| url | URL | All-caps abbreviation |
+| http | HTTP | All-caps abbreviation |
+| https | HTTPS | All-caps abbreviation |
+| ssh | SSH | All-caps abbreviation |
+| git | Git | Version control |
+| linux | Linux | Operating system |
+| macos | macOS | Operating system |
+| windows | Windows | Operating system |
+| ios | iOS | Operating system |
+| android | Android | Operating system |
 
-### 8.3 代码相关排版
+### 8.3 Code-Related Typesetting
 
-**行内代码使用反引号：**
+**Use backticks for inline code:**
 
 ```markdown
 使用 `npm install` 安装依赖。
 ```
 
-**代码块指定语言：**
+**Specify language for code blocks:**
 
 ````markdown
 ```javascript
@@ -1208,13 +1208,13 @@ console.log(greeting);
 ```
 ````
 
-**文件路径使用行内代码：**
+**Use inline code for file paths:**
 
 ```markdown
 配置文件位于 `config/settings.yml`。
 ```
 
-**命令行示例使用 bash 代码块：**
+**Use bash code blocks for command-line examples:**
 
 ````markdown
 ```bash
@@ -1226,9 +1226,9 @@ npm run dev
 ```
 ````
 
-### 8.4 链接和图片
+### 8.4 Links and Images
 
-**链接文本要有描述性：**
+**Make link text descriptive:**
 
 ```markdown
 # 不推荐
@@ -1238,7 +1238,7 @@ npm run dev
 查看[官方文档](https://docs.example.com)获取更多信息。
 ```
 
-**图片添加替代文本：**
+**Add alt text to images:**
 
 ```markdown
 # 不推荐
@@ -1250,9 +1250,9 @@ npm run dev
 
 ---
 
-## 9. 实战模板
+## 9. Practical Templates
 
-### 9.1 完整的英文 README 模板
+### 9.1 Complete English README Template
 
 ```markdown
 # Project Name
@@ -1314,7 +1314,7 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 - Inspired by [other-project](https://github.com/other/project)
 ```
 
-### 9.2 完整的中文 README 模板
+### 9.2 Complete Chinese README Template
 
 ```markdown
 # 项目名称
@@ -1376,24 +1376,24 @@ console.log(result);
 - 灵感来源于 [other-project](https://github.com/other/project)
 ```
 
-### 9.3 多语言 README 的完整示例
+### 9.3 Complete Example of a Multilingual README
 
-以下是一个完整的多语言 README 项目的目录结构和文件内容示例：
+Here is a complete example of a multilingual README project's directory structure and file contents:
 
 ```
 my-project/
-├── README.md                 # 英文版
-├── README.zh-CN.md           # 简体中文版
-├── README.ja.md              # 日文版
-├── .gitattributes            # 语言检测配置
-├── glossary.yml              # 术语表
+├── README.md                 # English version
+├── README.zh-CN.md           # Simplified Chinese version
+├── README.ja.md              # Japanese version
+├── .gitattributes            # Language detection configuration
+├── glossary.yml              # Glossary
 ├── scripts/
-│   ├── translate.py          # 翻译脚本
-│   └── check_translation.py  # 质量检查脚本
+│   ├── translate.py          # Translation script
+│   └── check_translation.py  # Quality check script
 ├── .github/
 │   └── workflows/
-│       ├── translate.yml     # 自动翻译工作流
-│       └── check.yml         # 质量检查工作流
+│       ├── translate.yml     # Automated translation workflow
+│       └── check.yml         # Quality check workflow
 └── docs/
     ├── en/
     │   └── ...
@@ -1401,9 +1401,9 @@ my-project/
         └── ...
 ```
 
-### 9.4 使用 Docusaurus 构建多语言文档站点
+### 9.4 Building a Multilingual Documentation Site with Docusaurus
 
-对于需要更完整多语言支持的项目，推荐使用 Docusaurus：
+For projects that need more comprehensive multilingual support, Docusaurus is recommended:
 
 ```javascript
 // docusaurus.config.js
@@ -1437,12 +1437,12 @@ module.exports = {
 };
 ```
 
-对应的目录结构：
+Corresponding directory structure:
 
 ```
 docs/
-├── intro.md              # 英文版
-├── getting-started.md    # 英文版
+├── intro.md              # English version
+├── getting-started.md    # English version
 i18n/
 ├── zh-CN/
 │   ├── docusaurus-plugin-content-docs/
@@ -1457,39 +1457,39 @@ i18n/
     └── ...
 ```
 
-### 9.5 最佳实践总结
+### 9.5 Best Practices Summary
 
-1. **选择合适的方案：** 根据项目规模和团队能力选择最合适的多语言方案
-2. **保持结构一致：** 所有语言版本应保持相同的章节结构
-3. **使用术语表：** 建立统一的术语翻译表，确保一致性
-4. **自动化翻译：** 使用 GitHub Actions 实现翻译自动化
-5. **质量检查：** 使用脚本自动检查翻译质量
-6. **社区参与：** 鼓励社区贡献翻译，降低维护负担
-7. **定期更新：** 设置提醒机制，确保翻译不会过期
-8. **排版规范：** 遵循中英文排版规范，提升文档专业性
-9. **SEO 优化：** 使用独立文件方案，便于搜索引擎索引
-10. **徽章切换：** 在 README 顶部添加醒目的语言切换链接
+1. **Choose the right approach:** Select the most suitable multilingual approach based on project scale and team capabilities
+2. **Maintain structural consistency:** All language versions should have the same section structure
+3. **Use a glossary:** Establish a unified terminology translation table to ensure consistency
+4. **Automate translation:** Use GitHub Actions to automate the translation process
+5. **Quality checks:** Use scripts to automatically check translation quality
+6. **Community involvement:** Encourage community translation contributions to reduce maintenance burden
+7. **Regular updates:** Set up reminder mechanisms to ensure translations do not become outdated
+8. **Typesetting standards:** Follow Chinese-English typesetting standards to improve document professionalism
+9. **SEO optimization:** Use the separate file approach for easier search engine indexing
+10. **Badge switching:** Add prominent language switch links at the top of the README
 
 ---
 
-## 总结
+## Summary
 
-双语 README 是开源项目国际化的重要一步。通过本文介绍的方法和工具，你可以：
+A bilingual README is an important step in the internationalization of open-source projects. Through the methods and tools introduced in this article, you can:
 
-1. **选择合适的排版方案：** 根据项目规模选择同一文件或多文件方案
-2. **利用 GitHub 特性：** 使用文件命名规范让 GitHub 识别多语言版本
-3. **建立翻译工作流：** 使用机器翻译加人工校对的模式提高效率
-4. **自动化翻译流程：** 使用 GitHub Actions 实现翻译自动化
-5. **保证翻译质量：** 使用质量检查脚本确保结构一致性
-6. **遵循排版规范：** 中英文排版规范化，提升文档专业性
+1. **Choose the right layout approach:** Select single-file or multi-file approach based on project scale
+2. **Leverage GitHub features:** Use file naming conventions for GitHub to recognize multilingual versions
+3. **Establish a translation workflow:** Use machine translation combined with human proofreading to improve efficiency
+4. **Automate the translation process:** Use GitHub Actions to automate translation
+5. **Ensure translation quality:** Use quality check scripts to ensure structural consistency
+6. **Follow typesetting standards:** Standardize Chinese-English typesetting to improve document professionalism
 
-记住，好的双语 README 不仅仅是翻译，更是一种对全球开发者的尊重和邀请。投入时间和精力维护高质量的多语言文档，将会为你的项目带来更广泛的影响力和更多的贡献者。
+Remember, a good bilingual README is not just about translation -- it is a sign of respect and invitation to developers around the world. Investing time and effort in maintaining high-quality multilingual documentation will bring broader influence and more contributors to your project.
 
-## 10. 高级主题与进阶技巧
+## 10. Advanced Topics and Techniques
 
-### 10.1 使用 GitHub Discussions 进行多语言社区管理
+### 10.1 Using GitHub Discussions for Multilingual Community Management
 
-除了 README 文件，GitHub Discussions 也是多语言社区管理的重要场所：
+In addition to README files, GitHub Discussions is also an important venue for multilingual community management:
 
 ```yaml
 # .github/DISCUSSION_CATEGORY.yml
@@ -1506,9 +1506,9 @@ i18n/
   emoji: "🎉"
 ```
 
-### 10.2 多语言贡献者指南
+### 10.2 Multilingual Contributing Guide
 
-为不同语言的贡献者提供专门的贡献指南：
+Provide dedicated contributing guides for contributors of different languages:
 
 ```markdown
 # CONTRIBUTING.md
@@ -1560,9 +1560,9 @@ We welcome translations! Please follow these guidelines:
 - 使用 `glossary.yml` 中的术语表确保翻译一致性
 ```
 
-### 10.3 自动化翻译质量保障
+### 10.3 Automated Translation Quality Assurance
 
-建立完善的自动化翻译质量保障体系：
+Establish a comprehensive automated translation quality assurance system:
 
 ```yaml
 # .github/workflows/translation-quality.yml
@@ -1630,9 +1630,9 @@ jobs:
           done
 ```
 
-### 10.4 多语言 SEO 优化
+### 10.4 Multilingual SEO Optimization
 
-为不同语言版本的文档进行 SEO 优化：
+Perform SEO optimization for documentation in different language versions:
 
 ```html
 <!-- 在 README.md 中添加 SEO 相关的 HTML 标签 -->
@@ -1649,7 +1649,7 @@ jobs:
 </p>
 ```
 
-使用 `.gitattributes` 优化 GitHub 的语言识别：
+Use `.gitattributes` to optimize GitHub's language recognition:
 
 ```gitattributes
 # 告诉 GitHub 这些文件是文档，不应计入语言统计
@@ -1662,9 +1662,9 @@ README.ko.md linguist-documentation=true
 *.ts linguist-detectable=true
 ```
 
-### 10.5 国际化文档站点架构
+### 10.5 Internationalized Documentation Site Architecture
 
-对于大型项目，建立完善的国际化文档站点架构：
+For large projects, establish a comprehensive internationalized documentation site architecture:
 
 ```
 project/
@@ -1698,7 +1698,7 @@ project/
 └── README.zh-CN.md
 ```
 
-Docusaurus 多语言配置示例：
+Docusaurus multilingual configuration example:
 
 ```javascript
 // docusaurus.config.js
@@ -1737,9 +1737,9 @@ module.exports = {
 };
 ```
 
-### 10.6 翻译记忆库与术语管理
+### 10.6 Translation Memory and Terminology Management
 
-建立企业级的翻译记忆库和术语管理系统：
+Establish enterprise-level translation memory and terminology management systems:
 
 ```yaml
 # glossary.yml - 完整的术语管理文件
@@ -1886,9 +1886,9 @@ terms:
     context: Open source license
 ```
 
-### 10.7 翻译贡献者认可体系
+### 10.7 Translation Contributor Recognition System
 
-建立完善的翻译贡献者认可体系，激励社区参与翻译：
+Establish a comprehensive translation contributor recognition system to motivate community participation in translation:
 
 ```markdown
 ## Translation Contributors / 翻译贡献者
@@ -1914,9 +1914,9 @@ Want to help translate? See our [Translation Guide](docs/translations/README.md)
 想帮助翻译？请查看我们的[翻译指南](docs/translations/README.md)。
 ```
 
-### 10.8 多语言文档的测试策略
+### 10.8 Testing Strategy for Multilingual Documentation
 
-为多语言文档建立测试策略，确保翻译质量：
+Establish a testing strategy for multilingual documentation to ensure translation quality:
 
 ```python
 #!/usr/bin/env python3
@@ -2006,9 +2006,9 @@ if __name__ == '__main__':
     pytest.main([__file__, '-v'])
 ```
 
-### 10.9 使用 AI 辅助翻译的最佳实践
+### 10.9 Best Practices for AI-Assisted Translation
 
-结合 AI 工具提升翻译效率和质量：
+Combine AI tools to improve translation efficiency and quality:
 
 ```python
 #!/usr/bin/env python3
@@ -2116,82 +2116,82 @@ if __name__ == "__main__":
 
 ---
 
-## 总结
+## Summary
 
-双语 README 是开源项目国际化的重要一步。通过本文介绍的方法和工具，你可以：
+A bilingual README is an important step in the internationalization of open-source projects. Through the methods and tools introduced in this article, you can:
 
-1. **选择合适的排版方案：** 根据项目规模选择同一文件或多文件方案，推荐使用独立文件方案
-2. **利用 GitHub 特性：** 使用文件命名规范让 GitHub 识别多语言版本，通过 .gitattributes 优化语言检测
-3. **建立翻译工作流：** 使用机器翻译加人工校对的模式提高效率，建立术语表确保一致性
-4. **自动化翻译流程：** 使用 GitHub Actions 实现翻译自动化，设置质量检查和更新提醒
-5. **保证翻译质量：** 使用质量检查脚本确保结构一致性，建立测试策略验证翻译质量
-6. **遵循排版规范：** 中英文排版规范化，提升文档专业性和可读性
-7. **建立社区认可：** 为翻译贡献者提供认可，激励社区参与翻译工作
-8. **持续优化改进：** 定期审查翻译质量，根据反馈持续优化翻译流程
+1. **Choose the right layout approach:** Select single-file or multi-file approach based on project scale; the separate file approach is recommended
+2. **Leverage GitHub features:** Use file naming conventions for GitHub to recognize multilingual versions; optimize language detection through `.gitattributes`
+3. **Establish a translation workflow:** Use machine translation combined with human proofreading to improve efficiency; create a glossary to ensure consistency
+4. **Automate the translation process:** Use GitHub Actions to automate translation; set up quality checks and update reminders
+5. **Ensure translation quality:** Use quality check scripts to ensure structural consistency; establish testing strategies to verify translation quality
+6. **Follow typesetting standards:** Standardize Chinese-English typesetting to improve document professionalism and readability
+7. **Build community recognition:** Provide recognition for translation contributors to motivate community participation in translation work
+8. **Continuously optimize and improve:** Regularly review translation quality and continuously optimize the translation process based on feedback
 
-记住，好的双语 README 不仅仅是翻译，更是一种对全球开发者的尊重和邀请。投入时间和精力维护高质量的多语言文档，将会为你的项目带来更广泛的影响力和更多的贡献者。在实践中，建议从核心文档开始，逐步扩展到完整的多语言支持，同时建立可持续的翻译维护机制。
+Remember, a good bilingual README is not just about translation -- it is a sign of respect and invitation to developers around the world. Investing time and effort in maintaining high-quality multilingual documentation will bring broader influence and more contributors to your project. In practice, it is recommended to start with core documentation and gradually expand to complete multilingual support while establishing a sustainable translation maintenance mechanism.
 
-## 11. 附录：多语言文档工具与资源
+## 11. Appendix: Multilingual Documentation Tools and Resources
 
-### 11.1 推荐的翻译工具
+### 11.1 Recommended Translation Tools
 
-| 工具名称 | 类型 | 特点 | 适用场景 |
+| Tool Name | Type | Features | Use Case |
 |----------|------|------|----------|
-| DeepL | 在线/API | 翻译质量最高 | 专业文档翻译 |
-| Google Translate | 在线/API | 支持语言最多 | 快速初稿 |
-| OpenAI GPT-4 | API | 上下文理解强 | 复杂技术内容 |
-| Claude | API | 长文本处理好 | 长文档翻译 |
-| 百度翻译 | 在线/API | 中文翻译好 | 中英互译 |
-| 有道翻译 | 在线/API | 中文自然 | 中英互译 |
-| Crowdin | 平台 | 专业翻译管理 | 大型项目 |
-| Transifex | 平台 | 团队协作 | 商业项目 |
-| Lokalise | 平台 | 移动应用友好 | 应用本地化 |
+| DeepL | Online/API | Highest translation quality | Professional document translation |
+| Google Translate | Online/API | Supports the most languages | Quick drafts |
+| OpenAI GPT-4 | API | Strong context understanding | Complex technical content |
+| Claude | API | Excellent long text processing | Long document translation |
+| Baidu Translate | Online/API | Good Chinese translation | Chinese-English translation |
+| Youdao Translate | Online/API | Natural Chinese | Chinese-English translation |
+| Crowdin | Platform | Professional translation management | Large projects |
+| Transifex | Platform | Team collaboration | Commercial projects |
+| Lokalise | Platform | Mobile app friendly | Application localization |
 
-### 11.2 推荐的文档工具
+### 11.2 Recommended Documentation Tools
 
-| 工具名称 | 特点 | 多语言支持 | 适用场景 |
+| Tool Name | Features | Multilingual Support | Use Case |
 |----------|------|-----------|----------|
-| Docusaurus | React 生态，功能完善 | 内置多语言 | 大型项目文档 |
-| VuePress | Vue 生态，简洁易用 | 插件支持 | 中小型项目 |
-| VitePress | Vue 3 生态，速度极快 | 插件支持 | 现代项目文档 |
-| MkDocs | Python 生态，Markdown 友好 | 插件支持 | 技术文档 |
-| GitBook | 在线编辑，团队协作 | 内置多语言 | 商业文档 |
-| Sphinx | Python 生态，功能强大 | 内置多语言 | Python 项目 |
+| Docusaurus | React ecosystem, comprehensive features | Built-in multilingual | Large project documentation |
+| VuePress | Vue ecosystem, simple and easy to use | Plugin support | Small to medium projects |
+| VitePress | Vue 3 ecosystem, extremely fast | Plugin support | Modern project documentation |
+| MkDocs | Python ecosystem, Markdown-friendly | Plugin support | Technical documentation |
+| GitBook | Online editing, team collaboration | Built-in multilingual | Commercial documentation |
+| Sphinx | Python ecosystem, powerful features | Built-in multilingual | Python projects |
 
-### 11.3 推荐的排版检查工具
+### 11.3 Recommended Typesetting Check Tools
 
-| 工具名称 | 功能 | 适用语言 |
+| Tool Name | Function | Supported Languages |
 |----------|------|----------|
-| markdownlint | Markdown 格式检查 | 所有语言 |
-| textlint | 自然语言检查 | 多语言支持 |
-| proselint | 英文写作检查 | 英文 |
-| write-good | 英文写作风格检查 | 英文 |
-| pangu.js | 中英文间加空格 | 中英文混合 |
+| markdownlint | Markdown format checking | All languages |
+| textlint | Natural language checking | Multilingual support |
+| proselint | English writing checking | English |
+| write-good | English writing style checking | English |
+| pangu.js | Adding spaces between Chinese and English | Chinese-English mixed |
 
-### 11.4 常用语言代码参考
+### 11.4 Common Language Code Reference
 
-| 语言代码 | 语言名称 | 文件名示例 |
+| Language Code | Language Name | Filename Example |
 |----------|----------|-----------|
-| en | 英语 | README.md |
-| zh-CN | 简体中文 | README.zh-CN.md |
-| zh-TW | 繁体中文 | README.zh-TW.md |
-| ja | 日语 | README.ja.md |
-| ko | 韩语 | README.ko.md |
-| fr | 法语 | README.fr.md |
-| de | 德语 | README.de.md |
-| es | 西班牙语 | README.es.md |
-| pt-BR | 巴西葡萄牙语 | README.pt-BR.md |
-| ru | 俄语 | README.ru.md |
-| ar | 阿拉伯语 | README.ar.md |
-| it | 意大利语 | README.it.md |
-| nl | 荷兰语 | README.nl.md |
-| pl | 波兰语 | README.pl.md |
-| th | 泰语 | README.th.md |
-| vi | 越南语 | README.vi.md |
-| hi | 印地语 | README.hi.md |
-| tr | 土耳其语 | README.tr.md |
+| en | English | README.md |
+| zh-CN | Simplified Chinese | README.zh-CN.md |
+| zh-TW | Traditional Chinese | README.zh-TW.md |
+| ja | Japanese | README.ja.md |
+| ko | Korean | README.ko.md |
+| fr | French | README.fr.md |
+| de | German | README.de.md |
+| es | Spanish | README.es.md |
+| pt-BR | Brazilian Portuguese | README.pt-BR.md |
+| ru | Russian | README.ru.md |
+| ar | Arabic | README.ar.md |
+| it | Italian | README.it.md |
+| nl | Dutch | README.nl.md |
+| pl | Polish | README.pl.md |
+| th | Thai | README.th.md |
+| vi | Vietnamese | README.vi.md |
+| hi | Hindi | README.hi.md |
+| tr | Turkish | README.tr.md |
 
-### 11.5 shields.io 徽章样式参考
+### 11.5 shields.io Badge Style Reference
 
 ```markdown
 # 默认样式
@@ -2213,7 +2213,7 @@ if __name__ == "__main__":
 [![English](https://img.shields.io/badge/English-blue?style=for-the-badge)](README.md)
 ```
 
-### 11.6 翻译质量检查脚本
+### 11.6 Translation Quality Check Script
 
 ```python
 #!/usr/bin/env python3
@@ -2320,4 +2320,4 @@ if __name__ == "__main__":
 
 ---
 
-**上一篇：[GitHub 项目实战案例](V-practical-examples.md) | 下一篇：[GitHub 教育资源](W-education.md)**
+**Previous: [GitHub Practical Project Examples](V-practical-examples.md) | Next: [GitHub Educational Resources](W-education.md)**

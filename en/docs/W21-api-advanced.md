@@ -1,8 +1,8 @@
-# GitHub REST/GraphQL API 实战
+# GitHub REST/GraphQL API in Practice
 
-## REST API 高级用法
+## REST API Advanced Usage
 
-### 分页处理
+### Pagination Handling
 
 ```javascript
 async function getAllIssues(owner, repo) {
@@ -31,7 +31,7 @@ async function getAllIssues(owner, repo) {
 }
 ```
 
-### 速率限制处理
+### Rate Limit Handling
 
 ```javascript
 async function makeRequest(url) {
@@ -41,7 +41,7 @@ async function makeRequest(url) {
     },
   });
   
-  // 检查速率限制
+  // Check rate limit
   const remaining = response.headers.get('x-ratelimit-remaining');
   const reset = response.headers.get('x-ratelimit-reset');
   
@@ -57,10 +57,10 @@ async function makeRequest(url) {
 }
 ```
 
-### 批量操作
+### Batch Operations
 
 ```javascript
-// 批量添加标签
+// Batch add labels
 async function addLabels(owner, repo, issueNumber, labels) {
   return fetch(
     `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/labels`,
@@ -75,7 +75,7 @@ async function addLabels(owner, repo, issueNumber, labels) {
   );
 }
 
-// 批量关闭 issues
+// Batch close issues
 async function closeIssues(owner, repo, issueNumbers) {
   const promises = issueNumbers.map(number =>
     fetch(
@@ -97,7 +97,7 @@ async function closeIssues(owner, repo, issueNumbers) {
 
 ## GraphQL API
 
-### 基础查询
+### Basic Queries
 
 ```graphql
 query {
@@ -125,7 +125,7 @@ query {
 }
 ```
 
-### 变更操作
+### Mutations
 
 ```graphql
 mutation {
@@ -143,7 +143,7 @@ mutation {
 }
 ```
 
-### 使用 JavaScript
+### Using JavaScript
 
 ```javascript
 async function graphqlQuery(query, variables = {}) {
@@ -159,7 +159,7 @@ async function graphqlQuery(query, variables = {}) {
   return response.json();
 }
 
-// 使用示例
+// Example usage
 const query = `
   query ($owner: String!, $name: String!) {
     repository(owner: $owner, name: $name) {
@@ -198,7 +198,7 @@ gh api graphql -f query='
   }
 '
 
-# 创建 issue
+# Create issue
 gh api repos/your-org/your-repo/issues \
   --method POST \
   -f title="Bug report" \
@@ -208,12 +208,12 @@ gh api repos/your-org/your-repo/issues \
 
 ## Webhooks
 
-### 创建 Webhook
+### Creating Webhooks
 
 ```javascript
 const crypto = require('crypto');
 
-// 验证 webhook 签名
+// Verify webhook signature
 function verifyWebhook(payload, signature, secret) {
   const hmac = crypto.createHmac('sha256', secret);
   const digest = hmac.update(payload).digest('hex');
@@ -223,7 +223,7 @@ function verifyWebhook(payload, signature, secret) {
   );
 }
 
-// 处理 webhook
+// Handle webhook
 app.post('/webhook', (req, res) => {
   const signature = req.headers['x-hub-signature-256'];
   
@@ -250,7 +250,7 @@ app.post('/webhook', (req, res) => {
 });
 ```
 
-### GitHub Action 接收 Webhook
+### GitHub Action Receiving Webhooks
 
 ```yaml
 # .github/workflows/webhook.yml
@@ -270,20 +270,20 @@ jobs:
         echo "Data: ${{ github.event.client_payload.data }}"
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **使用 GraphQL**：减少 API 调用次数
-2. **处理速率限制**：实现重试和等待机制
-3. **验证 Webhook**：确保请求来自 GitHub
-4. **使用 GitHub CLI**：简化 API 调用
-5. **缓存响应**：减少不必要的 API 调用
+1. **Use GraphQL**: Reduce API calls
+2. **Handle Rate Limits**: Implement retry and waiting mechanisms
+3. **Verify Webhooks**: Ensure requests come from GitHub
+4. **Use GitHub CLI**: Simplify API calls
+5. **Cache Responses**: Reduce unnecessary API calls
 
-## 相关资源
+## Related Resources
 
-- [REST API 文档](https://docs.github.com/en/rest)
-- [GraphQL API 文档](https://docs.github.com/en/graphql)
-- [Webhooks 文档](https://docs.github.com/en/webhooks)
+- [REST API Documentation](https://docs.github.com/en/rest)
+- [GraphQL API Documentation](https://docs.github.com/en/graphql)
+- [Webhooks Documentation](https://docs.github.com/en/webhooks)
 
 ---
 
-**上一篇：[Feature Flags 功能开关](W20-feature-flags.md) | 下一篇：[开源项目商业化运营](W22-open-source-business.md)**
+**Previous: [Feature Flags](W20-feature-flags.md) | Next: [Open Source Project Commercialization](W22-open-source-business.md)**

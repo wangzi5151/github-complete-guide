@@ -1,57 +1,57 @@
-# 练习 33：GitHub API 集成
+# Exercise 33: GitHub API Integration
 
-## 目标
+## Objective
 
-学习如何使用 GitHub API 来自动化和扩展 GitHub 功能。
+Learn how to use the GitHub API to automate and extend GitHub functionality.
 
-## 前置条件
+## Prerequisites
 
-- 有 GitHub 账号
-- 熟悉 REST API 基础
-- 有基本的编程能力
+- A GitHub account
+- Familiarity with REST API basics
+- Basic programming skills
 
-## 步骤
+## Steps
 
-### 1. 理解 GitHub API
+### 1. Understanding the GitHub API
 
-GitHub API 是一个 RESTful API，允许你以编程方式访问 GitHub 的功能。
+The GitHub API is a RESTful API that allows you to access GitHub functionality programmatically.
 
-**API 版本**：
-- REST API v3：传统 API，功能全面
-- GraphQL API v4：更灵活，可以一次请求获取多个资源
+**API Versions**:
+- REST API v3: Legacy API with comprehensive features
+- GraphQL API v4: More flexible, can fetch multiple resources in a single request
 
-**认证方式**：
-- Personal Access Token（PAT）
+**Authentication Methods**:
+- Personal Access Token (PAT)
 - GitHub App
 - OAuth App
 
-### 2. 创建 Personal Access Token
+### 2. Creating a Personal Access Token
 
-**创建步骤**：
+**Steps to Create**:
 
-1. 访问 [GitHub Settings](https://github.com/settings/tokens)
-2. 点击 "Generate new token"
-3. 选择 token 类型
-4. 选择权限范围
-5. 点击 "Generate token"
+1. Go to [GitHub Settings](https://github.com/settings/tokens)
+2. Click "Generate new token"
+3. Select the token type
+4. Choose permission scopes
+5. Click "Generate token"
 
-**权限范围**：
-- `repo`：仓库访问
-- `admin:org`：组织管理
-- `admin:repo_hook`：Webhook 管理
-- `user`：用户信息
-- `workflow`：GitHub Actions
+**Permission Scopes**:
+- `repo`: Repository access
+- `admin:org`: Organization management
+- `admin:repo_hook`: Webhook management
+- `user`: User information
+- `workflow`: GitHub Actions
 
-### 3. 使用 REST API
+### 3. Using the REST API
 
-**示例：获取用户信息**：
+**Example: Get User Information**:
 
 ```bash
-# 使用 curl
+# Using curl
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   https://api.github.com/users/octocat
 
-# 使用 Python
+# Using Python
 import requests
 
 headers = {
@@ -63,14 +63,14 @@ response = requests.get('https://api.github.com/users/octocat', headers=headers)
 print(response.json())
 ```
 
-**示例：获取仓库列表**：
+**Example: Get Repository List**:
 
 ```bash
-# 使用 curl
+# Using curl
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   https://api.github.com/user/repos
 
-# 使用 Python
+# Using Python
 import requests
 
 headers = {
@@ -83,17 +83,17 @@ for repo in response.json():
     print(repo['name'])
 ```
 
-**示例：创建 Issue**：
+**Example: Create an Issue**:
 
 ```bash
-# 使用 curl
+# Using curl
 curl -X POST \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Accept: application/vnd.github.v3+json" \
   https://api.github.com/repos/owner/repo/issues \
   -d '{"title":"New Issue","body":"This is a new issue"}'
 
-# 使用 Python
+# Using Python
 import requests
 
 headers = {
@@ -114,19 +114,19 @@ response = requests.post(
 print(response.json())
 ```
 
-### 4. 使用 GraphQL API
+### 4. Using the GraphQL API
 
-**示例：获取用户信息**：
+**Example: Get User Information**:
 
 ```bash
-# 使用 curl
+# Using curl
 curl -X POST \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   https://api.github.com/graphql \
   -d '{"query":"query { viewer { login name email } }"}'
 
-# 使用 Python
+# Using Python
 import requests
 
 headers = {
@@ -152,10 +152,10 @@ response = requests.post(
 print(response.json())
 ```
 
-**示例：获取仓库信息**：
+**Example: Get Repository Information**:
 
 ```bash
-# 使用 Python
+# Using Python
 import requests
 
 headers = {
@@ -188,40 +188,40 @@ response = requests.post(
 print(response.json())
 ```
 
-### 5. 使用 GitHub CLI
+### 5. Using GitHub CLI
 
-**示例：使用 GitHub CLI 调用 API**：
+**Example: Call the API Using GitHub CLI**:
 
 ```bash
-# 获取用户信息
+# Get user information
 gh api users/octocat
 
-# 获取仓库列表
+# Get repository list
 gh api user/repos
 
-# 创建 Issue
+# Create an Issue
 gh api repos/owner/repo/issues -f title="New Issue" -f body="This is a new issue"
 
-# 使用 GraphQL
+# Using GraphQL
 gh api graphql -f query='query { viewer { login name email } }'
 ```
 
-### 6. 使用 Webhook
+### 6. Using Webhooks
 
-**创建 Webhook**：
+**Creating a Webhook**:
 
-1. 访问仓库设置
-2. 点击 "Webhooks"
-3. 点击 "Add webhook"
-4. 配置 Webhook
+1. Go to the repository settings
+2. Click "Webhooks"
+3. Click "Add webhook"
+4. Configure the Webhook
 
-**Webhook 事件**：
-- `push`：代码推送
-- `pull_request`：Pull Request 事件
-- `issues`：Issue 事件
-- `release`：Release 事件
+**Webhook Events**:
+- `push`: Code push
+- `pull_request`: Pull Request events
+- `issues`: Issue events
+- `release`: Release events
 
-**示例：处理 Webhook**：
+**Example: Handling a Webhook**:
 
 ```python
 from flask import Flask, request, jsonify
@@ -234,12 +234,12 @@ WEBHOOK_SECRET = 'your-webhook-secret'
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    # 验证签名
+    # Verify signature
     signature = request.headers.get('X-Hub-Signature-256')
     if not verify_signature(request.data, signature):
         return 'Invalid signature', 403
     
-    # 处理事件
+    # Handle event
     event = request.headers.get('X-GitHub-Event')
     payload = request.json()
     
@@ -278,27 +278,27 @@ if __name__ == '__main__':
     app.run(port=5000)
 ```
 
-### 7. 使用 GitHub App
+### 7. Using GitHub Apps
 
-**创建 GitHub App**：
+**Creating a GitHub App**:
 
-1. 访问 [GitHub Developer Settings](https://github.com/settings/apps)
-2. 点击 "New GitHub App"
-3. 配置 App
-4. 生成私钥
+1. Go to [GitHub Developer Settings](https://github.com/settings/apps)
+2. Click "New GitHub App"
+3. Configure the App
+4. Generate a private key
 
-**示例：使用 GitHub App**：
+**Example: Using a GitHub App**:
 
 ```python
 import jwt
 import time
 import requests
 
-# 配置
+# Configuration
 APP_ID = 'your-app-id'
 PRIVATE_KEY = open('private-key.pem', 'r').read()
 
-# 生成 JWT
+# Generate JWT
 def generate_jwt():
     now = int(time.time())
     payload = {
@@ -308,7 +308,7 @@ def generate_jwt():
     }
     return jwt.encode(payload, PRIVATE_KEY, algorithm='RS256')
 
-# 获取安装令牌
+# Get installation token
 def get_installation_token(installation_id):
     jwt_token = generate_jwt()
     
@@ -324,7 +324,7 @@ def get_installation_token(installation_id):
     
     return response.json()['token']
 
-# 使用安装令牌
+# Use installation token
 def use_installation_token(token):
     headers = {
         'Authorization': f'Bearer {token}',
@@ -339,15 +339,15 @@ def use_installation_token(token):
     return response.json()
 ```
 
-### 8. 使用 OAuth
+### 8. Using OAuth
 
-**OAuth 流程**：
+**OAuth Flow**:
 
-1. 重定向用户到 GitHub 授权页面
-2. 用户授权后，GitHub 重定向回你的应用
-3. 你的应用获取访问令牌
+1. Redirect the user to the GitHub authorization page
+2. After the user authorizes, GitHub redirects back to your application
+3. Your application obtains an access token
 
-**示例：OAuth 流程**：
+**Example: OAuth Flow**:
 
 ```python
 from flask import Flask, redirect, request, session
@@ -373,7 +373,7 @@ def login():
 def callback():
     code = request.args.get('code')
     
-    # 获取访问令牌
+    # Get access token
     response = requests.post(
         'https://github.com/login/oauth/access_token',
         json={
@@ -409,9 +409,9 @@ if __name__ == '__main__':
     app.run(port=5000)
 ```
 
-### 9. 使用 GitHub API 进行自动化
+### 9. Automating with the GitHub API
 
-**示例：自动合并 Dependabot PR**：
+**Example: Auto-merge Dependabot PRs**:
 
 ```python
 import requests
@@ -422,7 +422,7 @@ def auto_merge_dependabot_prs(token, owner, repo):
         'Accept': 'application/vnd.github.v3+json'
     }
     
-    # 获取 PR 列表
+    # Get PR list
     response = requests.get(
         f'https://api.github.com/repos/{owner}/{repo}/pulls',
         headers=headers
@@ -431,11 +431,11 @@ def auto_merge_dependabot_prs(token, owner, repo):
     prs = response.json()
     
     for pr in prs:
-        # 检查是否是 Dependabot PR
+        # Check if it is a Dependabot PR
         if pr['user']['login'] == 'dependabot[bot]':
-            # 检查是否通过 CI
+            # Check if CI passed
             if check_ci_status(token, owner, repo, pr['number']):
-                # 合并 PR
+                # Merge the PR
                 merge_pr(token, owner, repo, pr['number'])
 
 def check_ci_status(token, owner, repo, pr_number):
@@ -467,9 +467,9 @@ def merge_pr(token, owner, repo, pr_number):
     return response.json()
 ```
 
-### 10. 使用 GitHub API 进行报告
+### 10. Reporting with the GitHub API
 
-**示例：生成贡献报告**：
+**Example: Generate a Contribution Report**:
 
 ```python
 import requests
@@ -481,32 +481,32 @@ def generate_contribution_report(token, owner, repo, days=30):
         'Accept': 'application/vnd.github.v3+json'
     }
     
-    # 计算日期范围
+    # Calculate date range
     end_date = datetime.now()
     start_date = end_date - timedelta(days=days)
     
-    # 获取提交
+    # Get commits
     commits = get_commits(token, owner, repo, start_date, end_date)
     
-    # 获取 PR
+    # Get PRs
     prs = get_pull_requests(token, owner, repo, start_date, end_date)
     
-    # 获取 Issues
+    # Get Issues
     issues = get_issues(token, owner, repo, start_date, end_date)
     
-    # 生成报告
+    # Generate report
     report = f"""
-    # 贡献报告
+    # Contribution Report
     
-    **时间范围**: {start_date.strftime('%Y-%m-%d')} 到 {end_date.strftime('%Y-%m-%d')}
+    **Date Range**: {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}
     
-    ## 统计
+    ## Statistics
     
-    - 提交数量: {len(commits)}
+    - Commits: {len(commits)}
     - Pull Requests: {len(prs)}
     - Issues: {len(issues)}
     
-    ## 活跃贡献者
+    ## Active Contributors
     
     {get_active_contributors(commits, prs, issues)}
     """
@@ -586,35 +586,35 @@ def get_active_contributors(commits, prs, issues):
         author = issue['user']['login']
         contributors[author] = contributors.get(author, 0) + 1
     
-    # 按贡献数量排序
+    # Sort by contribution count
     sorted_contributors = sorted(contributors.items(), key=lambda x: x[1], reverse=True)
     
-    return '\n'.join([f"- {name}: {count} 次贡献" for name, count in sorted_contributors[:10]])
+    return '\n'.join([f"- {name}: {count} contributions" for name, count in sorted_contributors[:10]])
 ```
 
-## 挑战
+## Challenges
 
-1. **挑战 1**：创建一个自动创建 Issue 的脚本
-2. **挑战 2**：创建一个自动合并 Dependabot PR 的脚本
-3. **挑战 3**：创建一个生成贡献报告的脚本
-4. **挑战 4**：创建一个自动处理 Webhook 的服务器
-5. **挑战 5**：创建一个 GitHub App 来自动化仓库管理
+1. **Challenge 1**: Create a script that automatically creates Issues
+2. **Challenge 2**: Create a script that automatically merges Dependabot PRs
+3. **Challenge 3**: Create a script that generates contribution reports
+4. **Challenge 4**: Create a server that automatically handles Webhooks
+5. **Challenge 5**: Create a GitHub App to automate repository management
 
-## 思考
+## Reflection
 
-1. GitHub API 的使用场景有哪些？
-2. 如何保护 GitHub API 的访问令牌？
-3. GitHub API 的速率限制如何处理？
-4. 如何选择使用 REST API 还是 GraphQL API？
+1. What are some use cases for the GitHub API?
+2. How can you protect GitHub API access tokens?
+3. How should you handle GitHub API rate limits?
+4. How do you choose between the REST API and the GraphQL API?
 
-## 相关资源
+## Related Resources
 
-- [GitHub REST API 文档](https://docs.github.com/en/rest)
-- [GitHub GraphQL API 文档](https://docs.github.com/en/graphql)
-- [GitHub CLI 文档](https://cli.github.com/)
-- [GitHub Webhooks 文档](https://docs.github.com/en/webhooks)
-- [GitHub Apps 文档](https://docs.github.com/en/apps)
+- [GitHub REST API Documentation](https://docs.github.com/en/rest)
+- [GitHub GraphQL API Documentation](https://docs.github.com/en/graphql)
+- [GitHub CLI Documentation](https://cli.github.com/)
+- [GitHub Webhooks Documentation](https://docs.github.com/en/webhooks)
+- [GitHub Apps Documentation](https://docs.github.com/en/apps)
 
 ---
 
-**上一篇：[练习 32：GitHub Actions 矩阵策略](exercise-32-github-actions-matrix.md) | 下一篇：[练习 34：GitHub 安全最佳实践](exercise-34-github-security-best-practices.md)**
+**Previous: [Exercise 32: GitHub Actions Matrix Strategy](exercise-32-github-actions-matrix.md) | Next: [Exercise 34: GitHub Security Best Practices](exercise-34-github-security-best-practices.md)**

@@ -1,38 +1,40 @@
-# 第五章：GitHub 核心功能详解
+# Chapter 5: Detailed Guide to GitHub Core Features
 
-## 5.1 仓库管理
+## 5.1 Repository Management
 
-### 创建仓库
+### Creating a Repository
 
-#### 方法一：网页创建（推荐新手）
+#### Method 1: Web-based Creation (Recommended for Beginners)
 
-**第 1 步：** 登录 GitHub，点击右上角的 **+** 号，选择 **New repository**
+**Step 1:** Log in to GitHub, click the **+** icon in the top right corner, and select **New repository**
 
 ```
 ┌─────────────────────────────────────────────┐
-│  +  [🔔]  [头像]                             │
+│  +  [🔔]  [Avatar]                          │
 │  │                                          │
-│  └─→ New repository  ← 点击这个              │
+│  └─→ New repository  ← Click this           │
 │      Import repository                      │
 │      New organization                        │
 └─────────────────────────────────────────────┘
 ```
 
-**第 2 步：** 填写仓库信息
+**Step 2:** Fill in repository information
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Create a new repository                     │
 │                                             │
-│  Owner: [你的用户名 ▼]                       │
+│  Owner: [your-username ▼]                   │
 │                                             │
 │  Repository name: [my-project          ]     │
-│  Description:     [这是一个示例项目    ]      │
+│  Description:     [This is a sample     ]   │
+│                    [project              ]   │
 │                                             │
-│  ○ Public  ← 任何人都可以看到                 │
-│  ○ Private ← 只有你和协作者可以看到           │
+│  ○ Public  ← Anyone can see it              │
+│  ○ Private ← Only you and collaborators     │
+│               can see it                    │
 │                                             │
-│  ☑ Add a README file  ← 强烈推荐勾选        │
+│  ☑ Add a README file  ← Strongly recommended│
 │                                             │
 │  Add .gitignore: [None ▼]                   │
 │  Choose a license: [None ▼]                 │
@@ -41,19 +43,19 @@
 └─────────────────────────────────────────────┘
 ```
 
-**第 3 步：** 点击 **Create repository** 完成创建
+**Step 3:** Click **Create repository** to complete creation
 
-#### 方法二：命令行创建
+#### Method 2: Command Line Creation
 
 ```bash
-# 使用 GitHub CLI
-gh repo create my-repo --public --description "我的项目"
+# Use GitHub CLI
+gh repo create my-repo --public --description "My project"
 
-# 创建私有仓库
+# Create a private repository
 gh repo create my-repo --private
 ```
 
-### 仓库页面详解
+### Repository Page Overview
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -73,33 +75,33 @@ gh repo create my-repo --private
 └─────────────────────────────────────────────┘
 ```
 
-**标签说明：**
+**Tab Descriptions:**
 
-| 标签 | 功能 |
+| Tab | Function |
 |------|------|
-| **Code** | 查看代码文件 |
-| **Issues** | 问题追踪 |
-| **Pull requests** | 代码合并请求 |
-| **Actions** | 自动化工作流 |
-| **Projects** | 项目看板 |
-| **Wiki** | 项目文档 |
-| **Security** | 安全设置 |
-| **Insights** | 数据分析 |
-| **Settings** | 仓库设置 |
+| **Code** | View code files |
+| **Issues** | Issue tracking |
+| **Pull requests** | Code merge requests |
+| **Actions** | Automation workflows |
+| **Projects** | Project boards |
+| **Wiki** | Project documentation |
+| **Security** | Security settings |
+| **Insights** | Data analytics |
+| **Settings** | Repository settings |
 
-### 仓库设置
+### Repository Settings
 
-**进入设置：**
-1. 打开仓库页面
-2. 点击 **Settings** 标签
+**Accessing Settings:**
+1. Open the repository page
+2. Click the **Settings** tab
 
-**基本设置：**
+**Basic Settings:**
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Settings                                    │
 │                                             │
-│  General  ← 基本设置                         │
+│  General  ← Basic settings                  │
 │  Access                                       │
 │  Branches                                    │
 │  Tags                                        │
@@ -108,7 +110,8 @@ gh repo create my-repo --private
 ├─────────────────────────────────────────────┤
 │                                             │
 │  Repository name: [my-project          ]     │
-│  Description:     [这是一个示例项目    ]      │
+│  Description:     [This is a sample     ]   │
+│                    [project              ]   │
 │  Website:         [https://example.com]      │
 │  Topics:          [react] [javascript]       │
 │                                             │
@@ -116,13 +119,13 @@ gh repo create my-repo --private
 └─────────────────────────────────────────────┘
 ```
 
-### 添加协作者
+### Adding Collaborators
 
-**操作步骤：**
-1. 进入 **Settings** → **Collaborators**
-2. 点击 **Add people**
-3. 输入对方的 GitHub 用户名
-4. 点击 **Add [username] to this repository**
+**Steps:**
+1. Go to **Settings** → **Collaborators**
+2. Click **Add people**
+3. Enter the other person's GitHub username
+4. Click **Add [username] to this repository**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -137,16 +140,16 @@ gh repo create my-repo --private
 └─────────────────────────────────────────────┘
 ```
 
-### 删除仓库
+### Deleting a Repository
 
-**⚠️ 警告：删除操作不可逆！**
+**⚠️ Warning: This operation is irreversible!**
 
-**操作步骤：**
-1. 进入 **Settings**
-2. 滚动到页面最底部
-3. 找到 **Danger Zone** 区域
-4. 点击 **Delete this repository**
-5. 输入仓库名称确认删除
+**Steps:**
+1. Go to **Settings**
+2. Scroll to the bottom of the page
+3. Find the **Danger Zone** section
+4. Click **Delete this repository**
+5. Enter the repository name to confirm deletion
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -160,51 +163,52 @@ gh repo create my-repo --private
 └─────────────────────────────────────────────┘
 ```
 
-## 5.2 Issue 管理
+## 5.2 Issue Management
 
-### 创建 Issue
+### Creating an Issue
 
-**第 1 步：** 进入仓库的 **Issues** 页面
+**Step 1:** Go to the repository's **Issues** page
 
-**第 2 步：** 点击 **New issue**
+**Step 2:** Click **New issue**
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Issues                                      │
 │                                             │
-│  [New issue]  ← 点击这个按钮                 │
+│  [New issue]  ← Click this button           │
 │                                             │
 │  Filters: [Open ▼] [Labels ▼] [Assignee ▼] │
 └─────────────────────────────────────────────┘
 ```
 
-**第 3 步：** 填写 Issue 信息
+**Step 3:** Fill in the Issue information
 
 ```
 ┌─────────────────────────────────────────────┐
 │  New issue                                   │
 │                                             │
-│  Title: [Bug: 首页加载失败              ]     │
+│  Title: [Bug: Homepage fails to load    ]    │
 │                                             │
 │  Description:                                │
 │  ┌─────────────────────────────────────┐    │
-│  │ ## 问题描述                         │    │
-│  │ 首页在某些情况下无法正常加载           │    │
+│  │ ## Description                       │    │
+│  │ The homepage fails to load           │    │
+│  │ properly in certain situations       │    │
 │  │                                     │    │
-│  │ ## 复现步骤                         │    │
-│  │ 1. 打开首页                         │    │
-│  │ 2. 点击登录按钮                      │    │
-│  │ 3. 页面显示空白                      │    │
+│  │ ## Steps to Reproduce               │    │
+│  │ 1. Open the homepage                │    │
+│  │ 2. Click the login button            │    │
+│  │ 3. The page displays blank           │    │
 │  │                                     │    │
-│  │ ## 期望行为                         │    │
-│  │ 应该显示登录表单                     │    │
+│  │ ## Expected Behavior                │    │
+│  │ Should display the login form        │    │
 │  │                                     │    │
-│  │ ## 环境信息                         │    │
+│  │ ## Environment                      │    │
 │  │ - OS: Windows 11                    │    │
 │  │ - Browser: Chrome 120               │    │
 │  └─────────────────────────────────────┘    │
 │                                             │
-│  ☑ Assignees: [选择负责人]                  │
+│  ☑ Assignees: [Select assignees]            │
 │  ☑ Labels: [bug] [help wanted]              │
 │  ☑ Milestone: [v1.0]                       │
 │                                             │
@@ -212,11 +216,11 @@ gh repo create my-repo --private
 └─────────────────────────────────────────────┘
 ```
 
-**第 4 步：** 点击 **Submit new issue**
+**Step 4:** Click **Submit new issue**
 
-### 使用 Issue 模板
+### Using Issue Templates
 
-很多仓库提供 Issue 模板，可以更快地创建标准 Issue：
+Many repositories provide Issue templates, which allow you to create standardized Issues more quickly:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -232,124 +236,127 @@ gh repo create my-repo --private
 └─────────────────────────────────────────────┘
 ```
 
-### 管理 Issue 标签
+### Managing Issue Labels
 
-**创建自定义标签：**
+**Creating Custom Labels:**
 
-1. 在 Issues 页面点击 **Labels**
-2. 点击 **New label**
-3. 填写信息：
-   - **Label name**：标签名称
-   - **Description**：描述
-   - **Color**：颜色
-4. 点击 **Add label**
+1. On the Issues page, click **Labels**
+2. Click **New label**
+3. Fill in the information:
+   - **Label name**: The name of the label
+   - **Description**: Description
+   - **Color**: Color
+4. Click **Add label**
 
 ```
 ┌─────────────────────────────────────┐
 │  New label                           │
 │                                     │
 │  Label name: [priority: high   ]    │
-│  Description: [高优先级问题      ]    │
+│  Description: [High priority    ]   │
+│              [issue              ]   │
 │  Color: [🔴]                        │
 │                                     │
 │     [Add label]                     │
 └─────────────────────────────────────┘
 ```
 
-### 关闭 Issue
+### Closing an Issue
 
-**方法一：在 Issue 页面关闭**
+**Method 1: Close on the Issue Page**
 
-1. 打开 Issue 页面
-2. 点击底部的 **Close issue**
+1. Open the Issue page
+2. Click **Close issue** at the bottom
 
-**方法二：使用关键词自动关闭**
+**Method 2: Auto-close Using Keywords**
 
 ```bash
-# 在提交信息中使用关键词
-git commit -m "fix: 修复登录问题，closes #42"
-git commit -m "fix: 修复多个问题，fixes #42, fixes #43"
+# Use keywords in commit messages
+git commit -m "fix: fix login issue, closes #42"
+git commit -m "fix: fix multiple issues, fixes #42, fixes #43"
 ```
 
-**关键词：**
+**Keywords:**
 - `closes #42`
 - `fixes #42`
 - `resolves #42`
 
-## 5.3 Pull Request
+## 5.3 Pull Requests
 
-### 创建 PR
+### Creating a PR
 
-**第 1 步：** 推送功能分支到远程
+**Step 1:** Push the feature branch to remote
 
 ```bash
 git push -u origin feature-new-button
 ```
 
-**第 2 步：** 打开创建 PR 页面
+**Step 2:** Open the PR creation page
 
 ```
 ┌─────────────────────────────────────────────┐
 │  feature-new-button had recent pushes       │
 │                                             │
-│  [Compare & pull request]  ← 点击创建 PR     │
+│  [Compare & pull request]  ← Click to       │
+│                               create PR     │
 └─────────────────────────────────────────────┘
 ```
 
-**第 3 步：** 选择分支
+**Step 3:** Select branches
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Compare changes                             │
 │                                             │
-│  base: [main ▼]  ← 目标分支                  │
+│  base: [main ▼]  ← Target branch            │
 │     ...                                     │
-│  compare: [feature-new-button ▼]  ← 你的分支 │
+│  compare: [feature-new-button ▼]  ← Your    │
+│                                   branch    │
 │                                             │
 │  [Create pull request]                       │
 └─────────────────────────────────────────────┘
 ```
 
-**第 4 步：** 填写 PR 信息
+**Step 4:** Fill in PR information
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Open a pull request                         │
 │                                             │
-│  Title: [feat: 添加新按钮功能           ]     │
+│  Title: [feat: Add new button feature   ]    │
 │                                             │
 │  Description:                                │
 │  ┌─────────────────────────────────────┐    │
-│  │ ## 变更说明                         │    │
-│  │ 添加了一个新按钮                     │    │
+│  │ ## Change Description               │    │
+│  │ Added a new button                   │    │
 │  │                                     │    │
-│  │ ## 变更类型                         │    │
-│  │ - [x] 新功能 (feat)                 │    │
-│  │ - [ ] Bug 修复 (fix)                │    │
+│  │ ## Change Type                      │    │
+│  │ - [x] New feature (feat)            │    │
+│  │ - [ ] Bug fix (fix)                 │    │
 │  │                                     │    │
-│  │ ## 测试                             │    │
-│  │ - [x] 已添加测试                    │    │
-│  │ - [x] 已通过所有测试                │    │
+│  │ ## Testing                          │    │
+│  │ - [x] Tests added                   │    │
+│  │ - [x] All tests passed              │    │
 │  │                                     │    │
-│  │ ## 关联 Issue                       │    │
+│  │ ## Related Issue                    │    │
 │  │ Closes #42                          │    │
 │  └─────────────────────────────────────┘    │
 │                                             │
-│  ☑ Reviewers: [添加审查者]                  │
+│  ☑ Reviewers: [Add reviewers]               │
 │  ☑ Labels: [enhancement]                    │
 │                                             │
 │        [Create pull request]                │
 └─────────────────────────────────────────────┘
 ```
 
-**第 5 步：** 点击 **Create pull request**
+**Step 5:** Click **Create pull request**
 
-### 审查 PR
+### Reviewing a PR
 
-**查看代码差异：**
+**Viewing Code Changes:**
 
-1. 点击 **Files changed** 标签
-2. 查看代码变更
+1. Click the **Files changed** tab
+2. Review the code changes
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -364,44 +371,47 @@ git push -u origin feature-new-button
 │  +   4  │   </button>;                      │
 │     5  │ };                                 │
 │                                             │
-│  点击行号旁边的 + 可以添加评论                  │
+│  Click the + next to a line number to add   │
+│  a comment                                 │
 └─────────────────────────────────────────────┘
 ```
 
-**添加行内评论：**
+**Adding Inline Comments:**
 
-1. 将鼠标悬停在代码行号旁边
-2. 点击出现的 **+** 按钮
-3. 在弹出框中输入评论
-4. 点击 **Start review**
+1. Hover over the line number in the code
+2. Click the **+** button that appears
+3. Enter your comment in the popup
+4. Click **Start review**
 
 ```
 ┌─────────────────────────────────────┐
 │  💬 Leave a comment                  │
 │                                     │
-│  这里建议使用更具体的类名              │
+│  I suggest using a more specific    │
+│  class name here                    │
 │                                     │
-│  ○ Comment  ← 仅评论                │
-│  ○ Approve  ← 批准                  │
-│  ○ Request changes ← 要求修改        │
+│  ○ Comment  ← Comment only         │
+│  ○ Approve  ← Approve              │
+│  ○ Request changes ← Request       │
+│                        changes      │
 │                                     │
 │     [Start review]                  │
 └─────────────────────────────────────┘
 ```
 
-### 合并 PR
+### Merging a PR
 
-**合并条件：**
-- ✅ 所有审查者已批准
-- ✅ CI 检查通过
-- ✅ 没有冲突
+**Merge Conditions:**
+- ✅ All reviewers have approved
+- ✅ CI checks have passed
+- ✅ No conflicts
 
-**合并操作：**
+**Merge Operations:**
 
-1. 在 PR 页面底部找到合并按钮
-2. 选择合并方式
-3. 点击 **Merge pull request**
-4. 点击 **Confirm merge**
+1. Find the merge button at the bottom of the PR page
+2. Select the merge method
+3. Click **Merge pull request**
+4. Click **Confirm merge**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -409,13 +419,13 @@ git push -u origin feature-new-button
 │                                             │
 │  ┌─────────────────────────────────────┐    │
 │  │  ○ Create a merge commit            │    │
-│  │    保留完整提交历史                   │    │
+│  │    Preserve full commit history     │    │
 │  │                                     │    │
 │  │  ○ Squash and merge                 │    │
-│  │    压缩为一个提交                    │    │
+│  │    Squash into a single commit      │    │
 │  │                                     │    │
 │  │  ○ Rebase and merge                 │    │
-│  │    线性历史                          │    │
+│  │    Linear history                   │    │
 │  └─────────────────────────────────────┘    │
 │                                             │
 │        [Merge pull request]                 │
@@ -424,15 +434,15 @@ git push -u origin feature-new-button
 
 ## 5.4 GitHub Actions
 
-### 什么是 GitHub Actions？
+### What are GitHub Actions?
 
-GitHub Actions 是 GitHub 的 CI/CD 平台，可以自动化构建、测试和部署流程。
+GitHub Actions is GitHub's CI/CD platform that automates build, test, and deployment workflows.
 
-### 创建工作流
+### Creating a Workflow
 
-**第 1 步：** 在仓库中创建 `.github/workflows` 目录
+**Step 1:** Create a `.github/workflows` directory in your repository
 
-**第 2 步：** 创建 YAML 文件（如 `ci.yml`）
+**Step 2:** Create a YAML file (e.g., `ci.yml`)
 
 ```yaml
 name: CI
@@ -462,18 +472,18 @@ jobs:
       run: npm test
 ```
 
-**第 3 步：** 提交并推送
+**Step 3:** Commit and push
 
 ```bash
 git add .github/workflows/ci.yml
-git commit -m "ci: 添加 CI 工作流"
+git commit -m "ci: Add CI workflow"
 git push
 ```
 
-### 查看工作流
+### Viewing Workflows
 
-1. 进入仓库的 **Actions** 页面
-2. 查看工作流运行状态
+1. Go to the repository's **Actions** page
+2. View workflow run status
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -485,14 +495,14 @@ git push
 │    ✓ build                                   │
 │    ✓ test                                    │
 │                                             │
-│  部署时间: 2 分钟前                          │
-│  状态: 成功 ✓                                │
+│  Deployed: 2 minutes ago                     │
+│  Status: Success ✓                           │
 └─────────────────────────────────────────────┘
 ```
 
-### 常用工作流模板
+### Common Workflow Templates
 
-**Node.js 项目：**
+**Node.js Project:**
 
 ```yaml
 name: Node.js CI
@@ -520,7 +530,7 @@ jobs:
     - run: npm test
 ```
 
-**部署到 GitHub Pages：**
+**Deploy to GitHub Pages:**
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -558,11 +568,11 @@ jobs:
 
 ## 5.5 GitHub Pages
 
-### 启用 GitHub Pages
+### Enabling GitHub Pages
 
-**第 1 步：** 进入仓库 **Settings** → **Pages**
+**Step 1:** Go to the repository's **Settings** → **Pages**
 
-**第 2 步：** 选择 Source
+**Step 2:** Select Source
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -579,61 +589,61 @@ jobs:
 └─────────────────────────────────────────────┘
 ```
 
-**第 3 步：** 等待部署完成
+**Step 3:** Wait for deployment to complete
 
-### 访问网站
+### Accessing the Website
 
-部署完成后，访问：
+After deployment is complete, visit:
 ```
-https://你的用户名.github.io/仓库名/
+https://your-username.github.io/repository-name/
 ```
 
-### 自定义域名
+### Custom Domain
 
-**第 1 步：** 购买域名
+**Step 1:** Purchase a domain
 
-**第 2 步：** 添加 CNAME 文件
+**Step 2:** Add a CNAME file
 
 ```bash
 echo "yourdomain.com" > CNAME
 git add CNAME
-git commit -m "添加自定义域名"
+git commit -m "Add custom domain"
 git push
 ```
 
-**第 3 步：** 配置 DNS
+**Step 3:** Configure DNS
 
-在域名服务商控制台添加：
+Add the following records in your domain provider's control panel:
 
-| 记录类型 | 主机记录 | 记录值 |
+| Record Type | Host Name | Record Value |
 |----------|----------|--------|
 | CNAME | @ | username.github.io |
 | CNAME | www | username.github.io |
 
-**第 4 步：** 启用 HTTPS
+**Step 4:** Enable HTTPS
 
-1. 打开 **Settings** → **Pages**
-2. 勾选 **Enforce HTTPS**
+1. Open **Settings** → **Pages**
+2. Check **Enforce HTTPS**
 
 ## 5.6 GitHub Projects
 
-### 创建项目
+### Creating a Project
 
 ```bash
-# 使用 CLI 创建项目
-gh project create --title "项目名称" --owner your-org
+# Use CLI to create a project
+gh project create --title "Project Name" --owner your-org
 ```
 
-### 项目视图
+### Project Views
 
-| 视图 | 说明 |
+| View | Description |
 |------|------|
-| **Board** | 看板视图 |
-| **Table** | 表格视图 |
-| **Roadmap** | 路线图视图 |
-| **Calendar** | 日历视图 |
+| **Board** | Board view |
+| **Table** | Table view |
+| **Roadmap** | Roadmap view |
+| **Calendar** | Calendar view |
 
-### 自动化
+### Automation
 
 ```yaml
 # .github/workflows/project-automation.yml
@@ -656,20 +666,20 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## 5.7 本章小结
+## 5.7 Chapter Summary
 
-本章详细介绍了 GitHub 的核心功能，包括：
+This chapter provided a detailed overview of GitHub's core features, including:
 
-- 仓库管理：创建、设置、协作者
-- Issue 管理：创建、标签、关闭
-- Pull Request：创建、审查、合并
-- GitHub Actions：工作流配置
-- GitHub Pages：网站托管
-- GitHub Projects：项目管理
+- Repository Management: Creating, settings, collaborators
+- Issue Management: Creating, labels, closing
+- Pull Requests: Creating, reviewing, merging
+- GitHub Actions: Workflow configuration
+- GitHub Pages: Website hosting
+- GitHub Projects: Project management
 
-**关键要点：**
-- 熟练掌握这些功能是使用 GitHub 的基础
-- 多实践，在实际项目中应用这些功能
+**Key Takeaways:**
+- Mastering these features is fundamental to using GitHub
+- Practice frequently and apply these features in real projects
 
-**下一步：**
-[协作与进阶 →](22-fork-contribute.md)
+**Next Steps:**
+[Collaboration & Advanced Topics →](22-fork-contribute.md)

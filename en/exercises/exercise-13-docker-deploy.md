@@ -1,14 +1,14 @@
-# 练习 13：Docker 部署实战
+# Exercise 13: Docker Deployment in Practice
 
-## 学习目标
+## Learning Objectives
 
-- 编写 Dockerfile
-- 使用 GitHub Actions 构建镜像
-- 推送到容器注册表
+- Write a Dockerfile
+- Build images using GitHub Actions
+- Push to a container registry
 
-## 步骤
+## Steps
 
-### 步骤 1：创建 Dockerfile
+### Step 1: Create a Dockerfile
 
 ```dockerfile
 FROM node:20-alpine
@@ -25,7 +25,7 @@ EXPOSE 3000
 CMD ["node", "src/index.js"]
 ```
 
-### 步骤 2：创建 .dockerignore
+### Step 2: Create .dockerignore
 
 ```
 node_modules
@@ -35,7 +35,7 @@ node_modules
 .env
 ```
 
-### 步骤 3：创建工作流
+### Step 3: Create a Workflow
 
 ```yaml
 # .github/workflows/docker.yml
@@ -72,20 +72,20 @@ jobs:
           ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 ```
 
-## 实战任务
+## Practice Tasks
 
-1. 创建 Dockerfile
-2. 创建 .dockerignore
-3. 创建 Docker 构建工作流
-4. 测试镜像构建和推送
+1. Create a Dockerfile
+2. Create .dockerignore
+3. Create a Docker build workflow
+4. Test image building and pushing
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 能够编写 Dockerfile
-- [ ] 能够配置 .dockerignore
-- [ ] 能够创建 Docker 构建工作流
-- [ ] 能够推送到 GHCR
+- [ ] Able to write a Dockerfile
+- [ ] Able to configure .dockerignore
+- [ ] Able to create a Docker build workflow
+- [ ] Able to push to GHCR
 
-## 下一步
+## Next Step
 
-继续 [练习 14：安全扫描实战](exercise-14-security-scan.md)
+Continue to [Exercise 14: Security Scanning in Practice](exercise-14-security-scan.md)

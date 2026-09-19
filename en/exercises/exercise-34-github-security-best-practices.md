@@ -1,168 +1,168 @@
-# 练习 34：GitHub 安全最佳实践
+# Exercise 34: GitHub Security Best Practices
 
-## 目标
+## Objectives
 
-学习如何在 GitHub 项目中实施安全最佳实践，保护代码和数据安全。
+Learn how to implement security best practices in GitHub projects to protect code and data.
 
-## 前置条件
+## Prerequisites
 
-- 有 GitHub 账号
-- 有一个测试仓库
-- 熟悉基本的 Git 操作
+- A GitHub account
+- A test repository
+- Familiarity with basic Git operations
 
-## 步骤
+## Steps
 
-### 1. 启用两步验证
+### 1. Enable Two-Factor Authentication
 
-两步验证是保护账户安全的第一道防线。
+Two-factor authentication is the first line of defense for protecting your account.
 
-**启用步骤**：
+**Steps to enable**:
 
-1. 访问 [GitHub Settings](https://github.com/settings/security)
-2. 点击 "Enable two-factor authentication"
-3. 选择验证方式：
-   - 认证器应用（推荐）
-   - 短信
-   - 安全密钥
+1. Visit [GitHub Settings](https://github.com/settings/security)
+2. Click "Enable two-factor authentication"
+3. Choose a verification method:
+   - Authenticator app (recommended)
+   - SMS
+   - Security key
 
-**推荐应用**：
+**Recommended apps**:
 - Google Authenticator
 - Authy
 - 1Password
 
-### 2. 使用 SSH 密钥
+### 2. Use SSH Keys
 
-SSH 密钥比密码更安全，且无需每次输入密码。
+SSH keys are more secure than passwords and don't require entering a password each time.
 
-**生成 SSH 密钥**：
+**Generate an SSH key**:
 
 ```bash
-# 生成 Ed25519 密钥（推荐）
+# Generate Ed25519 key (recommended)
 ssh-keygen -t ed25519 -C "your@email.com"
 
-# 生成 RSA 密钥
+# Generate RSA key
 ssh-keygen -t rsa -b 4096 -C "your@email.com"
 ```
 
-**添加 SSH 密钥到 GitHub**：
+**Add SSH key to GitHub**:
 
 ```bash
-# 复制公钥
+# Copy public key
 cat ~/.ssh/id_ed25519.pub | pbcopy  # macOS
 cat ~/.ssh/id_ed25519.pub | xclip -selection clipboard  # Linux
 
-# 在 GitHub 上添加：
+# Add on GitHub:
 # Settings → SSH and GPG keys → New SSH key
 ```
 
-**测试 SSH 连接**：
+**Test SSH connection**:
 
 ```bash
 ssh -T git@github.com
 ```
 
-### 3. 使用 Personal Access Token
+### 3. Use Personal Access Tokens
 
-Personal Access Token 用于替代密码进行 API 认证。
+Personal Access Tokens are used to replace passwords for API authentication.
 
-**创建 Token**：
+**Create a Token**:
 
-1. 访问 [GitHub Settings](https://github.com/settings/tokens)
-2. 点击 "Generate new token"
-3. 选择权限范围
-4. 设置过期时间
-5. 点击 "Generate token"
+1. Visit [GitHub Settings](https://github.com/settings/tokens)
+2. Click "Generate new token"
+3. Select permission scopes
+4. Set an expiration time
+5. Click "Generate token"
 
-**使用 Token**：
+**Use the Token**:
 
 ```bash
-# 使用 Token 克隆仓库
+# Clone a repository using a token
 git clone https://YOUR_TOKEN@github.com/owner/repo.git
 
-# 配置 Git 使用 Token
+# Configure Git to use a token
 git config --global credential.helper store
 echo "https://YOUR_TOKEN@github.com" > ~/.git-credentials
 ```
 
-### 4. 配置 .gitignore
+### 4. Configure .gitignore
 
-确保敏感信息不被提交到仓库。
+Ensure sensitive information is not committed to the repository.
 
-**常见的 .gitignore 配置**：
+**Common .gitignore configuration**:
 
 ```gitignore
-# 环境变量
+# Environment variables
 .env
 .env.local
 .env.*.local
 
-# 密钥文件
+# Key files
 *.pem
 *.key
 id_rsa
 id_ed25519
 
-# 配置文件
+# Configuration files
 config.json
 credentials.json
 secrets.yml
 
-# 依赖目录
+# Dependency directories
 node_modules/
 vendor/
 venv/
 
-# 日志文件
+# Log files
 *.log
 logs/
 
-# 操作系统文件
+# OS files
 .DS_Store
 Thumbs.db
 
-# IDE 配置
+# IDE configuration
 .idea/
 .vscode/
 *.swp
 ```
 
-### 5. 启用 Secret Scanning
+### 5. Enable Secret Scanning
 
-Secret Scanning 可以检测代码中泄露的敏感信息。
+Secret Scanning can detect sensitive information leaked in code.
 
-**启用步骤**：
+**Steps to enable**:
 
-1. 访问仓库设置
-2. 点击 "Code security"
-3. 启用 "Secret scanning"
-4. 启用 "Push protection"
+1. Visit repository settings
+2. Click "Code security"
+3. Enable "Secret scanning"
+4. Enable "Push protection"
 
-**测试 Secret Scanning**：
+**Test Secret Scanning**:
 
 ```bash
-# 创建一个包含敏感信息的文件
+# Create a file containing sensitive information
 echo "API_KEY=1234567890abcdef" > .env
 
-# 提交并推送
+# Commit and push
 git add .env
 git commit -m "Add .env file"
 git push
 
-# GitHub 会检测到敏感信息并阻止推送
+# GitHub will detect sensitive information and block the push
 ```
 
-### 6. 启用 Dependabot
+### 6. Enable Dependabot
 
-Dependabot 可以自动检查和更新项目依赖。
+Dependabot can automatically check and update project dependencies.
 
-**启用步骤**：
+**Steps to enable**:
 
-1. 访问仓库设置
-2. 点击 "Code security"
-3. 启用 "Dependabot alerts"
-4. 启用 "Dependabot security updates"
+1. Visit repository settings
+2. Click "Code security"
+3. Enable "Dependabot alerts"
+4. Enable "Dependabot security updates"
 
-**配置 Dependabot**：
+**Configure Dependabot**:
 
 ```yaml
 # .github/dependabot.yml
@@ -175,21 +175,21 @@ updates:
     open-pull-requests-limit: 10
 ```
 
-### 7. 配置分支保护
+### 7. Configure Branch Protection
 
-分支保护规则可以防止意外的代码变更。
+Branch protection rules can prevent accidental code changes.
 
-**配置步骤**：
+**Configuration steps**:
 
-1. 访问仓库设置
-2. 点击 "Branches"
-3. 点击 "Add rule"
-4. 配置保护规则
+1. Visit repository settings
+2. Click "Branches"
+3. Click "Add rule"
+4. Configure protection rules
 
-**推荐配置**：
+**Recommended configuration**:
 
 ```yaml
-# 分支保护规则
+# Branch protection rules
 required_pull_request_reviews:
   required_approving_review_count: 2
   dismiss_stale_reviews: true
@@ -208,44 +208,44 @@ restrictions:
   teams: ["core-team"]
 ```
 
-### 8. 配置 CODEOWNERS
+### 8. Configure CODEOWNERS
 
-CODEOWNERS 文件定义了代码审查的责任人。
+The CODEOWNERS file defines the responsible persons for code review.
 
-**创建 CODEOWNERS 文件**：
+**Create the CODEOWNERS file**:
 
 ```bash
-# 创建 .github/CODEOWNERS 文件
+# Create .github/CODEOWNERS file
 cat > .github/CODEOWNERS << EOF
-# 默认所有者
+# Default owners
 * @team-leads
 
-# 安全相关代码
+# Security-related code
 /security/ @security-team
 
-# 前端代码
+# Frontend code
 /src/frontend/ @frontend-team
 
-# 后端代码
+# Backend code
 /src/backend/ @backend-team
 
-# 配置文件
+# Configuration files
 *.yml @devops-team
 Dockerfile @devops-team
 EOF
 ```
 
-### 9. 使用 GitHub Advanced Security
+### 9. Use GitHub Advanced Security
 
-GitHub Advanced Security 提供了更高级的安全功能。
+GitHub Advanced Security provides more advanced security features.
 
-**功能包括**：
-- Code Scanning（代码扫描）
-- Secret Scanning（密钥扫描）
-- Dependency Review（依赖审查）
-- Security Overview（安全概览）
+**Features include**:
+- Code Scanning
+- Secret Scanning
+- Dependency Review
+- Security Overview
 
-**启用 Code Scanning**：
+**Enable Code Scanning**:
 
 ```yaml
 # .github/workflows/codeql.yml
@@ -289,80 +289,80 @@ jobs:
       uses: github/codeql-action/analyze@v3
 ```
 
-### 10. 安全审计
+### 10. Security Auditing
 
-定期进行安全审计，发现和修复安全漏洞。
+Conduct regular security audits to discover and fix security vulnerabilities.
 
-**安全审计清单**：
+**Security audit checklist**:
 
 ```markdown
-# 安全审计清单
+# Security Audit Checklist
 
-## 账户安全
-- [ ] 启用两步验证
-- [ ] 使用 SSH 密钥
-- [ ] 配置 Personal Access Token
-- [ ] 定期审查登录活动
+## Account Security
+- [ ] Enable two-factor authentication
+- [ ] Use SSH keys
+- [ ] Configure Personal Access Tokens
+- [ ] Regularly review login activity
 
-## 仓库安全
-- [ ] 配置 .gitignore
-- [ ] 启用 Secret Scanning
-- [ ] 启用 Dependabot
-- [ ] 配置分支保护
-- [ ] 配置 CODEOWNERS
+## Repository Security
+- [ ] Configure .gitignore
+- [ ] Enable Secret Scanning
+- [ ] Enable Dependabot
+- [ ] Configure branch protection
+- [ ] Configure CODEOWNERS
 
-## CI/CD 安全
-- [ ] 使用 Secrets
-- [ ] 限制 Actions 权限
-- [ ] 验证 Action 来源
-- [ ] 审查第三方 Action
+## CI/CD Security
+- [ ] Use Secrets
+- [ ] Restrict Actions permissions
+- [ ] Verify Action sources
+- [ ] Review third-party Actions
 
-## 依赖安全
-- [ ] 定期更新依赖
-- [ ] 使用 lock 文件
-- [ ] 扫描依赖漏洞
-- [ ] 监控安全公告
+## Dependency Security
+- [ ] Regularly update dependencies
+- [ ] Use lock files
+- [ ] Scan for dependency vulnerabilities
+- [ ] Monitor security advisories
 ```
 
-**使用 GitHub CLI 进行安全审计**：
+**Use GitHub CLI for security auditing**:
 
 ```bash
-# 检查仓库安全配置
+# Check repository security configuration
 gh api repos/{owner}/{repo} --jq '.security_and_analysis'
 
-# 检查 Secret Scanning 状态
+# Check Secret Scanning status
 gh api repos/{owner}/{repo}/secret-scanning/alerts
 
-# 检查 Dependabot 警报
+# Check Dependabot alerts
 gh api repos/{owner}/{repo}/vulnerability-alerts
 
-# 检查分支保护规则
+# Check branch protection rules
 gh api repos/{owner}/{repo}/branches/main/protection
 ```
 
-## 挑战
+## Challenges
 
-1. **挑战 1**：为你的仓库配置完整的安全设置
-2. **挑战 2**：创建一个安全审计脚本
-3. **挑战 3**：配置 GitHub Advanced Security
-4. **挑战 4**：创建一个自动安全扫描工作流
-5. **挑战 5**：制定一个安全事件响应计划
+1. **Challenge 1**: Configure complete security settings for your repository
+2. **Challenge 2**: Create a security audit script
+3. **Challenge 3**: Configure GitHub Advanced Security
+4. **Challenge 4**: Create an automated security scanning workflow
+5. **Challenge 5**: Develop a security incident response plan
 
-## 思考
+## Reflection
 
-1. 为什么安全在软件开发中很重要？
-2. 如何平衡安全性和开发效率？
-3. 如何处理安全漏洞？
-4. 如何培训团队成员的安全意识？
+1. Why is security important in software development?
+2. How do you balance security and development efficiency?
+3. How do you handle security vulnerabilities?
+4. How do you train team members on security awareness?
 
-## 相关资源
+## Related Resources
 
-- [GitHub 安全文档](https://docs.github.com/en/code-security)
-- [GitHub Advanced Security 文档](https://docs.github.com/en/code-security/advanced-security)
-- [GitHub Secret Scanning 文档](https://docs.github.com/en/code-security/secret-scanning)
-- [GitHub Dependabot 文档](https://docs.github.com/en/code-security/dependabot)
-- [GitHub 分支保护文档](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/managing-a-branch-protection-rule)
+- [GitHub Security Documentation](https://docs.github.com/en/code-security)
+- [GitHub Advanced Security Documentation](https://docs.github.com/en/code-security/advanced-security)
+- [GitHub Secret Scanning Documentation](https://docs.github.com/en/code-security/secret-scanning)
+- [GitHub Dependabot Documentation](https://docs.github.com/en/code-security/dependabot)
+- [GitHub Branch Protection Documentation](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/managing-a-branch-protection-rule)
 
 ---
 
-**上一篇：[练习 33：GitHub API 集成](exercise-33-github-api-integration.md) | 下一篇：[练习 35：GitHub 团队协作](exercise-35-github-team-collaboration.md)**
+**Previous: [Exercise 33: GitHub API Integration](exercise-33-github-api-integration.md) | Next: [Exercise 35: GitHub Team Collaboration](exercise-35-github-team-collaboration.md)**

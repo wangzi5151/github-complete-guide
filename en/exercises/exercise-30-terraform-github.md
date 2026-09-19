@@ -1,113 +1,113 @@
-# 练习 30：Terraform + GitHub Actions 基础设施自动化
+# Exercise 30: Terraform + GitHub Actions Infrastructure Automation
 
-## 学习目标
+## Learning Objectives
 
-完成本练习后，你将能够：
+After completing this exercise, you will be able to:
 
-- 理解基础设施即代码（IaC）的概念和优势
-- 编写基础的 Terraform 配置文件
-- 使用 GitHub Actions 自动化基础设施部署
-- 管理多个环境（开发、测试、生产）的基础设施
-- 实现基础设施的版本控制和审计
+- Understand the concepts and advantages of Infrastructure as Code (IaC)
+- Write basic Terraform configuration files
+- Use GitHub Actions to automate infrastructure deployment
+- Manage infrastructure across multiple environments (development, staging, production)
+- Implement version control and auditing for infrastructure
 
-## 前置条件
+## Prerequisites
 
-- 拥有 GitHub 仓库
-- 拥有云服务账户（AWS、Azure 或 GCP）
-- 了解基本的云服务概念
-- 已完成 GitHub Actions 基础练习
+- A GitHub repository
+- A cloud service account (AWS, Azure, or GCP)
+- Understanding of basic cloud service concepts
+- Completion of the GitHub Actions basics exercise
 
-## 背景知识
+## Background Knowledge
 
-### 什么是基础设施即代码
+### What is Infrastructure as Code
 
-基础设施即代码（Infrastructure as Code，IaC）是一种通过代码来管理和配置基础设施的方法：
+Infrastructure as Code (IaC) is a method of managing and configuring infrastructure through code:
 
-1. **声明式配置**：定义期望的基础设施状态
-2. **版本控制**：配置代码存放在版本控制系统中
-3. **自动化部署**：通过工具自动创建和更新基础设施
-4. **可重复性**：确保环境的一致性
+1. **Declarative Configuration**: Define the desired infrastructure state
+2. **Version Control**: Store configuration code in a version control system
+3. **Automated Deployment**: Automatically create and update infrastructure through tools
+4. **Repeatability**: Ensure consistency across environments
 
-### Terraform 简介
+### Introduction to Terraform
 
-Terraform 是 HashiCorp 开发的基础设施即代码工具：
+Terraform is an Infrastructure as Code tool developed by HashiCorp:
 
-- **多云支持**：支持 AWS、Azure、GCP 等主流云平台
-- **状态管理**：跟踪基础设施的当前状态
-- **计划和应用**：先预览变更，再执行
-- **模块化**：支持代码复用和组织
+- **Multi-Cloud Support**: Supports major cloud platforms such as AWS, Azure, GCP
+- **State Management**: Tracks the current state of infrastructure
+- **Plan and Apply**: Preview changes before executing them
+- **Modular**: Supports code reuse and organization
 
-### GitHub Actions 集成
+### GitHub Actions Integration
 
-GitHub Actions 可以与 Terraform 结合实现：
+GitHub Actions can be combined with Terraform to achieve:
 
-- 自动化基础设施部署
-- Pull Request 时自动计划
-- 多环境管理
-- 安全扫描和合规检查
+- Automated infrastructure deployment
+- Automatic planning on Pull Requests
+- Multi-environment management
+- Security scanning and compliance checks
 
 ---
 
-## 练习步骤
+## Exercise Steps
 
-### 第一部分：Terraform 基础配置
+### Part 1: Terraform Basic Configuration
 
-#### 步骤 1：安装 Terraform
+#### Step 1: Install Terraform
 
-**macOS：**
+**macOS:**
 
 ```bash
-# 使用 Homebrew
+# Using Homebrew
 brew install terraform
 
-# 或使用 tfenv 版本管理器
+# Or using tfenv version manager
 brew install tfenv
 tfenv install 1.7.0
 tfenv use 1.7.0
 ```
 
-**Linux：**
+**Linux:**
 
 ```bash
-# 下载 Terraform
+# Download Terraform
 wget https://releases.hashicorp.com/terraform/1.7.0/terraform_1.7.0_linux_amd64.zip
 
-# 解压
+# Extract
 unzip terraform_1.7.0_linux_amd64.zip
 
-# 移动到 PATH
+# Move to PATH
 sudo mv terraform /usr/local/bin/
 
-# 验证安装
+# Verify installation
 terraform version
 ```
 
-**Windows：**
+**Windows:**
 
 ```bash
-# 使用 Chocolatey
+# Using Chocolatey
 choco install terraform
 
-# 或使用 Scoop
+# Or using Scoop
 scoop install terraform
 
-# 或使用 tfenv
+# Or using tfenv
 scoop install tfenv
 tfenv install 1.7.0
 tfenv use 1.7.0
 ```
 
-#### 步骤 2：创建项目目录结构
+#### Step 2: Create Project Directory Structure
 
 ```bash
-# 创建项目结构
+# Create project structure
 mkdir -p terraform-github-demo/{environments/{dev,staging,prod},modules/network,scripts}
 
-# 查看目录结构
+# View directory structure
 tree terraform-github-demo/
 ```
 
-预期输出：
+Expected output:
 
 ```
 terraform-github-demo/
@@ -120,12 +120,12 @@ terraform-github-demo/
 └── scripts/
 ```
 
-#### 步骤 3：创建基础 Terraform 配置
+#### Step 3: Create Basic Terraform Configuration
 
-创建文件 `terraform-github-demo/main.tf`：
+Create file `terraform-github-demo/main.tf`:
 
 ```hcl
-# 配置 Terraform 提供商
+# Configure Terraform provider
 terraform {
   required_version = ">= 1.7.0"
   
@@ -136,7 +136,7 @@ terraform {
     }
   }
   
-  # 远程状态存储（推荐）
+  # Remote state storage (recommended)
   backend "s3" {
     bucket         = "my-terraform-state-bucket"
     key            = "terraform.tfstate"
@@ -146,7 +146,7 @@ terraform {
   }
 }
 
-# 配置 AWS 提供商
+# Configure AWS provider
 provider "aws" {
   region = var.aws_region
   
@@ -160,83 +160,83 @@ provider "aws" {
   }
 }
 
-# 定义变量
+# Define variables
 variable "aws_region" {
-  description = "AWS 区域"
+  description = "AWS region"
   type        = string
   default     = "us-east-1"
 }
 
 variable "environment" {
-  description = "环境名称"
+  description = "Environment name"
   type        = string
   validation {
     condition     = contains(["dev", "staging", "prod"], var.environment)
-    error_message = "环境必须是 dev、staging 或 prod。"
+    error_message = "Environment must be dev, staging, or prod."
   }
 }
 
 variable "project_name" {
-  description = "项目名称"
+  description = "Project name"
   type        = string
   default     = "my-project"
 }
 
 variable "repository" {
-  description = "GitHub 仓库地址"
+  description = "GitHub repository URL"
   type        = string
   default     = "github.com/username/repo"
 }
 
-# 输出值
+# Output values
 output "environment" {
-  description = "当前环境"
+  description = "Current environment"
   value       = var.environment
 }
 
 output "region" {
-  description = "AWS 区域"
+  description = "AWS region"
   value       = var.aws_region
 }
 ```
 
-#### 步骤 4：创建网络模块
+#### Step 4: Create Network Module
 
-创建文件 `terraform-github-demo/modules/network/main.tf`：
+Create file `terraform-github-demo/modules/network/main.tf`:
 
 ```hcl
-# 网络模块 - 创建 VPC 和子网
+# Network module - Create VPC and subnets
 
 variable "environment" {
-  description = "环境名称"
+  description = "Environment name"
   type        = string
 }
 
 variable "vpc_cidr" {
-  description = "VPC CIDR 块"
+  description = "VPC CIDR block"
   type        = string
   default     = "10.0.0.0/16"
 }
 
 variable "availability_zones" {
-  description = "可用区列表"
+  description = "List of availability zones"
   type        = list(string)
   default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 variable "private_subnet_cidrs" {
-  description = "私有子网 CIDR 列表"
+  description = "List of private subnet CIDRs"
   type        = list(string)
   default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
 variable "public_subnet_cidrs" {
-  description = "公有子网 CIDR 列表"
+  description = "List of public subnet CIDRs"
   type        = list(string)
   default     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 }
 
-# 创建 VPC
+# Create VPC
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -247,7 +247,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-# 创建互联网网关
+# Create internet gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
   
@@ -256,7 +256,7 @@ resource "aws_internet_gateway" "main" {
   }
 }
 
-# 创建公有子网
+# Create public subnets
 resource "aws_subnet" "public" {
   count                   = length(var.public_subnet_cidrs)
   vpc_id                  = aws_vpc.main.id
@@ -270,7 +270,7 @@ resource "aws_subnet" "public" {
   }
 }
 
-# 创建私有子网
+# Create private subnets
 resource "aws_subnet" "private" {
   count             = length(var.private_subnet_cidrs)
   vpc_id            = aws_vpc.main.id
@@ -283,7 +283,7 @@ resource "aws_subnet" "private" {
   }
 }
 
-# 创建公有子网路由表
+# Create public subnet route table
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
   
@@ -297,36 +297,36 @@ resource "aws_route_table" "public" {
   }
 }
 
-# 关联公有子网和路由表
+# Associate public subnets with route table
 resource "aws_route_table_association" "public" {
   count          = length(aws_subnet.public)
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
-# 输出值
+# Output values
 output "vpc_id" {
   description = "VPC ID"
   value       = aws_vpc.main.id
 }
 
 output "public_subnet_ids" {
-  description = "公有子网 ID 列表"
+  description = "List of public subnet IDs"
   value       = aws_subnet.public[*].id
 }
 
 output "private_subnet_ids" {
-  description = "私有子网 ID 列表"
+  description = "List of private subnet IDs"
   value       = aws_subnet.private[*].id
 }
 ```
 
-#### 步骤 5：创建环境配置
+#### Step 5: Create Environment Configuration
 
-创建文件 `terraform-github-demo/environments/dev/main.tf`：
+Create file `terraform-github-demo/environments/dev/main.tf`:
 
 ```hcl
-# 开发环境配置
+# Development environment configuration
 
 terraform {
   required_version = ">= 1.7.0"
@@ -338,7 +338,7 @@ terraform {
     }
   }
   
-  # 开发环境状态文件
+  # Development environment state file
   backend "s3" {
     bucket         = "my-terraform-state-bucket"
     key            = "dev/terraform.tfstate"
@@ -360,7 +360,7 @@ provider "aws" {
   }
 }
 
-# 调用网络模块
+# Invoke the network module
 module "network" {
   source = "../../modules/network"
   
@@ -372,7 +372,7 @@ module "network" {
   public_subnet_cidrs  = ["10.0.101.0/24", "10.0.102.0/24"]
 }
 
-# 输出值
+# Output values
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -386,21 +386,21 @@ output "private_subnet_ids" {
 }
 ```
 
-创建文件 `terraform-github-demo/environments/dev/terraform.tfvars`：
+Create file `terraform-github-demo/environments/dev/terraform.tfvars`:
 
 ```hcl
-# 开发环境变量
+# Development environment variables
 aws_region   = "us-east-1"
 environment  = "dev"
 project_name = "my-project"
 ```
 
-#### 步骤 6：创建生产环境配置
+#### Step 6: Create Production Environment Configuration
 
-创建文件 `terraform-github-demo/environments/prod/main.tf`：
+Create file `terraform-github-demo/environments/prod/main.tf`:
 
 ```hcl
-# 生产环境配置
+# Production environment configuration
 
 terraform {
   required_version = ">= 1.7.0"
@@ -412,7 +412,7 @@ terraform {
     }
   }
   
-  # 生产环境状态文件
+  # Production environment state file
   backend "s3" {
     bucket         = "my-terraform-state-bucket"
     key            = "prod/terraform.tfstate"
@@ -434,7 +434,7 @@ provider "aws" {
   }
 }
 
-# 调用网络模块
+# Invoke the network module
 module "network" {
   source = "../../modules/network"
   
@@ -446,7 +446,7 @@ module "network" {
   public_subnet_cidrs  = ["10.1.101.0/24", "10.1.102.0/24", "10.1.103.0/24"]
 }
 
-# 输出值
+# Output values
 output "vpc_id" {
   value = module.network.vpc_id
 }
@@ -460,11 +460,11 @@ output "private_subnet_ids" {
 }
 ```
 
-### 第二部分：GitHub Actions 集成
+### Part 2: GitHub Actions Integration
 
-#### 步骤 7：创建 Terraform 计划工作流
+#### Step 7: Create Terraform Plan Workflow
 
-创建文件 `.github/workflows/terraform-plan.yml`：
+Create file `.github/workflows/terraform-plan.yml`:
 
 ```yaml
 name: Terraform Plan
@@ -494,46 +494,46 @@ jobs:
         environment: [dev, staging, prod]
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 配置 AWS 凭证
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       
-      - name: 设置 Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
       
-      - name: Terraform 格式检查
+      - name: Terraform format check
         run: terraform fmt -check -recursive
         working-directory: terraform-github-demo
       
-      - name: Terraform 初始化
+      - name: Terraform init
         run: terraform init
         working-directory: terraform-github-demo/environments/${{ matrix.environment }}
       
-      - name: Terraform 验证
+      - name: Terraform validate
         run: terraform validate
         working-directory: terraform-github-demo/environments/${{ matrix.environment }}
       
-      - name: Terraform 计划
+      - name: Terraform plan
         id: plan
         run: |
           terraform plan -no-color -out=tfplan
         working-directory: terraform-github-demo/environments/${{ matrix.environment }}
         continue-on-error: true
       
-      - name: 生成计划输出
+      - name: Generate plan output
         run: |
           terraform show -no-color tfplan > plan_output.txt
         working-directory: terraform-github-demo/environments/${{ matrix.environment }}
       
-      - name: 添加 PR 评论
+      - name: Add PR comment
         uses: actions/github-script@v7
         with:
           script: |
@@ -563,14 +563,14 @@ jobs:
               body: body
             });
       
-      - name: 检查计划结果
+      - name: Check plan result
         if: steps.plan.outcome == 'failure'
         run: exit 1
 ```
 
-#### 步骤 8：创建 Terraform 应用工作流
+#### Step 8: Create Terraform Apply Workflow
 
-创建文件 `.github/workflows/terraform-apply.yml`：
+Create file `.github/workflows/terraform-apply.yml`:
 
 ```yaml
 name: Terraform Apply
@@ -583,7 +583,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: '部署环境'
+        description: 'Deployment environment'
         required: true
         type: choice
         options:
@@ -591,7 +591,7 @@ on:
           - staging
           - prod
       action:
-        description: '执行动作'
+        description: 'Action to execute'
         required: true
         type: choice
         options:
@@ -614,22 +614,22 @@ jobs:
     environment: ${{ github.event.inputs.environment || 'dev' }}
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 配置 AWS 凭证
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       
-      - name: 设置 Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
       
-      - name: 确定环境
+      - name: Determine environment
         id: env
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -638,35 +638,35 @@ jobs:
             echo "environment=dev" >> $GITHUB_OUTPUT
           fi
       
-      - name: Terraform 初始化
+      - name: Terraform init
         run: terraform init
         working-directory: terraform-github-demo/environments/${{ steps.env.outputs.environment }}
       
-      - name: Terraform 计划
+      - name: Terraform plan
         run: terraform plan -out=tfplan
         working-directory: terraform-github-demo/environments/${{ steps.env.outputs.environment }}
       
-      - name: Terraform 应用
+      - name: Terraform apply
         if: |
           (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
           (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
         run: terraform apply -auto-approve tfplan
         working-directory: terraform-github-demo/environments/${{ steps.env.outputs.environment }}
       
-      - name: Terraform 销毁
+      - name: Terraform destroy
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
         run: terraform destroy -auto-approve
         working-directory: terraform-github-demo/environments/${{ steps.env.outputs.environment }}
       
-      - name: 输出结果
+      - name: Output result
         run: |
-          echo "环境: ${{ steps.env.outputs.environment }}"
-          echo "操作完成"
+          echo "Environment: ${{ steps.env.outputs.environment }}"
+          echo "Operation completed"
 ```
 
-#### 步骤 9：创建多环境部署工作流
+#### Step 9: Create Multi-Environment Deployment Workflow
 
-创建文件 `.github/workflows/terraform-multi-env.yml`：
+Create file `.github/workflows/terraform-multi-env.yml`:
 
 ```yaml
 name: Terraform Multi-Environment
@@ -675,7 +675,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: '选择环境'
+        description: 'Select environment'
         required: true
         type: choice
         options:
@@ -683,7 +683,7 @@ on:
           - staging
           - prod
       action:
-        description: '执行动作'
+        description: 'Action to execute'
         required: true
         type: choice
         options:
@@ -699,7 +699,7 @@ env:
   TF_VERSION: '1.7.0'
 
 jobs:
-  # 审批作业（生产环境需要）
+  # Approval job (required for production)
   approval:
     name: Approval Required
     runs-on: ubuntu-latest
@@ -707,10 +707,10 @@ jobs:
     environment: production-approval
     
     steps:
-      - name: 等待审批
-        run: echo "生产环境部署已获得批准"
+      - name: Wait for approval
+        run: echo "Production deployment has been approved"
 
-  # Terraform 作业
+  # Terraform job
   terraform:
     name: Terraform ${{ github.event.inputs.action }}
     runs-on: ubuntu-latest
@@ -718,51 +718,51 @@ jobs:
     if: always() && (needs.approval.result == 'success' || github.event.inputs.environment != 'prod')
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 配置 AWS 凭证
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'us-east-1'
       
-      - name: 设置 Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
       
-      - name: Terraform 初始化
+      - name: Terraform init
         run: terraform init
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: Terraform 计划
+      - name: Terraform plan
         id: plan
         run: terraform plan -no-color -out=tfplan
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: Terraform 应用
+      - name: Terraform apply
         if: github.event.inputs.action == 'apply'
         run: terraform apply -auto-approve tfplan
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: Terraform 销毁
+      - name: Terraform destroy
         if: github.event.inputs.action == 'destroy'
         run: terraform destroy -auto-approve
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: 生成报告
+      - name: Generate report
         if: always()
         run: |
-          echo "# Terraform 部署报告" > report.md
+          echo "# Terraform Deployment Report" > report.md
           echo "" >> report.md
-          echo "## 环境: ${{ github.event.inputs.environment }}" >> report.md
-          echo "## 操作: ${{ github.event.inputs.action }}" >> report.md
-          echo "## 状态: ${{ job.status }}" >> report.md
-          echo "## 时间: $(date)" >> report.md
+          echo "## Environment: ${{ github.event.inputs.environment }}" >> report.md
+          echo "## Action: ${{ github.event.inputs.action }}" >> report.md
+          echo "## Status: ${{ job.status }}" >> report.md
+          echo "## Time: $(date)" >> report.md
       
-      - name: 上传报告
+      - name: Upload report
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -770,20 +770,20 @@ jobs:
           path: report.md
 ```
 
-### 第三部分：高级配置
+### Part 3: Advanced Configuration
 
-#### 步骤 10：创建 Terraform 后端配置
+#### Step 10: Create Terraform Backend Configuration
 
-创建文件 `terraform-github-demo/backend/main.tf`：
+Create file `terraform-github-demo/backend/main.tf`:
 
 ```hcl
-# 后端资源创建（需要先手动创建）
+# Backend resource creation (needs to be created manually first)
 
 provider "aws" {
   region = "us-east-1"
 }
 
-# S3 存储桶用于存储状态
+# S3 bucket for storing state
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "my-terraform-state-bucket"
   
@@ -798,7 +798,7 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
-# 启用版本控制
+# Enable versioning
 resource "aws_s3_bucket_versioning" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
   
@@ -807,7 +807,7 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
   }
 }
 
-# 启用加密
+# Enable encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
   
@@ -818,7 +818,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" 
   }
 }
 
-# 阻止公共访问
+# Block public access
 resource "aws_s3_bucket_public_access_block" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
   
@@ -828,7 +828,7 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
   restrict_public_buckets = true
 }
 
-# DynamoDB 表用于状态锁定
+# DynamoDB table for state locking
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = "terraform-locks"
   billing_mode = "PAY_PER_REQUEST"
@@ -846,21 +846,21 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 }
 
-# 输出值
+# Output values
 output "s3_bucket_name" {
-  description = "状态存储桶名称"
+  description = "State bucket name"
   value       = aws_s3_bucket.terraform_state.id
 }
 
 output "dynamodb_table_name" {
-  description = "锁定表名称"
+  description = "Lock table name"
   value       = aws_dynamodb_table.terraform_locks.name
 }
 ```
 
-#### 步骤 11：创建安全扫描工作流
+#### Step 11: Create Security Scan Workflow
 
-创建文件 `.github/workflows/terraform-security.yml`：
+Create file `.github/workflows/terraform-security.yml`:
 
 ```yaml
 name: Terraform Security Scan
@@ -881,16 +881,16 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 运行 tfsec
+      - name: Run tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: terraform-github-demo
           soft_fail: true
       
-      - name: 上传 tfsec SARIF 报告
+      - name: Upload tfsec SARIF report
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
@@ -901,10 +901,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 运行 Checkov
+      - name: Run Checkov
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: terraform-github-demo
@@ -912,7 +912,7 @@ jobs:
           output_format: sarif
           output_file_path: checkov.sarif
       
-      - name: 上传 Checkov SARIF 报告
+      - name: Upload Checkov SARIF report
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
@@ -923,30 +923,30 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 设置 Infracost
+      - name: Setup Infracost
         uses: infracost/actions/setup@v2
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
       
-      - name: 生成成本估算
+      - name: Generate cost estimate
         run: |
           infracost breakdown --path terraform-github-demo/environments/dev \
             --format json \
             --out-file infracost.json
       
-      - name: 添加 PR 评论
+      - name: Add PR comment
         uses: infracost/actions/comment@v2
         with:
           path: infracost.json
           behavior: update
 ```
 
-#### 步骤 12：创建状态管理工作流
+#### Step 12: Create State Management Workflow
 
-创建文件 `.github/workflows/terraform-state.yml`：
+Create file `.github/workflows/terraform-state.yml`:
 
 ```yaml
 name: Terraform State Management
@@ -955,7 +955,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: '环境'
+        description: 'Environment'
         required: true
         type: choice
         options:
@@ -963,7 +963,7 @@ on:
           - staging
           - prod
       action:
-        description: '操作'
+        description: 'Action'
         required: true
         type: choice
         options:
@@ -973,11 +973,11 @@ on:
           - rm
           - import
       resource:
-        description: '资源地址（用于 mv/rm/import）'
+        description: 'Resource address (for mv/rm/import)'
         required: false
         type: string
       target:
-        description: '目标地址（用于 mv）'
+        description: 'Target address (for mv)'
         required: false
         type: string
 
@@ -992,36 +992,36 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 配置 AWS 凭证
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'us-east-1'
       
-      - name: 设置 Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: '1.7.0'
       
-      - name: Terraform 初始化
+      - name: Terraform init
         run: terraform init
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: 列出资源
+      - name: List resources
         if: github.event.inputs.action == 'list'
         run: terraform state list
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: 显示资源
+      - name: Show resource
         if: github.event.inputs.action == 'show'
         run: terraform state show "${{ github.event.inputs.resource }}"
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: 移动资源
+      - name: Move resource
         if: github.event.inputs.action == 'mv'
         run: |
           terraform state mv \
@@ -1029,12 +1029,12 @@ jobs:
             "${{ github.event.inputs.target }}"
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: 删除资源
+      - name: Remove resource
         if: github.event.inputs.action == 'rm'
         run: terraform state rm "${{ github.event.inputs.resource }}"
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
       
-      - name: 导入资源
+      - name: Import resource
         if: github.event.inputs.action == 'import'
         run: |
           terraform import \
@@ -1043,91 +1043,91 @@ jobs:
         working-directory: terraform-github-demo/environments/${{ github.event.inputs.environment }}
 ```
 
-### 第四部分：实用脚本
+### Part 4: Utility Scripts
 
-#### 步骤 13：创建初始化脚本
+#### Step 13: Create Initialization Script
 
-创建文件 `terraform-github-demo/scripts/init.sh`：
+Create file `terraform-github-demo/scripts/init.sh`:
 
 ```bash
 #!/bin/bash
 
-# Terraform 初始化脚本
+# Terraform initialization script
 
 set -e
 
-# 颜色定义
+# Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# 打印帮助信息
+# Print help information
 show_help() {
-    echo "Terraform 初始化工具"
+    echo "Terraform Initialization Tool"
     echo ""
-    echo "用法: $0 [选项] <环境>"
+    echo "Usage: $0 [options] <environment>"
     echo ""
-    echo "环境:"
-    echo "  dev      - 开发环境"
-    echo "  staging  - 测试环境"
-    echo "  prod     - 生产环境"
+    echo "Environments:"
+    echo "  dev      - Development environment"
+    echo "  staging  - Staging environment"
+    echo "  prod     - Production environment"
     echo ""
-    echo "选项:"
-    echo "  -h, --help   显示帮助信息"
-    echo "  -f, --force  强制重新初始化"
+    echo "Options:"
+    echo "  -h, --help   Show help information"
+    echo "  -f, --force  Force reinitialization"
 }
 
-# 初始化环境
+# Initialize environment
 init_environment() {
     local env=$1
     local force=$2
     
-    echo -e "${GREEN}=== 初始化 ${env} 环境 ===${NC}"
+    echo -e "${GREEN}=== Initializing ${env} environment ===${NC}"
     echo ""
     
-    # 检查环境目录
+    # Check environment directory
     if [ ! -d "environments/${env}" ]; then
-        echo -e "${RED}错误: 环境目录不存在: environments/${env}${NC}"
+        echo -e "${RED}Error: Environment directory does not exist: environments/${env}${NC}"
         exit 1
     fi
     
-    # 进入环境目录
+    # Enter environment directory
     cd "environments/${env}"
     
-    # 检查是否需要强制初始化
+    # Check if force initialization is needed
     if [ "$force" = "true" ] && [ -d ".terraform" ]; then
-        echo -e "${YELLOW}清除现有 Terraform 状态...${NC}"
+        echo -e "${YELLOW}Clearing existing Terraform state...${NC}"
         rm -rf .terraform .terraform.lock.hcl
     fi
     
-    # 初始化 Terraform
-    echo "正在初始化 Terraform..."
+    # Initialize Terraform
+    echo "Initializing Terraform..."
     terraform init
     
-    # 验证配置
+    # Validate configuration
     echo ""
-    echo "正在验证配置..."
+    echo "Validating configuration..."
     terraform validate
     
-    # 格式检查
+    # Format check
     echo ""
-    echo "正在检查代码格式..."
+    echo "Checking code format..."
     terraform fmt -check
     
     echo ""
-    echo -e "${GREEN}初始化完成！${NC}"
+    echo -e "${GREEN}Initialization complete!${NC}"
     
-    # 显示工作区信息
+    # Show workspace information
     echo ""
-    echo "当前工作区:"
+    echo "Current workspace:"
     terraform workspace list
     
-    # 返回原目录
+    # Return to original directory
     cd ../..
 }
 
-# 主逻辑
+# Main logic
 FORCE=false
 ENV=""
 
@@ -1146,7 +1146,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *)
-            echo -e "${RED}未知选项: $1${NC}"
+            echo -e "${RED}Unknown option: $1${NC}"
             show_help
             exit 1
             ;;
@@ -1154,7 +1154,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ -z "$ENV" ]; then
-    echo -e "${RED}错误: 请指定环境${NC}"
+    echo -e "${RED}Error: Please specify an environment${NC}"
     show_help
     exit 1
 fi
@@ -1162,79 +1162,79 @@ fi
 init_environment "$ENV" "$FORCE"
 ```
 
-#### 步骤 14：创建部署脚本
+#### Step 14: Create Deployment Script
 
-创建文件 `terraform-github-demo/scripts/deploy.sh`：
+Create file `terraform-github-demo/scripts/deploy.sh`:
 
 ```bash
 #!/bin/bash
 
-# Terraform 部署脚本
+# Terraform deployment script
 
 set -e
 
-# 颜色定义
+# Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# 打印帮助信息
+# Print help information
 show_help() {
-    echo "Terraform 部署工具"
+    echo "Terraform Deployment Tool"
     echo ""
-    echo "用法: $0 [选项] <环境> <动作>"
+    echo "Usage: $0 [options] <environment> <action>"
     echo ""
-    echo "环境:"
-    echo "  dev      - 开发环境"
-    echo "  staging  - 测试环境"
-    echo "  prod     - 生产环境"
+    echo "Environments:"
+    echo "  dev      - Development environment"
+    echo "  staging  - Staging environment"
+    echo "  prod     - Production environment"
     echo ""
-    echo "动作:"
-    echo "  plan     - 查看变更计划"
-    echo "  apply    - 应用变更"
-    echo "  destroy  - 销毁资源"
-    echo "  output   - 显示输出"
+    echo "Actions:"
+    echo "  plan     - View change plan"
+    echo "  apply    - Apply changes"
+    echo "  destroy  - Destroy resources"
+    echo "  output   - Show outputs"
     echo ""
-    echo "选项:"
-    echo "  -h, --help       显示帮助信息"
-    echo "  -y, --auto-approve 自动确认"
-    echo "  -var-file=FILE   指定变量文件"
+    echo "Options:"
+    echo "  -h, --help         Show help information"
+    echo "  -y, --auto-approve Auto-confirm"
+    echo "  -var-file=FILE     Specify variable file"
 }
 
-# 部署函数
+# Deployment function
 deploy() {
     local env=$1
     local action=$2
     local auto_approve=$3
     local var_file=$4
     
-    echo -e "${GREEN}=== ${env} 环境 - ${action} ===${NC}"
+    echo -e "${GREEN}=== ${env} environment - ${action} ===${NC}"
     echo ""
     
-    # 检查环境目录
+    # Check environment directory
     if [ ! -d "environments/${env}" ]; then
-        echo -e "${RED}错误: 环境目录不存在: environments/${env}${NC}"
+        echo -e "${RED}Error: Environment directory does not exist: environments/${env}${NC}"
         exit 1
     fi
     
-    # 进入环境目录
+    # Enter environment directory
     cd "environments/${env}"
     
-    # 构建命令参数
+    # Build command arguments
     local cmd_args=""
     if [ -n "$var_file" ]; then
         cmd_args="-var-file=${var_file}"
     fi
     
-    # 执行动作
+    # Execute action
     case $action in
         plan)
-            echo "正在生成变更计划..."
+            echo "Generating change plan..."
             terraform plan $cmd_args
             ;;
         apply)
-            echo "正在应用变更..."
+            echo "Applying changes..."
             if [ "$auto_approve" = "true" ]; then
                 terraform apply -auto-approve $cmd_args
             else
@@ -1242,7 +1242,7 @@ deploy() {
             fi
             ;;
         destroy)
-            echo -e "${YELLOW}警告: 即将销毁所有资源！${NC}"
+            echo -e "${YELLOW}Warning: About to destroy all resources!${NC}"
             if [ "$auto_approve" = "true" ]; then
                 terraform destroy -auto-approve $cmd_args
             else
@@ -1250,23 +1250,23 @@ deploy() {
             fi
             ;;
         output)
-            echo "输出值:"
+            echo "Output values:"
             terraform output
             ;;
         *)
-            echo -e "${RED}未知动作: $action${NC}"
+            echo -e "${RED}Unknown action: $action${NC}"
             exit 1
             ;;
     esac
     
     echo ""
-    echo -e "${GREEN}操作完成！${NC}"
+    echo -e "${GREEN}Operation completed!${NC}"
     
-    # 返回原目录
+    # Return to original directory
     cd ../..
 }
 
-# 主逻辑
+# Main logic
 AUTO_APPROVE=false
 VAR_FILE=""
 ENV=""
@@ -1295,7 +1295,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *)
-            echo -e "${RED}未知选项: $1${NC}"
+            echo -e "${RED}Unknown option: $1${NC}"
             show_help
             exit 1
             ;;
@@ -1303,7 +1303,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ -z "$ENV" ] || [ -z "$ACTION" ]; then
-    echo -e "${RED}错误: 请指定环境和动作${NC}"
+    echo -e "${RED}Error: Please specify environment and action${NC}"
     show_help
     exit 1
 fi
@@ -1311,29 +1311,29 @@ fi
 deploy "$ENV" "$ACTION" "$AUTO_APPROVE" "$VAR_FILE"
 ```
 
-#### 步骤 15：创建 Terraform 文档生成脚本
+#### Step 15: Create Terraform Documentation Generation Script
 
-创建文件 `terraform-github-demo/scripts/generate-docs.sh`：
+Create file `terraform-github-demo/scripts/generate-docs.sh`:
 
 ```bash
 #!/bin/bash
 
-# Terraform 文档生成脚本
+# Terraform documentation generation script
 
 set -e
 
-# 颜色定义
+# Color definitions
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-echo -e "${GREEN}=== 生成 Terraform 文档 ===${NC}"
+echo -e "${GREEN}=== Generating Terraform Documentation ===${NC}"
 echo ""
 
-# 检查 terraform-docs 是否安装
+# Check if terraform-docs is installed
 if ! command -v terraform-docs &> /dev/null; then
-    echo "安装 terraform-docs..."
+    echo "Installing terraform-docs..."
     
-    # 检测操作系统
+    # Detect operating system
     if [[ "$OSTYPE" == "darwin"* ]]; then
         brew install terraform-docs
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -1344,163 +1344,163 @@ if ! command -v terraform-docs &> /dev/null; then
     fi
 fi
 
-# 生成模块文档
-echo "生成模块文档..."
+# Generate module documentation
+echo "Generating module documentation..."
 for module_dir in modules/*/; do
     if [ -d "$module_dir" ]; then
         module_name=$(basename "$module_dir")
         echo "  - ${module_name}"
         
-        # 生成 Markdown 文档
+        # Generate Markdown documentation
         terraform-docs markdown table "${module_dir}" > "${module_dir}/README.md"
     fi
 done
 
-# 生成环境文档
+# Generate environment documentation
 echo ""
-echo "生成环境文档..."
+echo "Generating environment documentation..."
 for env_dir in environments/*/; do
     if [ -d "$env_dir" ]; then
         env_name=$(basename "$env_dir")
         echo "  - ${env_name}"
         
-        # 生成 Markdown 文档
+        # Generate Markdown documentation
         terraform-docs markdown table "${env_dir}" > "${env_dir}/README.md"
     fi
 done
 
-# 生成主 README
+# Generate main README
 echo ""
-echo "生成主 README..."
+echo "Generating main README..."
 cat > README.md << 'EOF'
 # Terraform GitHub Demo
 
-本项目演示如何使用 Terraform 和 GitHub Actions 管理云基础设施。
+This project demonstrates how to use Terraform and GitHub Actions to manage cloud infrastructure.
 
-## 项目结构
+## Project Structure
 
 ```
 .
-├── environments/          # 环境配置
-│   ├── dev/              # 开发环境
-│   ├── staging/          # 测试环境
-│   └── prod/             # 生产环境
-├── modules/              # 可复用模块
-│   └── network/          # 网络模块
-├── scripts/              # 实用脚本
-└── .github/workflows/    # GitHub Actions 工作流
+├── environments/          # Environment configurations
+│   ├── dev/              # Development environment
+│   ├── staging/          # Staging environment
+│   └── prod/             # Production environment
+├── modules/              # Reusable modules
+│   └── network/          # Network module
+├── scripts/              # Utility scripts
+└── .github/workflows/    # GitHub Actions workflows
 ```
 
-## 快速开始
+## Quick Start
 
-### 初始化环境
+### Initialize Environment
 
 ```bash
-# 初始化开发环境
+# Initialize development environment
 ./scripts/init.sh dev
 
-# 初始化测试环境
+# Initialize staging environment
 ./scripts/init.sh staging
 
-# 初始化生产环境
+# Initialize production environment
 ./scripts/init.sh prod
 ```
 
-### 部署资源
+### Deploy Resources
 
 ```bash
-# 查看变更计划
+# View change plan
 ./scripts/deploy.sh dev plan
 
-# 应用变更
+# Apply changes
 ./scripts/deploy.sh dev apply
 
-# 销毁资源
+# Destroy resources
 ./scripts/deploy.sh dev destroy
 ```
 
-### 生成文档
+### Generate Documentation
 
 ```bash
 ./scripts/generate-docs.sh
 ```
 
-## GitHub Actions 工作流
+## GitHub Actions Workflows
 
-- `terraform-plan.yml` - PR 时自动计划
-- `terraform-apply.yml` - 合并后自动部署
-- `terraform-multi-env.yml` - 多环境部署
-- `terraform-security.yml` - 安全扫描
-- `terraform-state.yml` - 状态管理
+- `terraform-plan.yml` - Automatic planning on PR
+- `terraform-apply.yml` - Automatic deployment after merge
+- `terraform-multi-env.yml` - Multi-environment deployment
+- `terraform-security.yml` - Security scanning
+- `terraform-state.yml` - State management
 
-## 最佳实践
+## Best Practices
 
-1. 使用远程状态存储
-2. 启用状态锁定
-3. 使用变量文件管理环境差异
-4. 在 PR 中审查变更计划
-5. 使用 GitHub Environments 保护生产环境
-6. 定期运行安全扫描
+1. Use remote state storage
+2. Enable state locking
+3. Use variable files to manage environment differences
+4. Review change plans in PRs
+5. Use GitHub Environments to protect production
+6. Run security scans regularly
 
-## 安全注意事项
+## Security Considerations
 
-- 不要在代码中硬编码凭证
-- 使用 GitHub Secrets 存储敏感信息
-- 启用状态加密
-- 限制 IAM 权限
-- 定期审计基础设施变更
+- Never hardcode credentials in code
+- Use GitHub Secrets to store sensitive information
+- Enable state encryption
+- Restrict IAM permissions
+- Audit infrastructure changes regularly
 EOF
 
 echo ""
-echo -e "${GREEN}文档生成完成！${NC}"
+echo -e "${GREEN}Documentation generation complete!${NC}"
 ```
 
 ```bash
-# 使脚本可执行
+# Make scripts executable
 chmod +x terraform-github-demo/scripts/*.sh
 ```
 
 ---
 
-## 验证练习结果
+## Verify Exercise Results
 
-### 检查清单
+### Checklist
 
-完成练习后，请验证以下内容：
+After completing the exercise, verify the following:
 
-- [ ] Terraform 已正确安装
-- [ ] 项目目录结构已创建
-- [ ] Terraform 配置文件语法正确
-- [ ] GitHub Actions 工作流已创建
-- [ ] 脚本文件可执行
+- [ ] Terraform is installed correctly
+- [ ] Project directory structure is created
+- [ ] Terraform configuration file syntax is correct
+- [ ] GitHub Actions workflows are created
+- [ ] Script files are executable
 
-### 验证命令
+### Verification Commands
 
 ```bash
-# 检查 Terraform 安装
+# Check Terraform installation
 terraform version
 
-# 验证配置文件
+# Validate configuration files
 cd terraform-github-demo/environments/dev
 terraform init -backend=false
 terraform validate
 terraform fmt -check
 
-# 检查工作流语法
+# Check workflow syntax
 actionlint .github/workflows/terraform-*.yml
 
-# 检查脚本
+# Check scripts
 bash -n terraform-github-demo/scripts/init.sh
 bash -n terraform-github-demo/scripts/deploy.sh
 ```
 
 ---
 
-## 进阶挑战
+## Advanced Challenges
 
-### 挑战 1：实现 Terraform Cloud 集成
+### Challenge 1: Implement Terraform Cloud Integration
 
-使用 Terraform Cloud 替代 S3 后端：
+Use Terraform Cloud instead of S3 backend:
 
 ```hcl
 terraform {
@@ -1514,9 +1514,9 @@ terraform {
 }
 ```
 
-### 挑战 2：创建自定义 Terraform Provider
+### Challenge 2: Create a Custom Terraform Provider
 
-开发一个简单的 Terraform Provider：
+Develop a simple Terraform Provider:
 
 ```go
 package main
@@ -1535,181 +1535,181 @@ func main() {
 }
 ```
 
-### 挑战 3：实现基础设施漂移检测
+### Challenge 3: Implement Infrastructure Drift Detection
 
-创建定期检测基础设施漂移的工作流：
+Create a workflow that periodically detects infrastructure drift:
 
 ```yaml
 name: Drift Detection
 
 on:
   schedule:
-    - cron: '0 8 * * 1'  # 每周一早上8点
+    - cron: '0 8 * * 1'  # Every Monday at 8am
 
 jobs:
   detect-drift:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 检测漂移
+      - name: Detect drift
         run: |
           terraform plan -detailed-exitcode
           if [ $? -eq 2 ]; then
-            echo "检测到基础设施漂移！"
+            echo "Infrastructure drift detected!"
             exit 1
           fi
 ```
 
-### 挑战 4：实现成本优化建议
+### Challenge 4: Implement Cost Optimization Recommendations
 
-使用 Infracost 分析并提供成本优化建议：
+Use Infracost to analyze and provide cost optimization recommendations:
 
 ```yaml
-- name: 成本优化分析
+- name: Cost optimization analysis
   run: |
     infracost diff --path terraform-github-demo/environments/dev \
       --format json \
       --out-file infracost-diff.json
     
-    # 分析成本变化
+    # Analyze cost changes
     python scripts/analyze-cost.py infracost-diff.json
 ```
 
 ---
 
-## 常见问题
+## Frequently Asked Questions
 
-### Q1：如何处理 Terraform 状态冲突？
+### Q1: How to handle Terraform state conflicts?
 
 ```bash
-# 查看当前锁
+# View current lock
 terraform force-unlock <LOCK_ID>
 
-# 或使用 DynamoDB 自动解锁
+# Or use DynamoDB to automatically unlock
 aws dynamodb delete-item \
   --table-name terraform-locks \
   --key '{"LockID":{"S":"<LOCK_ID>"}}'
 ```
 
-### Q2：如何安全地删除资源？
+### Q2: How to safely delete resources?
 
 ```bash
-# 先查看将要删除的资源
+# First view resources to be deleted
 terraform plan -destroy
 
-# 使用 -target 选择性删除
+# Selectively delete using -target
 terraform destroy -target=aws_instance.example
 
-# 或在代码中移除资源后执行
+# Or remove resources from code and apply
 terraform apply
 ```
 
-### Q3：如何回滚 Terraform 变更？
+### Q3: How to roll back Terraform changes?
 
 ```bash
-# 使用 Git 回滚代码
+# Roll back code using Git
 git revert <commit-hash>
 
-# 重新应用
+# Reapply
 terraform apply
 
-# 或手动修改状态
+# Or manually modify state
 terraform state mv aws_instance.old aws_instance.new
 ```
 
-### Q4：如何优化 Terraform 执行速度？
+### Q4: How to optimize Terraform execution speed?
 
-1. 使用 `-parallelism` 参数增加并行度
-2. 使用 `-refresh=false` 跳过状态刷新
-3. 使用 `-target` 只处理特定资源
-4. 使用 Terraform Cloud 的远程执行
-5. 使用模块缓存
-
----
-
-## Terraform 核心概念深入解析
-
-### 状态管理的重要性
-
-Terraform 的状态文件是整个基础设施管理的核心。状态文件记录了 Terraform 管理的所有资源的当前状态，包括资源的属性、依赖关系和唯一标识符。当执行 `terraform plan` 命令时，Terraform 会对比配置文件中定义的期望状态和状态文件中记录的当前状态，计算出需要执行的变更操作。如果状态文件丢失或损坏，Terraform 将无法正确管理基础设施，可能导致资源重复创建或意外删除。
-
-远程状态存储是团队协作的基础。将状态文件存储在 S3、Azure Blob Storage 或 Terraform Cloud 等远程服务中，可以确保团队所有成员使用同一份状态文件。状态锁定机制防止多人同时修改状态导致冲突，DynamoDB 表用于实现 AWS 环境下的状态锁定。状态加密确保敏感信息不会泄露，S3 支持使用 KMS 进行服务端加密。状态版本控制允许回滚到之前的状态版本，在出现问题时可以快速恢复。
-
-### 工作区策略
-
-Terraform 工作区是在同一配置中管理多个环境的机制。每个工作区有独立的状态文件，使用相同配置创建不同的环境实例。工作区适合管理环境差异较小的场景，例如开发、测试和生产环境使用相同的资源配置，只是规模和参数不同。
-
-然而，对于环境差异较大的场景，建议使用目录隔离方式。每个环境使用独立的配置目录，可以有完全不同的资源配置和参数。目录隔离方式的灵活性更高，可以针对不同环境进行独立的优化和定制。在本练习中，我们采用了目录隔离方式，每个环境有独立的配置目录和状态文件。
-
-### 模块化设计原则
-
-良好的模块化设计可以显著提升 Terraform 代码的可维护性和复用性。模块应该遵循单一职责原则，每个模块只负责一类资源的管理。模块的接口应该简洁明了，输入变量和输出值应该有清晰的描述和类型定义。模块内部应该包含合理的默认值，减少调用方的配置负担。模块应该支持参数化，通过变量控制资源的规模、名称和其他属性。
-
-模块的版本管理也很重要。建议使用 Git 标签管理模块版本，语义化版本号表示变更的性质。在模块仓库中维护变更日志，记录每个版本的变更内容。模块的使用者可以通过版本约束指定使用的模块版本，避免意外的破坏性变更。
-
-### 计划与应用的工作流
-
-Terraform 的计划和应用流程是确保基础设施安全变更的关键。在执行 `terraform apply` 之前，应该先执行 `terraform plan` 查看变更计划。变更计划会列出所有将要执行的操作，包括资源的创建、修改和删除。仔细审查变更计划，确认所有变更都是预期的。特别注意标记为销毁的操作，确保不会意外删除重要资源。
-
-在 CI/CD 流程中，可以在 Pull Request 阶段自动执行 `terraform plan`，将变更计划作为评论添加到 PR 中。审查者可以查看变更计划，确认变更是否合理。合并 PR 后，自动执行 `terraform apply` 应用变更。这种工作流确保了所有基础设施变更都经过审查，降低了误操作的风险。
-
-### 变量管理最佳实践
-
-Terraform 的变量管理直接影响配置的灵活性和可维护性。使用变量文件可以将环境特定的参数与通用配置分离。每个环境可以有独立的变量文件，例如 `dev.tfvars`、`staging.tfvars` 和 `prod.tfvars`。变量文件不应该包含敏感信息，敏感信息应该通过环境变量或密钥管理服务传递。
-
-变量的验证规则可以在定义时指定，确保输入值符合预期。例如，可以限制环境变量只能是 `dev`、`staging` 或 `prod`。可以限制实例类型只能是特定的值列表。可以限制端口范围在有效范围内。变量验证可以在计划阶段捕获配置错误，避免在应用阶段才发现问题。
-
-### 输出值的设计
-
-Terraform 的输出值用于将资源属性暴露给外部使用。输出值可以用于模块之间的信息传递，例如网络模块输出子网 ID，计算模块使用这些子网 ID 创建实例。输出值也可以用于 CI/CD 流程，例如输出负载均衡器的 DNS 名称用于后续的健康检查。输出值应该有清晰的描述，说明输出的含义和用途。敏感的输出值应该标记为 `sensitive = true`，防止在日志中泄露。
-
-### 提供商配置
-
-Terraform 提供商是与云服务 API 交互的插件。提供商的版本约束应该明确指定，避免使用未经测试的版本。默认标签可以在提供商级别配置，确保所有资源都有统一的标签。多提供商配置允许在同一配置中管理多个区域或多账户的资源。提供商的认证信息应该通过环境变量或配置文件传递，不应该硬编码在配置中。
-
-### 生命周期管理
-
-Terraform 的生命周期规则可以控制资源的创建、更新和删除行为。`create_before_destroy` 规则在替换资源时先创建新资源再删除旧资源，避免服务中断。`prevent_destroy` 规则防止重要资源被意外删除，例如数据库和状态存储桶。`ignore_changes` 规则忽略特定属性的变更，避免外部修改触发不必要的更新。合理使用生命周期规则可以提升基础设施的稳定性和安全性。
-
-### 秘密管理
-
-在 Terraform 中管理秘密信息需要特别谨慎。不要在配置文件或变量文件中硬编码密码、密钥等敏感信息。使用 AWS Secrets Manager、Azure Key Vault 或 HashiCorp Vault 等秘密管理服务存储敏感信息。通过数据源在运行时获取秘密值，而不是将其存储在状态文件中。如果必须在状态文件中存储秘密，确保状态文件的存储位置有适当的访问控制和加密保护。定期轮换秘密值，降低泄露风险。
-
-### 灾难恢复计划
-
-基础设施的灾难恢复计划是生产环境的重要保障。定期备份状态文件，确保可以在状态文件损坏时恢复。记录所有手动配置的资源，这些资源不在 Terraform 管理范围内，需要单独备份。建立基础设施重建流程，在灾难发生时可以快速重建整个环境。定期进行灾难恢复演练，验证恢复流程的有效性。使用基础设施版本控制，可以快速回滚到之前已知正常的状态。
-
-### 性能优化
-
-大型基础设施的 Terraform 执行可能需要较长时间。使用 `-parallelism` 参数增加资源创建的并行度，默认值是 10，可以根据云服务的限制适当增加。使用 `-refresh=false` 跳过状态刷新，在状态文件已经是最新时可以节省时间。使用 `-target` 参数只处理特定资源，在调试时可以避免执行完整的计划和应用。将大型配置拆分为多个独立的状态文件，减少每个状态文件管理的资源数量。使用 Terraform Cloud 的远程执行功能，利用其缓存和并行能力提升执行效率。
-
-### 代码审查清单
-
-建立 Terraform 配置的代码审查清单可以提升代码质量。审查内容包括安全性检查，确认没有硬编码的凭证和过于宽松的权限。资源命名检查，确认资源名称符合命名规范且具有描述性。标签检查，确认所有资源都有必要的标签。变量检查，确认变量有清晰的描述和合理的默认值。输出检查，确认输出值有清晰的描述且敏感值已标记。生命周期检查，确认生命周期规则的使用合理。依赖检查，确认资源之间的依赖关系正确。格式检查，确认代码格式符合 Terraform 规范。
+1. Use the `-parallelism` parameter to increase parallelism
+2. Use `-refresh=false` to skip state refresh
+3. Use `-target` to only process specific resources
+4. Use Terraform Cloud's remote execution
+5. Use module caching
 
 ---
 
-## 延伸阅读
+## In-Depth Analysis of Terraform Core Concepts
 
-- [Terraform 官方文档](https://developer.hashicorp.com/terraform/docs)
-- [GitHub Actions 集成 Terraform](https://learn.hashicorp.com/tutorials/terraform/github-actions)
-- [Terraform 最佳实践](https://www.terraform-best-practices.com/)
-- [Infracost 文档](https://www.infracost.io/docs/)
+### The Importance of State Management
+
+Terraform's state file is the core of all infrastructure management. The state file records the current state of all resources managed by Terraform, including resource attributes, dependencies, and unique identifiers. When executing the `terraform plan` command, Terraform compares the desired state defined in the configuration files with the current state recorded in the state file, calculating the change operations that need to be executed. If the state file is lost or corrupted, Terraform will be unable to properly manage infrastructure, potentially leading to duplicate resource creation or unintended deletion.
+
+Remote state storage is the foundation of team collaboration. Storing the state file in remote services such as S3, Azure Blob Storage, or Terraform Cloud ensures that all team members use the same state file. State locking prevents conflicts caused by multiple people modifying the state simultaneously, with DynamoDB tables used to implement state locking in AWS environments. State encryption ensures that sensitive information is not leaked, with S3 supporting server-side encryption using KMS. State version control allows rolling back to previous state versions, enabling quick recovery when issues arise.
+
+### Workspace Strategies
+
+Terraform workspaces are a mechanism for managing multiple environments within the same configuration. Each workspace has an independent state file, using the same configuration to create different environment instances. Workspaces are suitable for scenarios with small environment differences, such as development, staging, and production environments using the same resource configuration with only different scales and parameters.
+
+However, for scenarios with significant environment differences, directory isolation is recommended. Each environment uses an independent configuration directory, allowing for completely different resource configurations and parameters. Directory isolation offers greater flexibility, enabling independent optimization and customization for different environments. In this exercise, we adopted the directory isolation approach, with each environment having its own configuration directory and state file.
+
+### Modular Design Principles
+
+Good modular design can significantly improve Terraform code maintainability and reusability. Modules should follow the single responsibility principle, with each module responsible for managing one type of resource. Module interfaces should be concise and clear, with input variables and output values having clear descriptions and type definitions. Modules should include reasonable default values to reduce the configuration burden on callers. Modules should support parameterization, controlling resource scale, names, and other attributes through variables.
+
+Module version management is also important. It is recommended to use Git tags to manage module versions, with semantic versioning indicating the nature of changes. Maintain a changelog in the module repository, recording the changes in each version. Module users can specify the module version to use through version constraints, avoiding unexpected breaking changes.
+
+### Plan and Apply Workflow
+
+Terraform's plan and apply process is the key to ensuring safe infrastructure changes. Before executing `terraform apply`, you should first run `terraform plan` to view the change plan. The change plan lists all operations to be executed, including resource creation, modification, and deletion. Carefully review the change plan to confirm all changes are as expected. Pay special attention to operations marked for destruction to ensure important resources are not accidentally deleted.
+
+In CI/CD workflows, `terraform plan` can be automatically executed during the Pull Request phase, with the change plan added as a comment to the PR. Reviewers can view the change plan and confirm whether the changes are reasonable. After merging the PR, `terraform apply` is automatically executed to apply the changes. This workflow ensures all infrastructure changes go through review, reducing the risk of operational errors.
+
+### Variable Management Best Practices
+
+Terraform's variable management directly affects configuration flexibility and maintainability. Using variable files can separate environment-specific parameters from general configurations. Each environment can have its own variable file, such as `dev.tfvars`, `staging.tfvars`, and `prod.tfvars`. Variable files should not contain sensitive information; sensitive information should be passed through environment variables or key management services.
+
+Variable validation rules can be specified at definition time to ensure input values meet expectations. For example, environment variables can be restricted to only `dev`, `staging`, or `prod`. Instance types can be limited to a specific list of values. Port ranges can be restricted to valid ranges. Variable validation can catch configuration errors during the planning phase, avoiding discovery of problems during the apply phase.
+
+### Output Value Design
+
+Terraform output values are used to expose resource attributes for external use. Output values can be used for information transfer between modules, such as a network module outputting subnet IDs and a compute module using those subnet IDs to create instances. Output values can also be used in CI/CD workflows, such as outputting load balancer DNS names for subsequent health checks. Output values should have clear descriptions explaining the meaning and purpose of the output. Sensitive output values should be marked as `sensitive = true` to prevent leakage in logs.
+
+### Provider Configuration
+
+Terraform providers are plugins that interact with cloud service APIs. Provider version constraints should be explicitly specified to avoid using untested versions. Default tags can be configured at the provider level to ensure all resources have unified tags. Multi-provider configuration allows managing resources across multiple regions or accounts in the same configuration. Provider authentication information should be passed through environment variables or configuration files, not hardcoded in configuration.
+
+### Lifecycle Management
+
+Terraform lifecycle rules can control resource creation, update, and deletion behavior. The `create_before_destroy` rule creates a new resource before deleting the old one during replacement, avoiding service disruption. The `prevent_destroy` rule prevents important resources from being accidentally deleted, such as databases and state storage buckets. The `ignore_changes` rule ignores changes to specific attributes, preventing external modifications from triggering unnecessary updates. Proper use of lifecycle rules can improve infrastructure stability and security.
+
+### Secret Management
+
+Managing secrets in Terraform requires special caution. Never hardcode passwords, keys, or other sensitive information in configuration files or variable files. Use secret management services such as AWS Secrets Manager, Azure Key Vault, or HashiCorp Vault to store sensitive information. Retrieve secret values at runtime through data sources rather than storing them in the state file. If secrets must be stored in the state file, ensure the storage location has appropriate access control and encryption protection. Regularly rotate secret values to reduce leakage risk.
+
+### Disaster Recovery Planning
+
+Infrastructure disaster recovery planning is essential for production environments. Regularly back up state files to ensure recovery is possible if the state file is corrupted. Document all manually configured resources that are not managed by Terraform and need separate backup. Establish an infrastructure rebuild process to quickly reconstruct the entire environment in case of disaster. Conduct regular disaster recovery drills to verify the effectiveness of recovery processes. Use infrastructure version control to quickly roll back to previously known good states.
+
+### Performance Optimization
+
+Terraform execution for large infrastructure may take considerable time. Use the `-parallelism` parameter to increase the parallelism of resource creation, with a default value of 10 that can be increased as appropriate based on cloud service limits. Use `-refresh=false` to skip state refresh, saving time when the state file is already up to date. Use the `-target` parameter to only process specific resources, avoiding execution of full plan and apply during debugging. Split large configurations into multiple independent state files to reduce the number of resources managed by each state file. Use Terraform Cloud's remote execution capability, leveraging its caching and parallelism features to improve execution efficiency.
+
+### Code Review Checklist
+
+Establishing a Terraform configuration code review checklist can improve code quality. Review content includes security checks, confirming no hardcoded credentials and overly permissive permissions. Resource naming checks, confirming resource names follow naming conventions and are descriptive. Tag checks, confirming all resources have necessary tags. Variable checks, confirming variables have clear descriptions and reasonable default values. Output checks, confirming output values have clear descriptions and sensitive values are marked. Lifecycle checks, confirming lifecycle rules are used appropriately. Dependency checks, confirming dependencies between resources are correct. Format checks, confirming code format conforms to Terraform standards.
 
 ---
 
-## 练习总结
+## Further Reading
 
-通过本练习，你已经学会了：
+- [Terraform Official Documentation](https://developer.hashicorp.com/terraform/docs)
+- [GitHub Actions Integration with Terraform](https://learn.hashicorp.com/tutorials/terraform/github-actions)
+- [Terraform Best Practices](https://www.terraform-best-practices.com/)
+- [Infracost Documentation](https://www.infracost.io/docs/)
 
-1. ✅ 理解基础设施即代码的概念
-2. ✅ 编写 Terraform 配置文件
-3. ✅ 创建可复用的 Terraform 模块
-4. ✅ 使用 GitHub Actions 自动化部署
-5. ✅ 管理多环境基础设施
-6. ✅ 实现安全扫描和成本估算
+---
 
-Terraform 与 GitHub Actions 的结合是现代 DevOps 的重要实践，建议在实际项目中逐步采用，从开发环境开始，逐步扩展到生产环境。
+## Exercise Summary
+
+Through this exercise, you have learned:
+
+1. ✅ Understanding the concept of Infrastructure as Code
+2. ✅ Writing Terraform configuration files
+3. ✅ Creating reusable Terraform modules
+4. ✅ Automating deployment with GitHub Actions
+5. ✅ Managing multi-environment infrastructure
+6. ✅ Implementing security scanning and cost estimation
+
+The combination of Terraform and GitHub Actions is an important practice in modern DevOps. It is recommended to adopt this approach gradually in real projects, starting from the development environment and expanding to production.

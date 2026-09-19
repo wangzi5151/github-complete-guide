@@ -1,34 +1,34 @@
-# 微服务架构的 GitHub 管理
+# GitHub Management for Microservices Architecture
 
-> 微服务项目的仓库组织、CI/CD 实践、服务治理与可观测性完整指南
-
----
-
-## 目录
-
-1. [微服务项目仓库组织](#1-微服务项目仓库组织)
-2. [微服务 CI/CD 最佳实践](#2-微服务-cicd-最佳实践)
-3. [服务网格部署](#3-服务网格部署)
-4. [API Gateway 配置与管理](#4-api-gateway-配置与管理)
-5. [微服务测试策略](#5-微服务测试策略)
-6. [服务发现与注册](#6-服务发现与注册)
-7. [分布式追踪](#7-分布式追踪)
-8. [日志聚合](#8-日志聚合)
-9. [微服务安全](#9-微服务安全)
-10. [微服务监控与告警](#10-微服务监控与告警)
-11. [蓝绿部署与金丝雀发布](#11-蓝绿部署与金丝雀发布)
-12. [微服务拆分与重构策略](#12-微服务拆分与重构策略)
-13. [国内微服务框架](#13-国内微服务框架)
+> Complete guide to repository organization, CI/CD practices, service governance, and observability for microservice projects
 
 ---
 
-## 1. 微服务项目仓库组织
+## Table of Contents
+
+1. [Microservice Project Repository Organization](#1-microservice-project-repository-organization)
+2. [Microservice CI/CD Best Practices](#2-microservice-cicd-best-practices)
+3. [Service Mesh Deployment](#3-service-mesh-deployment)
+4. [API Gateway Configuration and Management](#4-api-gateway-configuration-and-management)
+5. [Microservice Testing Strategies](#5-microservice-testing-strategies)
+6. [Service Discovery and Registration](#6-service-discovery-and-registration)
+7. [Distributed Tracing](#7-distributed-tracing)
+8. [Log Aggregation](#8-log-aggregation)
+9. [Microservice Security](#9-microservice-security)
+10. [Microservice Monitoring and Alerting](#10-microservice-monitoring-and-alerting)
+11. [Blue-Green Deployment and Canary Releases](#11-blue-green-deployment-and-canary-releases)
+12. [Microservice Splitting and Refactoring Strategies](#12-microservice-splitting-and-refactoring-strategies)
+13. [Domestic Microservice Frameworks](#13-domestic-microservice-frameworks)
+
+---
+
+## 1. Microservice Project Repository Organization
 
 ### 1.1 Monorepo vs Multirepo
 
-微服务架构面临的第一个重要决策就是仓库组织方式：
+The first important decision a microservices architecture faces is the repository organization approach:
 
-**Monorepo（单一仓库）**
+**Monorepo (Single Repository)**
 
 ```
 my-microservices/
@@ -71,22 +71,22 @@ my-microservices/
     └── api-docs/
 ```
 
-**Multirepo（多仓库）**
+**Multirepo (Multiple Repositories)**
 
 ```
 github.com/myorg/
-├── user-service/          # 独立仓库
-├── order-service/         # 独立仓库
-├── payment-service/       # 独立仓库
-├── notification-service/  # 独立仓库
-├── common-lib/           # 共享库仓库
-├── proto-definitions/    # Proto 定义仓库
-└── infrastructure/       # 基础设施仓库
+├── user-service/          # Independent repository
+├── order-service/         # Independent repository
+├── payment-service/       # Independent repository
+├── notification-service/  # Independent repository
+├── common-lib/           # Shared library repository
+├── proto-definitions/    # Proto definitions repository
+└── infrastructure/       # Infrastructure repository
 ```
 
-### 1.2 Monorepo CI/CD 配置
+### 1.2 Monorepo CI/CD Configuration
 
-Monorepo 的关键挑战是只构建和部署变更的服务：
+The key challenge of Monorepo is to build and deploy only the changed services:
 
 ```yaml
 # .github/workflows/monorepo-ci.yml
@@ -160,13 +160,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Deploy changed services
         run: |
-          # 根据构建结果决定部署哪些服务
+          # Decide which services to deploy based on build results
           echo "Deploying changed services..."
 ```
 
-### 1.3 可复用的工作流
+### 1.3 Reusable Workflows
 
-创建可复用的工作流模板，避免重复配置：
+Create reusable workflow templates to avoid duplicate configuration:
 
 ```yaml
 # .github/workflows/build-service.yml
@@ -226,9 +226,9 @@ jobs:
 
 ---
 
-## 2. 微服务 CI/CD 最佳实践
+## 2. Microservice CI/CD Best Practices
 
-### 2.1 完整的微服务 CI/CD 流水线
+### 2.1 Complete Microservice CI/CD Pipeline
 
 ```yaml
 # .github/workflows/microservice-pipeline.yml
@@ -386,13 +386,13 @@ jobs:
     steps:
       - name: Run smoke tests
         run: |
-          # 等待服务就绪
+          # Wait for service to be ready
           sleep 30
           
-          # 健康检查
+          # Health check
           curl -f https://staging-api.example.com/${{ env.SERVICE_NAME }}/actuator/health || exit 1
           
-          # 运行端到端测试
+          # Run end-to-end tests
           npm install -g newman
           newman run tests/smoke-tests.json \
             --env-var "base_url=https://staging-api.example.com"
@@ -416,11 +416,11 @@ jobs:
           kubectl rollout status deployment/${{ env.SERVICE_NAME }} -n production --timeout=300s
 ```
 
-### 2.2 Dockerfile 最佳实践
+### 2.2 Dockerfile Best Practices
 
 ```dockerfile
 # services/user-service/Dockerfile
-# 多阶段构建
+# Multi-stage build
 FROM maven:3.9-eclipse-temurin-17 AS builder
 WORKDIR /app
 COPY pom.xml .
@@ -429,22 +429,22 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn package -DskipTests
 
-# 运行阶段
+# Runtime stage
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# 创建非 root 用户
+# Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# 安装必要工具
+# Install necessary tools
 RUN apk add --no-cache curl
 
 COPY --from=builder /app/target/*.jar app.jar
 
-# 切换到非 root 用户
+# Switch to non-root user
 USER appuser
 
-# 健康检查
+# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:8080/actuator/health || exit 1
 
@@ -455,9 +455,9 @@ ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-j
 
 ---
 
-## 3. 服务网格部署
+## 3. Service Mesh Deployment
 
-### 3.1 Istio 部署
+### 3.1 Istio Deployment
 
 ```yaml
 # .github/workflows/istio-deploy.yml
@@ -491,13 +491,13 @@ jobs:
       
       - name: Deploy services with Istio
         run: |
-          # 应用 Istio 配置
+          # Apply Istio configuration
           kubectl apply -f infrastructure/istio/
           
-          # 部署服务
+          # Deploy services
           kubectl apply -f infrastructure/kubernetes/production/
           
-          # 等待所有 Pod 就绪
+          # Wait for all Pods to be ready
           kubectl wait --for=condition=ready pod -l app=user-service -n production --timeout=300s
       
       - name: Verify Istio configuration
@@ -505,7 +505,7 @@ jobs:
           istioctl analyze -n production
 ```
 
-Istio 流量管理配置：
+Istio traffic management configuration:
 
 ```yaml
 # infrastructure/istio/virtual-service.yaml
@@ -571,7 +571,7 @@ spec:
       maxEjectionPercent: 50
 ```
 
-### 3.2 Linkerd 部署
+### 3.2 Linkerd Deployment
 
 ```yaml
 # .github/workflows/linkerd-deploy.yml
@@ -610,7 +610,7 @@ jobs:
 
 ---
 
-## 4. API Gateway 配置与管理
+## 4. API Gateway Configuration and Management
 
 ### 4.1 Kong API Gateway
 
@@ -641,7 +641,7 @@ jobs:
             --kong-addr https://kong-admin.example.com
 ```
 
-Kong 配置文件：
+Kong configuration file:
 
 ```yaml
 # infrastructure/kong/kong.yaml
@@ -734,22 +734,22 @@ data:
 
 ---
 
-## 5. 微服务测试策略
+## 5. Microservice Testing Strategies
 
-### 5.1 测试金字塔
+### 5.1 Test Pyramid
 
 ```
-          /  E2E  \           <- 少量端到端测试
+          /  E2E  \           <- Few end-to-end tests
          /----------\
-        / Integration \       <- 适量集成测试
+        / Integration \       <- Moderate integration tests
        /--------------\
-      /   Unit Tests    \     <- 大量单元测试
+      /   Unit Tests    \     <- Many unit tests
      /------------------\
-    /   Contract Tests   \    <- 契约测试
+    /   Contract Tests   \    <- Contract tests
    /----------------------\
 ```
 
-### 5.2 契约测试（Pact）
+### 5.2 Contract Testing (Pact)
 
 ```java
 // services/user-service/src/test/java/contract/UserProviderPactTest.java
@@ -774,7 +774,7 @@ public class UserProviderPactTest {
 
     @State("user exists")
     void userExists() {
-        // 准备测试数据
+        // Prepare test data
         userRepository.save(new User("123", "testuser", "test@example.com"));
     }
 
@@ -785,7 +785,7 @@ public class UserProviderPactTest {
 }
 ```
 
-消费者端测试：
+Consumer-side testing:
 
 ```java
 // services/order-service/src/test/java/contract/UserConsumerPactTest.java
@@ -822,7 +822,7 @@ public class UserConsumerPactTest {
 }
 ```
 
-### 5.3 集成测试
+### 5.3 Integration Testing
 
 ```yaml
 # .github/workflows/integration-tests.yml
@@ -879,7 +879,7 @@ jobs:
         run: docker-compose -f docker-compose.test.yml down
 ```
 
-### 5.4 端到端测试
+### 5.4 End-to-End Testing
 
 ```yaml
 # .github/workflows/e2e-tests.yml
@@ -915,9 +915,9 @@ jobs:
 
 ---
 
-## 6. 服务发现与注册
+## 6. Service Discovery and Registration
 
-### 6.1 Consul 服务发现
+### 6.1 Consul Service Discovery
 
 ```yaml
 # infrastructure/consul/consul-deployment.yaml
@@ -966,7 +966,7 @@ spec:
   type: ClusterIP
 ```
 
-### 6.2 Nacos 服务发现（阿里开源）
+### 6.2 Nacos Service Discovery (Alibaba Open Source)
 
 ```yaml
 # infrastructure/nacos/nacos-deployment.yaml
@@ -1028,9 +1028,9 @@ spec:
 
 ---
 
-## 7. 分布式追踪
+## 7. Distributed Tracing
 
-### 7.1 Jaeger 部署
+### 7.1 Jaeger Deployment
 
 ```yaml
 # infrastructure/jaeger/jaeger-deployment.yaml
@@ -1060,7 +1060,7 @@ spec:
     replicas: 2
 ```
 
-### 7.2 Spring Boot 集成 Jaeger
+### 7.2 Spring Boot Integration with Jaeger
 
 ```yaml
 # application.yml
@@ -1072,7 +1072,7 @@ management:
     tracing:
       endpoint: http://jaeger-collector.monitoring.svc.cluster.local:9411/api/v2/spans
 
-# 使用 OpenTelemetry
+# Using OpenTelemetry
 otel:
   service:
     name: user-service
@@ -1081,7 +1081,7 @@ otel:
       endpoint: http://otel-collector.monitoring.svc.cluster.local:4317
 ```
 
-### 7.3 OpenTelemetry Collector 配置
+### 7.3 OpenTelemetry Collector Configuration
 
 ```yaml
 # infrastructure/otel/otel-collector-config.yaml
@@ -1139,9 +1139,9 @@ data:
 
 ---
 
-## 8. 日志聚合
+## 8. Log Aggregation
 
-### 8.1 ELK Stack 部署
+### 8.1 ELK Stack Deployment
 
 ```yaml
 # infrastructure/elk/elasticsearch.yaml
@@ -1190,7 +1190,7 @@ spec:
     name: elasticsearch
 ```
 
-### 8.2 Fluentd 日志收集
+### 8.2 Fluentd Log Collection
 
 ```yaml
 # infrastructure/elk/fluentd-config.yaml
@@ -1245,7 +1245,7 @@ data:
     </match>
 ```
 
-### 8.3 统一日志格式
+### 8.3 Unified Log Format
 
 ```json
 {
@@ -1265,9 +1265,9 @@ data:
 
 ---
 
-## 9. 微服务安全
+## 9. Microservice Security
 
-### 9.1 OAuth2 + JWT 认证
+### 9.1 OAuth2 + JWT Authentication
 
 ```yaml
 # infrastructure/keycloak/keycloak-deployment.yaml
@@ -1309,7 +1309,7 @@ spec:
             - containerPort: 8080
 ```
 
-Spring Security OAuth2 配置：
+Spring Security OAuth2 configuration:
 
 ```java
 // services/user-service/src/main/java/config/SecurityConfig.java
@@ -1348,7 +1348,7 @@ public class SecurityConfig {
 }
 ```
 
-### 9.2 mTLS 双向认证
+### 9.2 mTLS Mutual Authentication
 
 ```yaml
 # infrastructure/istio/peer-authentication.yaml
@@ -1383,7 +1383,7 @@ spec:
             paths: ["/api/v1/orders/*"]
 ```
 
-### 9.3 API 密钥管理
+### 9.3 API Key Management
 
 ```yaml
 # .github/workflows/secret-rotation.yml
@@ -1391,7 +1391,7 @@ name: Secret Rotation
 
 on:
   schedule:
-    - cron: '0 0 1 */3 *'  # 每三个月轮换一次
+    - cron: '0 0 1 */3 *'  # Rotate every three months
 
 jobs:
   rotate-secrets:
@@ -1415,7 +1415,7 @@ jobs:
       
       - name: Notify team
         run: |
-          # 发送通知
+          # Send notification
           curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
             -H 'Content-Type: application/json' \
             -d '{"text": "API keys have been rotated successfully"}'
@@ -1423,7 +1423,7 @@ jobs:
 
 ---
 
-## 10. 微服务监控与告警
+## 10. Microservice Monitoring and Alerting
 
 ### 10.1 Prometheus + Grafana
 
@@ -1462,7 +1462,7 @@ data:
             target_label: __address__
 ```
 
-### 10.2 告警规则
+### 10.2 Alert Rules
 
 ```yaml
 # infrastructure/monitoring/alert-rules.yaml
@@ -1509,7 +1509,7 @@ spec:
             summary: "Pod {{ $labels.pod }} is crash looping"
 ```
 
-### 10.3 Grafana Dashboard 配置
+### 10.3 Grafana Dashboard Configuration
 
 ```json
 {
@@ -1559,9 +1559,9 @@ spec:
 
 ---
 
-## 11. 蓝绿部署与金丝雀发布
+## 11. Blue-Green Deployment and Canary Releases
 
-### 11.1 蓝绿部署
+### 11.1 Blue-Green Deployment
 
 ```yaml
 # .github/workflows/blue-green-deploy.yml
@@ -1599,13 +1599,13 @@ jobs:
       
       - name: Run smoke tests
         run: |
-          # 针对目标环境运行测试
+          # Run tests against the target environment
           TARGET_PORT=$(kubectl get svc user-service-$TARGET -n production -o jsonpath='{.spec.ports[0].port}')
           curl -f http://user-service-$TARGET:$TARGET_PORT/actuator/health
       
       - name: Switch traffic
         run: |
-          # 更新 Service selector 指向目标环境
+          # Update Service selector to point to the target environment
           kubectl patch svc user-service -n production \
             -p '{"spec":{"selector":{"version":"'$TARGET'"}}}'
       
@@ -1621,7 +1621,7 @@ jobs:
             -p '{"spec":{"selector":{"version":"'$CURRENT'"}}}'
 ```
 
-### 11.2 金丝雀发布
+### 11.2 Canary Release
 
 ```yaml
 # infrastructure/kubernetes/canary/deployment-canary.yaml
@@ -1631,7 +1631,7 @@ metadata:
   name: user-service-canary
   namespace: production
 spec:
-  replicas: 1  # 少量副本用于金丝雀测试
+  replicas: 1  # Few replicas for canary testing
   selector:
     matchLabels:
       app: user-service
@@ -1664,7 +1664,7 @@ spec:
             periodSeconds: 30
 ```
 
-使用 Istio 进行精细流量控制：
+Using Istio for fine-grained traffic control:
 
 ```yaml
 # infrastructure/istio/canary-virtual-service.yaml
@@ -1698,7 +1698,7 @@ spec:
         attempts: 3
         perTryTimeout: 2s
 ---
-# 自动金丝雀分析
+# Automated canary analysis
 apiVersion: flagger.app/v1beta1
 kind: Canary
 metadata:
@@ -1731,9 +1731,9 @@ spec:
 
 ---
 
-## 12. 微服务拆分与重构策略
+## 12. Microservice Splitting and Refactoring Strategies
 
-### 12.1 绞杀者模式（Strangler Fig Pattern）
+### 12.1 Strangler Fig Pattern
 
 ```yaml
 # .github/workflows/strangler-pattern-migration.yml
@@ -1744,7 +1744,7 @@ on:
     branches: [ main ]
 
 jobs:
-  # 阶段1：部署新服务
+  # Phase 1: Deploy new service
   deploy-new-service:
     runs-on: ubuntu-latest
     steps:
@@ -1753,25 +1753,25 @@ jobs:
         run: |
           kubectl apply -f infrastructure/kubernetes/new-service/
           
-  # 阶段2：配置 API Gateway 路由迁移
+  # Phase 2: Configure API Gateway routing migration
   configure-routing:
     needs: deploy-new-service
     runs-on: ubuntu-latest
     steps:
       - name: Update routing rules
         run: |
-          # 逐步将流量从单体迁移到新服务
-          # 开始：10% 流量到新服务
+          # Gradually migrate traffic from monolith to new service
+          # Start: 10% traffic to new service
           kubectl apply -f infrastructure/istio/migration-phase-1.yaml
           
-  # 阶段3：监控和验证
+  # Phase 3: Monitoring and validation
   monitor-migration:
     needs: configure-routing
     runs-on: ubuntu-latest
     steps:
       - name: Monitor error rates
         run: |
-          # 查询 Prometheus 检查新服务错误率
+          # Query Prometheus to check new service error rate
           ERROR_RATE=$(curl -s "http://prometheus:9090/api/v1/query" \
             --data-urlencode "query=sum(rate(http_server_requests_seconds_count{service='new-service',status=~'5..'}[5m]))/sum(rate(http_server_requests_seconds_count{service='new-service'}[5m]))" \
             | jq '.data.result[0].value[1]' -r)
@@ -1783,7 +1783,7 @@ jobs:
           fi
 ```
 
-### 12.2 数据库拆分策略
+### 12.2 Database Splitting Strategy
 
 ```yaml
 # infrastructure/kubernetes/db-migration-job.yaml
@@ -1813,10 +1813,10 @@ spec:
             - /bin/sh
             - -c
             - |
-              # 1. 复制数据到新数据库
+              # 1. Copy data to new database
               pg_dump $SOURCE_DB_URL -t users | psql $TARGET_DB_URL
               
-              # 2. 验证数据一致性
+              # 2. Verify data consistency
               SOURCE_COUNT=$(psql $SOURCE_DB_URL -t -c "SELECT COUNT(*) FROM users")
               TARGET_COUNT=$(psql $TARGET_DB_URL -t -c "SELECT COUNT(*) FROM users")
               
@@ -1825,7 +1825,7 @@ spec:
                 exit 1
               fi
               
-              # 3. 更新应用配置指向新数据库
+              # 3. Update application configuration to point to new database
               kubectl set env deployment/user-service \
                 DATABASE_URL=$TARGET_DB_URL \
                 -n production
@@ -1835,11 +1835,11 @@ spec:
 
 ---
 
-## 13. 国内微服务框架
+## 13. Domestic Microservice Frameworks
 
 ### 13.1 Spring Cloud Alibaba
 
-Spring Cloud Alibaba 是国内最流行的微服务框架之一，提供了 Nacos、Sentinel、Seata 等组件的集成。
+Spring Cloud Alibaba is one of the most popular microservice frameworks in China, providing integration with components such as Nacos, Sentinel, and Seata.
 
 ```yaml
 # .github/workflows/spring-cloud-alibaba.yml
@@ -1889,7 +1889,7 @@ jobs:
           SENTINEL_DASHBOARD: localhost:8858
 ```
 
-Nacos 配置管理示例：
+Nacos configuration management example:
 
 ```yaml
 # application.yml
@@ -1913,10 +1913,10 @@ spring:
             refresh: true
 ```
 
-Sentinel 限流降级配置：
+Sentinel rate limiting and circuit breaker configuration:
 
 ```yaml
-# Sentinel 规则配置
+# Sentinel rule configuration
 spring:
   cloud:
     sentinel:
@@ -1937,9 +1937,9 @@ spring:
             rule-type: degrade
 ```
 
-### 13.2 Dubbo 微服务
+### 13.2 Dubbo Microservices
 
-Apache Dubbo 是另一个广泛使用的 RPC 框架：
+Apache Dubbo is another widely used RPC framework:
 
 ```yaml
 # .github/workflows/dubbo-service.yml
@@ -1968,7 +1968,7 @@ jobs:
           kubectl apply -f infrastructure/kubernetes/dubbo/
 ```
 
-Dubbo 服务配置：
+Dubbo service configuration:
 
 ```yaml
 # application-dubbo.yml
@@ -1993,7 +1993,7 @@ dubbo:
     base-packages: com.mycompany.userservice
 ```
 
-### 13.3 国内镜像加速配置
+### 13.3 China Mirror Acceleration Configuration
 
 ```yaml
 # .github/workflows/china-mirror-ci.yml
@@ -2034,34 +2034,34 @@ jobs:
         run: mvn clean package
 ```
 
-### 13.4 国内微服务网关选择
+### 13.4 Domestic Microservice Gateway Selection
 
-国内常用的微服务网关包括：
+Commonly used microservice gateways in China include:
 
-| 网关 | 特点 | 适用场景 |
-|------|------|----------|
-| **Spring Cloud Gateway** | 基于 WebFlux，响应式 | Spring 生态项目 |
-| **Apache Shenyu** | 高性能，插件化 | 多协议支持场景 |
-| **APISIX** | 动态路由，高性能 | 大规模流量场景 |
-| **Kong** | 插件丰富，社区活跃 | 企业级 API 管理 |
-| **Soul** | 轻量级，易于扩展 | 中小型项目 |
+| Gateway | Features | Use Cases |
+|---------|----------|-----------|
+| **Spring Cloud Gateway** | Based on WebFlux, reactive | Spring ecosystem projects |
+| **Apache Shenyu** | High performance, plugin-based | Multi-protocol support scenarios |
+| **APISIX** | Dynamic routing, high performance | High traffic scenarios |
+| **Kong** | Rich plugins, active community | Enterprise API management |
+| **Soul** | Lightweight, easy to extend | Small to medium projects |
 
 ---
 
-## 总结
+## Summary
 
-本指南涵盖了微服务架构在 GitHub 上进行管理的完整生命周期：
+This guide covers the complete lifecycle of managing microservices architecture on GitHub:
 
-### 架构决策
+### Architecture Decisions
 
-| 方面 | Monorepo | Multirepo |
-|------|----------|-----------|
-| 代码共享 | 容易 | 需要包管理 |
-| CI/CD 配置 | 需要路径过滤 | 独立配置 |
-| 团队协作 | 统一视图 | 独立管理 |
-| 版本管理 | 统一版本 | 独立版本 |
+| Aspect | Monorepo | Multirepo |
+|--------|----------|-----------|
+| Code Sharing | Easy | Requires package management |
+| CI/CD Configuration | Requires path filtering | Independent configuration |
+| Team Collaboration | Unified view | Independent management |
+| Version Management | Unified versioning | Independent versioning |
 
-### 技术栈选择
+### Technology Stack Selection
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -2071,29 +2071,29 @@ jobs:
 │                    Service Mesh                              │
 │              (Istio / Linkerd)                               │
 ├─────────────────────────────────────────────────────────────┤
-│                    服务层                                      │
+│                    Service Layer                             │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
 │  │User Svc  │ │Order Svc │ │Pay Svc   │ │Notify Svc│      │
 │  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
 ├─────────────────────────────────────────────────────────────┤
-│                    基础设施层                                  │
+│                    Infrastructure Layer                      │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
 │  │  Nacos   │ │ Sentinel │ │  Seata   │ │  SkyWalking│    │
 │  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 关键实践
+### Key Practices
 
-1. **仓库组织**：根据团队规模和项目复杂度选择 Monorepo 或 Multirepo
-2. **CI/CD**：实现自动化的构建、测试、部署流水线
-3. **可观测性**：分布式追踪 + 日志聚合 + 监控告警三位一体
-4. **安全**：OAuth2/JWT 认证 + mTLS 通信加密
-5. **发布策略**：蓝绿部署保证零停机，金丝雀发布降低风险
-6. **国内适配**：选择合适的镜像源和框架
+1. **Repository Organization**: Choose Monorepo or Multirepo based on team size and project complexity
+2. **CI/CD**: Implement automated build, test, and deployment pipelines
+3. **Observability**: Distributed tracing + log aggregation + monitoring alerting as a three-in-one approach
+4. **Security**: OAuth2/JWT authentication + mTLS communication encryption
+5. **Release Strategy**: Blue-green deployment ensures zero downtime, canary releases reduce risk
+6. **China Adaptation**: Choose appropriate mirror sources and frameworks
 
-微服务架构的成功不仅依赖于技术选型，更依赖于合理的仓库管理和自动化的 CI/CD 流程。通过 GitHub Actions 结合 Kubernetes 和服务网格，可以构建出高可用、可观测、易维护的微服务系统。
+The success of a microservices architecture depends not only on technology selection but also on proper repository management and automated CI/CD processes. By combining GitHub Actions with Kubernetes and service mesh, you can build a highly available, observable, and easy-to-maintain microservices system.
 
 ---
 
-*最后更新：2026 年 9 月*
+*Last updated: September 2026*

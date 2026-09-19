@@ -1,234 +1,235 @@
-# GitHub 技术写作指南
+# GitHub Technical Writing Guide
 
-> **目标读者**：中国开发者、技术文档工程师、开源项目维护者
-> **预计阅读时间**：50 分钟
-> **前置知识**：基本的 Git/GitHub 使用、Markdown 基础
-
----
-
-## 目录
-
-1. [技术写作风格指南](#1-技术写作风格指南)
-2. [中文技术文档排版规范](#2-中文技术文档排版规范)
-3. [Markdown 高级技巧](#3-markdown-高级技巧)
-4. [AsciiDoc 介绍](#4-asciidoc-介绍)
-5. [静态文档站点](#5-静态文档站点)
-6. [API 文档自动化](#6-api-文档自动化)
-7. [文档版本管理策略](#7-文档版本管理策略)
-8. [多语言文档管理](#8-多语言文档管理)
-9. [文档自动化测试](#9-文档自动化测试)
-10. [GitHub Wiki 使用指南](#10-github-wiki-使用指南)
-11. [GitHub Discussions 作为知识库](#11-github-discussions-作为知识库)
-12. [技术博客写作](#12-技术博客写作)
-13. [文档贡献工作流](#13-文档贡献工作流)
-14. [中英混合排版最佳实践](#14-中英混合排版最佳实践)
+> **Target Audience**: Chinese developers, technical documentation engineers, open source project maintainers
+> **Estimated Reading Time**: 50 minutes
+> **Prerequisites**: Basic Git/GitHub usage, Markdown basics
 
 ---
 
-## 1. 技术写作风格指南
+## Table of Contents
 
-### 1.1 技术写作的核心原则
+1. [Technical Writing Style Guide](#1-technical-writing-style-guide)
+2. [Chinese Technical Documentation Typesetting Standards](#2-chinese-technical-documentation-typesetting-standards)
+3. [Markdown Advanced Tips](#3-markdown-advanced-tips)
+4. [AsciiDoc Introduction](#4-asciidoc-introduction)
+5. [Static Documentation Sites](#5-static-documentation-sites)
+6. [API Documentation Automation](#6-api-documentation-automation)
+7. [Documentation Version Management Strategy](#7-documentation-version-management-strategy)
+8. [Multilingual Documentation Management](#8-multilingual-documentation-management)
+9. [Documentation Automated Testing](#9-documentation-automated-testing)
+10. [GitHub Wiki Usage Guide](#10-github-wiki-usage-guide)
+11. [GitHub Discussions as Knowledge Base](#11-github-discussions-as-knowledge-base)
+12. [Technical Blog Writing](#12-technical-blog-writing)
+13. [Documentation Contribution Workflow](#13-documentation-contribution-workflow)
+14. [Chinese-English Mixed Typesetting Best Practices](#14-chinese-english-mixed-typesetting-best-practices)
 
-技术写作的目标是**让读者快速理解和使用技术内容**。与文学写作不同，技术写作强调：
+---
 
-**清晰性（Clarity）**：
-- 使用简单直接的句子
-- 避免歧义和模糊表达
-- 一个句子表达一个意思
+## 1. Technical Writing Style Guide
 
-**准确性（Accuracy）**：
-- 技术细节必须准确
-- 代码示例必须可运行
-- 版本号、路径、命令必须正确
+### 1.1 Core Principles of Technical Writing
 
-**简洁性（Conciseness）**：
-- 删除不必要的修饰词
-- 避免重复信息
-- 使用列表代替长段落
+The goal of technical writing is **to help readers quickly understand and use technical content**. Unlike literary writing, technical writing emphasizes:
 
-**一致性（Consistency）**：
-- 术语使用统一
-- 格式风格统一
-- 文档结构统一
+**Clarity**:
+- Use simple and direct sentences
+- Avoid ambiguity and vague expressions
+- One sentence should express one idea
 
-### 1.2 句子结构
+**Accuracy**:
+- Technical details must be accurate
+- Code examples must be runnable
+- Version numbers, paths, and commands must be correct
 
-**主动语态优先**：
+**Conciseness**:
+- Remove unnecessary modifiers
+- Avoid repetitive information
+- Use lists instead of long paragraphs
+
+**Consistency**:
+- Use unified terminology
+- Maintain consistent formatting style
+- Keep consistent document structure
+
+### 1.2 Sentence Structure
+
+**Use active voice**:
 ```markdown
-# 不推荐
+# Not recommended
 The configuration file is edited by the user.
 
-# 推荐
+# Recommended
 Edit the configuration file.
 ```
 
-**使用现在时态**：
+**Use present tense**:
 ```markdown
-# 不推荐
+# Not recommended
 The system will return a JSON response.
 
-# 推荐
+# Recommended
 The system returns a JSON response.
 ```
 
-**使用第二人称（你/您）**：
+**Use second person (you)**:
 ```markdown
-# 不推荐
+# Not recommended
 Users should configure the environment.
 
-# 推荐
-你需要配置环境变量。
+# Recommended
+You need to configure the environment variables.
 ```
 
-### 1.3 段落写作
+### 1.3 Paragraph Writing
 
-**段落长度**：3-5 句为宜，避免超过 8 句
+**Paragraph length**: 3-5 sentences is ideal, avoid exceeding 8 sentences
 
-**段落结构**：
-1. 主题句：说明本段核心内容
-2. 支撑句：提供细节和解释
-3. 过渡句：连接下一段（可选）
+**Paragraph structure**:
+1. Topic sentence: states the core content of the paragraph
+2. Supporting sentences: provide details and explanations
+3. Transition sentence: connects to the next paragraph (optional)
 
-**示例**：
+**Example**:
 ```markdown
-GitHub Actions 是 GitHub 提供的 CI/CD 服务。你可以在仓库中定义工作流，
-当代码推送到特定分支时自动运行测试和部署。工作流使用 YAML 格式定义，
-存放在 `.github/workflows` 目录中。
+GitHub Actions is a CI/CD service provided by GitHub. You can define workflows
+in your repository, and they will automatically run tests and deploy when code
+is pushed to specific branches. Workflows are defined using YAML format and
+stored in the `.github/workflows` directory.
 ```
 
-### 1.4 术语管理
+### 1.4 Terminology Management
 
-建立项目术语表（Glossary）：
+Create a project Glossary:
 
 ```markdown
-## 术语表
+## Glossary
 
-| 术语 | 英文 | 定义 |
-|------|------|------|
-| 仓库 | Repository | 存储代码和资源的容器 |
-| 分支 | Branch | 代码的独立开发线 |
-| 拉取请求 | Pull Request | 请求合并代码的机制 |
-| 工作流 | Workflow | 自动化任务的定义文件 |
+| Term | English | Definition |
+|------|---------|------------|
+| 仓库 | Repository | A container for storing code and resources |
+| 分支 | Branch | An independent development line of code |
+| 拉取请求 | Pull Request | A mechanism for requesting code merges |
+| 工作流 | Workflow | A definition file for automated tasks |
 ```
 
-### 1.5 常见写作错误
+### 1.5 Common Writing Errors
 
-| 错误类型 | 错误示例 | 正确示例 |
-|----------|----------|----------|
-| 冗长 | 在这里我们将会要讨论的是... | 本节讨论... |
-| 被动语态 | 代码被提交到仓库 | 提交代码到仓库 |
-| 模糊 | 一些配置可能需要修改 | 修改 `config.yml` 中的 `timeout` 字段 |
-| 口语化 | 这个功能超好用 | 这个功能可以提高开发效率 |
-| 术语不一致 | 有时叫"仓库"，有时叫"代码库" | 统一使用"仓库" |
+| Error Type | Incorrect Example | Correct Example |
+|------------|-------------------|-----------------|
+| Verbose | In this section, we will be discussing... | This section discusses... |
+| Passive voice | Code is committed to the repository | Commit code to the repository |
+| Vague | Some configurations may need modification | Modify the `timeout` field in `config.yml` |
+| Colloquial | This feature is super great | This feature can improve development efficiency |
+| Inconsistent terminology | Sometimes called "仓库", sometimes called "代码库" | Use "Repository" consistently |
 
 ---
 
-## 2. 中文技术文档排版规范
+## 2. Chinese Technical Documentation Typesetting Standards
 
-### 2.1 标点符号规范
+### 2.1 Punctuation Standards
 
-**中文标点**：
-- 使用全角标点：，。！？；：""''（）
-- 不使用半角标点：,.!?;:""''()
+**Chinese punctuation**:
+- Use full-width punctuation: ，。！？；：""''（）
+- Do not use half-width punctuation: ,.!?;:""''()
 
-**特殊情况**：
-- 代码中的标点使用半角
-- 英文缩写后的句点使用半角（如 `e.g.`、`i.e.`）
-- 数字和单位之间不加空格（如 `100MB`）
+**Special cases**:
+- Use half-width punctuation in code
+- Use half-width periods after English abbreviations (e.g., `e.g.`, `i.e.`)
+- No space between numbers and units (e.g., `100MB`)
 
-### 2.2 空格规范
+### 2.2 Spacing Standards
 
-**中英文之间加空格**：
+**Add space between Chinese and English**:
 ```markdown
-# 不推荐
+# Not recommended
 使用GitHub进行版本控制
 
-# 推荐
+# Recommended
 使用 GitHub 进行版本控制
 ```
 
-**数字和中文之间加空格**：
+**Add space between numbers and Chinese**:
 ```markdown
-# 不推荐
+# Not recommended
 仓库有100个星标
 
-# 推荐
+# Recommended
 仓库有 100 个星标
 ```
 
-**标点符号前后不加空格**：
+**No space before or after punctuation**:
 ```markdown
-# 不推荐
+# Not recommended
 使用 GitHub ，进行版本控制 。
 
-# 推荐
+# Recommended
 使用 GitHub，进行版本控制。
 ```
 
-**例外情况**：
-- 代码块中的空格按代码规范
-- 英文单词之间的空格保留
+**Exceptions**:
+- Spacing in code blocks follows code conventions
+- Preserve spaces between English words
 
-### 2.3 数字和单位
+### 2.3 Numbers and Units
 
-**数字**：
-- 一般使用阿拉伯数字：3 个步骤、10 个文件
-- 大数字使用逗号分隔：1,000、1,000,000
-- 百分比使用符号：50%（而非 50 percent）
+**Numbers**:
+- Generally use Arabic numerals: 3 steps, 10 files
+- Use commas for large numbers: 1,000, 1,000,000
+- Use symbols for percentages: 50% (not 50 percent)
 
-**单位**：
-- 与数字之间不加空格：100MB、2GHz
-- 使用国际单位制：KB、MB、GB、TB
-- 时间单位：秒、分钟、小时、天
+**Units**:
+- No space between unit and number: 100MB, 2GHz
+- Use the International System of Units: KB, MB, GB, TB
+- Time units: seconds, minutes, hours, days
 
-### 2.4 标题规范
+### 2.4 Heading Standards
 
-**标题层级**：
-- 一级标题（#）：文档标题，每个文件只有一个
-- 二级标题（##）：主要章节
-- 三级标题（###）：子章节
-- 四级标题（####）：细分内容
-- 不建议使用五级及以下标题
+**Heading levels**:
+- Level 1 heading (#): document title, only one per file
+- Level 2 heading (##): major sections
+- Level 3 heading (###): subsections
+- Level 4 heading (####): detailed content
+- It is not recommended to use level 5 or below headings
 
-**标题格式**：
+**Heading format**:
 ```markdown
-# 文档标题
+# Document Title
 
-## 一级章节
+## Level 1 Section
 
-### 二级章节
+### Level 2 Section
 
-#### 三级章节
+#### Level 3 Section
 ```
 
-**标题大小写**：
-- 中文标题：首字母大写（如"Git 基础教程"）
-- 英文标题：Title Case（如"Getting Started with Git"）
-- 专有名词保持原样：GitHub、JavaScript、API
+**Heading capitalization**:
+- Chinese headings: capitalize the first letter (e.g., "Git 基础教程")
+- English headings: Title Case (e.g., "Getting Started with Git")
+- Keep proper nouns as-is: GitHub, JavaScript, API
 
-### 2.5 列表规范
+### 2.5 List Standards
 
-**有序列表**：用于有先后顺序的步骤
+**Ordered lists**: for steps that have a sequential order
 ```markdown
-1. 克隆仓库
-2. 安装依赖
-3. 启动服务
+1. Clone the repository
+2. Install dependencies
+3. Start the service
 ```
 
-**无序列表**：用于并列的项目
+**Unordered lists**: for parallel items
 ```markdown
-- 优点一
-- 优点二
-- 优点三
+- Advantage 1
+- Advantage 2
+- Advantage 3
 ```
 
-**嵌套列表**：
+**Nested lists**:
 ```markdown
-- 前端技术栈
+- Frontend tech stack
   - React
   - Vue.js
   - Angular
-- 后端技术栈
+- Backend tech stack
   - Node.js
   - Python
   - Go
@@ -236,39 +237,39 @@ GitHub Actions 是 GitHub 提供的 CI/CD 服务。你可以在仓库中定义�
 
 ---
 
-## 3. Markdown 高级技巧
+## 3. Markdown Advanced Tips
 
-### 3.1 表格进阶
+### 3.1 Advanced Tables
 
-**对齐方式**：
+**Alignment**:
 ```markdown
-| 左对齐 | 居中 | 右对齐 |
-|:------|:----:|-------:|
-| 内容 | 内容 | 内容 |
+| Left aligned | Centered | Right aligned |
+|:-------------|:--------:|--------------:|
+| Content | Content | Content |
 ```
 
-**表格中的代码**：
+**Code in tables**:
 ```markdown
-| 命令 | 说明 |
-|------|------|
-| `git add` | 暂存文件 |
-| `git commit` | 提交更改 |
-| `git push` | 推送代码 |
+| Command | Description |
+|---------|-------------|
+| `git add` | Stage files |
+| `git commit` | Commit changes |
+| `git push` | Push code |
 ```
 
-**复杂表格**：
+**Complex tables**:
 ```markdown
-| 功能 | 免费版 | 专业版 | 企业版 |
-|------|:------:|:------:|:------:|
-| 私有仓库 | ✅ 无限 | ✅ 无限 | ✅ 无限 |
-| 协作者 | 3 人 | 无限 | 无限 |
-| CI/CD 分钟数 | 2,000 | 3,000 | 50,000 |
-| 存储空间 | 500MB | 2GB | 50GB |
+| Feature | Free | Pro | Enterprise |
+|---------|:----:|:---:|:----------:|
+| Private repositories | ✅ Unlimited | ✅ Unlimited | ✅ Unlimited |
+| Collaborators | 3 users | Unlimited | Unlimited |
+| CI/CD minutes | 2,000 | 3,000 | 50,000 |
+| Storage | 500MB | 2GB | 50GB |
 ```
 
-### 3.2 代码块进阶
+### 3.2 Advanced Code Blocks
 
-**带行号的代码块**（部分平台支持）：
+**Code blocks with line numbers** (some platforms support):
 ```markdown
 ```python {.numberLines}
 def hello():
@@ -278,38 +279,38 @@ hello()
 `` `
 ```
 
-**高亮特定行**（部分平台支持）：
+**Highlight specific lines** (some platforms support):
 ```markdown
 ```python {2,3}
 def calculate_sum(a, b):
-    result = a + b  # 这行会被高亮
-    return result   # 这行也会被高亮
+    result = a + b  # This line will be highlighted
+    return result   # This line will also be highlighted
 `` `
 ```
 
-**代码块中的注释**：
+**Comments in code blocks**:
 ```python
-# 这是一个 Python 函数
+# This is a Python function
 def greet(name: str) -> str:
     """
-    生成问候语
+    Generate a greeting
     
     Args:
-        name: 用户名
+        name: username
         
     Returns:
-        问候语字符串
+        Greeting string
     """
     return f"Hello, {name}!"
 ```
 
-### 3.3 折叠内容
+### 3.3 Collapsible Content
 
-使用 `<details>` 标签创建可折叠内容：
+Use the `<details>` tag to create collapsible content:
 
 ```markdown
 <details>
-<summary>点击展开详细配置</summary>
+<summary>Click to expand detailed configuration</summary>
 
 ```yaml
 server:
@@ -326,44 +327,44 @@ database:
 </details>
 ```
 
-### 3.4 警告和提示框
+### 3.4 Alerts and Tips
 
-GitHub 支持以下提示框语法（GitHub Flavored Markdown）：
+GitHub supports the following alert syntax (GitHub Flavored Markdown):
 
 ```markdown
 > [!NOTE]
-> 这是一个提示信息。
+> This is a note message.
 
 > [!TIP]
-> 这是一个技巧提示。
+> This is a tip message.
 
 > [!IMPORTANT]
-> 这是一个重要信息。
+> This is important information.
 
 > [!WARNING]
-> 这是一个警告信息。
+> This is a warning message.
 
 > [!CAUTION]
-> 这是一个注意事项。
+> This is a caution message.
 ```
 
-### 3.5 数学公式
+### 3.5 Mathematical Formulas
 
-GitHub 支持 LaTeX 数学公式：
+GitHub supports LaTeX mathematical formulas:
 
-**行内公式**：
+**Inline formulas**:
 ```markdown
-质能方程 $E = mc^2$ 是物理学中最著名的公式。
+The mass-energy equivalence $E = mc^2$ is the most famous formula in physics.
 ```
 
-**块级公式**：
+**Block formulas**:
 ```markdown
 $$
 \sum_{i=1}^{n} i = \frac{n(n+1)}{2}
 $$
 ```
 
-**矩阵**：
+**Matrices**:
 ```markdown
 $$
 \begin{pmatrix}
@@ -373,132 +374,132 @@ c & d
 $$
 ```
 
-### 3.6 Mermaid 图表
+### 3.6 Mermaid Diagrams
 
-GitHub 原生支持 Mermaid 图表：
+GitHub natively supports Mermaid diagrams:
 
-**流程图**：
+**Flowchart**:
 ```markdown
 ```mermaid
 graph TD
-    A[开始] --> B{是否已安装?}
-    B -->|是| C[配置环境]
-    B -->|否| D[安装依赖]
+    A[Start] --> B{Is installed?}
+    B -->|Yes| C[Configure environment]
+    B -->|No| D[Install dependencies]
     D --> C
-    C --> E[运行程序]
-    E --> F[结束]
+    C --> E[Run program]
+    E --> F[End]
 `` `
 ```
 
-**序列图**：
+**Sequence diagram**:
 ```markdown
 ```mermaid
 sequenceDiagram
-    participant User as 用户
-    participant Client as 客户端
-    participant Server as 服务器
+    participant User as User
+    participant Client as Client
+    participant Server as Server
     
-    User->>Client: 输入命令
-    Client->>Server: 发送请求
-    Server-->>Client: 返回响应
-    Client-->>User: 显示结果
+    User->>Client: Enter command
+    Client->>Server: Send request
+    Server-->>Client: Return response
+    Client-->>User: Display result
 `` `
 ```
 
-**甘特图**：
+**Gantt chart**:
 ```markdown
 ```mermaid
 gantt
-    title 项目计划
+    title Project Plan
     dateFormat  YYYY-MM-DD
-    section 设计阶段
-    需求分析       :done,    des1, 2024-01-01, 2024-01-15
-    UI 设计        :active,  des2, 2024-01-10, 2024-01-25
-    section 开发阶段
-    前端开发       :         dev1, 2024-01-20, 2024-02-15
-    后端开发       :         dev2, 2024-01-25, 2024-02-20
+    section Design Phase
+    Requirements Analysis  :done,    des1, 2024-01-01, 2024-01-15
+    UI Design              :active,  des2, 2024-01-10, 2024-01-25
+    section Development Phase
+    Frontend Development   :         dev1, 2024-01-20, 2024-02-15
+    Backend Development    :         dev2, 2024-01-25, 2024-02-20
 `` `
 ```
 
-### 3.7 任务列表
+### 3.7 Task Lists
 
 ```markdown
-## 项目待办
+## Project TODO
 
-- [x] 完成需求分析
-- [x] 设计数据库 schema
-- [ ] 实现用户认证
-- [ ] 编写单元测试
-- [ ] 部署到生产环境
+- [x] Complete requirements analysis
+- [x] Design database schema
+- [ ] Implement user authentication
+- [ ] Write unit tests
+- [ ] Deploy to production
 ```
 
-### 3.8 脚注
+### 3.8 Footnotes
 
 ```markdown
-GitHub 是全球最大的代码托管平台[^1]，拥有超过 1 亿开发者[^2]。
+GitHub is the world's largest code hosting platform[^1], with over 100 million developers[^2].
 
-[^1]: GitHub 官方网站 https://github.com
-[^2]: 截至 2024 年的统计数据
+[^1]: GitHub official website https://github.com
+[^2]: Statistics as of 2024
 ```
 
 ---
 
-## 4. AsciiDoc 介绍
+## 4. AsciiDoc Introduction
 
-### 4.1 AsciiDoc 简介
+### 4.1 AsciiDoc Overview
 
-AsciiDoc 是一种轻量级标记语言，比 Markdown 更强大，特别适合编写大型技术文档。
+AsciiDoc is a lightweight markup language that is more powerful than Markdown, particularly suitable for writing large technical documents.
 
-**主要特点**：
-- 支持复杂的文档结构
-- 内置交叉引用和索引
-- 支持条件编译
-- 可扩展的宏系统
-- 生成 HTML、PDF、EPUB 等格式
+**Key Features**:
+- Supports complex document structures
+- Built-in cross-references and indexing
+- Supports conditional compilation
+- Extensible macro system
+- Generates HTML, PDF, EPUB and other formats
 
-### 4.2 AsciiDoc 与 Markdown 对比
+### 4.2 AsciiDoc vs Markdown Comparison
 
-| 特性 | Markdown | AsciiDoc |
-|------|----------|----------|
-| 学习曲线 | 低 | 中等 |
-| 表格支持 | 基础 | 强大 |
-| 交叉引用 | 不支持 | 原生支持 |
-| 条件编译 | 不支持 | 支持 |
-| 目录生成 | 自动/手动 | 自动 |
-| 代码块 | 基础 | 高级（含 callouts） |
-| 适用场景 | 简单文档、README | 大型文档、书籍 |
+| Feature | Markdown | AsciiDoc |
+|---------|----------|----------|
+| Learning curve | Low | Medium |
+| Table support | Basic | Advanced |
+| Cross-references | Not supported | Native support |
+| Conditional compilation | Not supported | Supported |
+| Table of contents | Auto/Manual | Auto |
+| Code blocks | Basic | Advanced (with callouts) |
+| Use cases | Simple docs, README | Large docs, books |
 
-### 4.3 AsciiDoc 基础语法
+### 4.3 AsciiDoc Basic Syntax
 
-**标题**：
+**Headings**:
 ```asciidoc
-= 文档标题
-== 一级章节
-=== 二级章节
-==== 三级章节
+= Document Title
+== Level 1 Section
+=== Level 2 Section
+==== Level 3 Section
 ```
 
-**段落和换行**：
+**Paragraphs and line breaks**:
 ```asciidoc
-这是第一段。
+This is the first paragraph.
 
-这是第二段。
-段落内的换行使用 +
-强制换行。
+This is the second paragraph.
+Line breaks within a paragraph use +
+forced line break.
 ```
 
-**列表**：
+**Lists**:
 ```asciidoc
-* 无序列表项 1
-* 无序列表项 2
-** 嵌套项
+* Unordered list item 1
+* Unordered list item 2
+** Nested item
 
-. 有序列表项 1
-. 有序列表项 2
-.. 嵌套项
+. Ordered list item 1
+. Ordered list item 2
+.. Nested item
 ```
 
-**代码块**：
+**Code blocks**:
 ```asciidoc
 [source,python]
 ----
@@ -507,116 +508,116 @@ def hello():
 ----
 ```
 
-**带标注的代码块**：
+**Annotated code blocks**:
 ```asciidoc
 [source,python]
 ----
 def hello():  # <1>
     print("Hello, World!")  # <2>
 ----
-<1> 函数定义
-<2> 打印语句
+<1> Function definition
+<2> Print statement
 ```
 
-**表格**：
+**Tables**:
 ```asciidoc
 [cols="1,2,1", options="header"]
 |===
-| 命令
-| 说明
-| 示例
+| Command
+| Description
+| Example
 
 | git add
-| 暂存文件
+| Stage files
 | `git add .`
 
 | git commit
-| 提交更改
+| Commit changes
 | `git commit -m "message"`
 |===
 ```
 
-**交叉引用**：
+**Cross-references**:
 ```asciidoc
-参见 <<_installation>> 章节。
+See the <<_installation>> section.
 
 [[installation]]
-== 安装指南
+== Installation Guide
 
-本章介绍如何安装软件。
+This chapter describes how to install the software.
 ```
 
-### 4.4 AsciiDoc 工具链
+### 4.4 AsciiDoc Toolchain
 
-**Asciidoctor**：主要的 AsciiDoc 处理器
+**Asciidoctor**: The main AsciiDoc processor
 ```bash
-# 安装
+# Install
 gem install asciidoctor
 
-# 转换为 HTML
+# Convert to HTML
 asciidoctor document.adoc
 
-# 转换为 PDF
+# Convert to PDF
 asciidoctor-pdf document.adoc
 
-# 转换为 EPUB
+# Convert to EPUB
 asciidoctor-epub3 document.adoc
 ```
 
-**Antora**：AsciiDoc 文档站点生成器
+**Antora**: AsciiDoc documentation site generator
 ```bash
-# 安装
+# Install
 npm install -g @antora/cli @antora/site-generator-default
 
-# 生成站点
+# Generate site
 antora site.yml
 ```
 
-### 4.5 何时选择 AsciiDoc
+### 4.5 When to Choose AsciiDoc
 
-**选择 AsciiDoc**：
-- 大型文档项目（超过 100 页）
-- 需要交叉引用和索引
-- 需要生成 PDF
-- 技术书籍写作
-- 企业级文档
+**Choose AsciiDoc**:
+- Large documentation projects (over 100 pages)
+- Need cross-references and indexing
+- Need to generate PDF
+- Technical book writing
+- Enterprise-level documentation
 
-**选择 Markdown**：
-- 简单的 README
-- 博客文章
-- 快速笔记
-- GitHub 项目文档
+**Choose Markdown**:
+- Simple READMEs
+- Blog posts
+- Quick notes
+- GitHub project documentation
 
 ---
 
-## 5. 静态文档站点
+## 5. Static Documentation Sites
 
-### 5.1 主流静态文档站点工具
+### 5.1 Popular Static Documentation Site Tools
 
-| 工具 | 语言 | 特点 | 适用场景 |
-|------|------|------|----------|
-| MkDocs | Python | 简单易用、Material 主题 | 项目文档 |
-| Docusaurus | React | Facebook 出品、版本管理 | 开源项目文档 |
-| VitePress | Vue | 极速构建、Vue 生态 | Vue 项目文档 |
-| Hugo | Go | 极速构建、功能强大 | 博客、文档 |
-| Jekyll | Ruby | GitHub Pages 原生支持 | 博客 |
-| Sphinx | Python | 学术文档、reStructuredText | Python 项目 |
+| Tool | Language | Features | Use Cases |
+|------|----------|----------|-----------|
+| MkDocs | Python | Easy to use, Material theme | Project documentation |
+| Docusaurus | React | By Facebook, version management | Open source project docs |
+| VitePress | Vue | Blazing fast build, Vue ecosystem | Vue project documentation |
+| Hugo | Go | Blazing fast build, feature-rich | Blogs, documentation |
+| Jekyll | Ruby | Native GitHub Pages support | Blogs |
+| Sphinx | Python | Academic docs, reStructuredText | Python projects |
 
-### 5.2 MkDocs 快速上手
+### 5.2 Getting Started with MkDocs
 
-**安装**：
+**Installation**:
 ```bash
 pip install mkdocs
-pip install mkdocs-material  # Material 主题
+pip install mkdocs-material  # Material theme
 ```
 
-**初始化项目**：
+**Initialize project**:
 ```bash
 mkdocs new my-docs
 cd my-docs
 ```
 
-**目录结构**：
+**Directory structure**:
 ```
 my-docs/
 ├── docs/
@@ -628,10 +629,10 @@ my-docs/
 └── mkdocs.yml
 ```
 
-**配置文件（mkdocs.yml）**：
+**Configuration file (mkdocs.yml)**:
 ```yaml
-site_name: 我的项目文档
-site_description: 项目文档站点
+site_name: My Project Documentation
+site_description: Project Documentation Site
 site_url: https://example.com
 
 theme:
@@ -648,11 +649,11 @@ theme:
     - content.code.copy
 
 nav:
-  - 首页: index.md
-  - 快速开始: getting-started.md
-  - API 文档:
-    - 概述: api/overview.md
-    - 参考: api/reference.md
+  - Home: index.md
+  - Quick Start: getting-started.md
+  - API Documentation:
+    - Overview: api/overview.md
+    - Reference: api/reference.md
 
 markdown_extensions:
   - admonition
@@ -664,26 +665,26 @@ markdown_extensions:
       alternate_style: true
 ```
 
-**本地预览**：
+**Local preview**:
 ```bash
 mkdocs serve
-# 访问 http://localhost:8000
+# Visit http://localhost:8000
 ```
 
-**部署到 GitHub Pages**：
+**Deploy to GitHub Pages**:
 ```bash
 mkdocs gh-deploy
 ```
 
-### 5.3 Docusaurus 快速上手
+### 5.3 Getting Started with Docusaurus
 
-**初始化项目**：
+**Initialize project**:
 ```bash
 npx create-docusaurus@latest my-website classic
 cd my-website
 ```
 
-**目录结构**：
+**Directory structure**:
 ```
 my-website/
 ├── docs/
@@ -701,11 +702,11 @@ my-website/
 └── package.json
 ```
 
-**配置文件（docusaurus.config.js）**：
+**Configuration file (docusaurus.config.js)**:
 ```javascript
 module.exports = {
-  title: '我的项目文档',
-  tagline: '项目文档站点',
+  title: 'My Project Documentation',
+  tagline: 'Project Documentation Site',
   url: 'https://example.com',
   baseUrl: '/',
   
@@ -719,10 +720,10 @@ module.exports = {
   
   themeConfig: {
     navbar: {
-      title: '我的项目',
+      title: 'My Project',
       items: [
-        { type: 'doc', position: 'left', docId: 'intro', label: '文档' },
-        { to: '/blog', label: '博客', position: 'left' },
+        { type: 'doc', position: 'left', docId: 'intro', label: 'Docs' },
+        { to: '/blog', label: 'Blog', position: 'left' },
         { type: 'localeDropdown', position: 'right' },
         { href: 'https://github.com/your-org/your-project', label: 'GitHub', position: 'right' },
       ],
@@ -732,13 +733,13 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: '文档',
+          title: 'Docs',
           items: [
-            { label: '快速开始', to: '/docs/intro' },
+            { label: 'Quick Start', to: '/docs/intro' },
           ],
         },
         {
-          title: '社区',
+          title: 'Community',
           items: [
             { label: 'GitHub', href: 'https://github.com/your-org/your-project' },
           ],
@@ -749,26 +750,26 @@ module.exports = {
 };
 ```
 
-**运行和构建**：
+**Run and build**:
 ```bash
-# 本地开发
+# Local development
 npm start
 
-# 构建
+# Build
 npm run build
 
-# 部署到 GitHub Pages
+# Deploy to GitHub Pages
 GIT_USER=your-username npm run deploy
 ```
 
-### 5.4 VitePress 快速上手
+### 5.4 Getting Started with VitePress
 
-**安装**：
+**Installation**:
 ```bash
 npm init vitepress
 ```
 
-**目录结构**：
+**Directory structure**:
 ```
 docs/
 ├── .vitepress/
@@ -780,25 +781,25 @@ docs/
 └── examples/
 ```
 
-**配置文件（.vitepress/config.js）**：
+**Configuration file (.vitepress/config.js)**:
 ```javascript
 export default {
-  title: '我的项目文档',
-  description: '项目文档站点',
+  title: 'My Project Documentation',
+  description: 'Project Documentation Site',
   
   themeConfig: {
     nav: [
-      { text: '指南', link: '/guide/getting-started' },
+      { text: 'Guide', link: '/guide/getting-started' },
       { text: 'API', link: '/guide/api' },
     ],
     
     sidebar: {
       '/guide/': [
         {
-          text: '指南',
+          text: 'Guide',
           items: [
-            { text: '快速开始', link: '/guide/getting-started' },
-            { text: 'API 参考', link: '/guide/api' },
+            { text: 'Quick Start', link: '/guide/getting-started' },
+            { text: 'API Reference', link: '/guide/api' },
           ],
         },
       ],
@@ -815,21 +816,21 @@ export default {
 };
 ```
 
-**运行和构建**：
+**Run and build**:
 ```bash
-# 本地开发
+# Local development
 npm run dev
 
-# 构建
+# Build
 npm run build
 
-# 预览构建结果
+# Preview build result
 npm run preview
 ```
 
-### 5.5 Hugo 快速上手
+### 5.5 Getting Started with Hugo
 
-**安装**：
+**Installation**:
 ```bash
 # macOS
 brew install hugo
@@ -841,23 +842,23 @@ sudo apt install hugo
 choco install hugo
 ```
 
-**创建站点**：
+**Create site**:
 ```bash
 hugo new site my-docs
 cd my-docs
 ```
 
-**安装主题**：
+**Install theme**:
 ```bash
 git init
 git submodule add https://github.com/alex-shpak/hugo-book themes/hugo-book
 ```
 
-**配置文件（hugo.toml）**：
+**Configuration file (hugo.toml)**:
 ```toml
 baseURL = 'https://example.com/'
 languageCode = 'zh-CN'
-title = '我的项目文档'
+title = 'My Project Documentation'
 theme = 'hugo-book'
 
 [params]
@@ -873,81 +874,81 @@ theme = 'hugo-book'
     weight = 10
 ```
 
-**创建内容**：
+**Create content**:
 ```bash
 hugo new docs/getting-started.md
 ```
 
-**运行和构建**：
+**Run and build**:
 ```bash
-# 本地开发
+# Local development
 hugo server -D
 
-# 构建
+# Build
 hugo
 ```
 
 ---
 
-## 6. API 文档自动化
+## 6. API Documentation Automation
 
-### 6.1 API 文档工具概览
+### 6.1 API Documentation Tools Overview
 
-| 工具 | 特点 | 适用场景 |
-|------|------|----------|
-| Swagger UI | 交互式文档、在线测试 | REST API |
-| Redoc | 美观的三栏布局 | 生产环境文档 |
-| Stoplight Studio | 可视化编辑器 | API 设计 |
-| Readme.io | 商业平台、协作功能 | 企业 API 文档 |
-| Postman | API 测试 + 文档 | API 开发 |
+| Tool | Features | Use Cases |
+|------|----------|-----------|
+| Swagger UI | Interactive docs, online testing | REST API |
+| Redoc | Beautiful three-column layout | Production documentation |
+| Stoplight Studio | Visual editor | API design |
+| Readme.io | Commercial platform, collaboration | Enterprise API docs |
+| Postman | API testing + documentation | API development |
 
-### 6.2 OpenAPI 规范
+### 6.2 OpenAPI Specification
 
-OpenAPI（原 Swagger）是描述 REST API 的标准规范：
+OpenAPI (formerly Swagger) is the standard specification for describing REST APIs:
 
-**OpenAPI 3.0 示例（YAML）**：
+**OpenAPI 3.0 Example (YAML)**:
 ```yaml
 openapi: 3.0.0
 info:
-  title: 用户管理 API
-  description: 用户管理系统的 REST API 文档
+  title: User Management API
+  description: REST API documentation for user management system
   version: 1.0.0
   contact:
-    name: API 支持
+    name: API Support
     email: support@example.com
   
 servers:
   - url: https://api.example.com/v1
-    description: 生产环境
+    description: Production
   - url: https://staging-api.example.com/v1
-    description: 测试环境
+    description: Staging
 
 paths:
   /users:
     get:
-      summary: 获取用户列表
-      description: 返回所有用户的列表
+      summary: Get user list
+      description: Returns a list of all users
       operationId: getUsers
       tags:
-        - 用户管理
+        - User Management
       parameters:
         - name: page
           in: query
-          description: 页码
+          description: Page number
           required: false
           schema:
             type: integer
             default: 1
         - name: limit
           in: query
-          description: 每页数量
+          description: Items per page
           required: false
           schema:
             type: integer
             default: 20
       responses:
         '200':
-          description: 成功返回用户列表
+          description: Successfully returned user list
           content:
             application/json:
               schema:
@@ -960,14 +961,14 @@ paths:
                   total:
                     type: integer
         '401':
-          description: 未授权
+          description: Unauthorized
     
     post:
-      summary: 创建用户
-      description: 创建一个新用户
+      summary: Create user
+      description: Create a new user
       operationId: createUser
       tags:
-        - 用户管理
+        - User Management
       requestBody:
         required: true
         content:
@@ -976,13 +977,13 @@ paths:
               $ref: '#/components/schemas/CreateUserRequest'
       responses:
         '201':
-          description: 用户创建成功
+          description: User created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: 请求参数错误
+          description: Invalid request parameters
 
 components:
   schemas:
@@ -991,21 +992,21 @@ components:
       properties:
         id:
           type: integer
-          description: 用户 ID
+          description: User ID
           example: 1
         name:
           type: string
-          description: 用户名
-          example: "张三"
+          description: Username
+          example: "John Doe"
         email:
           type: string
           format: email
-          description: 邮箱
-          example: "zhangsan@example.com"
+          description: Email address
+          example: "johndoe@example.com"
         created_at:
           type: string
           format: date-time
-          description: 创建时间
+          description: Creation time
     
     CreateUserRequest:
       type: object
@@ -1015,23 +1016,23 @@ components:
       properties:
         name:
           type: string
-          description: 用户名
-          example: "张三"
+          description: Username
+          example: "John Doe"
         email:
           type: string
           format: email
-          description: 邮箱
-          example: "zhangsan@example.com"
+          description: Email address
+          example: "johndoe@example.com"
 ```
 
-### 6.3 Swagger UI 集成
+### 6.3 Swagger UI Integration
 
-**HTML 集成**：
+**HTML integration**:
 ```html
 <!DOCTYPE html>
 <html>
 <head>
-  <title>API 文档</title>
+  <title>API Documentation</title>
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
 </head>
 <body>
@@ -1052,7 +1053,7 @@ components:
 </html>
 ```
 
-**GitHub Pages 集成**：
+**GitHub Pages integration**:
 ```yaml
 # .github/workflows/api-docs.yml
 name: Deploy API Docs
@@ -1086,22 +1087,22 @@ jobs:
           publish_dir: ./docs
 ```
 
-### 6.4 Redoc 集成
+### 6.4 Redoc Integration
 
-Redoc 提供更美观的三栏布局：
+Redoc provides a more beautiful three-column layout:
 
 ```bash
-# 安装
+# Install
 npm install -g redoc-cli
 
-# 本地预览
+# Local preview
 redoc-cli serve openapi.yaml
 
-# 构建静态文件
+# Build static files
 redoc-cli build openapi.yaml -o api-docs.html
 ```
 
-**自定义配置**：
+**Custom configuration**:
 ```yaml
 # redoc.yaml
 theme:
@@ -1115,54 +1116,54 @@ theme:
     width: '260px'
 ```
 
-### 6.5 代码注释自动生成文档
+### 6.5 Auto-generate Documentation from Code Comments
 
-**Python（使用 FastAPI）**：
+**Python (using FastAPI)**:
 ```python
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 
 app = FastAPI(
-    title="用户管理 API",
-    description="用户管理系统的 REST API",
+    title="User Management API",
+    description="REST API for user management system",
     version="1.0.0"
 )
 
 class User(BaseModel):
-    """用户模型"""
+    """User model"""
     id: int
     name: str
     email: str
 
 class CreateUserRequest(BaseModel):
-    """创建用户请求"""
+    """Create user request"""
     name: str
     email: str
 
-@app.get("/users", response_model=List[User], tags=["用户管理"])
+@app.get("/users", response_model=List[User], tags=["User Management"])
 async def get_users(page: int = 1, limit: int = 20):
     """
-    获取用户列表
+    Get user list
     
-    - **page**: 页码（默认 1）
-    - **limit**: 每页数量（默认 20）
+    - **page**: Page number (default 1)
+    - **limit**: Items per page (default 20)
     """
-    # 实现代码
+    # Implementation code
     pass
 
-@app.post("/users", response_model=User, tags=["用户管理"])
+@app.post("/users", response_model=User, tags=["User Management"])
 async def create_user(request: CreateUserRequest):
     """
-    创建用户
+    Create user
     
-    创建一个新用户并返回用户信息
+    Create a new user and return user information
     """
-    # 实现代码
+    # Implementation code
     pass
 ```
 
-**Node.js（使用 Express + Swagger JSDoc）**：
+**Node.js (using Express + Swagger JSDoc)**:
 ```javascript
 const express = require('express');
 const swaggerJsdoc = require('swagger-jsdoc');
@@ -1174,7 +1175,7 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: '用户管理 API',
+      title: 'User Management API',
       version: '1.0.0',
     },
   },
@@ -1188,20 +1189,20 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
  * @swagger
  * /users:
  *   get:
- *     summary: 获取用户列表
- *     tags: [用户管理]
+ *     summary: Get user list
+ *     tags: [User Management]
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: 页码
+ *         description: Page number
  *     responses:
  *       200:
- *         description: 成功
+ *         description: Success
  */
 app.get('/users', (req, res) => {
-  // 实现代码
+  // Implementation code
 });
 
 app.listen(3000);
@@ -1209,35 +1210,35 @@ app.listen(3000);
 
 ---
 
-## 7. 文档版本管理策略
+## 7. Documentation Version Management Strategy
 
-### 7.1 版本管理的重要性
+### 7.1 Importance of Version Management
 
-随着项目迭代，文档也需要版本管理：
+As projects iterate, documentation also needs version management:
 
-- 用户可能使用不同版本的软件
-- API 可能在不同版本间有变化
-- 需要保留旧版本文档供参考
+- Users may be using different versions of the software
+- APIs may change between versions
+- Old version documentation needs to be preserved for reference
 
-### 7.2 Docusaurus 版本管理
+### 7.2 Docusaurus Version Management
 
-Docusaurus 内置版本管理功能：
+Docusaurus has built-in version management:
 
 ```bash
-# 创建新版本
+# Create a new version
 npm run docusaurus docs:version 2.0
 
-# 目录结构变化
-docs/           # 当前开发版本（next）
+# Directory structure changes
+docs/           # Current development version (next)
 versioned_docs/
-  version-1.0/  # 1.0 版本文档
-  version-2.0/  # 2.0 版本文档
+  version-1.0/  # Version 1.0 documentation
+  version-2.0/  # Version 2.0 documentation
 versioned_sidebars/
   version-1.0-sidebars.json
   version-2.0-sidebars.json
 ```
 
-**配置版本下拉菜单**：
+**Configure version dropdown**:
 ```javascript
 // docusaurus.config.js
 module.exports = {
@@ -1254,46 +1255,46 @@ module.exports = {
 };
 ```
 
-### 7.3 MkDocs 版本管理
+### 7.3 MkDocs Version Management
 
-使用 `mike` 工具管理 MkDocs 版本：
+Use the `mike` tool to manage MkDocs versions:
 
 ```bash
-# 安装
+# Install
 pip install mike
 
-# 设置默认版本
+# Set default version
 mike set-default latest
 
-# 创建新版本
+# Create new versions
 mike deploy 1.0
 mike deploy 2.0
 
-# 列出所有版本
+# List all versions
 mike list
 
-# 设置别名
+# Set alias
 mike deploy 2.0 latest
 ```
 
-**配置 mkdocs.yml**：
+**Configure mkdocs.yml**:
 ```yaml
 extra:
   version:
     provider: mike
 ```
 
-### 7.4 Git 分支策略
+### 7.4 Git Branch Strategy
 
-**分支命名规范**：
+**Branch naming conventions**:
 ```
-main           # 主分支，最新文档
-docs/v1.0      # 1.0 版本文档
-docs/v2.0      # 2.0 版本文档
-docs/next       # 下一版本开发文档
+main           # Main branch, latest documentation
+docs/v1.0      # Version 1.0 documentation
+docs/v2.0      # Version 2.0 documentation
+docs/next       # Next version development documentation
 ```
 
-**GitHub Actions 自动部署**：
+**GitHub Actions auto-deployment**:
 ```yaml
 name: Deploy Docs
 
@@ -1322,21 +1323,21 @@ jobs:
       
       - name: Deploy
         run: |
-          # 部署到对应版本目录
+          # Deploy to corresponding version directory
           echo "Deploying version ${{ steps.version.outputs.version }}"
 ```
 
-### 7.5 文档快照和归档
+### 7.5 Documentation Snapshots and Archiving
 
-**创建文档快照**：
+**Creating documentation snapshots**:
 ```bash
-# 创建快照目录
+# Create snapshot directory
 mkdir -p snapshots/v1.0.0
 
-# 复制文档
+# Copy documentation
 cp -r docs/* snapshots/v1.0.0/
 
-# 提交快照
+# Commit snapshot
 git add snapshots/v1.0.0
 git commit -m "docs: snapshot v1.0.0"
 git tag docs-v1.0.0
@@ -1344,11 +1345,11 @@ git tag docs-v1.0.0
 
 ---
 
-## 8. 多语言文档管理
+## 8. Multilingual Documentation Management
 
-### 8.1 多语言文档策略
+### 8.1 Multilingual Documentation Strategies
 
-**策略一：独立目录**
+**Strategy 1: Separate directories**
 ```
 docs/
 ├── en/
@@ -1362,19 +1363,19 @@ docs/
     └── api/
 ```
 
-**策略二：文件后缀**
+**Strategy 2: File suffixes**
 ```
 docs/
-├── getting-started.md        # 默认语言
-├── getting-started.zh.md     # 中文
-├── getting-started.ja.md     # 日文
+├── getting-started.md        # Default language
+├── getting-started.zh.md     # Chinese
+├── getting-started.ja.md     # Japanese
 ├── api/
 │   ├── overview.md
 │   ├── overview.zh.md
 │   └── overview.ja.md
 ```
 
-**策略三：i18n 框架**
+**Strategy 3: i18n framework**
 ```
 docs/
 ├── getting-started.md
@@ -1385,7 +1386,7 @@ docs/
 │       └── getting-started.md
 ```
 
-### 8.2 Docusaurus 多语言配置
+### 8.2 Docusaurus Multilingual Configuration
 
 ```javascript
 // docusaurus.config.js
@@ -1409,19 +1410,19 @@ module.exports = {
 };
 ```
 
-**翻译工作流**：
+**Translation workflow**:
 ```bash
-# 提取需要翻译的字符串
+# Extract strings that need translation
 npm run write-translations -- --locale zh-Hans
 
-# 翻译文件位于
+# Translation files are located at
 # i18n/zh-Hans/docusaurus-plugin-content-docs/current/
 # i18n/zh-Hans/docusaurus-theme-classic/
 ```
 
-### 8.3 MkDocs 多语言配置
+### 8.3 MkDocs Multilingual Configuration
 
-使用 `mkdocs-static-i18n` 插件：
+Use the `mkdocs-static-i18n` plugin:
 
 ```yaml
 # mkdocs.yml
@@ -1437,7 +1438,7 @@ plugins:
           build: true
 ```
 
-**目录结构**：
+**Directory structure**:
 ```
 docs/
 ├── index.md
@@ -1446,11 +1447,11 @@ docs/
 ├── getting-started.zh.md
 ```
 
-### 8.4 Crowdin 集成
+### 8.4 Crowdin Integration
 
-Crowdin 是专业的翻译管理平台，支持与 GitHub 集成：
+Crowdin is a professional translation management platform that supports GitHub integration:
 
-**配置文件（crowdin.yml）**：
+**Configuration file (crowdin.yml)**:
 ```yaml
 project_id_env: CROWDIN_PROJECT_ID
 api_token_env: CROWDIN_PERSONAL_TOKEN
@@ -1460,7 +1461,7 @@ files:
     translation: /docs/**/%file_name%.%two_letters_code%.md
 ```
 
-**GitHub Actions 集成**：
+**GitHub Actions integration**:
 ```yaml
 name: Crowdin
 
@@ -1488,34 +1489,34 @@ jobs:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 ```
 
-### 8.5 翻译最佳实践
+### 8.5 Translation Best Practices
 
-1. **保持术语一致性**：建立多语言术语表
-2. **避免硬编码字符串**：使用 i18n 框架管理文本
-3. **提供语言切换**：在导航栏添加语言选择器
-4. **定期同步**：确保翻译与原文保持同步
-5. **社区翻译**：鼓励社区贡献翻译
+1. **Maintain terminology consistency**: Create multilingual glossaries
+2. **Avoid hardcoded strings**: Use i18n frameworks to manage text
+3. **Provide language switching**: Add language selector to navigation bar
+4. **Synchronize regularly**: Ensure translations stay in sync with source
+5. **Community translation**: Encourage community contributions to translations
 
 ---
 
-## 9. 文档自动化测试
+## 9. Documentation Automated Testing
 
-### 9.1 为什么需要文档测试
+### 9.1 Why Documentation Testing is Needed
 
-文档中的代码示例可能因为以下原因失效：
+Code examples in documentation may break due to:
 
-- API 变更
-- 依赖版本更新
-- 配置文件变化
-- 环境差异
+- API changes
+- Dependency version updates
+- Configuration file changes
+- Environment differences
 
-### 9.2 代码块测试
+### 9.2 Code Block Testing
 
-**Python doctest**：
+**Python doctest**:
 ```python
 def add(a, b):
     """
-    计算两数之和
+    Calculate the sum of two numbers
     
     >>> add(1, 2)
     3
@@ -1529,30 +1530,30 @@ if __name__ == "__main__":
     doctest.testmod()
 ```
 
-**Markdown 代码块测试**（使用 `markdown-test`）：
+**Markdown code block testing** (using `markdown-test`):
 ```bash
-# 安装
+# Install
 npm install -g markdown-test
 
-# 运行测试
+# Run tests
 markdown-test docs/**/*.md
 ```
 
-### 9.3 链接检查
+### 9.3 Link Checking
 
-**使用 markdown-link-check**：
+**Using markdown-link-check**:
 ```bash
-# 安装
+# Install
 npm install -g markdown-link-check
 
-# 检查单个文件
+# Check a single file
 markdown-link-check README.md
 
-# 检查目录
+# Check a directory
 find docs -name "*.md" -exec markdown-link-check {} \;
 ```
 
-**GitHub Actions 配置**：
+**GitHub Actions configuration**:
 ```yaml
 name: Check Links
 
@@ -1575,7 +1576,7 @@ jobs:
           config-file: '.mlc-config.json'
 ```
 
-**配置文件（.mlc-config.json）**：
+**Configuration file (.mlc-config.json)**:
 ```json
 {
   "retryOn429": true,
@@ -1589,21 +1590,21 @@ jobs:
 }
 ```
 
-### 9.4 拼写检查
+### 9.4 Spell Checking
 
-**使用 cspell**：
+**Using cspell**:
 ```bash
-# 安装
+# Install
 npm install -g cspell
 
-# 检查文件
+# Check files
 cspell "docs/**/*.md"
 
-# 添加自定义词汇
+# Add custom words
 cspell add words
 ```
 
-**配置文件（cspell.json）**：
+**Configuration file (cspell.json)**:
 ```json
 {
   "version": "0.2",
@@ -1622,9 +1623,9 @@ cspell add words
 }
 ```
 
-### 9.5 文档 CI/CD 流程
+### 9.5 Documentation CI/CD Pipeline
 
-完整的文档 CI/CD 流程：
+Complete documentation CI/CD pipeline:
 
 ```yaml
 name: Docs CI
@@ -1698,238 +1699,238 @@ jobs:
 
 ---
 
-## 10. GitHub Wiki 使用指南
+## 10. GitHub Wiki Usage Guide
 
-### 10.1 Wiki 简介
+### 10.1 Wiki Overview
 
-GitHub Wiki 是每个仓库自带的文档功能，适合编写项目文档、知识库和教程。
+GitHub Wiki is a documentation feature included with every repository, suitable for writing project documentation, knowledge bases, and tutorials.
 
-**特点**：
-- 独立的 Git 仓库
-- 支持 Markdown 语法
-- 可以本地克隆编辑
-- 支持侧边栏导航
+**Features**:
+- Independent Git repository
+- Supports Markdown syntax
+- Can be cloned and edited locally
+- Supports sidebar navigation
 
-### 10.2 Wiki 创建和编辑
+### 10.2 Creating and Editing Wikis
 
-**启用 Wiki**：
-1. 进入仓库 Settings
-2. 在 Features 部分勾选 Wikis
-3. 点击 Wiki 标签开始创建
+**Enabling Wiki**:
+1. Go to repository Settings
+2. Check Wikis in the Features section
+3. Click the Wiki tab to start creating
 
-**创建页面**：
-1. 点击 "New Page"
-2. 输入页面标题
-3. 编写内容（Markdown 格式）
-4. 点击 "Save Page"
+**Creating pages**:
+1. Click "New Page"
+2. Enter page title
+3. Write content (Markdown format)
+4. Click "Save Page"
 
-### 10.3 Wiki 本地管理
+### 10.3 Local Wiki Management
 
-**克隆 Wiki**：
+**Cloning Wiki**:
 ```bash
-# Wiki 地址格式
+# Wiki URL format
 git clone https://github.com/owner/repo.wiki.git
 
-# 示例
+# Example
 git clone https://github.com/octocat/Hello-World.wiki.git
 ```
 
-**本地编辑**：
+**Local editing**:
 ```bash
 cd repo.wiki.git
 
-# 编辑文件
+# Edit files
 vim Home.md
 
-# 提交更改
+# Commit changes
 git add .
 git commit -m "Update wiki"
 git push
 ```
 
-### 10.4 Wiki 侧边栏
+### 10.4 Wiki Sidebar
 
-编辑 `_Sidebar.md` 文件来定义侧边栏：
+Edit the `_Sidebar.md` file to define the sidebar:
 
 ```markdown
-## 目录
+## Table of Contents
 
-* [首页](Home)
-* [快速开始](Getting-Started)
-* [安装指南](Installation)
+* [Home](Home)
+* [Getting Started](Getting-Started)
+* [Installation](Installation)
   * [Windows](Installation-Windows)
   * [macOS](Installation-macOS)
   * [Linux](Installation-Linux)
-* [API 参考](API-Reference)
-* [常见问题](FAQ)
+* [API Reference](API-Reference)
+* [FAQ](FAQ)
 ```
 
-### 10.5 Wiki 脚注
+### 10.5 Wiki Footer
 
-编辑 `_Footer.md` 文件来定义页脚：
+Edit the `_Footer.md` file to define the footer:
 
 ```markdown
 ---
 
-**项目链接**
-- [GitHub 仓库](https://github.com/owner/repo)
-- [问题反馈](https://github.com/owner/repo/issues)
-- [讨论区](https://github.com/owner/repo/discussions)
+**Project Links**
+- [GitHub Repository](https://github.com/owner/repo)
+- [Issue Tracker](https://github.com/owner/repo/issues)
+- [Discussions](https://github.com/owner/repo/discussions)
 ```
 
-### 10.6 Wiki 最佳实践
+### 10.6 Wiki Best Practices
 
-1. **结构清晰**：使用侧边栏组织页面层级
-2. **链接互通**：在页面之间添加链接
-3. **定期维护**：保持 Wiki 内容与项目同步
-4. **本地备份**：定期克隆 Wiki 仓库备份
-5. **贡献指南**：说明如何贡献 Wiki 内容
+1. **Clear structure**: Use sidebar to organize page hierarchy
+2. **Interconnected links**: Add links between pages
+3. **Regular maintenance**: Keep Wiki content in sync with project
+4. **Local backup**: Regularly clone Wiki repository for backup
+5. **Contribution guide**: Explain how to contribute Wiki content
 
-### 10.7 Wiki 局限性
+### 10.7 Wiki Limitations
 
-**不支持**：
-- Pull Request 审核
-- 代码审查
-- 版本分支
-- 复杂的目录结构
+**Not supported**:
+- Pull Request reviews
+- Code reviews
+- Version branches
+- Complex directory structures
 
-**替代方案**：
-- 文档仓库（docs/ 目录）
+**Alternatives**:
+- Documentation repository (docs/ directory)
 - GitHub Pages
-- 外部文档平台（如 Readme.io）
+- External documentation platforms (e.g., Readme.io)
 
 ---
 
-## 11. GitHub Discussions 作为知识库
+## 11. GitHub Discussions as Knowledge Base
 
-### 11.1 Discussions 简介
+### 11.1 Discussions Overview
 
-GitHub Discussions 是 GitHub 提供的讨论功能，适合构建社区知识库：
+GitHub Discussions is a discussion feature provided by GitHub, suitable for building community knowledge bases:
 
-**特点**：
-- 分类管理讨论
-- 支持问答格式
-- 可以标记最佳答案
-- 支持投票和反应
+**Features**:
+- Category-based discussion management
+- Supports Q&A format
+- Can mark best answers
+- Supports voting and reactions
 
-### 11.2 启用 Discussions
+### 11.2 Enabling Discussions
 
-1. 进入仓库 Settings
-2. 在 Features 部分勾选 Discussions
-3. 点击 Discussions 标签开始配置
+1. Go to repository Settings
+2. Check Discussions in the Features section
+3. Click the Discussions tab to start configuration
 
-### 11.3 讨论分类
+### 11.3 Discussion Categories
 
-建议创建以下分类：
+Recommended categories:
 
-| 分类 | 用途 | 格式 |
-|------|------|------|
-| 📢 公告 | 项目公告 | 讨论 |
-| 💡 想法 | 功能建议 | 讨论 |
-| ❓ Q&A | 问题解答 | 问答 |
-| 🐛 Bug 报告 | 问题反馈 | 讨论 |
-| 📖 使用教程 | 教程分享 | 讨论 |
-| 🎉 展示 | 项目展示 | 讨论 |
+| Category | Purpose | Format |
+|----------|---------|--------|
+| 📢 Announcements | Project announcements | Discussion |
+| 💡 Ideas | Feature suggestions | Discussion |
+| ❓ Q&A | Question answers | Q&A |
+| 🐛 Bug Reports | Issue feedback | Discussion |
+| 📖 Tutorials | Tutorial sharing | Discussion |
+| 🎉 Show and Tell | Project showcase | Discussion |
 
-### 11.4 Discussions 配置
+### 11.4 Discussions Configuration
 
-**分类配置文件**：
+**Category configuration file**:
 ```yaml
 # .github/DISCUSSION_TEMPLATE/announcement.yml
-title: "📢 [公告] "
+title: "📢 [Announcement] "
 labels: ["announcement"]
 body:
   - type: textarea
     id: content
     attributes:
-      label: 公告内容
-      description: 输入公告内容
+      label: Announcement content
+      description: Enter announcement content
     validations:
       required: true
 ```
 
-**问答模板**：
+**Q&A template**:
 ```yaml
 # .github/DISCUSSION_TEMPLATE/q-and-a.yml
-title: "❓ [问题] "
+title: "❓ [Question] "
 labels: ["question"]
 body:
   - type: textarea
     id: description
     attributes:
-      label: 问题描述
-      description: 详细描述你的问题
+      label: Question description
+      description: Describe your question in detail
       placeholder: |
-        1. 你想要做什么？
-        2. 你尝试了什么？
-        3. 你期望的结果是什么？
+        1. What do you want to do?
+        2. What have you tried?
+        3. What is your expected result?
     validations:
       required: true
   
   - type: textarea
     id: environment
     attributes:
-      label: 环境信息
-      description: 提供你的环境信息
+      label: Environment information
+      description: Provide your environment information
       placeholder: |
-        - 操作系统：
-        - Node.js 版本：
-        - 包管理器：
+        - Operating system:
+        - Node.js version:
+        - Package manager:
     validations:
       required: false
 ```
 
-### 11.5 Discussions 与 Issues 的区别
+### 11.5 Discussions vs Issues
 
-| 特性 | Issues | Discussions |
-|------|--------|-------------|
-| 用途 | Bug 修复、任务跟踪 | 讨论、问答、想法 |
-| 状态 | 开启/关闭 | 无状态 |
-| 最佳答案 | 不支持 | 支持 |
-| 投票 | 不支持 | 支持 |
-| 分类 | 标签 | 分类 |
-| 格式 | 单一 | 多种（讨论、问答、投票等） |
+| Feature | Issues | Discussions |
+|---------|--------|-------------|
+| Purpose | Bug fixes, task tracking | Discussions, Q&A, ideas |
+| Status | Open/Closed | Stateless |
+| Best answer | Not supported | Supported |
+| Voting | Not supported | Supported |
+| Categories | Labels | Categories |
+| Format | Single | Multiple (discussions, Q&A, polls, etc.) |
 
-### 11.6 将 Discussion 转换为 Issue
+### 11.6 Converting Discussions to Issues
 
-如果讨论中发现了一个 Bug，可以将其转换为 Issue：
+If a bug is found during discussion, it can be converted to an Issue:
 
-1. 在 Discussion 中找到相关的回复
-2. 点击 "..." 菜单
-3. 选择 "Transfer to issue"
-4. 填写 Issue 信息
+1. Find the relevant reply in the Discussion
+2. Click the "..." menu
+3. Select "Transfer to issue"
+4. Fill in Issue information
 
-### 11.7 Discussions 最佳实践
+### 11.7 Discussions Best Practices
 
-1. **建立模板**：为不同类型的讨论创建模板
-2. **分类清晰**：明确每个分类的用途
-3. **及时回复**：保持社区活跃
-4. **标记答案**：对于 Q&A 分类，及时标记最佳答案
-5. **链接相关**：在 Discussion 和 Issue 之间建立链接
+1. **Create templates**: Create templates for different types of discussions
+2. **Clear categories**: Define the purpose of each category clearly
+3. **Respond promptly**: Keep the community active
+4. **Mark answers**: For Q&A categories, mark best answers promptly
+5. **Link related items**: Create links between Discussions and Issues
 
 ---
 
-## 12. 技术博客写作
+## 12. Technical Blog Writing
 
 ### 12.1 GitHub Pages + Jekyll
 
-**Jekyll 简介**：
-Jekyll 是 GitHub Pages 原生支持的静态站点生成器。
+**Jekyll Overview**:
+Jekyll is a static site generator natively supported by GitHub Pages.
 
-**创建博客**：
+**Creating a blog**:
 ```bash
-# 创建新仓库
-# 仓库名格式：username.github.io
+# Create new repository
+# Repository name format: username.github.io
 
-# 克隆仓库
+# Clone repository
 git clone https://github.com/username/username.github.io.git
 cd username.github.io
 
-# 初始化 Jekyll
+# Initialize Jekyll
 jekyll new .
 ```
 
-**目录结构**：
+**Directory structure**:
 ```
 username.github.io/
 ├── _posts/
@@ -1939,10 +1940,10 @@ username.github.io/
 └── about.md
 ```
 
-**配置文件（_config.yml）**：
+**Configuration file (_config.yml)**:
 ```yaml
-title: 我的技术博客
-description: 分享技术心得
+title: My Tech Blog
+description: Sharing technical insights
 url: https://username.github.io
 
 theme: minima
@@ -1956,81 +1957,81 @@ social:
   twitter: username
 ```
 
-**编写文章**：
+**Writing articles**:
 ```markdown
 ---
 layout: post
-title: "Git 工作流最佳实践"
+title: "Git Workflow Best Practices"
 date: 2024-01-01 12:00:00 +0800
-categories: [Git, 工具]
+categories: [Git, Tools]
 tags: [git, workflow, best-practices]
 ---
 
-## 为什么需要 Git 工作流
+## Why Git Workflow is Needed
 
-Git 工作流是团队协作的基础...
+Git workflow is the foundation of team collaboration...
 
-## 常见的 Git 工作流
+## Common Git Workflows
 
 ### Git Flow
 
-Git Flow 是最经典的工作流...
+Git Flow is the most classic workflow...
 ```
 
 ### 12.2 GitHub Pages + Hugo
 
-**创建 Hugo 博客**：
+**Creating a Hugo blog**:
 ```bash
-# 创建新站点
+# Create new site
 hugo new site blog
 cd blog
 
-# 安装主题
+# Install theme
 git init
 git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
 
-# 创建文章
+# Create post
 hugo new posts/my-first-post.md
 ```
 
-**配置文件（hugo.toml）**：
+**Configuration file (hugo.toml)**:
 ```toml
 baseURL = 'https://username.github.io/blog/'
 languageCode = 'zh-CN'
-title = '我的技术博客'
+title = 'My Tech Blog'
 theme = 'PaperMod'
 
 [params]
   author = "Your Name"
-  description = "分享技术心得"
+  description = "Sharing technical insights"
   defaultTheme = "auto"
   ShowReadingTime = true
   ShowShareButtons = true
 
 [[menu.main]]
-  name = "首页"
+  name = "Home"
   url = "/"
   weight = 1
 
 [[menu.main]]
-  name = "文章"
+  name = "Posts"
   url = "/posts/"
   weight = 2
 
 [[menu.main]]
-  name = "标签"
+  name = "Tags"
   url = "/tags/"
   weight = 3
 
 [[menu.main]]
-  name = "关于"
+  name = "About"
   url = "/about/"
   weight = 4
 ```
 
-### 12.3 GitHub Actions 自动部署
+### 12.3 GitHub Actions Auto-deployment
 
-**Jekyll 部署**：
+**Jekyll deployment**:
 ```yaml
 name: Deploy Jekyll
 
@@ -2075,7 +2076,7 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-**Hugo 部署**：
+**Hugo deployment**:
 ```yaml
 name: Deploy Hugo
 
@@ -2108,186 +2109,186 @@ jobs:
           publish_dir: ./public
 ```
 
-### 12.4 技术博客写作技巧
+### 12.4 Technical Blog Writing Tips
 
-**文章结构**：
+**Article structure**:
 ```markdown
-# 标题
+# Title
 
-## 概述
-简要介绍文章内容（2-3 句）
+## Overview
+Brief introduction to article content (2-3 sentences)
 
-## 前置知识
-列出读者需要了解的内容
+## Prerequisites
+List what readers need to know
 
-## 正文
-分步骤讲解，配合代码示例
+## Main Content
+Step-by-step explanation with code examples
 
-## 总结
-回顾要点，提供下一步建议
+## Summary
+Review key points, provide next steps
 
-## 参考资料
-列出相关链接
+## References
+List related links
 ```
 
-**代码示例原则**：
-1. 完整可运行
-2. 有注释说明
-3. 突出重点部分
-4. 提供完整代码仓库链接
+**Code example principles**:
+1. Complete and runnable
+2. Include comments
+3. Highlight key parts
+4. Provide link to complete code repository
 
-**SEO 优化**：
-- 使用描述性标题
-- 添加关键词
-- 使用内部链接
-- 添加图片 alt 文本
-- 生成 sitemap
+**SEO optimization**:
+- Use descriptive titles
+- Add keywords
+- Use internal links
+- Add image alt text
+- Generate sitemap
 
 ---
 
-## 13. 文档贡献工作流
+## 13. Documentation Contribution Workflow
 
-### 13.1 文档贡献流程
+### 13.1 Documentation Contribution Flow
 
 ```
-Fork 仓库
+Fork repository
     ↓
-创建分支
+Create branch
     ↓
-编辑文档
+Edit documentation
     ↓
-本地预览
+Local preview
     ↓
-提交更改
+Commit changes
     ↓
-创建 Pull Request
+Create Pull Request
     ↓
-代码审查
+Code review
     ↓
-合并发布
+Merge and publish
 ```
 
-### 13.2 文档贡献指南模板
+### 13.2 Documentation Contribution Guide Template
 
-在仓库中创建 `CONTRIBUTING.md`：
+Create `CONTRIBUTING.md` in the repository:
 
 ```markdown
-# 贡献指南
+# Contribution Guide
 
-感谢你对本项目的贡献！
+Thank you for contributing to this project!
 
-## 如何贡献文档
+## How to Contribute Documentation
 
-### 1. Fork 仓库
+### 1. Fork Repository
 
-点击仓库右上角的 "Fork" 按钮。
+Click the "Fork" button in the upper right corner of the repository.
 
-### 2. 克隆仓库
+### 2. Clone Repository
 
 ```bash
 git clone https://github.com/your-username/project.git
 cd project
 ```
 
-### 3. 创建分支
+### 3. Create Branch
 
 ```bash
 git checkout -b docs/your-topic
 ```
 
-### 4. 编辑文档
+### 4. Edit Documentation
 
-使用你喜欢的编辑器编辑文档。
+Use your preferred editor to edit the documentation.
 
-### 5. 本地预览
+### 5. Local Preview
 
 ```bash
-# 安装依赖
+# Install dependencies
 npm install
 
-# 本地预览
+# Local preview
 npm run docs:dev
 ```
 
-### 6. 提交更改
+### 6. Commit Changes
 
 ```bash
 git add .
-git commit -m "docs: 描述你的更改"
+git commit -m "docs: describe your changes"
 ```
 
-### 7. 推送并创建 PR
+### 7. Push and Create PR
 
 ```bash
 git push origin docs/your-topic
 ```
 
-然后在 GitHub 上创建 Pull Request。
+Then create a Pull Request on GitHub.
 
-## 文档规范
+## Documentation Standards
 
-- 使用中文撰写
-- 遵循 [中文技术文档排版规范](#中文技术文档排版规范)
-- 代码示例必须可运行
-- 图片存放在 `docs/assets` 目录
+- Write in Chinese
+- Follow [Chinese Technical Documentation Typesetting Standards](#chinese-technical-documentation-typesetting-standards)
+- Code examples must be runnable
+- Images should be stored in the `docs/assets` directory
 
-## 问题反馈
+## Feedback
 
-如有问题，请在 Discussions 中提问。
+If you have any questions, please ask in Discussions.
 ```
 
-### 13.3 Pull Request 模板
+### 13.3 Pull Request Template
 
-创建 `.github/PULL_REQUEST_TEMPLATE/docs.md`：
+Create `.github/PULL_REQUEST_TEMPLATE/docs.md`:
 
 ```markdown
-## 文档更改类型
+## Documentation Change Type
 
-- [ ] 新增文档
-- [ ] 修复错误
-- [ ] 更新内容
-- [ ] 翻译
+- [ ] New documentation
+- [ ] Fix errors
+- [ ] Update content
+- [ ] Translation
 
-## 更改内容
+## Changes
 
-<!-- 描述你的更改 -->
+<!-- Describe your changes -->
 
-## 相关 Issue
+## Related Issues
 
-<!-- 关联的 Issue 编号 -->
+<!-- Related Issue number -->
 
-## 检查清单
+## Checklist
 
-- [ ] 文档格式正确
-- [ ] 代码示例可运行
-- [ ] 链接有效
-- [ ] 图片显示正常
-- [ ] 已添加必要的说明
+- [ ] Documentation format is correct
+- [ ] Code examples are runnable
+- [ ] Links are valid
+- [ ] Images display correctly
+- [ ] Necessary explanations have been added
 
-## 截图（如适用）
+## Screenshots (if applicable)
 
-<!-- 添加截图 -->
+<!-- Add screenshots -->
 ```
 
-### 13.4 代码审查最佳实践
+### 13.4 Code Review Best Practices
 
-**作为审查者**：
-1. 检查技术准确性
-2. 验证代码示例
-3. 检查格式和风格
-4. 提供建设性反馈
-5. 及时响应
+**As a reviewer**:
+1. Check technical accuracy
+2. Verify code examples
+3. Check formatting and style
+4. Provide constructive feedback
+5. Respond promptly
 
-**作为贡献者**：
-1. 预览更改效果
-2. 自我检查
-3. 响应审查意见
-4. 保持耐心
-5. 学习改进
+**As a contributor**:
+1. Preview changes
+2. Self-check
+3. Respond to review comments
+4. Be patient
+5. Learn and improve
 
-### 13.5 自动化贡献流程
+### 13.5 Automated Contribution Pipeline
 
-**GitHub Actions 自动检查**：
+**GitHub Actions automated checks**:
 ```yaml
 name: PR Docs Check
 
@@ -2321,236 +2322,236 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: '✅ 文档预览构建成功！'
+              body: '✅ Documentation preview build successful!'
             })
 ```
 
 ---
 
-## 14. 中英混合排版最佳实践
+## 14. Chinese-English Mixed Typesetting Best Practices
 
-中英混合排版是中文技术文档中最常见的排版挑战之一。由于技术领域大量使用英文术语，如何在中文文档中正确处理英文内容，直接影响文档的专业性和可读性。
+Chinese-English mixed typesetting is one of the most common typesetting challenges in Chinese technical documentation. Since the technical field extensively uses English terms, how to properly handle English content in Chinese documents directly affects the professionalism and readability of the documentation.
 
-### 14.1 基本规则
+### 14.1 Basic Rules
 
-**中英文之间加空格**：
-这是中英混合排版最基本的规则。在中文和英文、数字之间应该添加一个半角空格，这样可以提高阅读体验，避免字符粘连。
+**Add space between Chinese and English**:
+This is the most fundamental rule of Chinese-English mixed typesetting. A half-width space should be added between Chinese and English characters and numbers, which improves reading experience and avoids character sticking.
 
 ```markdown
-# 推荐
+# Recommended
 使用 GitHub 进行版本控制
 安装 Node.js 依赖
 项目有 100 个 Star
 
-# 不推荐
+# Not recommended
 使用GitHub进行版本控制
 安装Node.js依赖
 项目有100个Star
 ```
 
-空格的添加不仅是为了美观，更是为了提高可读性。当英文单词紧邻中文字符时，读者的视线需要快速切换语言环境，空格可以提供一个视觉上的缓冲。
+Adding spaces is not just for aesthetics, but to improve readability. When English words are adjacent to Chinese characters, readers' eyes need to quickly switch language contexts, and spaces provide a visual buffer.
 
-**数字和中文之间加空格**：
-数字与中文之间同样需要添加空格，这样可以使数字更加醒目，便于阅读。
+**Add space between numbers and Chinese**:
+Spaces should also be added between numbers and Chinese characters, making numbers more prominent and easier to read.
 
 ```markdown
-# 推荐
+# Recommended
 仓库有 100 个星标
 3 个提交记录
 版本号为 2.0.1
 
-# 不推荐
+# Not recommended
 仓库有100个星标
 3个提交记录
 版本号为2.0.1
 ```
 
-**全角标点与半角标点**：
-中文语境中应使用全角标点符号，英文语境中应使用半角标点符号。
+**Full-width vs half-width punctuation**:
+In Chinese context, use full-width punctuation; in English context, use half-width punctuation.
 
 ```markdown
-# 推荐
+# Recommended
 这是一个示例，演示如何使用 GitHub。
 请运行 `npm install` 命令。
 
-# 不推荐
+# Not recommended
 这是一个示例,演示如何使用GitHub.
 请运行 `npm install` 命令
 ```
 
-### 14.2 标点符号使用规范
+### 14.2 Punctuation Usage Standards
 
-**中文标点符号**：
-- 逗号：，（全角）
-- 句号：。（全角）
-- 冒号：：（全角）
-- 分号；（全角）
-- 问号：？（全角）
-- 感叹号：！（全角）
-- 引号：""（全角）
-- 括号：（）（全角）
+**Chinese punctuation**:
+- Comma: ，(full-width)
+- Period: 。(full-width)
+- Colon: ：(full-width)
+- Semicolon: ；(full-width)
+- Question mark: ？(full-width)
+- Exclamation mark: ！(full-width)
+- Quotes: "" (full-width)
+- Parentheses: （）(full-width)
 
-**英文标点符号**：
-- 逗号：,（半角）
-- 句号：.（半角）
-- 冒号：:（半角）
-- 分号：;（半角）
-- 问号：?（半角）
-- 感叹号：!（半角）
-- 引号：""（半角）
-- 括号：()（半角）
+**English punctuation**:
+- Comma: , (half-width)
+- Period: . (half-width)
+- Colon: : (half-width)
+- Semicolon: ; (half-width)
+- Question mark: ? (half-width)
+- Exclamation mark: ! (half-width)
+- Quotes: "" (half-width)
+- Parentheses: () (half-width)
 
-**混合使用规则**：
-当句子以中文为主，包含英文单词或代码时，使用中文标点：
+**Mixed usage rules**:
+When a sentence is primarily Chinese with English words or code, use Chinese punctuation:
 ```markdown
 运行 `git commit` 命令，提交你的更改。
 ```
 
-当句子以英文为主，包含中文说明时，使用英文标点：
+When a sentence is primarily English with Chinese explanations, use English punctuation:
 ```markdown
 Use `git commit` to commit your changes.
 ```
 
-### 14.3 专有名词处理
+### 14.3 Proper Noun Handling
 
-**保持原样，不翻译**：
-技术领域的专有名词应该保持英文原样，不进行翻译。这是因为：
-1. 专有名词的中文翻译可能不统一
-2. 开发者更熟悉英文原词
-3. 便于搜索和交流
+**Keep as-is, do not translate**:
+Technical proper nouns should remain in English and should not be translated. This is because:
+1. Chinese translations of proper nouns may not be consistent
+2. Developers are more familiar with the English terms
+3. Easier to search and communicate
 
 ```markdown
-# 推荐
+# Recommended
 使用 GitHub Actions 进行 CI/CD
 配置 Docker 容器
 运行 Kubernetes 集群
 
-# 不推荐
+# Not recommended
 使用 GitHub 动作进行持续集成/持续部署
 配置 Docker 容器
 运行 Kubernetes 集群
 ```
 
-**首次出现可加注释**：
-对于不太常见的专有名词，首次出现时可以添加中文注释，帮助读者理解。
+**Add annotations on first occurrence**:
+For less common proper nouns, you can add Chinese annotations on first occurrence to help readers understand.
 
 ```markdown
-持续集成（Continuous Integration，CI）是一种开发实践，要求开发者频繁地将代码集成到共享仓库中。
+持续集成（Continuous Integration，CI）is a development practice that requires developers to frequently integrate code into a shared repository.
 ```
 
-**常见技术术语对照表**：
+**Common technical terminology reference table**:
 
-| 英文术语 | 中文术语 | 建议使用 |
-|----------|----------|----------|
-| Repository | 仓库 | 英文或中文均可 |
-| Branch | 分支 | 英文或中文均可 |
-| Pull Request | 拉取请求 | 英文（PR） |
-| Issue | 问题/议题 | 英文 |
-| Fork | 复刻 | 英文 |
-| Clone | 克隆 | 英文 |
-| Commit | 提交 | 英文或中文均可 |
-| Push | 推送 | 英文或中文均可 |
-| Merge | 合并 | 英文或中文均可 |
-| Deploy | 部署 | 中文 |
-| Build | 构建 | 中文 |
-| Test | 测试 | 中文 |
-| Debug | 调试 | 中文 |
-| API | 接口 | 英文 |
-| SDK | 开发工具包 | 英文 |
-| IDE | 集成开发环境 | 英文 |
-| CLI | 命令行界面 | 英文 |
-| GUI | 图形用户界面 | 英文 |
-| URL | 网址 | 英文 |
-| HTTP | 超文本传输协议 | 英文 |
-| JSON | JavaScript 对象表示法 | 英文 |
-| YAML | YAML 格式 | 英文 |
-| Markdown | Markdown 格式 | 英文 |
-| Docker | Docker 容器 | 英文 |
-| Kubernetes | K8s | 英文 |
-| Git | Git 版本控制 | 英文 |
-| Node.js | Node.js 运行时 | 英文 |
-| React | React 框架 | 英文 |
-| Vue | Vue 框架 | 英文 |
-| Angular | Angular 框架 | 英文 |
-| TypeScript | TypeScript 语言 | 英文 |
-| JavaScript | JavaScript 语言 | 英文 |
-| Python | Python 语言 | 英文 |
-| Java | Java 语言 | 英文 |
-| Go | Go 语言 | 英文 |
-| Rust | Rust 语言 | 英文 |
+| English Term | Chinese Term | Recommendation |
+|--------------|--------------|----------------|
+| Repository | 仓库 | English or Chinese |
+| Branch | 分支 | English or Chinese |
+| Pull Request | 拉取请求 | English (PR) |
+| Issue | 问题/议题 | English |
+| Fork | 复刻 | English |
+| Clone | 克隆 | English |
+| Commit | 提交 | English or Chinese |
+| Push | 推送 | English or Chinese |
+| Merge | 合并 | English or Chinese |
+| Deploy | 部署 | Chinese |
+| Build | 构建 | Chinese |
+| Test | 测试 | Chinese |
+| Debug | 调试 | Chinese |
+| API | 接口 | English |
+| SDK | 开发工具包 | English |
+| IDE | 集成开发环境 | English |
+| CLI | 命令行界面 | English |
+| GUI | 图形用户界面 | English |
+| URL | 网址 | English |
+| HTTP | 超文本传输协议 | English |
+| JSON | JavaScript 对象表示法 | English |
+| YAML | YAML 格式 | English |
+| Markdown | Markdown 格式 | English |
+| Docker | Docker 容器 | English |
+| Kubernetes | K8s | English |
+| Git | Git 版本控制 | English |
+| Node.js | Node.js 运行时 | English |
+| React | React 框架 | English |
+| Vue | Vue 框架 | English |
+| Angular | Angular 框架 | English |
+| TypeScript | TypeScript 语言 | English |
+| JavaScript | JavaScript 语言 | English |
+| Python | Python 语言 | English |
+| Java | Java 语言 | English |
+| Go | Go 语言 | English |
+| Rust | Rust 语言 | English |
 
-### 14.4 代码和命令处理
+### 14.4 Code and Command Handling
 
-**代码使用英文标点**：
-在代码块或行内代码中，始终使用英文标点符号。
+**Use English punctuation in code**:
+In code blocks or inline code, always use English punctuation.
 
 ```markdown
-# 推荐
+# Recommended
 运行 `git commit -m "message"` 提交更改。
 配置文件路径为 `/etc/config.yml`。
 
-# 不推荐
+# Not recommended
 运行 `git commit -m "message"` 提交更改。
 配置文件路径为 `/etc/config.yml`。
 ```
 
-**命令说明使用中文标点**：
-当用中文描述命令或代码时，使用中文标点。
+**Use Chinese punctuation for command descriptions**:
+When describing commands or code in Chinese, use Chinese punctuation.
 
 ```markdown
-# 推荐
+# Recommended
 这个命令用于提交更改。参数 `-m` 用于指定提交信息。
 
-# 不推荐
+# Not recommended
 这个命令用于提交更改.参数 `-m` 用于指定提交信息.
 ```
 
-**代码注释的语言选择**：
-根据项目受众选择注释语言：
-- 面向国际开发者：使用英文注释
-- 面向中国开发者：可以使用中文注释
-- 开源项目：建议使用英文注释
+**Language choice for code comments**:
+Choose comment language based on project audience:
+- For international developers: use English comments
+- For Chinese developers: can use Chinese comments
+- For open source projects: recommend English comments
 
 ```python
-# 英文注释（面向国际开发者）
+# English comments (for international developers)
 def calculate_sum(a, b):
     """Calculate the sum of two numbers."""
     return a + b
 
-# 中文注释（面向中国开发者）
+# Chinese comments (for Chinese developers)
 def calculate_sum(a, b):
     """计算两个数的和。"""
     return a + b
 ```
 
-### 14.5 排版工具推荐
+### 14.5 Typesetting Tool Recommendations
 
-**中文排版检查工具**：
+**Chinese typesetting check tools**:
 
-1. **pangu.js**：自动在中英文之间加空格
+1. **pangu.js**: Automatically add spaces between Chinese and English
    ```bash
    npm install -g pangu
    pangu --help
    ```
 
-2. **lint-md**：中文 Markdown 排版检查
+2. **lint-md**: Chinese Markdown typesetting check
    ```bash
    npm install -g lint-md
    lint-md docs/**/*.md
    ```
 
-3. **zhlint**：中文排版格式化工具
+3. **zhlint**: Chinese typesetting formatting tool
    ```bash
    npm install -g zhlint
    zhlint --fix docs/**/*.md
    ```
 
-**VS Code 插件**：
-1. **Chinese Typography**：自动处理中英文间距
-2. **Markdown Lint**：Markdown 格式检查
-3. **Pangu Mark**：自动添加中英文间距
+**VS Code plugins**:
+1. **Chinese Typography**: Automatically handle Chinese-English spacing
+2. **Markdown Lint**: Markdown format checking
+3. **Pangu Mark**: Automatically add Chinese-English spacing
 
-**GitHub Actions 集成**：
+**GitHub Actions integration**:
 ```yaml
 name: Lint Markdown
 
@@ -2574,7 +2575,7 @@ jobs:
           lint-md docs/**/*.md --config .lintmdrc.json
 ```
 
-**lint-md 配置文件（.lintmdrc.json）**：
+**lint-md configuration file (.lintmdrc.json)**:
 ```json
 {
   "rules": {
@@ -2595,204 +2596,204 @@ jobs:
 }
 ```
 
-### 14.6 常见错误示例
+### 14.6 Common Error Examples
 
-| 错误类型 | 错误示例 | 正确示例 | 说明 |
-|----------|----------|----------|------|
-| 缺少空格 | 使用GitHub进行版本控制 | 使用 GitHub 进行版本控制 | 中英文之间加空格 |
-| 标点错误 | 这是示例. | 这是示例。 | 中文语境用全角标点 |
-| 代码标点 | 运行 `npm install`。 | 运行 `npm install`。 | 代码中的标点用半角 |
-| 过度翻译 | 拉取请求 | Pull Request | 保持专有名词原样 |
-| 格式混乱 | 运行`npm install`命令 | 运行 `npm install` 命令 | 代码前后加空格 |
-| 数字格式 | 仓库有100个星标 | 仓库有 100 个星标 | 数字前后加空格 |
-| 混用标点 | 使用GitHub,进行版本控制 | 使用 GitHub，进行版本控制 | 统一使用全角标点 |
-| 缺少注释 | 使用 CI/CD | 使用 CI/CD（持续集成/持续部署） | 首次出现加注释 |
+| Error Type | Incorrect Example | Correct Example | Description |
+|------------|-------------------|-----------------|-------------|
+| Missing space | 使用GitHub进行版本控制 | 使用 GitHub 进行版本控制 | Add space between Chinese and English |
+| Punctuation error | 这是示例. | 这是示例。 | Use full-width punctuation in Chinese context |
+| Code punctuation | 运行 `npm install`。 | 运行 `npm install`。 | Use half-width punctuation in code |
+| Over-translation | 拉取请求 | Pull Request | Keep proper nouns as-is |
+| Format confusion | 运行`npm install`命令 | 运行 `npm install` 命令 | Add space before and after code |
+| Number format | 仓库有100个星标 | 仓库有 100 个星标 | Add space before and after numbers |
+| Mixed punctuation | 使用GitHub,进行版本控制 | 使用 GitHub，进行版本控制 | Use consistent full-width punctuation |
+| Missing annotation | 使用 CI/CD | 使用 CI/CD（持续集成/持续部署） | Add annotation on first occurrence |
 
-### 14.7 排版检查清单
+### 14.7 Typesetting Checklist
 
-在发布文档前，使用以下检查清单：
+Before publishing documentation, use the following checklist:
 
-**基本格式检查**：
-- [ ] 中英文之间是否有空格
-- [ ] 数字和中文之间是否有空格
-- [ ] 标点符号是否正确（全角/半角）
-- [ ] 代码块中的标点是否使用半角
-- [ ] 专有名词是否保持原样
+**Basic format check**:
+- [ ] Is there space between Chinese and English
+- [ ] Is there space between numbers and Chinese
+- [ ] Are punctuation marks correct (full-width/half-width)
+- [ ] Are code block punctuation marks half-width
+- [ ] Are proper nouns kept as-is
 
-**内容检查**：
-- [ ] 术语使用是否一致
-- [ ] 链接是否有效
-- [ ] 图片是否显示正常
-- [ ] 代码示例是否可运行
-- [ ] 是否有拼写错误
+**Content check**:
+- [ ] Is terminology usage consistent
+- [ ] Are links valid
+- [ ] Do images display correctly
+- [ ] Are code examples runnable
+- [ ] Are there any spelling errors
 
-**可读性检查**：
-- [ ] 段落是否过长
-- [ ] 标题层级是否合理
-- [ ] 列表使用是否恰当
-- [ ] 是否有足够的示例
-- [ ] 是否有必要的说明
+**Readability check**:
+- [ ] Are paragraphs too long
+- [ ] Are heading levels reasonable
+- [ ] Are lists used appropriately
+- [ ] Are there enough examples
+- [ ] Are there necessary explanations
 
-**国际化检查**：
-- [ ] 英文内容是否需要翻译
-- [ ] 是否需要添加中文注释
-- [ ] 是否考虑了不同语言读者的需求
-- [ ] 是否提供了多语言版本
+**Internationalization check**:
+- [ ] Does English content need translation
+- [ ] Do Chinese annotations need to be added
+- [ ] Are the needs of readers from different language backgrounds considered
+- [ ] Are multilingual versions provided
 
-### 14.8 最佳实践总结
+### 14.8 Best Practices Summary
 
-**核心原则**：
-1. **一致性**：在整个文档中保持一致的排版风格
-2. **可读性**：排版应该服务于内容，提高阅读体验
-3. **专业性**：技术文档应该体现专业水准
-4. **国际化**：考虑不同语言背景读者的需求
+**Core principles**:
+1. **Consistency**: Maintain consistent typesetting style throughout the document
+2. **Readability**: Typesetting should serve the content and improve reading experience
+3. **Professionalism**: Technical documentation should reflect professional standards
+4. **Internationalization**: Consider the needs of readers from different language backgrounds
 
-**具体建议**：
-1. 建立项目排版规范文档
-2. 使用自动化工具检查排版
-3. 在代码审查中关注排版问题
-4. 定期更新排版规范
-5. 收集读者反馈并改进
+**Specific recommendations**:
+1. Create project typesetting standards documentation
+2. Use automated tools to check typesetting
+3. Pay attention to typesetting issues during code reviews
+4. Regularly update typesetting standards
+5. Collect reader feedback and improve
 
-**常见问题解答**：
+**Common questions**:
 
-**问**：中英文之间一定要加空格吗？
-**答**：是的，这是中英混合排版的基本规则。加空格可以提高可读性，避免字符粘连。
+**Q**: Is it necessary to add spaces between Chinese and English?
+**A**: Yes, this is a fundamental rule of Chinese-English mixed typesetting. Adding spaces improves readability and avoids character sticking.
 
-**问**：代码中的中文注释应该用什么标点？
-**答**：代码注释通常使用英文标点，因为代码编辑器和 IDE 对英文标点的支持更好。但如果项目明确面向中国开发者，也可以使用中文标点。
+**Q**: What punctuation should be used in Chinese comments in code?
+**A**: Code comments usually use English punctuation because code editors and IDEs have better support for English punctuation. However, if the project is specifically targeted at Chinese developers, Chinese punctuation can also be used.
 
-**问**：专有名词要不要翻译？
-**答**：一般不翻译。技术领域的专有名词保持英文原样更便于交流和搜索。首次出现时可以添加中文注释。
+**Q**: Should proper nouns be translated?
+**A**: Generally, no. Technical proper nouns should remain in English for easier communication and searching. You can add Chinese annotations on first occurrence.
 
-**问**：如何处理中英文混用的标题？
-**答**：标题中的英文专有名词保持原样，其他部分使用中文。例如："GitHub Actions 使用指南"。
+**Q**: How to handle titles that mix Chinese and English?
+**A**: Keep English proper nouns as-is in titles, and use Chinese for other parts. For example: "GitHub Actions 使用指南".
 
-**问**：文档中的数字用阿拉伯数字还是中文数字？
-**答**：一般使用阿拉伯数字，更便于阅读。例如："3 个步骤"而不是"三个步骤"。
+**Q**: Should numbers in documentation use Arabic or Chinese numerals?
+**A**: Generally use Arabic numerals for easier reading. For example: "3 个步骤" instead of "三个步骤".
 
 ---
 
-## 15. 技术文档项目实战
+## 15. Technical Documentation Project in Practice
 
-技术文档不仅仅是代码的附属品，它是开发者与用户之间沟通的桥梁。一个优秀的技术文档项目需要系统化的规划、持续的维护和不断的优化。本章将通过实际案例，带你从零开始构建一个完整的技术文档体系。
+Technical documentation is not just an accessory to code; it is the bridge between developers and users. An excellent technical documentation project requires systematic planning, continuous maintenance, and constant optimization. This chapter will walk you through building a complete technical documentation system from scratch using practical examples.
 
-### 15.1 从零开始创建项目文档
+### 15.1 Creating Project Documentation from Scratch
 
-假设你正在开发一个名为 `awesome-cli` 的命令行工具，需要为其创建完整的文档体系。我们将从文档规划、内容编写到部署上线，一步步完成整个流程。
+Assuming you are developing a command-line tool called `awesome-cli` and need to create a complete documentation system for it. We will go through the entire process step by step, from documentation planning to content writing to deployment.
 
-**第一步：规划文档结构**
+**Step 1: Plan the documentation structure**
 
-良好的文档结构是成功的一半。在开始编写之前，需要仔细规划文档的组织方式：
+A good documentation structure is half the success. Before starting to write, carefully plan how the documentation will be organized:
 
 ```
 awesome-cli-docs/
 ├── docs/
-│   ├── index.md                 # 首页
-│   ├── getting-started.md       # 快速开始
-│   ├── installation.md          # 安装指南
-│   ├── configuration.md         # 配置说明
-│   ├── commands/                # 命令参考
+│   ├── index.md                 # Homepage
+│   ├── getting-started.md       # Quick start
+│   ├── installation.md          # Installation guide
+│   ├── configuration.md         # Configuration guide
+│   ├── commands/                # Command reference
 │   │   ├── init.md
 │   │   ├── build.md
 │   │   └── deploy.md
-│   ├── guides/                  # 使用指南
+│   ├── guides/                  # User guides
 │   │   ├── basic-usage.md
 │   │   ├── advanced-usage.md
 │   │   └── best-practices.md
-│   ├── api/                     # API 文档
+│   ├── api/                     # API documentation
 │   │   ├── overview.md
 │   │   └── reference.md
-│   ├── faq.md                   # 常见问题
-│   └── changelog.md             # 更新日志
+│   ├── faq.md                   # FAQ
+│   └── changelog.md             # Changelog
 ├── mkdocs.yml
 └── README.md
 ```
 
-**第二步：编写首页内容**
+**Step 2: Write the homepage content**
 
-首页是用户接触文档的第一印象，应该简洁明了地介绍项目：
+The homepage is the first impression users get of the documentation, so it should introduce the project clearly and concisely:
 
 ```markdown
-# Awesome CLI 文档
+# Awesome CLI Documentation
 
-欢迎使用 Awesome CLI！这是一个强大的命令行工具，帮助你快速构建和部署应用。
+Welcome to Awesome CLI! This is a powerful command-line tool that helps you quickly build and deploy applications.
 
-## 功能特性
+## Features
 
-- **快速构建**：一键构建项目，支持多种框架
-- **智能部署**：自动检测环境，一键部署到云端
-- **插件系统**：丰富的插件生态，扩展功能无限可能
-- **跨平台支持**：支持 Windows、macOS 和 Linux
+- **Fast Build**: One-click project build, supporting multiple frameworks
+- **Smart Deploy**: Auto-detect environment, one-click deploy to cloud
+- **Plugin System**: Rich plugin ecosystem, unlimited extensibility
+- **Cross-platform Support**: Supports Windows, macOS, and Linux
 
-## 快速开始
+## Quick Start
 
 ```bash
-# 安装
+# Install
 npm install -g awesome-cli
 
-# 初始化项目
+# Initialize project
 awesome-cli init my-project
 
-# 构建项目
+# Build project
 awesome-cli build
 
-# 部署项目
+# Deploy project
 awesome-cli deploy
 ```
 
-## 获取帮助
+## Get Help
 
-- [快速开始指南](getting-started.md)
-- [命令参考](commands/init.md)
-- [常见问题](faq.md)
+- [Quick Start Guide](getting-started.md)
+- [Command Reference](commands/init.md)
+- [FAQ](faq.md)
 - [GitHub Issues](https://github.com/your-username/awesome-cli/issues)
 ```
 
-**第三步：编写快速开始指南**
+**Step 3: Write the quick start guide**
 
-快速开始指南应该让新手在 5 分钟内上手使用：
+The quick start guide should help beginners get started within 5 minutes:
 
 ```markdown
-# 快速开始
+# Quick Start
 
-本指南将在 5 分钟内带你了解 Awesome CLI 的基本使用方法。
+This guide will help you understand the basic usage of Awesome CLI in 5 minutes.
 
-## 前置条件
+## Prerequisites
 
-- Node.js 18 或更高版本
-- npm 9 或更高版本
+- Node.js 18 or higher
+- npm 9 or higher
 - Git
 
-## 安装
+## Installation
 
-使用 npm 全局安装：
+Install globally using npm:
 
 ```bash
 npm install -g awesome-cli
 ```
 
-验证安装：
+Verify installation:
 
 ```bash
 awesome-cli --version
-# 输出: awesome-cli v1.0.0
+# Output: awesome-cli v1.0.0
 ```
 
-## 创建第一个项目
+## Create Your First Project
 
 ```bash
-# 初始化项目
+# Initialize project
 awesome-cli init my-first-project
 
-# 进入项目目录
+# Enter project directory
 cd my-first-project
 
-# 查看项目结构
+# View project structure
 ls -la
 ```
 
-项目结构如下：
+The project structure is as follows:
 
 ```
 my-first-project/
@@ -2805,34 +2806,34 @@ my-first-project/
 └── README.md
 ```
 
-## 构建项目
+## Build Project
 
 ```bash
 awesome-cli build
 ```
 
-构建完成后，会在 `dist/` 目录生成构建产物。
+After the build is complete, the build output will be generated in the `dist/` directory.
 
-## 部署项目
+## Deploy Project
 
 ```bash
 awesome-cli deploy
 ```
 
-按照提示选择部署环境，完成部署。
+Follow the prompts to select a deployment environment and complete the deployment.
 
-## 下一步
+## Next Steps
 
-- [配置说明](configuration.md) - 了解如何配置项目
-- [命令参考](commands/init.md) - 查看所有可用命令
-- [使用指南](guides/basic-usage.md) - 深入学习使用方法
+- [Configuration Guide](configuration.md) - Learn how to configure the project
+- [Command Reference](commands/init.md) - View all available commands
+- [User Guide](guides/basic-usage.md) - Learn more about usage methods
 ```
 
-### 15.2 文档维护工作流
+### 15.2 Documentation Maintenance Workflow
 
-建立文档与代码同步更新的工作流，确保文档始终与代码保持一致：
+Establish a workflow that keeps documentation in sync with code updates, ensuring documentation always stays consistent with code:
 
-**GitHub Actions 配置**：
+**GitHub Actions configuration**:
 ```yaml
 name: Docs Update Reminder
 
@@ -2877,46 +2878,46 @@ jobs:
                 await github.rest.issues.create({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  title: '提醒：代码变更，请检查文档是否需要更新',
-                  body: `PR #${pr.number} 修改了代码，但未更新文档。\n\n请检查以下内容是否需要更新：\n- API 文档\n- 命令参考\n- 配置说明\n- 使用示例`,
+                  title: 'Reminder: Code changed, check if docs need updating',
+                  body: `PR #${pr.number} modified code but did not update documentation.\n\nPlease check if the following need updating:\n- API documentation\n- Command reference\n- Configuration guide\n- Usage examples`,
                   labels: ['documentation']
                 });
               }
             }
 ```
 
-### 15.3 文档质量评估指标
+### 15.3 Documentation Quality Metrics
 
-建立文档质量评估体系，量化文档质量：
+Establish a documentation quality assessment system to quantify documentation quality:
 
-| 指标 | 说明 | 目标值 |
-|------|------|--------|
-| 覆盖率 | 已文档化的功能比例 | > 90% |
-| 准确性 | 文档与实际功能的一致性 | 100% |
-| 时效性 | 文档最后更新时间 | < 30 天 |
-| 可读性 | 阅读难度评分 | 中等以下 |
-| 完整性 | 必要章节的完整性 | 100% |
-| 链接有效性 | 有效链接比例 | > 95% |
+| Metric | Description | Target Value |
+|--------|-------------|--------------|
+| Coverage | Percentage of documented features | > 90% |
+| Accuracy | Consistency between docs and actual functionality | 100% |
+| Timeliness | Last documentation update time | < 30 days |
+| Readability | Reading difficulty score | Below medium |
+| Completeness | Completeness of required sections | 100% |
+| Link validity | Percentage of valid links | > 95% |
 
-**自动化检查脚本**：
+**Automated check script**:
 ```bash
 #!/bin/bash
 # docs-quality-check.sh
 
-echo "=== 文档质量检查报告 ==="
+echo "=== Documentation Quality Check Report ==="
 echo ""
 
-# 检查文件数量
+# Check file count
 TOTAL_FILES=$(find docs -name "*.md" | wc -l)
-echo "文档文件总数: $TOTAL_FILES"
+echo "Total documentation files: $TOTAL_FILES"
 
-# 检查文件大小
+# Check file size
 TOTAL_SIZE=$(find docs -name "*.md" -exec wc -c {} + | tail -1 | awk '{print $1}')
-echo "文档总大小: $TOTAL_SIZE 字节"
+echo "Total documentation size: $TOTAL_SIZE bytes"
 
-# 检查链接有效性
+# Check link validity
 echo ""
-echo "检查链接有效性..."
+echo "Checking link validity..."
 broken_links=0
 for file in docs/**/*.md; do
   while IFS= read -r line; do
@@ -2924,38 +2925,38 @@ for file in docs/**/*.md; do
       url="${BASH_REMATCH[1]}"
       status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
       if [ "$status" != "200" ]; then
-        echo "  失效链接: $url (在 $file)"
+        echo "  Broken link: $url (in $file)"
         ((broken_links++))
       fi
     fi
   done < "$file"
 done
-echo "失效链接数: $broken_links"
+echo "Broken link count: $broken_links"
 
-# 检查代码块
+# Check code blocks
 echo ""
-echo "检查代码块..."
+echo "Checking code blocks..."
 code_blocks=$(grep -r '```' docs --count | awk -F: '{sum+=$2} END {print sum}')
-echo "代码块总数: $((code_blocks / 2))"
+echo "Total code blocks: $((code_blocks / 2))"
 
 echo ""
-echo "=== 检查完成 ==="
+echo "=== Check complete ==="
 ```
 
-### 15.4 文档国际化实战
+### 15.4 Documentation Internationalization in Practice
 
-为项目添加多语言支持的完整流程：
+Complete process for adding multilingual support to a project:
 
-**第一步：提取可翻译内容**
+**Step 1: Extract translatable content**
 
 ```bash
-# 使用 Docusaurus 提取翻译字符串
+# Use Docusaurus to extract translation strings
 npm run write-translations -- --locale zh-Hans
 ```
 
-**第二步：翻译内容文件**
+**Step 2: Translate content files**
 
-目录结构：
+Directory structure:
 ```
 i18n/
 ├── zh-Hans/
@@ -2973,7 +2974,7 @@ i18n/
             └── getting-started.md
 ```
 
-**第三步：配置语言切换**
+**Step 3: Configure language switching**
 
 ```javascript
 // docusaurus.config.js
@@ -2997,7 +2998,7 @@ module.exports = {
 };
 ```
 
-**第四步：翻译工作流自动化**
+**Step 4: Automate translation workflow**
 
 ```yaml
 # .github/workflows/translate.yml
@@ -3035,17 +3036,17 @@ jobs:
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '翻译提醒：文档内容已更新',
-              body: `以下文档已更新，请同步翻译：\n\n\`\`\`\n${changedFiles}\n\`\`\`\n\n请更新对应的翻译文件。`,
+              title: 'Translation reminder: Documentation content updated',
+              body: `The following documentation has been updated, please sync translations:\n\n\`\`\`\n${changedFiles}\n\`\`\`\n\nPlease update the corresponding translation files.`,
               labels: ['translation']
             });
 ```
 
-### 15.5 文档搜索优化
+### 15.5 Documentation Search Optimization
 
-提升文档搜索体验的技巧：
+Tips to improve documentation search experience:
 
-**本地搜索配置（MkDocs）**：
+**Local search configuration (MkDocs)**:
 ```yaml
 # mkdocs.yml
 plugins:
@@ -3054,7 +3055,7 @@ plugins:
       separator: '[\s\-\.]+'
 ```
 
-**Algolia DocSearch 集成**：
+**Algolia DocSearch integration**:
 ```javascript
 // docusaurus.config.js
 module.exports = {
@@ -3070,55 +3071,55 @@ module.exports = {
 };
 ```
 
-**搜索优化建议**：
-1. 为每个页面添加描述性标题
-2. 使用关键词丰富的章节标题
-3. 添加元数据描述
-4. 建立清晰的文档层级
-5. 使用标签分类内容
+**Search optimization recommendations**:
+1. Add descriptive titles to each page
+2. Use keyword-rich section headings
+3. Add metadata descriptions
+4. Establish clear documentation hierarchy
+5. Use tags to categorize content
 
-### 15.6 文档性能优化
+### 15.6 Documentation Performance Optimization
 
-大型文档站点的性能优化：
+Performance optimization for large documentation sites:
 
-**图片优化**：
+**Image optimization**:
 ```markdown
-<!-- 使用 WebP 格式 -->
-![示例图片](./assets/example.webp)
+<!-- Use WebP format -->
+![Example image](./assets/example.webp)
 
-<!-- 添加尺寸属性 -->
-<img src="./assets/example.png" width="600" height="400" alt="示例图片">
+<!-- Add size attributes -->
+<img src="./assets/example.png" width="600" height="400" alt="Example image">
 
-<!-- 使用懒加载 -->
-<img src="./assets/example.png" loading="lazy" alt="示例图片">
+<!-- Use lazy loading -->
+<img src="./assets/example.png" loading="lazy" alt="Example image">
 ```
 
-**代码块优化**：
+**Code block optimization**:
 ```markdown
-<!-- 只展示关键代码 -->
+<!-- Show only key code -->
 ```python
-# 关键部分
+# Key section
 def important_function():
     pass
 ```
 
-<!-- 完整代码放在折叠区域 -->
+<!-- Put complete code in collapsible area -->
 <details>
-<summary>查看完整代码</summary>
+<summary>View complete code</summary>
 
 ```python
-# 完整实现
+# Complete implementation
 def important_function():
-    # ... 100 行代码
+    # ... 100 lines of code
     pass
 ```
 
 </details>
 ```
 
-**构建优化**：
+**Build optimization**:
 ```yaml
-# GitHub Actions 缓存配置
+# GitHub Actions cache configuration
 - name: Cache docs
   uses: actions/cache@v4
   with:
@@ -3130,17 +3131,17 @@ def important_function():
       docs-
 ```
 
-### 15.7 文档自动化测试
+### 15.7 Documentation Automated Testing
 
-文档中的代码示例可能因为各种原因失效，比如接口变更、依赖版本更新或者环境差异。建立自动化测试机制，可以及时发现并修复这些问题，确保文档的准确性和可靠性。
+Code examples in documentation may break due to various reasons, such as API changes, dependency version updates, or environment differences. Establishing an automated testing mechanism can help discover and fix these issues in a timely manner, ensuring the accuracy and reliability of documentation.
 
-**测试策略**：
-1. 代码块测试：提取文档中的代码块并执行验证
-2. 链接检查：验证所有外部链接是否有效可访问
-3. 拼写检查：检查文档中的拼写错误和格式问题
-4. 格式检查：验证文档格式是否符合规范要求
+**Testing strategy**:
+1. Code block testing: Extract and execute code blocks from documentation
+2. Link checking: Verify all external links are valid and accessible
+3. Spell checking: Check for spelling errors and formatting issues in documentation
+4. Format checking: Verify documentation format meets standards
 
-**完整的测试流程**：
+**Complete testing pipeline**:
 ```yaml
 # .github/workflows/docs-test.yml
 name: Docs Testing
@@ -3188,102 +3189,102 @@ jobs:
         run: npm run docs:build
 ```
 
-### 15.8 文档贡献指南
+### 15.8 Documentation Contribution Guide
 
-为项目建立清晰的文档贡献指南，鼓励社区参与文档改进。良好的贡献指南可以降低参与门槛，提高文档质量：
+Establish clear documentation contribution guidelines for the project to encourage community participation in documentation improvement. Good contribution guidelines can lower the barrier to participation and improve documentation quality:
 
 ```markdown
-# 文档贡献指南
+# Documentation Contribution Guide
 
-感谢你对本项目文档的贡献！以下是参与文档改进的指南。
+Thank you for contributing to this project's documentation! Below are guidelines for participating in documentation improvement.
 
-## 如何贡献
+## How to Contribute
 
-### 报告问题
+### Report Issues
 
-如果你发现文档中的错误或不清楚的地方，请通过以下方式反馈：
-- 在 GitHub Issues 中创建新的问题
-- 使用 "文档问题" 标签
-- 详细描述问题所在和建议的改进方案
+If you find errors or unclear content in the documentation, please provide feedback through the following methods:
+- Create a new issue in GitHub Issues
+- Use the "Documentation Issue" label
+- Describe the issue and suggested improvements in detail
 
-### 提交修改
+### Submit Modifications
 
-1. Fork 项目仓库到你的账号
-2. 创建文档分支：`git checkout -b docs/your-topic`
-3. 修改文档内容并确保格式正确
-4. 本地预览确认无误后提交
-5. 创建 Pull Request 并描述修改内容
+1. Fork the project repository to your account
+2. Create a documentation branch: `git checkout -b docs/your-topic`
+3. Modify documentation content and ensure correct formatting
+4. Preview locally to confirm everything is correct, then commit
+5. Create a Pull Request and describe the changes
 
-### 文档规范
+### Documentation Standards
 
-- 使用中文撰写，保持语言简洁明了
-- 遵循中英混合排版规范
-- 代码示例必须可运行且有注释说明
-- 图片存放在 `docs/assets` 目录
-- 添加必要的注释和说明文字
+- Write in Chinese, keep the language concise and clear
+- Follow Chinese-English mixed typesetting standards
+- Code examples must be runnable and include comments
+- Images should be stored in the `docs/assets` directory
+- Add necessary comments and explanations
 
-## 文档结构
+## Documentation Structure
 
 ```
 docs/
-├── index.md           # 首页介绍
-├── getting-started.md # 快速开始指南
-├── guides/            # 详细使用指南
-├── api/               # API 参考文档
-└── faq.md             # 常见问题解答
+├── index.md           # Homepage introduction
+├── getting-started.md # Quick start guide
+├── guides/            # Detailed user guides
+├── api/               # API reference documentation
+└── faq.md             # Frequently asked questions
 ```
 
-## 本地开发
+## Local Development
 
 ```bash
-# 安装项目依赖
+# Install project dependencies
 npm install
 
-# 启动本地预览服务器
+# Start local preview server
 npm run docs:dev
 
-# 构建生产版本文档
+# Build production documentation
 npm run docs:build
 ```
 
-## 联系方式
+## Contact
 
-如有任何疑问，请在 GitHub Discussions 中提问交流。
+If you have any questions, please ask and discuss in GitHub Discussions.
 ```
 
 ---
 
-## 附录 A：推荐工具列表
+## Appendix A: Recommended Tools List
 
-| 类别 | 工具 | 用途 |
-|------|------|------|
-| 编辑器 | VS Code | 代码和文档编辑 |
-| 编辑器 | Typora | Markdown 编辑 |
-| 文档生成 | MkDocs | 项目文档 |
-| 文档生成 | Docusaurus | 开源项目文档 |
-| 文档生成 | VitePress | Vue 生态文档 |
-| 文档生成 | Hugo | 博客和文档 |
-| API 文档 | Swagger UI | REST API 文档 |
-| API 文档 | Redoc | 美观的 API 文档 |
-| 排版检查 | lint-md | 中文排版检查 |
-| 排版检查 | zhlint | 中文格式化 |
-| 链接检查 | markdown-link-check | 链接有效性检查 |
-| 拼写检查 | cspell | 拼写检查 |
-| 翻译管理 | Crowdin | 多语言翻译平台 |
-| 版本管理 | mike | MkDocs 版本管理 |
+| Category | Tool | Purpose |
+|----------|------|---------|
+| Editor | VS Code | Code and documentation editing |
+| Editor | Typora | Markdown editing |
+| Doc generation | MkDocs | Project documentation |
+| Doc generation | Docusaurus | Open source project documentation |
+| Doc generation | VitePress | Vue ecosystem documentation |
+| Doc generation | Hugo | Blogs and documentation |
+| API docs | Swagger UI | REST API documentation |
+| API docs | Redoc | Beautiful API documentation |
+| Typesetting check | lint-md | Chinese typesetting check |
+| Typesetting check | zhlint | Chinese formatting |
+| Link check | markdown-link-check | Link validity check |
+| Spell check | cspell | Spell checking |
+| Translation management | Crowdin | Multilingual translation platform |
+| Version management | mike | MkDocs version management |
 
-## 附录 B：推荐阅读
+## Appendix B: Recommended Reading
 
-- [Google 技术写作课程](https://developers.google.com/tech-writing)
-- [Markdown 语法指南](https://www.markdownguide.org/)
-- [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines)
-- [OpenAPI 规范](https://swagger.io/specification/)
-- [Docusaurus 文档](https://docusaurus.io/)
-- [MkDocs 文档](https://www.mkdocs.org/)
-- [Hugo 文档](https://gohugo.io/)
+- [Google Technical Writing Courses](https://developers.google.com/tech-writing)
+- [Markdown Style Guide](https://www.markdownguide.org/)
+- [Chinese Copywriting Guidelines](https://github.com/sparanoid/chinese-copywriting-guidelines)
+- [OpenAPI Specification](https://swagger.io/specification/)
+- [Docusaurus Documentation](https://docusaurus.io/)
+- [MkDocs Documentation](https://www.mkdocs.org/)
+- [Hugo Documentation](https://gohugo.io/)
 
 ---
 
-**最后更新**：2024 年 12 月
+**Last Updated**: December 2024
 
-**许可协议**：本文档采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 协议发布。
+**License**: This document is published under the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.

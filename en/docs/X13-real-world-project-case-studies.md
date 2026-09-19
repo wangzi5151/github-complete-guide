@@ -1,67 +1,67 @@
-# 大型开源项目 GitHub 管理案例分析
+# Large-Scale Open Source Project GitHub Management Case Studies
 
-> **目标读者**：希望深入了解顶级开源项目治理模式与协作流程的开发者、技术管理者  
-> **预计学习时间**：3-4 小时  
-> **前置知识**：Git 基础操作、GitHub 基本功能、Pull Request 工作流
-
----
-
-## 目录
-
-1. [Linux Kernel 项目管理分析](#1-linux-kernel-项目管理分析)
-2. [React 项目管理分析](#2-react-项目管理分析)
-3. [Vue.js 项目管理分析](#3-vuejs-项目管理分析)
-4. [Kubernetes 项目管理分析](#4-kubernetes-项目管理分析)
-5. [Spring Boot 项目管理分析](#5-spring-boot-项目管理分析)
-6. [VS Code 项目管理分析](#6-vs-code-项目管理分析)
-7. [Rust 项目管理分析](#7-rust-项目管理分析)
-8. [Flutter/Dart 项目管理分析](#8-flutterdart-项目管理分析)
-9. [Next.js 项目管理分析](#9-nextjs-项目管理分析)
-10. [中国开源项目案例](#10-中国开源项目案例)
-11. [从案例中提炼的最佳实践](#11-从案例中提炼的最佳实践)
-12. [不同规模项目的管理策略](#12-不同规模项目的管理策略)
+> **Target Audience**: Developers and technical managers who want to gain in-depth understanding of governance models and collaboration workflows in top open source projects
+> **Estimated Learning Time**: 3-4 hours
+> **Prerequisites**: Basic Git operations, GitHub fundamentals, Pull Request workflow
 
 ---
 
-## 1. Linux Kernel 项目管理分析
+## Table of Contents
 
-### 1.1 项目背景与规模
+1. [Linux Kernel Project Management Analysis](#1-linux-kernel-project-management-analysis)
+2. [React Project Management Analysis](#2-react-project-management-analysis)
+3. [Vue.js Project Management Analysis](#3-vuejs-project-management-analysis)
+4. [Kubernetes Project Management Analysis](#4-kubernetes-project-management-analysis)
+5. [Spring Boot Project Management Analysis](#5-spring-boot-project-management-analysis)
+6. [VS Code Project Management Analysis](#6-vs-code-project-management-analysis)
+7. [Rust Project Management Analysis](#7-rust-project-management-analysis)
+8. [Flutter/Dart Project Management Analysis](#8-flutterdart-project-management-analysis)
+9. [Next.js Project Management Analysis](#9-nextjs-project-management-analysis)
+10. [Chinese Open Source Project Cases](#10-chinese-open-source-project-cases)
+11. [Best Practices Distilled from Cases](#11-best-practices-distilled-from-cases)
+12. [Management Strategies for Different Project Sizes](#12-management-strategies-for-different-project-sizes)
 
-Linux Kernel 是全球最大的开源协作项目之一，由 Linus Torvalds 于 1991 年发起。截至目前，Linux 内核代码库包含超过 **3000 万行代码**，由来自 **1700 多家公司** 的 **20000 多名开发者** 共同维护。每年有超过 **100 万次邮件交换** 通过邮件列表完成代码审查和合并。
+---
 
-### 1.2 独特的协作模型：邮件列表 + Git
+## 1. Linux Kernel Project Management Analysis
 
-Linux Kernel 的协作模型与大多数 GitHub 项目截然不同。它不依赖 GitHub Pull Request，而是使用 **邮件列表（Mailing List）** 作为核心协作平台。
+### 1.1 Project Background and Scale
 
-**核心工具链**：
+Linux Kernel is one of the largest open source collaboration projects in the world, initiated by Linus Torvalds in 1991. As of now, the Linux kernel codebase contains over **30 million lines of code**, maintained by over **20,000 developers** from over **1,700 companies**. Every year, over **1 million email exchanges** are conducted through mailing lists for code review and merging.
+
+### 1.2 Unique Collaboration Model: Mailing List + Git
+
+The Linux Kernel collaboration model is fundamentally different from most GitHub projects. It does not rely on GitHub Pull Requests, but instead uses **Mailing Lists** as its core collaboration platform.
+
+**Core Toolchain**:
 ```
-开发者本地 Git → git format-patch → 邮件列表（LKML）→ 维护者审查 → 维护者树 → Linus 主线树
+Developer local Git → git format-patch → Mailing List (LKML) → Maintainer review → Maintainer tree → Linus mainline tree
 ```
 
-**为什么选择邮件列表**：
+**Why Choose Mailing Lists**:
 
-| 特性 | 邮件列表 | GitHub PR |
-|------|----------|-----------|
-| 离线工作 | 完全支持 | 需要网络 |
-| 代码审查 | 逐行回复 | 行内评论 |
-| 讨论记录 | 自动归档 | Issues/PR |
-| 集成度 | 低 | 高 |
-| 学习曲线 | 陡峭 | 平缓 |
+| Feature | Mailing List | GitHub PR |
+|---------|-------------|-----------|
+| Offline work | Fully supported | Requires network |
+| Code review | Line-by-line reply | Inline comments |
+| Discussion records | Auto-archived | Issues/PR |
+| Integration | Low | High |
+| Learning curve | Steep | Gentle |
 
-**补丁提交流程**：
+**Patch Submission Workflow**:
 
 ```bash
-# 1. 基于最新代码创建分支
+# 1. Create a branch based on the latest code
 git checkout -b my-feature origin/master
 
-# 2. 进行代码修改并提交
-git add -p  # 交互式暂存，确保每个提交原子化
-git commit -s  # 添加 Signed-off-by 行
+# 2. Make code changes and commit
+git add -p  # Interactive staging to ensure each commit is atomic
+git commit -s  # Add Signed-off-by line
 
-# 3. 使用 git format-patch 生成补丁
+# 3. Use git format-patch to generate patches
 git format-patch master --cover-letter
 
-# 4. 使用 git send-email 发送到邮件列表
+# 4. Use git send-email to send to the mailing list
 git send-email \
   --to=linux-kernel@vger.kernel.org \
   --cc=maintainer@example.com \
@@ -72,45 +72,45 @@ git send-email \
   0003-driver-update-docs.patch
 ```
 
-### 1.3 子系统维护者层级结构
+### 1.3 Subsystem Maintainer Hierarchy
 
-Linux Kernel 采用严格的 **层级式维护者模型**：
-
-```
-Linus Torvalds（最终合并到主线）
-    ├── 子系统维护者（Subsys Maintainer）
-    │   ├── 网络子系统 - David S. Miller
-    │   ├── 文件系统 - Al Viro
-    │   ├── 内存管理 - Andrew Morton
-    │   ├── ARM 架构 - Russell King
-    │   └── ... 80+ 子系统维护者
-    ├── 架构维护者（Arch Maintainer）
-    └── 驱动维护者（Driver Maintainer）
-```
-
-每个子系统维护者负责自己的 Git 树（tree），定期向 Linus 发送 pull request。Linus 每 **2-3 个月** 发布一个新的主线版本。
-
-### 1.4 内核开发工作流详解
-
-**窗口期（Merge Window）与稳定期（Stabilization Period）**：
+Linux Kernel adopts a strict **hierarchical maintainer model**:
 
 ```
-v6.8 发布
-    ├── [窗口期 2 周] 大量新功能合并
-    ├── [稳定期 6-8 周] rc1 → rc2 → ... → rc7
-    └── v6.9 发布
+Linus Torvalds (final merge to mainline)
+    ├── Subsystem Maintainers
+    │   ├── Networking Subsystem - David S. Miller
+    │   ├── Filesystems - Al Viro
+    │   ├── Memory Management - Andrew Morton
+    │   ├── ARM Architecture - Russell King
+    │   └── ... 80+ subsystem maintainers
+    ├── Architecture Maintainers
+    └── Driver Maintainers
 ```
 
-**代码审查文化**：
+Each subsystem maintainer is responsible for their own Git tree and periodically sends pull requests to Linus. Linus releases a new mainline version every **2-3 months**.
 
-内核社区对代码质量要求极高。审查者会关注：
+### 1.4 Kernel Development Workflow in Detail
 
-- **编码风格**：严格遵循 `Documentation/process/coding-style.rst`
-- **提交信息格式**：必须包含子系统前缀、详细描述、Signed-off-by
-- **回归测试**：新代码不能引入已知功能的回归
-- **ABI 稳定性**：用户空间接口一旦发布就不能随意更改
+**Merge Window and Stabilization Period**:
 
-**提交信息规范示例**：
+```
+v6.8 release
+    ├── [Merge window 2 weeks] Large number of new features merged
+    ├── [Stabilization period 6-8 weeks] rc1 → rc2 → ... → rc7
+    └── v6.9 release
+```
+
+**Code Review Culture**:
+
+The kernel community has extremely high standards for code quality. Reviewers focus on:
+
+- **Coding style**: Strictly follows `Documentation/process/coding-style.rst`
+- **Commit message format**: Must include subsystem prefix, detailed description, Signed-off-by
+- **Regression testing**: New code must not introduce regressions in known functionality
+- **ABI stability**: User-space interfaces cannot be changed at will once released
+
+**Commit Message Specification Example**:
 
 ```
 net: tcp: fix potential null pointer dereference in tcp_close()
@@ -132,171 +132,171 @@ Reviewed-by: Reviewer Name <reviewer@example.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 ```
 
-### 1.5 学习要点
+### 1.5 Key Takeaways
 
-- **工具选择应服务于需求**：邮件列表虽然古老，但对于全球分布的内核开发者来说依然高效
-- **严格的层级管理**：清晰的职责分工使得海量代码变更得以有序合并
-- **邮件列表的未来**：2024 年起，内核社区开始探索基于 GitHub 镜像和 lore.kernel.org 的新型协作方式
+- **Tool choice should serve the needs**: Although mailing lists are old, they remain efficient for globally distributed kernel developers
+- **Strict hierarchical management**: Clear division of labor enables orderly merging of massive code changes
+- **Future of mailing lists**: Starting from 2024, the kernel community began exploring new collaboration methods based on GitHub mirrors and lore.kernel.org
 
 ---
 
-## 2. React 项目管理分析
+## 2. React Project Management Analysis
 
-### 2.1 项目背景
+### 2.1 Project Background
 
-React 是由 Meta（前 Facebook）维护的前端 UI 框架，2013 年开源。截至目前拥有超过 **230K Star**，是 GitHub 上最受欢迎的前端项目之一。
+React is a front-end UI framework maintained by Meta (formerly Facebook), open-sourced in 2013. It currently has over **230K Stars** and is one of the most popular front-end projects on GitHub.
 
-### 2.2 公司主导 + 社区治理模型
+### 2.2 Company-Led + Community Governance Model
 
-React 采用 **公司主导型开源** 模式，核心开发团队由 Meta 全职工程师组成。
+React adopts a **company-led open source** model, with the core development team consisting of full-time Meta engineers.
 
-**治理结构**：
+**Governance Structure**:
 
 ```
-Meta 内部团队
-    ├── 核心团队（Core Team）- Meta 全职雇员
-    │   ├── Dan Abramov（已离开）
+Meta Internal Team
+    ├── Core Team - Meta full-time employees
+    │   ├── Dan Abramov (departed)
     │   ├── Andrew Clark
-    │   ├── Sophie Alpert（已离开）
+    │   ├── Sophie Alpert (departed)
     │   └── ...
-    ├── React 核心贡献者（Core Contributors）- 社区志愿者
-    └── React Working Groups（特定功能工作组）
+    ├── React Core Contributors - Community volunteers
+    └── React Working Groups (feature-specific working groups)
         ├── React Server Components Working Group
         └── New React Docs Working Group
 ```
 
-### 2.3 RFC 流程与功能提案
+### 2.3 RFC Process and Feature Proposals
 
-React 采用 **RFC（Request for Comments）** 流程来管理重大功能变更：
+React uses the **RFC (Request for Comments)** process to manage major feature changes:
 
-**RFC 工作流**：
+**RFC Workflow**:
 
 ```markdown
-## RFC 提案模板
+## RFC Proposal Template
 
-### 概述
-[用 1-2 句话描述这个提案]
+### Overview
+[Describe this proposal in 1-2 sentences]
 
-### 动机
-[为什么需要这个功能？解决什么问题？]
+### Motivation
+[Why is this feature needed? What problem does it solve?]
 
-### 详细设计
-[技术方案的详细描述]
+### Detailed Design
+[Detailed description of the technical approach]
 
-### 备选方案
-[考虑过的其他方案]
+### Alternatives
+[Other approaches considered]
 
-### 破坏性变更
-[这个变更会破坏现有代码吗？]
+### Breaking Changes
+[Will this change break existing code?]
 
-### 采用策略
-[如何逐步推出这个功能？]
+### Adoption Strategy
+[How to roll out this feature incrementally?]
 ```
 
-**RFC 流程步骤**：
+**RFC Process Steps**:
 
-1. **Draft**：提交 RFC 到 `reactjs/rfcs` 仓库
-2. **Review**：社区讨论，核心团队审查
-3. **Active**：获得足够支持后进入活跃状态
-4. **Landed**：实现完成并合并到主线
-5. **Rejected**：未通过审查
+1. **Draft**: Submit RFC to the `reactjs/rfcs` repository
+2. **Review**: Community discussion, core team review
+3. **Active**: Enters active status after gaining sufficient support
+4. **Landed**: Implementation complete and merged to mainline
+5. **Rejected**: Did not pass review
 
-**经典案例：React Hooks RFC**
+**Classic Case: React Hooks RFC**
 
-React Hooks 的 RFC 历时数月讨论，经历了多次修改。最终方案（`useState`、`useEffect` 等）是在对比了多个备选方案后确定的。这个 RFC 至今仍是 React 社区引用最多的提案之一。
+The React Hooks RFC went through months of discussion and multiple revisions. The final solution (`useState`, `useEffect`, etc.) was determined after comparing multiple alternative approaches. This RFC remains one of the most cited proposals in the React community.
 
-### 2.4 版本发布策略
+### 2.4 Version Release Strategy
 
-React 采用 **语义化版本** 但有特殊策略：
+React adopts **semantic versioning** with special strategies:
 
-- **Major 版本**（如 React 18）：引入破坏性变更，提供迁移路径
-- **Minor 版本**（如 React 18.1）：新功能，向后兼容
-- **Patch 版本**（如 React 18.1.1）：Bug 修复
+- **Major versions** (e.g., React 18): Introduce breaking changes, provide migration path
+- **Minor versions** (e.g., React 18.1): New features, backward compatible
+- **Patch versions** (e.g., React 18.1.1): Bug fixes
 
-React 18 引入了 **渐进式采用（Gradual Adoption）** 策略：
+React 18 introduced a **Gradual Adoption** strategy:
 
 ```javascript
-// React 17 方式（仍然有效）
+// React 17 approach (still valid)
 import ReactDOM from 'react-dom';
 ReactDOM.render(<App />, document.getElementById('root'));
 
-// React 18 方式（新 API）
+// React 18 approach (new API)
 import { createRoot } from 'react-dom/client';
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
 ```
 
-### 2.5 社区参与机制
+### 2.5 Community Participation Mechanisms
 
-- **Discussion Board**：使用 GitHub Discussions 进行非代码讨论
-- **RFC 仓库**：`reactjs/rfcs` 用于功能提案
-- **Blog**：官方博客发布重大变更和路线图
-- **Working Groups**：特定功能的深度参与渠道
+- **Discussion Board**: Uses GitHub Discussions for non-code discussions
+- **RFC Repository**: `reactjs/rfcs` for feature proposals
+- **Blog**: Official blog publishes major changes and roadmap
+- **Working Groups**: Deep participation channels for specific features
 
 ---
 
-## 3. Vue.js 项目管理分析
+## 3. Vue.js Project Management Analysis
 
-### 3.1 从个人项目到社区驱动
+### 3.1 From Personal Project to Community-Driven
 
-Vue.js 由尤雨溪（Evan You）于 2014 年创建，是 **个人发起、逐步社区化** 的典型案例。
+Vue.js was created by Evan You in 2014 and is a typical example of a **personally initiated, gradually community-driven** project.
 
-**发展历程**：
-
-```
-2014 - 个人项目，尤雨溪独自开发
-2015 - 获得社区关注，开始接受 PR
-2016 - Vue 2.0 发布，建立核心团队
-2017 - 成立独立组织 vuejs
-2018 - Vue 3.0 RFC 流程启动
-2020 - Vue 3.0 发布
-2022 - Vue 3 成为默认版本
-2024 - Vapor Mode 实验性发布
-```
-
-### 3.2 独立治理模式
-
-Vue.js 不隶属于任何公司，通过 **Open Collective** 和 **GitHub Sponsors** 获得资金支持。
-
-**治理结构**：
+**Development History**:
 
 ```
-尤雨溪（项目创始人 & 最终决策者）
-    ├── 核心团队成员（Core Team Members）
+2014 - Personal project, Evan You developing alone
+2015 - Gained community attention, started accepting PRs
+2016 - Vue 2.0 released, core team established
+2017 - Independent organization vuejs established
+2018 - Vue 3.0 RFC process launched
+2020 - Vue 3.0 released
+2022 - Vue 3 became the default version
+2024 - Vapor Mode experimental release
+```
+
+### 3.2 Independent Governance Model
+
+Vue.js is not affiliated with any company and receives funding through **Open Collective** and **GitHub Sponsors**.
+
+**Governance Structure**:
+
+```
+Evan You (Project Founder & Final Decision Maker)
+    ├── Core Team Members
     │   ├── Natalia Tepluhina
     │   ├── Anthony Fu
     │   ├── Eduardo San Martin Morote
-    │   └── ... 20+ 核心成员
-    ├── 生态系统维护者
+    │   └── ... 20+ core members
+    ├── Ecosystem Maintainers
     │   ├── Vue Router - Eduardo San Martin Morote
     │   ├── Pinia - Eduardo San Martin Morote
-    │   ├── Vite - 尤雨溪
+    │   ├── Vite - Evan You
     │   └── VueUse - Anthony Fu
-    └── 社区贡献者
+    └── Community Contributors
 ```
 
-### 3.3 RFC 流程详解
+### 3.3 RFC Process in Detail
 
-Vue.js 在 Vue 3 开发中引入了 RFC 流程，这是 Vue 项目管理的重要转折点。
+Vue.js introduced the RFC process during Vue 3 development, which was an important turning point for Vue project management.
 
-**RFC 仓库结构**：
+**RFC Repository Structure**:
 
 ```
 vuejs/rfcs/
-├── active-rfcs/          # 活跃的 RFC
+├── active-rfcs/          # Active RFCs
 │   ├── 0000-template.md
 │   ├── 0013-composition-api.md
 │   └── ...
-├── rfcs/                 # 所有 RFC
+├── rfcs/                 # All RFCs
 └── README.md
 ```
 
-**Composition API RFC 案例**：
+**Composition API RFC Case**:
 
-Vue 3 的 Composition API 是通过 RFC 流程讨论最多的功能之一。社区出现了大量反对声音，尤雨溪撰写了详细的回应文档，最终通过充分的讨论和多次修改达成了共识。
+Vue 3's Composition API was one of the most discussed features through the RFC process. The community had significant opposition, and Evan You wrote a detailed response document. Through thorough discussion and multiple revisions, a consensus was ultimately reached.
 
 ```javascript
-// Options API（Vue 2 风格）
+// Options API (Vue 2 style)
 export default {
   data() {
     return { count: 0 }
@@ -309,7 +309,7 @@ export default {
   }
 }
 
-// Composition API（Vue 3 风格）
+// Composition API (Vue 3 style)
 import { ref, onMounted } from 'vue'
 
 export default {
@@ -325,7 +325,7 @@ export default {
   }
 }
 
-// <script setup> 语法糖
+// <script setup> syntax sugar
 <script setup>
 import { ref, onMounted } from 'vue'
 
@@ -338,63 +338,63 @@ onMounted(() => {
 </script>
 ```
 
-### 3.4 单人核心决策 + 社区执行
+### 3.4 Single-Person Core Decision-Making + Community Execution
 
-Vue 的管理模式独特之处在于：
+Vue's management model is unique in:
 
-- **尤雨溪拥有最终决策权**：在重大技术方向上具有最终拍板权
-- **社区执行**：核心团队成员负责具体模块的开发和维护
-- **透明决策**：通过 RFC、博客文章公开决策过程
+- **Evan You holds final decision-making authority**: Has final say on major technical directions
+- **Community execution**: Core team members are responsible for specific module development and maintenance
+- **Transparent decision-making**: Decision processes made public through RFCs and blog posts
 
-这种模式的优势是决策效率高、方向一致；风险是对单人依赖度高。
+The advantage of this model is high decision-making efficiency and consistent direction; the risk is high dependency on a single person.
 
-### 3.5 经济模型
+### 3.5 Economic Model
 
-Vue 的资金模式值得研究：
+Vue's funding model is worth studying:
 
-- **企业赞助**：通过 Open Collective 接受企业赞助
-- **个人赞助**：通过 GitHub Sponsors
-- **认证培训**：官方认证的培训合作伙伴
-- **不卖商业许可**：所有代码完全开源
+- **Corporate sponsorship**: Accepts corporate sponsorship through Open Collective
+- **Individual sponsorship**: Through GitHub Sponsors
+- **Certified training**: Officially certified training partners
+- **No commercial licensing**: All code is completely open source
 
-截至 2024 年，Vue 在 Open Collective 上的年度预算约为 **50 万美元**，足以支持核心团队成员的全职投入。
+As of 2024, Vue's annual budget on Open Collective is approximately **$500,000**, enough to support full-time engagement of core team members.
 
 ---
 
-## 4. Kubernetes 项目管理分析
+## 4. Kubernetes Project Management Analysis
 
-### 4.1 CNCF 治理模型
+### 4.1 CNCF Governance Model
 
-Kubernetes 是云原生计算基金会（CNCF）的旗舰项目，采用 **基金会治理** 模型。
+Kubernetes is the flagship project of the Cloud Native Computing Foundation (CNCF), adopting a **foundation governance** model.
 
-**CNCF 治理层级**：
+**CNCF Governance Hierarchy**:
 
 ```
-CNCF TOC（Technical Oversight Committee）
-    ├── Kubernetes Steering Committee（7 人）
-    │   ├── 选举产生（每年改选 3-4 席）
-    │   ├── 负责项目方向和治理
-    │   └── 不涉及具体技术决策
-    ├── SIG（Special Interest Groups）- 30+ 个
+CNCF TOC (Technical Oversight Committee)
+    ├── Kubernetes Steering Committee (7 members)
+    │   ├── Elected (3-4 seats rotated annually)
+    │   ├── Responsible for project direction and governance
+    │   └── Not involved in specific technical decisions
+    ├── SIGs (Special Interest Groups) - 30+
     │   ├── SIG-Apps
     │   ├── SIG-Network
     │   ├── SIG-Storage
     │   ├── SIG-Node
     │   └── ...
-    ├── WG（Working Groups）- 跨 SIG 协作
-    ├── OWNERS 文件（代码所有权）
-    └── 社区贡献者
+    ├── WGs (Working Groups) - Cross-SIG collaboration
+    ├── OWNERS files (code ownership)
+    └── Community contributors
 ```
 
-### 4.2 SIG（特别兴趣小组）架构
+### 4.2 SIG (Special Interest Group) Architecture
 
-Kubernetes 的核心组织单元是 SIG，每个 SIG 负责特定的技术领域。
+Kubernetes's core organizational unit is the SIG, with each SIG responsible for specific technical areas.
 
-**SIG 组织示例**：
+**SIG Organization Example**:
 
 ```yaml
 # sig-apps/OWNERS
-# 这个文件定义了 SIG-Apps 的代码所有权
+# This file defines the code ownership of SIG-Apps
 
 approvers:
   - janetkuo      # Janet Kuo
@@ -411,84 +411,84 @@ labels:
   - sig/apps
 ```
 
-**SIG 的职责**：
+**SIG Responsibilities**:
 
-1. **路线图制定**：确定 SIG 范围内的技术方向
-2. **KEP 审查**：审查 Kubernetes Enhancement Proposals
-3. **代码审查**：审查相关代码的 PR
-4. **发布协调**：参与每个版本的发布过程
-5. **社区会议**：定期举行 SIG 会议并发布会议记录
+1. **Roadmap Development**: Define technical direction within SIG scope
+2. **KEP Review**: Review Kubernetes Enhancement Proposals
+3. **Code Review**: Review PRs related to the SIG's area
+4. **Release Coordination**: Participate in each version's release process
+5. **Community Meetings**: Hold regular SIG meetings and publish meeting notes
 
-### 4.3 KEP（Kubernetes Enhancement Proposal）
+### 4.3 KEP (Kubernetes Enhancement Proposal)
 
-KEP 是 Kubernetes 管理功能增强的正式流程。
+KEP is the formal process for managing feature enhancements in Kubernetes.
 
-**KEP 生命周期**：
+**KEP Lifecycle**:
 
 ```
 Provisional → Implementable → Implemented → Deferred | Rejected | Withdrawn | Replaced
 ```
 
-**KEP 模板核心部分**：
+**KEP Template Core Sections**:
 
 ```markdown
-# KEP-NNNN: 标题
+# KEP-NNNN: Title
 
 ## Summary
-[功能概述]
+[Feature overview]
 
 ## Motivation
-[动机和背景]
+[Motivation and background]
 
 ## Design Details
 ### Test Plan
-[测试计划]
+[Test plan]
 ### Graduation Criteria
-[升级标准 - Alpha/Beta/GA]
+[Graduation criteria - Alpha/Beta/GA]
 ### Version Skew Strategy
-[版本偏差策略]
+[Version skew strategy]
 
 ## Production Readiness Review Questionnaire
-[生产就绪审查问卷]
+[Production readiness review questionnaire]
 
 ## Implementation History
-[实现历史]
+[Implementation history]
 ```
 
-### 4.4 版本发布流程
+### 4.4 Version Release Process
 
-Kubernetes 采用 **时间驱动的发布流程**，每 **4 个月** 发布一个新版本。
+Kubernetes adopts a **time-driven release process**, releasing a new version every **4 months**.
 
 ```
-v1.30 发布周期示例：
+v1.30 Release Cycle Example:
 
-Week 1-4:  Enhancement 审查期
-Week 5-12: 代码实现期（Code Freeze 在 Week 10）
-Week 13-15: 测试和稳定性期
-Week 16:    发布
+Week 1-4:  Enhancement review period
+Week 5-12: Code implementation period (Code Freeze at Week 10)
+Week 13-15: Testing and stabilization period
+Week 16:   Release
 ```
 
-**发布团队组成**：
+**Release Team Composition**:
 
-- **Release Lead**：负责整个发布过程
-- **Enhancements Lead**：跟踪 Enhancement 状态
-- **Branch Manager**：管理发布分支
-- **CI Signal Lead**：监控 CI 信号
-- **Docs Lead**：文档更新协调
-- **Communications Lead**：对外沟通
+- **Release Lead**: Responsible for the entire release process
+- **Enhancements Lead**: Tracks Enhancement status
+- **Branch Manager**: Manages release branches
+- **CI Signal Lead**: Monitors CI signals
+- **Docs Lead**: Coordinates documentation updates
+- **Communications Lead**: External communications
 
-### 4.5 OWNERS 机制
+### 4.5 OWNERS Mechanism
 
-Kubernetes 使用 **OWNERS 文件** 实现细粒度的代码所有权管理。
+Kubernetes uses **OWNERS files** to implement fine-grained code ownership management.
 
 ```yaml
-# 目录级 OWNERS 文件
+# Directory-level OWNERS file
 approvers:
-  - alice        # 可以 /approve 此目录下的 PR
+  - alice        # Can /approve PRs in this directory
   - bob
 
 reviewers:
-  - charlie      # 会被自动分配为 reviewer
+  - charlie      # Will be automatically assigned as reviewer
   - diana
 
 filters:
@@ -502,54 +502,54 @@ filters:
       - python-expert
 ```
 
-Prow 机器人根据 OWNERS 文件自动分配 reviewer 和处理 `/approve`、`/lgtm` 命令。
+The Prow bot automatically assigns reviewers and handles `/approve` and `/lgtm` commands based on OWNERS files.
 
 ---
 
-## 5. Spring Boot 项目管理分析
+## 5. Spring Boot Project Management Analysis
 
-### 5.1 公司主导 + 开放治理
+### 5.1 Company-Led + Open Governance
 
-Spring Boot 是 **VMware（原 Pivotal）** 主导的开源项目，是 Spring 生态系统的核心组成部分。
+Spring Boot is an open source project led by **VMware (formerly Pivotal)** and is a core component of the Spring ecosystem.
 
-**组织结构**：
+**Organizational Structure**:
 
 ```
 VMware / Broadcom
-    ├── Spring Framework（核心框架）
+    ├── Spring Framework (core framework)
     │   └── Juergen Hoeller, Sam Brannen
-    ├── Spring Boot（快速开发框架）
+    ├── Spring Boot (rapid development framework)
     │   └── Phil Webb, Andy Wilkinson
-    ├── Spring Cloud（微服务工具集）
-    ├── Spring Data（数据访问层）
-    ├── Spring Security（安全框架）
-    └── Spring Initializr（项目初始化工具）
+    ├── Spring Cloud (microservices toolset)
+    ├── Spring Data (data access layer)
+    ├── Spring Security (security framework)
+    └── Spring Initializr (project initialization tool)
 ```
 
-### 5.2 版本支持策略
+### 5.2 Version Support Strategy
 
-Spring Boot 有明确的 **版本支持生命周期**：
+Spring Boot has a clear **version support lifecycle**:
 
 ```
-Spring Boot 3.x 系列：
+Spring Boot 3.x series:
 ├── 3.0.x (2022-11) - EOL
 ├── 3.1.x (2023-05) - EOL
-├── 3.2.x (2023-11) - 支持中
-├── 3.3.x (2024-05) - 当前版本
-└── 3.4.x (2024-11) - 开发中
+├── 3.2.x (2023-11) - Supported
+├── 3.3.x (2024-05) - Current version
+└── 3.4.x (2024-11) - In development
 
-每个版本支持策略：
-├── GA 发布后 12 个月内的免费支持
-├── 商业支持由 VMware/Broadcom 提供
-└── 安全补丁优先回移植到最新版本
+Each version's support strategy:
+├── Free support within 12 months of GA release
+├── Commercial support provided by VMware/Broadcom
+└── Security patches prioritized for backporting to latest version
 ```
 
-### 5.3 Spring Initializr 与项目初始化
+### 5.3 Spring Initializr and Project Initialization
 
-Spring Boot 的一大创新是 **Spring Initializr**，它极大地降低了项目启动门槛。
+One of Spring Boot's innovations is **Spring Initializr**, which greatly lowers the barrier to project startup.
 
 ```bash
-# 使用 curl 创建 Spring Boot 项目
+# Use curl to create a Spring Boot project
 curl https://start.spring.io/starter.zip \
   -d type=maven-project \
   -d language=java \
@@ -561,18 +561,18 @@ curl https://start.spring.io/starter.zip \
   -d dependencies=web,data-jpa,h2 \
   -o my-project.zip
 
-# 解压并构建
+# Unzip and build
 unzip my-project.zip
 cd my-project
 ./mvnw spring-boot:run
 ```
 
-### 5.4 依赖管理：BOM（Bill of Materials）
+### 5.4 Dependency Management: BOM (Bill of Materials)
 
-Spring Boot 使用 **BOM** 模式管理依赖版本：
+Spring Boot uses the **BOM** model to manage dependency versions:
 
 ```xml
-<!-- pom.xml - 使用 Spring Boot BOM -->
+<!-- pom.xml - Using Spring Boot BOM -->
 <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -583,7 +583,7 @@ Spring Boot 使用 **BOM** 模式管理依赖版本：
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
-        <!-- 不需要指定版本，由 BOM 管理 -->
+        <!-- No need to specify version, managed by BOM -->
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -592,51 +592,51 @@ Spring Boot 使用 **BOM** 模式管理依赖版本：
 </dependencies>
 ```
 
-### 5.5 社区贡献指南
+### 5.5 Community Contribution Guidelines
 
-Spring Boot 的贡献流程：
+Spring Boot's contribution workflow:
 
-1. **Issues**：在 GitHub Issues 中提出 bug 或功能请求
-2. **讨论**：在 Spring 社区论坛讨论设计方案
-3. **Fork & PR**：Fork 仓库并提交 Pull Request
-4. **CLA 签署**：必须签署 Contributor License Agreement
-5. **代码审查**：核心团队成员审查代码
-6. **合并**：审查通过后合并到主线
+1. **Issues**: Report bugs or feature requests in GitHub Issues
+2. **Discussion**: Discuss design proposals in the Spring community forum
+3. **Fork & PR**: Fork the repository and submit a Pull Request
+4. **CLA Signing**: Must sign the Contributor License Agreement
+5. **Code Review**: Core team members review the code
+6. **Merge**: Merge to mainline after review approval
 
 ---
 
-## 6. VS Code 项目管理分析
+## 6. VS Code Project Management Analysis
 
-### 6.1 微软开源策略
+### 6.1 Microsoft's Open Source Strategy
 
-Visual Studio Code 是微软 **"新微软"** 战略的标志性开源项目。它于 2015 年开源，采用 MIT 许可证。
+Visual Studio Code is a flagship open source project of Microsoft's **"New Microsoft"** strategy. It was open-sourced in 2015 under the MIT license.
 
-**VS Code 的开源策略**：
+**VS Code's Open Source Strategy**:
 
 ```
-VS Code 的分层架构：
+VS Code's layered architecture:
 
-├── 开源层（github.com/microsoft/vscode）
-│   ├── 核心编辑器（Monaco Editor）
-│   ├── 扩展 API
-│   ├── 终端集成
-│   ├── Git 集成
-│   └── 调试协议（DAP）
-├── 微软专有层
-│   ├── Copilot 集成
-│   ├── Azure 集成
-│   └── 某些品牌和遥测功能
-└── 社区扩展层
-    └── 60000+ 扩展
+├── Open source layer (github.com/microsoft/vscode)
+│   ├── Core editor (Monaco Editor)
+│   ├── Extension API
+│   ├── Terminal integration
+│   ├── Git integration
+│   └── Debug Adapter Protocol (DAP)
+├── Microsoft proprietary layer
+│   ├── Copilot integration
+│   ├── Azure integration
+│   └── Certain branding and telemetry features
+└── Community extension layer
+    └── 60,000+ extensions
 ```
 
-### 6.2 Issues 与 PR 管理
+### 6.2 Issues and PR Management
 
-VS Code 项目管理的几个关键特征：
+Several key features of VS Code's project management:
 
-**Issue 模板**：
+**Issue Templates**:
 
-VS Code 使用精细化的 Issue 模板：
+VS Code uses fine-grained Issue templates:
 
 ```yaml
 # .github/ISSUE_TEMPLATE/bug_report.yml
@@ -666,26 +666,26 @@ body:
       required: true
 ```
 
-**里程碑管理**：
+**Milestone Management**:
 
-VS Code 使用月度发布周期：
+VS Code uses a monthly release cycle:
 
 ```
-每月发布流程：
-├── 第 1-2 周：功能开发和 PR 合并
-├── 第 3 周：Endgame（测试和验证期）
-│   ├── 周一：分配测试
-│   ├── 周二-周三：测试验证
-│   ├── 周四：Bug 修复
-│   └── 周五：发布
-└── 每月第一周发布稳定版
+Monthly release process:
+├── Weeks 1-2: Feature development and PR merging
+├── Week 3: Endgame (testing and verification period)
+│   ├── Monday: Assign testing
+│   ├── Tuesday-Wednesday: Test verification
+│   ├── Thursday: Bug fixes
+│   └── Friday: Release
+└── Stable version released on the first week of each month
 ```
 
-### 6.3 扩展生态系统管理
+### 6.3 Extension Ecosystem Management
 
-VS Code 的成功很大程度上归功于其 **扩展生态系统**。
+VS Code's success is largely attributed to its **extension ecosystem**.
 
-**扩展开发示例**：
+**Extension Development Example**:
 
 ```json
 {
@@ -741,28 +741,28 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 ```
 
-### 6.4 Issue Triage 流程
+### 6.4 Issue Triage Process
 
-VS Code 团队使用 **标签系统** 管理大量 Issues：
+The VS Code team uses a **label system** to manage the large number of Issues:
 
 ```
-标签分类：
-├── 类型标签
-│   ├── bug - 缺陷报告
-│   ├── feature-request - 功能请求
-│   ├── debt - 技术债务
-│   └── engineering - 工程改进
-├── 优先级标签
-│   ├── P0 - 紧急
-│   ├── P1 - 高优先级
-│   ├── P2 - 中优先级
-│   └── P3 - 低优先级
-├── 状态标签
-│   ├── *as-designed - 按设计工作
-│   ├── *duplicate - 重复
-│   ├── *out-of-scope - 超出范围
-│   └── *needs-more-info - 需要更多信息
-└── 领域标签
+Label categories:
+├── Type labels
+│   ├── bug - Bug report
+│   ├── feature-request - Feature request
+│   ├── debt - Technical debt
+│   └── engineering - Engineering improvement
+├── Priority labels
+│   ├── P0 - Critical
+│   ├── P1 - High priority
+│   ├── P2 - Medium priority
+│   └── P3 - Low priority
+├── Status labels
+│   ├── *as-designed - Works as designed
+│   ├── *duplicate - Duplicate
+│   ├── *out-of-scope - Out of scope
+│   └── *needs-more-info - Needs more information
+└── Area labels
     ├── editor-core
     ├── terminal
     ├── extensions
@@ -771,84 +771,84 @@ VS Code 团队使用 **标签系统** 管理大量 Issues：
 
 ---
 
-## 7. Rust 项目管理分析
+## 7. Rust Project Management Analysis
 
-### 7.1 社区驱动的治理
+### 7.1 Community-Driven Governance
 
-Rust 是一种系统编程语言，由 Mozilla 于 2010 年发起，现在由 **Rust Foundation** 管理。
+Rust is a systems programming language initiated by Mozilla in 2010, now managed by the **Rust Foundation**.
 
-**治理结构**：
-
-```
-Rust Foundation（法律和财务）
-    ├── Core Team（核心团队）
-    │   ├── 项目方向
-    │   ├── 发布管理
-    │   └── 子团队协调
-    ├── Language Team（语言设计）
-    │   └── RFC 审查
-    ├── Compiler Team（编译器开发）
-    ├── Library Team（标准库）
-    ├── Dev Tools Team（开发工具）
-    ├── Crates.io Team（包管理）
-    └── Moderation Team（社区管理）
-```
-
-### 7.2 RFC 流程详解
-
-Rust 的 RFC 流程是 **开源语言设计的典范**。
-
-**RFC 生命周期**：
+**Governance Structure**:
 
 ```
-草案 → 提交 → 审查期 → 最终评论期 → 合并/关闭
+Rust Foundation (legal and financial)
+    ├── Core Team
+    │   ├── Project direction
+    │   ├── Release management
+    │   └── Sub-team coordination
+    ├── Language Team (language design)
+    │   └── RFC review
+    ├── Compiler Team (compiler development)
+    ├── Library Team (standard library)
+    ├── Dev Tools Team (development tools)
+    ├── Crates.io Team (package management)
+    └── Moderation Team (community management)
 ```
 
-**RFC 模板**：
+### 7.2 RFC Process in Detail
+
+Rust's RFC process is a **model for open source language design**.
+
+**RFC Lifecycle**:
+
+```
+Draft → Submission → Review period → Final comment period → Merge/Close
+```
+
+**RFC Template**:
 
 ```markdown
-# RFC: 标题
+# RFC: Title
 
-## 摘要
-[一段话概述]
+## Summary
+[One paragraph overview]
 
-## 动机
-[为什么需要这个功能？]
+## Motivation
+[Why is this feature needed?]
 
-## 详细设计
-### 语法
-[新的语法设计]
-### 语义
-[语义说明]
-### 标准库
-[标准库变更]
+## Detailed Design
+### Syntax
+[New syntax design]
+### Semantics
+[Semantic explanation]
+### Standard Library
+[Standard library changes]
 
-## 缺点和替代方案
-[缺点分析]
-[替代方案比较]
+## Drawbacks and Alternatives
+[Drawbacks analysis]
+[Alternative comparison]
 
-## 未解决的问题
-[尚待解决的问题]
+## Unresolved Questions
+[Questions still to be resolved]
 
-## 未来可能性
-[未来可能的扩展]
+## Future Possibilities
+[Future possible extensions]
 ```
 
-**经典 RFC 案例：async/await**
+**Classic RFC Case: async/await**
 
-Rust 的 async/await 语法经历了 **3 年** 的 RFC 讨论（2016-2019），涉及多个相关 RFC：
+Rust's async/await syntax went through **3 years** of RFC discussion (2016-2019), involving multiple related RFCs:
 
-- RFC 1522：`std::future::Future` trait 设计
-- RFC 2394：async/await 语法
-- RFC 2592：`async fn` 语法
-- RFC 3028：`?` 在 async 上下文中的使用
+- RFC 1522: `std::future::Future` trait design
+- RFC 2394: async/await syntax
+- RFC 2592: `async fn` syntax
+- RFC 3028: `?` in async contexts
 
-### 7.3 Rust 的稳定性保证
+### 7.3 Rust's Stability Guarantees
 
-Rust 以 **稳定性承诺** 著称：
+Rust is renowned for its **stability commitment**:
 
 ```rust
-// Rust 的稳定性级别
+// Rust's stability levels
 #[stable(feature = "rust1", since = "1.0.0")]
 pub fn stable_function() { }
 
@@ -859,21 +859,21 @@ pub fn unstable_function() { }
 pub fn old_function() { }
 ```
 
-**版本发布策略**：
+**Version Release Strategy**:
 
 ```
-Rust 发布通道：
-├── Nightly（每晚构建）
-│   └── 可以使用 unstable features
-├── Beta（6 周测试期）
-│   └── 即将发布的功能
-└── Stable（每 6 周发布）
-    └── 生产可用
+Rust release channels:
+├── Nightly (nightly builds)
+│   └── Can use unstable features
+├── Beta (6-week testing period)
+│   └── Features about to be released
+└── Stable (released every 6 weeks)
+    └── Production ready
 ```
 
-### 7.4 Crates.io 生态管理
+### 7.4 Crates.io Ecosystem Management
 
-Crates.io 是 Rust 的官方包管理平台：
+Crates.io is Rust's official package management platform:
 
 ```toml
 # Cargo.toml
@@ -891,51 +891,51 @@ serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
 ```
 
-**语义化版本规则**：
+**Semantic Versioning Rules**:
 
 ```
-0.y.z → 初始开发阶段，任何变更都是破坏性的
-1.0.0+ → 稳定版本，遵循语义化版本
+0.y.z → Initial development phase, any change is breaking
+1.0.0+ → Stable version, follows semantic versioning
 ```
 
 ---
 
-## 8. Flutter/Dart 项目管理分析
+## 8. Flutter/Dart Project Management Analysis
 
-### 8.1 Google 主导的开源项目
+### 8.1 Google-Led Open Source Project
 
-Flutter 是 Google 维护的跨平台 UI 框架，Dart 是配套的编程语言。
+Flutter is a cross-platform UI framework maintained by Google, and Dart is its companion programming language.
 
-**组织结构**：
+**Organizational Structure**:
 
 ```
-Google 内部团队
+Google Internal Team
 ├── Flutter Framework
-│   ├── Framework Team（核心框架）
-│   ├── Engine Team（Skia/Impeller 渲染引擎）
-│   ├── Tooling Team（CLI 和 DevTools）
-│   └── Ecosystem Team（插件和包）
+│   ├── Framework Team (core framework)
+│   ├── Engine Team (Skia/Impeller rendering engine)
+│   ├── Tooling Team (CLI and DevTools)
+│   └── Ecosystem Team (plugins and packages)
 ├── Dart Language
-│   ├── Language Team（语言设计）
-│   ├── VM Team（虚拟机）
-│   └── Tools Team（开发工具）
-└── 社区贡献者
+│   ├── Language Team (language design)
+│   ├── VM Team (virtual machine)
+│   └── Tools Team (development tools)
+└── Community contributors
 ```
 
-### 8.2 Flutter 的 Issue 管理
+### 8.2 Flutter's Issue Management
 
-Flutter 项目每天收到大量 Issues，采用了精细化的分类系统：
+Flutter receives a large number of Issues daily and adopts a fine-grained classification system:
 
 ```yaml
-# 标签体系
+# Label system
 labels:
-  # 严重程度
-  - P0: "紧急 - 完全阻塞"
-  - P1: "高优先级 - 严重影响"
-  - P2: "中优先级 - 一般问题"
-  - P3: "低优先级 - 轻微问题"
+  # Severity
+  - P0: "Critical - Completely blocked"
+  - P1: "High priority - Significantly impacted"
+  - P2: "Medium priority - General issue"
+  - P3: "Low priority - Minor issue"
   
-  # 平台标签
+  # Platform labels
   - platform-android
   - platform-ios
   - platform-web
@@ -943,37 +943,37 @@ labels:
   - platform-linux
   - platform-macos
   
-  # 组件标签
+  # Component labels
   - framework
   - engine
   - tool
   - plugin
   
-  # 状态标签
-  - "triaged" - 已分类
-  - "waiting for customer response" - 等待用户回复
-  - "has reproducible steps" - 有可复现步骤
+  # Status labels
+  - "triaged" - Triaged
+  - "waiting for customer response" - Waiting for customer response
+  - "has reproducible steps" - Has reproducible steps
 ```
 
-### 8.3 Flutter 的发布策略
+### 8.3 Flutter's Release Strategy
 
-Flutter 采用 **渠道发布** 模式：
+Flutter adopts a **channel-based release** model:
 
 ```
-Flutter 发布渠道：
-├── Stable（稳定版）
-│   └── 推荐用于生产环境
-├── Beta（测试版）
-│   └── 每月更新，接近稳定
-├── Dev（开发版）
-│   └── 每周更新，包含最新功能
-└── Master（主分支）
-    └── 最新代码，可能不稳定
+Flutter release channels:
+├── Stable
+│   └── Recommended for production use
+├── Beta
+│   └── Updated monthly, close to stable
+├── Dev
+│   └── Updated weekly, includes latest features
+└── Master (main branch)
+    └── Latest code, may be unstable
 ```
 
-### 8.4 Dart 语言的 RFC 流程
+### 8.4 Dart Language RFC Process
 
-Dart 语言的功能变更通过 **Dart Enhancement Proposal (DEP)** 流程管理：
+Dart language feature changes are managed through the **Dart Enhancement Proposal (DEP)** process:
 
 ```markdown
 # DEP: Records and Tuples
@@ -982,223 +982,223 @@ Dart 语言的功能变更通过 **Dart Enhancement Proposal (DEP)** 流程管�
 Accepted
 
 ## Summary
-引入 Record 类型支持多返回值和模式匹配。
+Introduces Record type to support multiple return values and pattern matching.
 
 ## Motivation
-Dart 函数目前只能返回单个值。多个值需要定义类或使用 List/Map，
-这导致代码冗余且类型安全性差。
+Dart functions currently can only return a single value. Returning multiple values requires defining a class or using List/Map,
+which leads to code redundancy and poor type safety.
 
 ## Design
 ```dart
-// Record 语法
+// Record syntax
 (int, String) getUser() => (42, 'Alice');
 
-// 命名字段
+// Named fields
 ({int id, String name}) getUser2() => (id: 42, name: 'Alice');
 
-// 解构
+// Destructuring
 var (id, name) = getUser();
 ```
 ```
 
-### 8.5 Flutter 社区贡献
+### 8.5 Flutter Community Contribution
 
-Flutter 的社区贡献指南：
+Flutter's community contribution guidelines:
 
-1. **贡献类型**：
-   - Bug 修复
-   - 新功能实现
-   - 文档改进
-   - 示例代码
-   - 测试覆盖
+1. **Contribution Types**:
+   - Bug fixes
+   - New feature implementations
+   - Documentation improvements
+   - Example code
+   - Test coverage
 
-2. **贡献流程**：
+2. **Contribution Workflow**:
 
 ```bash
-# 1. Fork 仓库
+# 1. Fork the repository
 gh repo fork flutter/flutter
 
-# 2. 克隆并设置
+# 2. Clone and set up
 git clone git@github.com:YOUR_USERNAME/flutter.git
 cd flutter
 git remote add upstream git@github.com:flutter/flutter.git
 
-# 3. 创建分支
+# 3. Create a branch
 git checkout -b feature/my-feature
 
-# 4. 进行修改并测试
+# 4. Make changes and test
 flutter test
 flutter analyze
 
-# 5. 提交 PR
+# 5. Submit PR
 git push origin feature/my-feature
 gh pr create --title "feat: add my feature" --body "Description..."
 ```
 
 ---
 
-## 9. Next.js 项目管理分析
+## 9. Next.js Project Management Analysis
 
-### 9.1 商业公司 + 开源模式
+### 9.1 Commercial Company + Open Source Model
 
-Next.js 是 **Vercel** 公司维护的 React 框架，是 **商业开源** 的典型代表。
+Next.js is a React framework maintained by **Vercel** and is a typical representative of **commercial open source**.
 
-**商业模式**：
+**Business Model**:
 
 ```
-Vercel 的商业策略：
+Vercel's business strategy:
 
-├── 开源层（Next.js）
-│   ├── 框架核心
+├── Open source layer (Next.js)
+│   ├── Framework core
 │   ├── App Router
 │   ├── Pages Router
-│   └── 基础功能
-├── 商业平台层（Vercel Platform）
-│   ├── 部署基础设施
+│   └── Basic features
+├── Commercial platform layer (Vercel Platform)
+│   ├── Deployment infrastructure
 │   ├── Edge Functions
 │   ├── Analytics
-│   ├── 域名管理
-│   └── 团队协作
-└── 生态层
-    ├── Turbopack（打包器）
-    ├── SWC（编译器）
-    └── v0（AI 生成工具）
+│   ├── Domain management
+│   └── Team collaboration
+└── Ecosystem layer
+    ├── Turbopack (bundler)
+    ├── SWC (compiler)
+    └── v0 (AI generation tool)
 ```
 
-### 9.2 功能提案与 RFC
+### 9.2 Feature Proposals and RFC
 
-Next.js 使用 **GitHub Discussions** 和 **RFC 仓库** 管理功能提案：
+Next.js uses **GitHub Discussions** and an **RFC repository** to manage feature proposals:
 
 ```markdown
 # RFC: App Router
 
-## 概述
-引入基于文件系统的 App Router，支持 React Server Components、
-嵌套布局和流式渲染。
+## Overview
+Introducing a file-system based App Router supporting React Server Components,
+nested layouts, and streaming rendering.
 
-## 动机
-- Pages Router 的嵌套布局支持不足
-- 缺乏对 React Server Components 的原生支持
-- 数据获取模式需要改进
+## Motivation
+- Insufficient nested layout support in Pages Router
+- Lack of native support for React Server Components
+- Data fetching patterns need improvement
 
-## 设计方案
-### 目录结构
+## Design Approach
+### Directory Structure
 ```
 app/
-├── layout.tsx       # 根布局
-├── page.tsx         # 首页
-├── loading.tsx      # 加载状态
-├── error.tsx        # 错误处理
+├── layout.tsx       # Root layout
+├── page.tsx         # Home page
+├── loading.tsx      # Loading state
+├── error.tsx        # Error handling
 ├── dashboard/
-│   ├── layout.tsx   # Dashboard 布局
-│   └── page.tsx     # Dashboard 页面
+│   ├── layout.tsx   # Dashboard layout
+│   └── page.tsx     # Dashboard page
 └── api/
-    └── route.ts     # API 路由
+    └── route.ts     # API routes
 ```
 ```
 
-### 9.3 Turbopack 的开发管理
+### 9.3 Turbopack Development Management
 
-Turbopack 是 Vercel 开发的下一代打包器，采用 **Rust** 实现：
+Turbopack is a next-generation bundler developed by Vercel, implemented in **Rust**:
 
 ```rust
-// Turbopack 的架构
-turbo-tasks        // 增量计算引擎
-turbo-tasks-fs     // 文件系统抽象
-turbo-tasks-env    // 环境变量管理
-turbopack-core     // 核心打包逻辑
-turbopack-dev      // 开发服务器
-turbopack-node     // Node.js 集成
+// Turbopack architecture
+turbo-tasks        // Incremental computation engine
+turbo-tasks-fs     // Filesystem abstraction
+turbo-tasks-env    // Environment variable management
+turbopack-core     // Core bundling logic
+turbopack-dev      // Development server
+turbopack-node     // Node.js integration
 ```
 
-### 9.4 社区治理特点
+### 9.4 Community Governance Characteristics
 
-Next.js 的治理特点：
+Next.js's governance characteristics:
 
-- **Vercel 员工主导**：核心功能由 Vercel 全职团队开发
-- **社区贡献**：接受 Bug 修复和小功能 PR
-- **RFC 公开**：重大功能变更通过公开 RFC 讨论
-- **Confrence**：举办 Next.js Conf 年度会议
+- **Vercel employee-led**: Core features developed by Vercel's full-time team
+- **Community contributions**: Accepts bug fixes and small feature PRs
+- **Open RFCs**: Major feature changes discussed through public RFCs
+- **Conference**: Hosts the annual Next.js Conf conference
 
 ---
 
-## 10. 中国开源项目案例
+## 10. Chinese Open Source Project Cases
 
 ### 10.1 Apache Dubbo
 
-**项目背景**：Apache Dubbo 是阿里巴巴开源的高性能 RPC 框架，2018 年捐赠给 Apache 基金会。
+**Project Background**: Apache Dubbo is a high-performance RPC framework open-sourced by Alibaba, donated to the Apache Foundation in 2018.
 
-**治理特点**：
+**Governance Characteristics**:
 
 ```
-Apache Dubbo 治理结构：
-├── Apache 基金会（法律和品牌管理）
+Apache Dubbo Governance Structure:
+├── Apache Foundation (legal and brand management)
 │   ├── ASF Board
 │   └── ASF Infrastructure
-├── Dubbo PMC（项目管理委员会）
+├── Dubbo PMC (Project Management Committee)
 │   ├── PMC Chair
 │   ├── PMC Members
 │   └── Committers
-└── 贡献者社区
+└── Contributor community
 ```
 
-**社区贡献流程**：
+**Community Contribution Workflow**:
 
-1. **Issue 报告**：在 GitHub Issues 中报告问题
-2. **邮件讨论**：在 dev@dubbo.apache.org 邮件列表讨论
-3. **PR 提交**：提交 Pull Request
-4. **Code Review**：至少两位 Committer 审查
-5. **合并**：审查通过后合并
-6. **发版**：PMC 协调版本发布
+1. **Issue Reporting**: Report issues in GitHub Issues
+2. **Email Discussion**: Discuss on dev@dubbo.apache.org mailing list
+3. **PR Submission**: Submit Pull Request
+4. **Code Review**: At least two Committers review
+5. **Merge**: Merge after review approval
+6. **Release**: PMC coordinates version release
 
-**Dubbo 的中国特色**：
+**Dubbo's Chinese Characteristics**:
 
-- **阿里巴巴主导**：核心开发由阿里巴巴团队负责
-- **双语社区**：中英文并重的社区沟通
-- **商业支持**：通过阿里云提供商业支持
-- **生态整合**：与 Spring Cloud、Kubernetes 深度整合
+- **Alibaba-led**: Core development managed by the Alibaba team
+- **Bilingual community**: Equal emphasis on Chinese and English communication
+- **Commercial support**: Commercial support provided through Alibaba Cloud
+- **Ecosystem integration**: Deep integration with Spring Cloud and Kubernetes
 
 ### 10.2 TiDB
 
-**项目背景**：TiDB 是 PingCAP 开源的分布式 NewSQL 数据库，兼容 MySQL 协议。
+**Project Background**: TiDB is a distributed NewSQL database open-sourced by PingCAP, compatible with the MySQL protocol.
 
-**商业开源模式**：
+**Commercial Open Source Model**:
 
 ```
-PingCAP 的商业策略：
-├── 开源层（TiDB）
-│   ├── TiDB Server（SQL 层）
-│   ├── TiKV（存储引擎）
-│   ├── PD（调度器）
-│   └── TiFlash（列式存储）
-├── 商业产品
-│   ├── TiDB Cloud（云服务）
-│   ├── TiDB Enterprise（企业版）
-│   └── 技术支持服务
-└── 开源生态
-    ├── TiUP（部署工具）
-    ├── TiCDC（变更数据捕获）
-    └── DM（数据迁移）
+PingCAP's business strategy:
+├── Open source layer (TiDB)
+│   ├── TiDB Server (SQL layer)
+│   ├── TiKV (storage engine)
+│   ├── PD (scheduler)
+│   └── TiFlash (columnar storage)
+├── Commercial products
+│   ├── TiDB Cloud (cloud service)
+│   ├── TiDB Enterprise (enterprise edition)
+│   └── Technical support services
+└── Open source ecosystem
+    ├── TiUP (deployment tool)
+    ├── TiCDC (change data capture)
+    └── DM (data migration)
 ```
 
-**社区治理结构**：
+**Community Governance Structure**:
 
 ```markdown
-## TiDB 社区角色
+## TiDB Community Roles
 
 ### Reviewer
-- 负责特定模块的代码审查
-- 由 Committer 提名
+- Responsible for code review of specific modules
+- Nominated by Committer
 
 ### Committer
-- 可以合并 PR
-- 由 PMC 提名
+- Can merge PRs
+- Nominated by PMC
 
 ### PMC Member
-- 参与项目决策
-- 选举 PMC Chair
+- Participates in project decision-making
+- Elects PMC Chair
 
-### SIG（Special Interest Group）
+### SIG (Special Interest Group)
 - SIG-Execution
 - SIG-Transaction
 - SIG-SQL-Infra
@@ -1207,35 +1207,35 @@ PingCAP 的商业策略：
 
 ### 10.3 OpenMMLab
 
-**项目背景**：OpenMMLab 是商汤科技开源的计算机视觉算法工具箱，包含 30+ 个算法库。
+**Project Background**: OpenMMLab is a computer vision algorithm toolbox open-sourced by SenseTime, containing 30+ algorithm libraries.
 
-**组织结构**：
+**Organizational Structure**:
 
 ```
-OpenMMLab 工具箱体系：
-├── MMEngine（核心引擎）
-├── MMDetection（目标检测）
-├── MMSegmentation（语义分割）
-├── MMClassification（图像分类）
-├── MMPose（姿态估计）
-├── MMDeploy（模型部署）
-├── MMTracking（目标跟踪）
-├── MMagic（图像生成）
-└── ... 30+ 个项目
+OpenMMLab Toolbox System:
+├── MMEngine (core engine)
+├── MMDetection (object detection)
+├── MMSegmentation (semantic segmentation)
+├── MMClassification (image classification)
+├── MMPose (pose estimation)
+├── MMDeploy (model deployment)
+├── MMTracking (object tracking)
+├── MMagic (image generation)
+└── ... 30+ projects
 ```
 
-**OpenMMLab 的管理模式**：
+**OpenMMLab's Management Model**:
 
-- **统一架构**：所有算法库共享 MMEngine 核心引擎
-- **统一 API**：一致的配置系统和训练流程
-- **社区维护**：每个子项目有独立的维护者团队
-- **定期发版**：遵循统一的版本发布节奏
-- **学术导向**：与论文发表紧密结合
+- **Unified architecture**: All algorithm libraries share the MMEngine core engine
+- **Unified API**: Consistent configuration system and training pipeline
+- **Community maintenance**: Each sub-project has an independent maintainer team
+- **Regular releases**: Follows a unified version release cadence
+- **Academic-oriented**: Tightly integrated with paper publications
 
-**典型贡献流程**：
+**Typical Contribution Workflow**:
 
 ```python
-# OpenMMLab 的代码风格示例
+# OpenMMLab code style example
 from mmengine.model import BaseModule
 from mmdet.registry import MODELS
 
@@ -1253,314 +1253,314 @@ class MyDetector(BaseModule):
         return self.head(x, data_samples, mode=mode)
 ```
 
-### 10.4 中国开源项目的特点总结
+### 10.4 Summary of Chinese Open Source Project Characteristics
 
-| 特点 | 说明 |
-|------|------|
-| **公司主导** | 大多数项目由互联网公司内部开源 |
-| **商业化路径** | 通过云服务、企业版、技术支持变现 |
-| **双语社区** | 中英文文档和社区并重 |
-| **快速迭代** | 响应速度快，功能迭代频繁 |
-| **生态整合** | 与国内云平台深度整合 |
-| **学术合作** | 与高校和研究机构紧密合作 |
-
----
-
-## 11. 从案例中提炼的最佳实践
-
-### 11.1 治理模式选择
-
-```
-选择治理模式的决策树：
-
-项目类型？
-├── 公司内部项目开源
-│   ├── 希望保持控制权 → 公司主导模式（React、Next.js）
-│   └── 希望社区参与 → 基金会模式（Kubernetes）
-├── 个人项目成长
-│   ├── 维持个人决策 → 个人主导模式（Vue.js 早期）
-│   └── 社区化治理 → 基金会模式（Rust）
-└── 多公司协作
-    └── 中立组织托管 → 基金会模式（Linux、Kubernetes）
-```
-
-### 11.2 代码审查最佳实践
-
-从各项目提炼的代码审查实践：
-
-```markdown
-## 代码审查清单
-
-### 1. 代码质量
-- [ ] 代码风格符合项目规范
-- [ ] 没有明显的性能问题
-- [ ] 错误处理完善
-- [ ] 没有硬编码的魔法值
-
-### 2. 测试覆盖
-- [ ] 有单元测试
-- [ ] 测试覆盖边界情况
-- [ ] 集成测试（如适用）
-
-### 3. 文档更新
-- [ ] API 文档已更新
-- [ ] 变更日志已更新
-- [ ] 使用示例已更新（如适用）
-
-### 4. 破坏性变更
-- [ ] 没有未计划的破坏性变更
-- [ ] 如有破坏性变更，提供迁移指南
-
-### 5. 安全性
-- [ ] 没有引入安全漏洞
-- [ ] 敏感数据处理正确
-```
-
-### 11.3 发布管理最佳实践
-
-```markdown
-## 版本发布检查清单
-
-### 发布前
-- [ ] 所有计划的 PR 已合并
-- [ ] CI 测试全部通过
-- [ ] 文档已更新
-- [ ] 变更日志已整理
-- [ ] 依赖版本已更新
-
-### 发布中
-- [ ] 创建发布分支
-- [ ] 更新版本号
-- [ ] 运行完整测试套件
-- [ ] 创建 Git Tag
-- [ ] 发布到包管理平台
-- [ ] 创建 GitHub Release
-
-### 发布后
-- [ ] 监控错误报告
-- [ ] 更新项目文档
-- [ ] 发布公告
-- [ ] 更新依赖该项目的下游项目
-```
-
-### 11.4 社区建设最佳实践
-
-```markdown
-## 社区建设关键要素
-
-### 1. 文档
-- 详细的贡献指南
-- 清晰的代码规范
-- 完善的开发环境设置文档
-- 新手友好的 "Good First Issues"
-
-### 2. 沟通渠道
-- GitHub Issues（主要沟通渠道）
-- Discord / Slack（实时沟通）
-- 邮件列表（正式讨论）
-- 博客（发布更新和教程）
-
-### 3. 激励机制
-- 贡献者排行榜
-- 贡献者专属徽章
-- 年度贡献者大会
-- 社区礼品和奖励
-
-### 4. 导师制度
-- 新贡献者导师计划
-- 定期的社区办公时间
-- 贡献者成长路径
-```
+| Characteristic | Description |
+|----------------|-------------|
+| **Company-led** | Most projects open-sourced from within internet companies |
+| **Commercialization path** | Monetized through cloud services, enterprise editions, and technical support |
+| **Bilingual community** | Equal emphasis on Chinese and English documentation and community |
+| **Rapid iteration** | Fast response times, frequent feature iterations |
+| **Ecosystem integration** | Deep integration with domestic cloud platforms |
+| **Academic collaboration** | Close collaboration with universities and research institutions |
 
 ---
 
-## 12. 不同规模项目的管理策略
+## 11. Best Practices Distilled from Cases
 
-### 12.1 小型项目（< 100 Star）
+### 11.1 Governance Model Selection
 
-**特点**：代码量小、贡献者少、迭代快
+```
+Decision tree for selecting a governance model:
 
-**管理策略**：
-
-```markdown
-## 小型项目管理要点
-
-### 版本管理
-- 使用语义化版本
-- 可以快速迭代，不拘泥于严格流程
-- main 分支即为开发分支
-
-### Issue 管理
-- 简单的 Issue 模板即可
-- 不需要复杂的标签系统
-- 快速响应，保持 Issue 数量少
-
-### PR 流程
-- 单人审查即可合并
-- 不需要复杂的 CI/CD
-- 重点是代码质量，不是流程
-
-### 社区建设
-- 撰写清晰的 README
-- 提供 "Good First Issues"
-- 积极回应每个 Issue 和 PR
+Project type?
+├── Company internal project open-sourced
+│   ├── Want to maintain control → Company-led model (React, Next.js)
+│   └── Want community participation → Foundation model (Kubernetes)
+├── Personal project growth
+│   ├── Maintain personal decision-making → Individual-led model (early Vue.js)
+│   └── Community-driven governance → Foundation model (Rust)
+└── Multi-company collaboration
+    └── Neutral organization hosting → Foundation model (Linux, Kubernetes)
 ```
 
-### 12.2 中型项目（100-1000 Star）
+### 11.2 Code Review Best Practices
 
-**特点**：有一定社区基础、需要规范化管理
-
-**管理策略**：
+Code review practices distilled from various projects:
 
 ```markdown
-## 中型项目管理要点
+## Code Review Checklist
 
-### 版本管理
-- 严格的语义化版本
-- 使用发布分支
-- 维护多个版本线
+### 1. Code Quality
+- [ ] Code style conforms to project standards
+- [ ] No obvious performance issues
+- [ ] Proper error handling
+- [ ] No hardcoded magic values
 
-### Issue 管理
-- 完善的 Issue 模板
-- 标签分类系统
-- 里程碑规划
+### 2. Test Coverage
+- [ ] Unit tests exist
+- [ ] Tests cover edge cases
+- [ ] Integration tests (if applicable)
 
-### PR 流程
-- 至少两人审查
-- 自动化 CI/CD
-- 代码审查清单
+### 3. Documentation Updates
+- [ ] API documentation updated
+- [ ] Changelog updated
+- [ ] Usage examples updated (if applicable)
 
-### 社区建设
-- 贡献指南
-- 社区沟通渠道
-- 定期发布更新
+### 4. Breaking Changes
+- [ ] No unplanned breaking changes
+- [ ] Migration guide provided if breaking changes exist
+
+### 5. Security
+- [ ] No security vulnerabilities introduced
+- [ ] Sensitive data handled correctly
 ```
 
-### 12.3 大型项目（1000-10000 Star）
-
-**特点**：社区活跃、需要规范化治理
-
-**管理策略**：
+### 11.3 Release Management Best Practices
 
 ```markdown
-## 大型项目管理要点
+## Version Release Checklist
 
-### 治理结构
-- 建立核心团队
-- 定义决策流程
-- RFC 流程管理重大变更
+### Pre-release
+- [ ] All planned PRs merged
+- [ ] CI tests all passing
+- [ ] Documentation updated
+- [ ] Changelog organized
+- [ ] Dependency versions updated
 
-### 版本管理
-- 长期支持版本（LTS）
-- 发布候选版本（RC）
-- 详细的迁移指南
+### During release
+- [ ] Create release branch
+- [ ] Update version number
+- [ ] Run full test suite
+- [ ] Create Git Tag
+- [ ] Publish to package management platform
+- [ ] Create GitHub Release
 
-### Issue 管理
-- Issue 分类和优先级
-- Issue Triage 流程
-- 定期清理过期 Issues
-
-### PR 流程
-- 多人审查
-- 自动化测试覆盖
-- 合并条件严格
-
-### 社区建设
-- SIG/WG 组织
-- 贡献者晋升路径
-- 社区活动和会议
+### Post-release
+- [ ] Monitor error reports
+- [ ] Update project documentation
+- [ ] Publish announcement
+- [ ] Update downstream projects depending on this project
 ```
 
-### 12.4 超大型项目（10000+ Star）
-
-**特点**：社区庞大、影响广泛、需要专业治理
-
-**管理策略**：
+### 11.4 Community Building Best Practices
 
 ```markdown
-## 超大型项目管理要点
+## Key Elements of Community Building
 
-### 治理结构
-- 基金会托管
+### 1. Documentation
+- Detailed contribution guidelines
+- Clear code standards
+- Comprehensive development environment setup documentation
+- Beginner-friendly "Good First Issues"
+
+### 2. Communication Channels
+- GitHub Issues (primary communication channel)
+- Discord / Slack (real-time communication)
+- Mailing lists (formal discussions)
+- Blog (publishing updates and tutorials)
+
+### 3. Incentive Mechanisms
+- Contributor leaderboards
+- Exclusive contributor badges
+- Annual contributor conferences
+- Community gifts and rewards
+
+### 4. Mentorship Programs
+- New contributor mentorship program
+- Regular community office hours
+- Contributor growth paths
+```
+
+---
+
+## 12. Management Strategies for Different Project Sizes
+
+### 12.1 Small Projects (< 100 Stars)
+
+**Characteristics**: Small codebase, few contributors, fast iteration
+
+**Management Strategy**:
+
+```markdown
+## Small Project Management Essentials
+
+### Version Management
+- Use semantic versioning
+- Can iterate quickly without strict process adherence
+- main branch serves as the development branch
+
+### Issue Management
+- Simple Issue templates are sufficient
+- No need for complex label systems
+- Quick response to keep Issue count low
+
+### PR Workflow
+- Single reviewer approval sufficient for merge
+- No need for complex CI/CD
+- Focus on code quality, not process
+
+### Community Building
+- Write a clear README
+- Provide "Good First Issues"
+- Actively respond to every Issue and PR
+```
+
+### 12.2 Medium Projects (100-1000 Stars)
+
+**Characteristics**: Established community base, needs standardized management
+
+**Management Strategy**:
+
+```markdown
+## Medium Project Management Essentials
+
+### Version Management
+- Strict semantic versioning
+- Use release branches
+- Maintain multiple version lines
+
+### Issue Management
+- Comprehensive Issue templates
+- Label classification system
+- Milestone planning
+
+### PR Workflow
+- At least two reviewers
+- Automated CI/CD
+- Code review checklist
+
+### Community Building
+- Contribution guidelines
+- Community communication channels
+- Regular update releases
+```
+
+### 12.3 Large Projects (1000-10000 Stars)
+
+**Characteristics**: Active community, needs standardized governance
+
+**Management Strategy**:
+
+```markdown
+## Large Project Management Essentials
+
+### Governance Structure
+- Establish core team
+- Define decision-making process
+- RFC process for major changes
+
+### Version Management
+- Long-term support versions (LTS)
+- Release candidates (RC)
+- Detailed migration guides
+
+### Issue Management
+- Issue classification and priority
+- Issue triage process
+- Regular cleanup of stale Issues
+
+### PR Workflow
+- Multiple reviewers
+- Automated test coverage
+- Strict merge conditions
+
+### Community Building
+- SIG/WG organization
+- Contributor advancement paths
+- Community events and conferences
+```
+
+### 12.4 Extra-Large Projects (10000+ Stars)
+
+**Characteristics**: Large community, wide impact, needs professional governance
+
+**Management Strategy**:
+
+```markdown
+## Extra-Large Project Management Essentials
+
+### Governance Structure
+- Foundation hosting
 - PMC/Steering Committee
-- 详细的治理文档
-- 选举机制
+- Detailed governance documentation
+- Election mechanisms
 
-### 版本管理
-- 多版本并行维护
-- 严格的兼容性保证
-- 详细的发布流程
-- 安全补丁发布机制
+### Version Management
+- Multi-version parallel maintenance
+- Strict compatibility guarantees
+- Detailed release process
+- Security patch release mechanism
 
-### Issue 管理
-- 自动化 Issue 分类
-- Issue 模板多样化
-- 机器人辅助管理
-- 定期 Issue 审查
+### Issue Management
+- Automated Issue classification
+- Diverse Issue templates
+- Bot-assisted management
+- Regular Issue audits
 
-### PR 流程
-- 多轮审查
-- 自动化 CI/CD 流水线
-- 合并条件严格
-- 代码所有权管理（OWNERS）
+### PR Workflow
+- Multi-round reviews
+- Automated CI/CD pipelines
+- Strict merge conditions
+- Code ownership management (OWNERS)
 
-### 社区建设
-- 多语言支持
-- 全球社区活动
-- 认证和培训
-- 企业合作计划
+### Community Building
+- Multi-language support
+- Global community events
+- Certification and training
+- Enterprise partnership programs
 
-### 安全管理
-- 安全响应团队
-- CVE 处理流程
-- 安全审计
-- 保密漏洞处理
+### Security Management
+- Security response team
+- CVE handling process
+- Security audits
+- Confidential vulnerability handling
 ```
 
-### 12.5 规模化管理对照表
+### 12.5 Scalability Management Comparison Table
 
-| 维度 | 小型 | 中型 | 大型 | 超大型 |
-|------|------|------|------|--------|
-| **贡献者** | < 10 | 10-50 | 50-500 | 500+ |
-| **Issue/月** | < 20 | 20-100 | 100-500 | 500+ |
-| **PR/月** | < 10 | 10-50 | 50-200 | 200+ |
-| **版本周期** | 随时 | 月度 | 双周/月度 | 严格周期 |
-| **审查要求** | 1人 | 2人 | 2+人 | 2+人+自动化 |
-| **治理模型** | 个人 | 核心团队 | 委员会 | 基金会 |
-| **CI/CD** | 基础 | 完整 | 高级 | 企业级 |
-| **文档** | README | 贡献指南 | 完整文档站 | 多语言文档站 |
+| Dimension | Small | Medium | Large | Extra-Large |
+|-----------|-------|--------|-------|-------------|
+| **Contributors** | < 10 | 10-50 | 50-500 | 500+ |
+| **Issues/month** | < 20 | 20-100 | 100-500 | 500+ |
+| **PRs/month** | < 10 | 10-50 | 50-200 | 200+ |
+| **Release cycle** | On-demand | Monthly | Bi-weekly/Monthly | Strict cycle |
+| **Review requirement** | 1 person | 2 people | 2+ people | 2+ people + automation |
+| **Governance model** | Individual | Core team | Committee | Foundation |
+| **CI/CD** | Basic | Complete | Advanced | Enterprise-grade |
+| **Documentation** | README | Contribution guide | Full documentation site | Multi-language documentation site |
 
 ---
 
-## 总结
+## Summary
 
-### 核心要点回顾
+### Key Points Recap
 
-1. **治理模式应匹配项目特点**：没有放之四海而皆准的最佳治理模式
-2. **RFC 流程是重大变更的保险**：避免草率的决策影响项目未来
-3. **自动化是规模化的关键**：CI/CD、机器人、标签系统缺一不可
-4. **文档是社区的基石**：好的文档能降低贡献门槛
-5. **版本管理需要策略**：语义化版本、LTS、迁移指南都是必须的
-6. **中国开源正在崛起**：Apache Dubbo、TiDB、OpenMMLab 等项目展现了中国开源的力量
+1. **Governance model should match project characteristics**: There is no one-size-fits-all best governance model
+2. **RFC process is insurance for major changes**: Prevent hasty decisions from affecting the project's future
+3. **Automation is key to scalability**: CI/CD, bots, and label systems are all essential
+4. **Documentation is the foundation of community**: Good documentation lowers the barrier to contribution
+5. **Version management requires strategy**: Semantic versioning, LTS, and migration guides are all necessary
+6. **Chinese open source is rising**: Projects like Apache Dubbo, TiDB, and OpenMMLab demonstrate the strength of Chinese open source
 
-### 推荐阅读
+### Recommended Reading
 
 - [Producing Open Source Software](https://producingoss.com/) - Karl Fogel
 - [The Art of Community](https://artofcommunityonline.org/) - Jono Bacon
-- [GitHub 的开源指南](https://opensource.guide/)
-- [CNCF 治理模板](https://github.com/cncf/toc/tree/main/templates)
+- [GitHub Open Source Guides](https://opensource.guide/)
+- [CNCF Governance Templates](https://github.com/cncf/toc/tree/main/templates)
 
-### 下一步学习
+### Next Steps
 
-完成本案例分析后，建议继续学习：
-- **X14-github-copilot-workspace-agents.md**：GitHub Copilot Workspace 与 AI Agent 开发
-- **W22-open-source-business.md**：开源商业模式详解
-- **W29-open-source-guide.md**：开源贡献完全指南
+After completing this case study analysis, it is recommended to continue studying:
+- **X14-github-copilot-workspace-agents.md**: GitHub Copilot Workspace and AI Agent Development
+- **W22-open-source-business.md**: Open Source Business Models in Detail
+- **W29-open-source-guide.md**: Complete Guide to Open Source Contribution
 
 ---
 
-> **文档信息**
-> - 创建日期：2024 年
-> - 最后更新：2024 年
-> - 版本：v1.0
-> - 作者：GitHub 新手指南编写组
+> **Document Information**
+> - Creation date: 2024
+> - Last updated: 2024
+> - Version: v1.0
+> - Author: GitHub Beginners Guide Writing Team

@@ -20,7 +20,7 @@ Every developer's local repository contains all historical versions of large fil
 
 **Problem 4: Daily Operations Become Slow**
 
-Daily `git push` and `git pull` operations become异常 slow because they need to transfer large amounts of binary data. Even small code changes may require long waits due to accompanying large file changes.
+Daily `git push` and `git pull` operations become abnormally slow because they need to transfer large amounts of binary data. Even small code changes may require long waits due to accompanying large file changes.
 
 **Problem 5: Branch Switching and Merging Difficulties**
 
@@ -28,7 +28,7 @@ When large files have multiple versions, switching branches requires downloading
 
 ### 1.2 Typical Large File Scenarios
 
-In actual development,多种 scenarios involve large files:
+In actual development, various scenarios involve large files:
 
 **Design Files**: Including Photoshop PSD files, Illustrator AI files, Sketch design files, Figma export files, etc. These files typically contain multiple layers, effects, and resources, ranging from tens of MB to hundreds of MB. Design teams need version control for these files to track design changes and rollback to previous versions.
 
@@ -40,7 +40,7 @@ In actual development,多种 scenarios involve large files:
 
 **Build Artifacts**: Including EXE, DLL, SO, JAR binary executables and library files. Some projects need to include compiled binary files in version control.
 
-**Game Resources**: Including Unity Asset files, Unreal Engine Pak files, etc. Game development projects typically contain大量 game resources, which are often very large.
+**Game Resources**: Including Unity Asset files, Unreal Engine Pak files, etc. Game development projects typically contain a large number of game resources, which are often very large.
 
 **Machine Learning Models**: Including PyTorch PT files, ONNX model files, HDF5 model files, etc. Trained machine learning models are usually large and need to be shared within teams.
 
@@ -61,7 +61,7 @@ After years of development, Git LFS has become the industry standard for handlin
 
 ### 2.1 Core Architecture Design
 
-Git LFS adopts "pointer replacement" architecture design, which is its most核心 innovation. When a file is tracked by Git LFS, what's stored in the Git repository is no longer the actual file content, but a small pointer file. This pointer file contains reference information pointing to the actual file content.
+Git LFS adopts "pointer replacement" architecture design, which is its most core innovation. When a file is tracked by Git LFS, what's stored in the Git repository is no longer the actual file content, but a small pointer file. This pointer file contains reference information pointing to the actual file content.
 
 In local repositories, Git LFS uses Git's clean filter and smudge filter mechanisms to implement transparent file replacement. When executing `git add` command, clean filter replaces actual file content with pointer file; when executing `git checkout` command, smudge filter replaces pointer file with actual file content.
 
@@ -69,7 +69,7 @@ For remote storage, Git LFS stores actual file content on independent LFS storag
 
 ### 2.2 Pointer File Format Details
 
-Git LFS pointer file uses纯 text format, containing three key pieces of information:
+Git LFS pointer file uses plain text format, containing three key pieces of information:
 
 ```
 version https://git-lfs.github.com/spec/v1
@@ -107,7 +107,7 @@ Step 4: Replaces downloaded actual file content into working directory, while ca
 
 ### 2.4 Role of .gitattributes File
 
-`.gitattributes` file is the core file for Git LFS配置 tracking rules. This file is located in repository root directory, defining which files should be managed by Git LFS.
+`.gitattributes` file is the core file for configuring Git LFS tracking rules. This file is located in repository root directory, defining which files should be managed by Git LFS.
 
 Each rule line's format is:
 
@@ -147,7 +147,7 @@ Before installing Git LFS, ensure the following system requirements are met:
 
 ### 3.2 Windows System Installation
 
-Windows users can install Git LFS through多种 methods:
+Windows users can install Git LFS through various methods:
 
 **Using winget package manager (recommended)**:
 
@@ -177,7 +177,7 @@ git lfs install
 
 ### 3.3 macOS System Installation
 
-macOS users can install Git LFS through以下 methods:
+macOS users can install Git LFS through the following methods:
 
 **Using Homebrew (recommended)**:
 
@@ -253,7 +253,7 @@ git config --global https.proxy socks5://127.0.0.1:7891
 
 **Using domestic Git hosting platforms**:
 
-Domestic platforms like Gitee, Coding also provide Git LFS services, can serve as alternatives to GitHub. These platforms' servers are located在国内, access速度更快,更适合 domestic development teams. Gitee provides features similar to GitHub, including code hosting, Issue management, CI/CD, etc. If project mainly面向 domestic users, using domestic platform is a good choice.
+Domestic platforms like Gitee, Coding also provide Git LFS services, can serve as alternatives to GitHub. These platforms' servers are located domestically, with faster access speed, more suitable for domestic development teams. Gitee provides features similar to GitHub, including code hosting, Issue management, CI/CD, etc. If project mainly targets domestic users, using domestic platform is a good choice.
 
 **Configure custom LFS endpoint**:
 
@@ -288,7 +288,7 @@ This chapter will introduce Git LFS's basic usage methods, including tracking fi
 
 ### 4.1 Track Files
 
-Tracking files is the first step in using Git LFS. By specifying file patterns,告诉 Git LFS which files need to be managed. Tracking rules use wildcard patterns to match filenames, supporting common wildcard syntax. Tracking command creates or modifies `.gitattributes` file in repository root directory, this file needs to be committed to repository so team members can share same tracking rules.
+Tracking files is the first step in using Git LFS. By specifying file patterns, tells Git LFS which files need to be managed. Tracking rules use wildcard patterns to match filenames, supporting common wildcard syntax. Tracking command creates or modifies `.gitattributes` file in repository root directory, this file needs to be committed to repository so team members can share same tracking rules.
 
 ```bash
 # Track files with specific extensions
@@ -312,7 +312,7 @@ After executing tracking command, creates or modifies `.gitattributes` file in p
 
 ### 4.2 View Tracking Status
 
-Viewing tracking status helps developers understand which files are managed by Git LFS and current configuration. Git LFS provides multiple commands to view different dimension information. Developers should be familiar with these commands to quickly获取 relevant information when needed.
+Viewing tracking status helps developers understand which files are managed by Git LFS and current configuration. Git LFS provides multiple commands to view different dimension information. Developers should be familiar with these commands to quickly obtain relevant information when needed.
 
 ```bash
 # View current tracking rules
@@ -333,7 +333,7 @@ git lfs status
 
 ### 4.3 Untrack Files
 
-Untracking files means removing files from Git LFS management,使其恢复为 ordinary Git objects. Untracking only affects newly added files, already tracked files won't automatically convert back to ordinary Git objects. If need to convert tracked files back to ordinary Git objects, need to use `git lfs migrate` command for migration.
+Untracking files means removing files from Git LFS management, restoring them to ordinary Git objects. Untracking only affects newly added files, already tracked files won't automatically convert back to ordinary Git objects. If need to convert tracked files back to ordinary Git objects, need to use `git lfs migrate` command for migration.
 
 ```bash
 # Untrack specific file types
@@ -348,7 +348,7 @@ Note that untracking only affects newly added files, already tracked files won't
 
 ### 4.4 Complete Workflow Example
 
-The following is a complete Git LFS workflow example, showing the complete process from initialization to push. This example适用于 new project's Git LFS configuration. Developers can follow this流程 to configure Git LFS for new projects, ensuring large files are correctly managed.
+The following is a complete Git LFS workflow example, showing the complete process from initialization to push. This example is suitable for new project's Git LFS configuration. Developers can follow this workflow to configure Git LFS for new projects, ensuring large files are correctly managed.
 
 ```bash
 # Step 1: Initialize Git LFS
@@ -386,7 +386,7 @@ git push origin main
 
 ### 4.5 Pull and Checkout Operations
 
-Pull and checkout operations are the most常用 operations in team collaboration. When team members need to get latest code and large files, need to use pull operation. Git LFS provides flexible pull options, allowing developers to pull specific files on demand, avoiding downloading unnecessary large files. This is particularly useful for developers with limited bandwidth.
+Pull and checkout operations are the most commonly used operations in team collaboration. When team members need to get latest code and large files, need to use pull operation. Git LFS provides flexible pull options, allowing developers to pull specific files on demand, avoiding downloading unnecessary large files. This is particularly useful for developers with limited bandwidth.
 
 ```bash
 # Pull latest code (including LFS files)
@@ -409,15 +409,15 @@ git lfs checkout "*.psd"
 
 ## Chapter 5: Migrate Existing Repositories to LFS
 
-For existing repositories that already contain大量 large files, can use migration功能 to convert them to use Git LFS. Migration process rewrites Git history, replacing large files with LFS pointers. This is an important operation that needs谨慎 execution. This chapter will introduce timing, methods and precautions for migration.
+For existing repositories that already contain a large number of large files, can use migration feature to convert them to use Git LFS. Migration process rewrites Git history, replacing large files with LFS pointers. This is an important operation that needs careful execution. This chapter will introduce timing, methods and precautions for migration.
 
 ### 5.1 When Migration is Needed
 
-Migrating existing repositories to Git LFS is a decision that needs谨慎 consideration. Following situations need考虑 migrating to Git LFS: Repository already contains大量 large file history, causing repository size过大; Repository clone速度过慢, affecting team efficiency; Repository size exceeds GitHub recommended limit (5GB); Daily Git operations (push, pull, clone) slow. Before deciding to migrate, should evaluate migration's benefits and risks, and notify team members提前.
+Migrating existing repositories to Git LFS is a decision that needs careful consideration. Following situations need consideration for migrating to Git LFS: Repository already contains a large number of large file history, causing repository size to be too large; Repository clone speed is too slow, affecting team efficiency; Repository size exceeds GitHub recommended limit (5GB); Daily Git operations (push, pull, clone) slow. Before deciding to migrate, should evaluate migration's benefits and risks, and notify team members in advance.
 
 ### 5.2 Using git lfs migrate Command
 
-Git LFS provides `migrate` command to migrate existing repositories. This command can convert large files already committed to Git repository into LFS pointers, while preserving complete commit history. Migration operation rewrites Git history, so needs谨慎 execution. Recommend using `info` subcommand to preview migration impact before migration.
+Git LFS provides `migrate` command to migrate existing repositories. This command can convert large files already committed to Git repository into LFS pointers, while preserving complete commit history. Migration operation rewrites Git history, so needs careful execution. Recommend using `info` subcommand to preview migration impact before migration.
 
 ```bash
 # Preview migration (don't actually execute)
@@ -444,7 +444,7 @@ git lfs migrate import --include="*.psd" --everything
 
 ### 5.3 Migration Options Details
 
-`git lfs migrate` command provides multiple options, allowing developers to precisely control migration scope and behavior. Understanding these options is crucial for successful migration. Developers should choose appropriate option组合 based on project needs.
+`git lfs migrate` command provides multiple options, allowing developers to precisely control migration scope and behavior. Understanding these options is crucial for successful migration. Developers should choose appropriate option combinations based on project needs.
 
 ```bash
 # --include: Specify file patterns to migrate
@@ -465,11 +465,11 @@ git lfs migrate import --include="*.psd" --yes
 
 ### 5.4 Migration Precautions
 
-Migrating existing repositories is a task that needs谨慎 operation,以下 are key points to note:
+Migrating existing repositories is a task that needs careful operation, the following are key points to note:
 
-**Backup repository**: Migration rewrites Git history,务必 backup repository before operation. Can use `git clone --mirror` to create complete backup.
+**Backup repository**: Migration rewrites Git history, must backup repository before operation. Can use `git clone --mirror` to create complete backup.
 
-**Team coordination**: After migration, all team members need to re-clone repository, or execute specific sync commands. Need to notify team members提前, and coordinate migration time.
+**Team coordination**: After migration, all team members need to re-clone repository, or execute specific sync commands. Need to notify team members in advance, and coordinate migration time.
 
 **Force push**: After migration, need to use `--force-with-lease` to push updated branches and tags. This overwrites remote repository's history, ensure all members have synced before execution.
 
@@ -483,11 +483,11 @@ File locking is an important feature provided by Git LFS, used to solve binary f
 
 ### 6.1 Why File Locking is Needed
 
-For binary files, Git cannot automatically merge conflicts like处理 text files. When two developers simultaneously modify the same binary file (such as PSD design file), merging will produce unresolvable conflicts. In this case, must manually choose which version of file to use. File locking mechanism allows developers to "lock" file before修改, preventing others from simultaneously修改, thus avoiding conflicts. This is particularly important for design files, video materials and other large binary files.
+For binary files, Git cannot automatically merge conflicts like handling text files. When two developers simultaneously modify the same binary file (such as PSD design file), merging will produce unresolvable conflicts. In this case, must manually choose which version of file to use. File locking mechanism allows developers to "lock" file before modification, preventing others from simultaneously modifying, thus avoiding conflicts. This is particularly important for design files, video materials and other large binary files.
 
 ### 6.2 Lock and Unlock Operations
 
-Git LFS provides simple commands to lock and unlock files. After locking file, other developers can still view file, but cannot modify. After unlocking file, other developers can lock and modify file. Developers should养成 good habits, lock binary files before修改, unlock promptly after修改.
+Git LFS provides simple commands to lock and unlock files. After locking file, other developers can still view file, but cannot modify. After unlocking file, other developers can lock and modify file. Developers should develop good habits, lock binary files before modification, unlock promptly after modification.
 
 ```bash
 # Lock single file
@@ -511,7 +511,7 @@ git lfs unlock --id=123
 
 ### 6.3 Locking Workflow
 
-Typical file locking workflow includes four steps: lock file, modify file, commit and push, unlock file. Team members should follow this workflow to ensure file locking mechanism works correctly. If developer forgets to unlock file, other developers can use force unlock功能 to unlock file.
+Typical file locking workflow includes four steps: lock file, modify file, commit and push, unlock file. Team members should follow this workflow to ensure file locking mechanism works correctly. If developer forgets to unlock file, other developers can use force unlock feature to unlock file.
 
 Typical file locking workflow:
 
@@ -551,7 +551,7 @@ In modern software development, CI/CD (Continuous Integration/Continuous Deploym
 
 ### 7.1 GitHub Actions Configuration
 
-GitHub Actions is GitHub's CI/CD service, with good integration with Git LFS. Using LFS files in GitHub Actions is very simple,只需 enable LFS option in checkout step. After enabling, Actions will automatically download LFS files, ensuring build process can access all needed resources.
+GitHub Actions is GitHub's CI/CD service, with good integration with Git LFS. Using LFS files in GitHub Actions is very simple, just enable LFS option in checkout step. After enabling, Actions will automatically download LFS files, ensuring build process can access all needed resources.
 
 ```yaml
 name: Build with LFS files
@@ -580,7 +580,7 @@ jobs:
 
 ### 7.2 Partial Checkout Optimization
 
-If CI only needs部分 LFS files, can optimize build time. By specifying which file patterns to download, can avoid downloading unnecessary large files, thus加快 build speed. This is particularly useful for large projects, because these projects may contain大量 LFS files, but each build only needs其中一部分.
+If CI only needs a portion of LFS files, can optimize build time. By specifying which file patterns to download, can avoid downloading unnecessary large files, thus speeding up build speed. This is particularly useful for large projects, because these projects may contain a large number of LFS files, but each build only needs a portion of them.
 
 ```yaml
 jobs:
@@ -600,7 +600,7 @@ jobs:
 
 ### 7.3 LFS Cache Configuration
 
-Using cache can accelerate CI builds. By caching LFS files, can avoid re-downloading all LFS files during each build. Cache configuration uses GitHub Actions' cache action, judges whether cache needs update based on LFS file hash values. This caching strategy can significantly reduce build time, especially for projects containing大量 LFS files.
+Using cache can accelerate CI builds. By caching LFS files, can avoid re-downloading all LFS files during each build. Cache configuration uses GitHub Actions' cache action, judges whether cache needs update based on LFS file hash values. This caching strategy can significantly reduce build time, especially for projects containing a large number of LFS files.
 
 ```yaml
 jobs:
@@ -623,7 +623,7 @@ jobs:
 
 ### 7.4 Other CI Platform Configuration
 
-Besides GitHub Actions, other CI platforms also support Git LFS.以下是 GitLab CI and Jenkins configuration examples. These platforms' configuration methods are similar, all need to install Git LFS and pull LFS files before build. Developers should choose appropriate configuration method based on使用的 CI platform.
+Besides GitHub Actions, other CI platforms also support Git LFS. The following are GitLab CI and Jenkins configuration examples. These platforms' configuration methods are similar, all need to install Git LFS and pull LFS files before build. Developers should choose appropriate configuration method based on the CI platform being used.
 
 **GitLab CI Configuration**:
 
@@ -677,7 +677,7 @@ GitHub provides different LFS storage quotas for different subscription plans. F
 
 ### 8.2 View Usage
 
-Developers should regularly view LFS storage usage, ensure not exceeding quota. GitHub provides web interface and API两种 methods to view usage. By monitoring usage, can timely discover storage space shortage problems, and take corresponding measures.
+Developers should regularly view LFS storage usage, ensure not exceeding quota. GitHub provides web interface and API two methods to view usage. By monitoring usage, can timely discover storage space shortage problems, and take corresponding measures.
 
 ```bash
 # View via web
@@ -696,7 +696,7 @@ When LFS storage exceeds quota, developers will not be able to push new LFS file
 
 ### 8.4 Optimize Storage Usage
 
-Optimizing storage usage can help teams complete more work within limited quota.以下是 some optimization suggestions, including regularly cleaning cache, deleting unnecessary file history, using third-party storage services, etc. Developers should choose appropriate optimization strategy based on project实际情况.
+Optimizing storage usage can help teams complete more work within limited quota. The following are some optimization suggestions, including regularly cleaning cache, deleting unnecessary file history, using third-party storage services, etc. Developers should choose appropriate optimization strategy based on project actual situation.
 
 ```bash
 # Clean unreferenced LFS objects
@@ -711,14 +711,14 @@ git lfs ls-files --size
 
 ## Chapter 9: LFS Alternatives
 
-Although Git LFS is the most流行 large file management solution, it's not the only choice. Based on project's specific needs, other solutions may be more appropriate. This chapter will introduce several common Git LFS alternatives, and conduct comparative analysis to help developers make明智 choices.
+Although Git LFS is the most popular large file management solution, it's not the only choice. Based on project's specific needs, other solutions may be more appropriate. This chapter will introduce several common Git LFS alternatives, and conduct comparative analysis to help developers make wise choices.
 
 ### 9.1 DVC (Data Version Control)
 
-DVC is a data version control tool specially designed for machine learning projects. It supports多种 storage backends, deep integration with machine learning frameworks. DVC's design concept is to separate data and models from code management, but maintain version synchronization. This enables data scientists to manage data and models like managing code.
+DVC is a data version control tool specially designed for machine learning projects. It supports various storage backends, deep integration with machine learning frameworks. DVC's design concept is to separate data and models from code management, but maintain version synchronization. This enables data scientists to manage data and models like managing code.
 
 **DVC's main advantages**:
-- Supports多种 storage backends (S3, GCS, Azure, SSH, etc.)
+- Supports various storage backends (S3, GCS, Azure, SSH, etc.)
 - Deep integration with machine learning frameworks
 - Supports data pipelines and experiment management
 - No need to modify Git history
@@ -744,22 +744,22 @@ Git Annex is another large file management solution, developed by Joey Hess. It 
 
 ### 9.3 Solution Selection Suggestions
 
-Choosing appropriate large file management solution needs考虑 multiple factors, including project type, team size, tech stack, storage needs, etc.以下是 selection suggestions for different scenarios, helping developers make明智 decisions. No one solution fits all scenarios, developers should choose most appropriate solution based on project's specific needs.
+Choosing appropriate large file management solution needs to consider multiple factors, including project type, team size, tech stack, storage needs, etc. The following are selection suggestions for different scenarios, helping developers make wise decisions. No one solution fits all scenarios, developers should choose most appropriate solution based on project's specific needs.
 
 - **GitHub projects, general large files** → Git LFS
 - **Machine learning/data science projects** → DVC
 - **Ultra-large scale data, needs distributed storage** → Git Annex
-- **Already has大量 historical large files** → Git LFS migrate
+- **Already has a large number of historical large files** → Git LFS migrate
 
 ## Chapter 10: Common Problem Troubleshooting
 
-During using Git LFS, developers may encounter various problems. This chapter will详细介绍 common problems' causes and solutions, helping developers quickly locate and solve problems.
+During using Git LFS, developers may encounter various problems. This chapter will detail common problems' causes and solutions, helping developers quickly locate and solve problems.
 
 ### 10.1 LFS Files Display as Pointer Files
 
-**Problem Description**: After cloning repository, LFS files display as text pointers instead of actual content. This is one of the most common problems in Git LFS usage. When developers see file content is text like `version https://git-lfs.github.com/spec/v1`,说明 LFS files not correctly downloaded.
+**Problem Description**: After cloning repository, LFS files display as text pointers instead of actual content. This is one of the most common problems in Git LFS usage. When developers see file content is text like `version https://git-lfs.github.com/spec/v1`, indicating LFS files not correctly downloaded.
 
-**Problem Cause**: This problem通常有几个原因. First,可能是 developer locally没有 installed Git LFS. Git LFS needs单独 installed, won't随 Git 一起 installed. Second,可能是 Git LFS没有 correctly initialized. Finally,可能是 network problem causing LFS file download failure.
+**Problem Cause**: This problem usually has several causes. First, could be developer locally has not installed Git LFS. Git LFS needs to be installed separately, won't be installed with Git. Second, could be Git LFS not correctly initialized. Finally, could be network problem causing LFS file download failure.
 
 **Solution**:
 
@@ -780,7 +780,7 @@ git lfs pull
 
 ### 10.2 LFS Push Failure
 
-**Problem Description**: Error when pushing LFS files. Push failure may have多种 manifestations, such as network timeout, authentication failure, insufficient storage space, etc. Developers need to judge problem cause based on specific error message.
+**Problem Description**: Error when pushing LFS files. Push failure may have various manifestations, such as network timeout, authentication failure, insufficient storage space, etc. Developers need to judge problem cause based on specific error message.
 
 **Problem Cause**: Common causes of push failure include network connection problems, expired or invalid authentication information, insufficient LFS storage space, remote server configuration errors, etc. In some cases, firewall or proxy settings may also cause push failure.
 
@@ -802,9 +802,9 @@ GIT_TRACE=1 git push
 
 ### 10.3 Clone Speed Still Slow
 
-**Problem Description**: Clone still slow after enabling LFS. Even after configuring Git LFS, cloning large repositories仍然需要很长时间, this会影响 team's work efficiency.
+**Problem Description**: Clone still slow after enabling LFS. Even after configuring Git LFS, cloning large repositories still takes a long time, this will affect team's work efficiency.
 
-**Problem Cause**: Slow clone speed可能是因为 LFS files过多或单个文件体积过大. Additionally, insufficient network bandwidth, server距离较远, concurrent connection数限制等因素也会影响 download speed.
+**Problem Cause**: Slow clone speed may be because LFS files are too many or single file size is too large. Additionally, insufficient network bandwidth, server distance is far, concurrent connection count limits and other factors also affect download speed.
 
 **Solution**:
 
@@ -843,9 +843,9 @@ git commit -m "Resolve LFS file conflict"
 
 ### 10.5 .gitattributes Not Working
 
-**Problem Description**: Configured tracking rules but files not managed by LFS. Developer configured LFS tracking rules in `.gitattributes` file, but newly added files仍然被存储为 ordinary Git objects.
+**Problem Description**: Configured tracking rules but files not managed by LFS. Developer configured LFS tracking rules in `.gitattributes` file, but newly added files still stored as ordinary Git objects.
 
-**Problem Cause**: This problem通常有几个原因. First, `.gitattributes` file可能没有被 committed to repository. Second, files may have already been added to Git repository, need to remove cache first then re-add. Finally, tracking rule pattern may not match target files.
+**Problem Cause**: This problem usually has several causes. First, `.gitattributes` file may not have been committed to repository. Second, files may have already been added to Git repository, need to remove cache first then re-add. Finally, tracking rule pattern may not match target files.
 
 **Solution**:
 
@@ -867,7 +867,7 @@ git check-attr filter design.psd
 
 ### 10.6 Debug LFS Problems
 
-When encountering无法解决的 LFS problems, can enable detailed log output to help diagnose problems. Git LFS provides multiple environment variables to control log level and output content. By analyzing log information, developers can understand LFS operation's detailed process, find problem's root cause.
+When encountering unresolvable LFS problems, can enable detailed log output to help diagnose problems. Git LFS provides multiple environment variables to control log level and output content. By analyzing log information, developers can understand LFS operation's detailed process, find problem's root cause.
 
 ```bash
 # Enable detailed log
@@ -887,7 +887,7 @@ git config --list | grep lfs
 
 ## Best Practices Summary
 
-During using Git LFS, following best practices can help teams avoid common problems, improve collaboration efficiency.以下是 practice-verified suggestions, covering usage scenario selection, team collaboration and performance optimization.
+During using Git LFS, following best practices can help teams avoid common problems, improve collaboration efficiency. The following are practice-verified suggestions, covering usage scenario selection, team collaboration and performance optimization.
 
 ### When to Use LFS
 

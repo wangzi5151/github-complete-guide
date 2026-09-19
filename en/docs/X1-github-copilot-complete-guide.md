@@ -1,146 +1,146 @@
-# GitHub Copilot 完全指南
+# GitHub Copilot Complete Guide
 
-> 本文档面向中国开发者，全面介绍 GitHub Copilot 产品线的使用方法、最佳实践和进阶技巧。
+> This guide is aimed at developers in China, providing a comprehensive introduction to the GitHub Copilot product line, including usage methods, best practices, and advanced tips.
 
 ---
 
-## 目录
+## Table of Contents
 
-1. [GitHub Copilot 产品线概述](#1-github-copilot-产品线概述)
-2. [Copilot Chat 深度使用](#2-copilot-chat-深度使用)
-3. [Copilot 代码补全最佳实践](#3-copilot-代码补全最佳实践)
-4. [Copilot 与不同IDE的集成](#4-copilot-与不同ide的集成)
-5. [Copilot Extensions 开发入门](#5-copilot-extensions-开发入门)
-6. [Copilot Workspace 详解](#6-copilot-workspace-详解)
+1. [GitHub Copilot Product Line Overview](#1-github-copilot-product-line-overview)
+2. [Deep Dive into Copilot Chat](#2-deep-dive-into-copilot-chat)
+3. [Copilot Code Completion Best Practices](#3-copilot-code-completion-best-practices)
+4. [Copilot IDE Integration](#4-copilot-ide-integration)
+5. [Getting Started with Copilot Extensions](#5-getting-started-with-copilot-extensions)
+6. [Copilot Workspace in Detail](#6-copilot-workspace-in-detail)
 7. [Copilot for CLI](#7-copilot-for-cli)
-8. [Copilot 知识库](#8-copilot-知识库)
-9. [Copilot 的AI模型选择](#9-copilot-的ai模型选择)
-10. [Copilot 企业部署与管理](#10-copilot-企业部署与管理)
-11. [Copilot 安全与隐私](#11-copilot-安全与隐私)
-12. [Copilot 使用技巧与效率提升](#12-copilot-使用技巧与效率提升)
-13. [中国开发者使用Copilot的注意事项](#13-中国开发者使用copilot的注意事项)
-14. [Copilot vs 竞品对比](#14-copilot-vs-竞品对比)
+8. [Copilot Knowledge Bases](#8-copilot-knowledge-bases)
+9. [Copilot AI Model Selection](#9-copilot-ai-model-selection)
+10. [Copilot Enterprise Deployment and Management](#10-copilot-enterprise-deployment-and-management)
+11. [Copilot Security and Privacy](#11-copilot-security-and-privacy)
+12. [Copilot Tips and Efficiency Boosters](#12-copilot-tips-and-efficiency-boosters)
+13. [Notes for Developers in China Using Copilot](#13-notes-for-developers-in-china-using-copilot)
+14. [Copilot vs Competitors](#14-copilot-vs-competitors)
 
 ---
 
-## 1. GitHub Copilot 产品线概述
+## 1. GitHub Copilot Product Line Overview
 
-GitHub Copilot 是 GitHub 与 OpenAI 合作开发的 AI 编程助手，自 2021 年首次推出以来，已经发展成为一个完整的产品家族。Copilot 利用大语言模型（LLM）为开发者提供代码补全、代码生成、代码解释、调试辅助等多种功能。截至 2025 年，Copilot 已经成为全球使用最广泛的 AI 编程工具，拥有数百万付费用户。
+GitHub Copilot is an AI programming assistant developed in collaboration between GitHub and OpenAI. Since its initial launch in 2021, it has grown into a complete product family. Copilot leverages large language models (LLMs) to provide developers with code completion, code generation, code explanation, debugging assistance, and more. As of 2025, Copilot has become the most widely used AI programming tool globally, with millions of paid users.
 
-### 1.1 产品线对比
+### 1.1 Product Line Comparison
 
-| 产品 | 月费 | 目标用户 | 核心特性 |
-|------|------|----------|----------|
-| **Copilot Free** | $0 | 个人开发者/学生 | 有限的代码补全和聊天 |
-| **Copilot Individual** | $10/月 | 个人开发者 | 完整的代码补全、Chat、CLI |
-| **Copilot Business** | $19/月/用户 | 企业团队 | 管理策略、知识库、审计日志 |
-| **Copilot Enterprise** | $39/月/用户 | 大型企业 | 自定义模型、Copilot Workspace、高级安全 |
+| Product | Monthly Fee | Target Users | Core Features |
+|---------|------------|--------------|---------------|
+| **Copilot Free** | $0 | Individual developers/students | Limited code completion and chat |
+| **Copilot Individual** | $10/month | Individual developers | Full code completion, Chat, CLI |
+| **Copilot Business** | $19/month/user | Enterprise teams | Management policies, knowledge bases, audit logs |
+| **Copilot Enterprise** | $39/month/user | Large enterprises | Custom models, Copilot Workspace, advanced security |
 
-### 1.2 Copilot Free（免费版）
+### 1.2 Copilot Free
 
-Copilot Free 是 2024 年底推出的产品，旨在让更多开发者体验 AI 编程的力量。免费版提供有限的代码补全次数和聊天消息数量。
+Copilot Free was launched at the end of 2024, aiming to let more developers experience the power of AI programming. The free version offers limited code completions and chat messages per month.
 
 ```text
-Copilot Free 包含：
-- 每月 2000 次代码补全
-- 每月 50 条聊天消息
-- 基础的代码补全功能
-- 支持 VS Code 和 JetBrains
-- 不支持 Copilot CLI
-- 不支持 Copilot Extensions
+Copilot Free includes:
+- 2000 code completions per month
+- 50 chat messages per month
+- Basic code completion features
+- Support for VS Code and JetBrains
+- No Copilot CLI support
+- No Copilot Extensions support
 ```
 
-**适用场景：** 学生学习编程、偶尔使用 AI 辅助的开发者、想要体验 Copilot 功能的用户。
+**Use cases:** Students learning programming, developers who occasionally use AI assistance, users who want to try out Copilot features.
 
-### 1.3 Copilot Individual（个人版）
+### 1.3 Copilot Individual
 
-个人版是面向独立开发者的完整产品，提供无限的代码补全和聊天功能。
+The Individual plan is a complete product for independent developers, offering unlimited code completions and chat functionality.
 
 ```text
-Copilot Individual 包含：
-- 无限代码补全
-- 无限聊天消息
-- Copilot Chat（IDE 内和 GitHub.com）
+Copilot Individual includes:
+- Unlimited code completions
+- Unlimited chat messages
+- Copilot Chat (in IDE and on GitHub.com)
 - Copilot for CLI
-- 支持所有 IDE 集成
-- 支持 Copilot Extensions
-- 多模型选择（GPT-4o、Claude、Gemini）
+- Support for all IDE integrations
+- Copilot Extensions support
+- Multiple model choices (GPT-4o, Claude, Gemini)
 ```
 
-**适用场景：** 专业独立开发者、自由职业者、开源贡献者。
+**Use cases:** Professional independent developers, freelancers, open source contributors.
 
-### 1.4 Copilot Business（商业版）
+### 1.4 Copilot Business
 
-商业版面向企业团队，增加了管理和安全控制功能。
+The Business plan is designed for enterprise teams, adding management and security control features.
 
 ```text
-Copilot Business 在 Individual 基础上增加：
-- 组织级管理控制
-- 策略管理（启用/禁用特定功能）
-- 审计日志
-- IP 合规性保证
-- 知识库（Copilot Knowledge Bases）
-- 排除公共代码建议
-- SAML 单点登录（SSO）
-- 专属客户支持
+Copilot Business adds on top of Individual:
+- Organization-level management controls
+- Policy management (enable/disable specific features)
+- Audit logs
+- IP compliance guarantees
+- Knowledge bases (Copilot Knowledge Bases)
+- Exclude public code suggestions
+- SAML single sign-on (SSO)
+- Dedicated customer support
 ```
 
-### 1.5 Copilot Enterprise（企业版）
+### 1.5 Copilot Enterprise
 
-企业版是功能最全面的产品，专为大型组织设计。
+The Enterprise plan is the most feature-complete product, designed specifically for large organizations.
 
 ```text
-Copilot Enterprise 在 Business 基础上增加：
+Copilot Enterprise adds on top of Business:
 - Copilot Workspace
-- 自定义模型微调
-- 高级知识库功能
-- Copilot for Pull Requests（增强版）
-- 代码审查辅助
-- 文档搜索与问答
-- 与内部系统的深度集成
-- 专属技术客户经理
+- Custom model fine-tuning
+- Advanced knowledge base features
+- Copilot for Pull Requests (enhanced)
+- Code review assistance
+- Document search and Q&A
+- Deep integration with internal systems
+- Dedicated technical account manager
 ```
 
 ---
 
-## 2. Copilot Chat 深度使用
+## 2. Deep Dive into Copilot Chat
 
-Copilot Chat 是 Copilot 的对话式 AI 界面，开发者可以通过自然语言与 AI 交互，获取代码建议、解释代码、调试问题等。Chat 功能已经深度集成到多个平台中，包括 VS Code、JetBrains IDE、GitHub.com 以及命令行工具。
+Copilot Chat is Copilot's conversational AI interface. Developers can interact with the AI using natural language to get code suggestions, explain code, debug issues, and more. The Chat feature has been deeply integrated into multiple platforms, including VS Code, JetBrains IDEs, GitHub.com, and command-line tools.
 
-### 2.1 Chat 基础用法
+### 2.1 Chat Basics
 
-在 VS Code 中，可以通过以下方式打开 Copilot Chat：
-
-```text
-快捷键：
-- Ctrl+Shift+I（Windows/Linux）
-- Cmd+Shift+I（macOS）
-
-或者：
-- 点击侧边栏的 Copilot 图标
-- 使用命令面板：Ctrl+Shift+P → "Copilot: Open Chat"
-```
-
-### 2.2 Chat Commands（斜杠命令）
-
-Copilot Chat 支持多种斜杠命令，用于指定特定的操作类型：
+In VS Code, you can open Copilot Chat in the following ways:
 
 ```text
-常用命令：
-/explain    - 解释选中的代码
-/fix        - 修复代码中的问题
-/test       - 为代码生成单元测试
-/doc        - 生成文档注释
-/commit     - 生成 commit message
-/simplify   - 简化代码
-/optimize   - 优化代码性能
-/security   - 检查安全漏洞
+Keyboard shortcuts:
+- Ctrl+Shift+I (Windows/Linux)
+- Cmd+Shift+I (macOS)
+
+Or:
+- Click the Copilot icon in the sidebar
+- Use the Command Palette: Ctrl+Shift+P → "Copilot: Open Chat"
 ```
 
-**使用示例：**
+### 2.2 Chat Commands (Slash Commands)
+
+Copilot Chat supports various slash commands for specifying specific action types:
+
+```text
+Common commands:
+/explain    - Explain selected code
+/fix        - Fix issues in code
+/test       - Generate unit tests for code
+/doc        - Generate documentation comments
+/commit     - Generate a commit message
+/simplify   - Simplify code
+/optimize   - Optimize code performance
+/security   - Check for security vulnerabilities
+```
+
+**Usage example:**
 
 ```python
-# 选中以下代码后输入 /explain
+# After selecting the following code, type /explain
 def quicksort(arr):
     if len(arr) <= 1:
         return arr
@@ -152,128 +152,128 @@ def quicksort(arr):
 ```
 
 ```text
-# 在 Chat 中输入：
-/explain 这个快速排序的实现
+# In Chat, type:
+/explain this quicksort implementation
 
-# Copilot 会详细解释：
-# 1. 算法选择基准元素（pivot）的方式
-# 2. 三路分区的思想
-# 3. 递归调用的过程
-# 4. 时间复杂度分析
+# Copilot will explain in detail:
+# 1. How the algorithm selects the pivot element
+# 2. The three-way partitioning approach
+# 3. The recursive call process
+# 4. Time complexity analysis
 ```
 
-### 2.3 上下文引用（Context References）
+### 2.3 Context References
 
-Copilot Chat 支持通过特定的引用语法来提供上下文信息，这对于大型项目的代码理解至关重要。
+Copilot Chat supports providing context information through specific reference syntax, which is crucial for code understanding in large projects.
 
 ```text
-引用类型：
-@workspace   - 引用整个工作区
-@terminal    - 引用终端输出
-@codebase    - 引用代码库
-@file        - 引用特定文件
-@selection   - 引用选中的代码
-@vscode      - 引用 VS Code 配置
-@github      - 引用 GitHub 信息
+Reference types:
+@workspace   - Reference the entire workspace
+@terminal    - Reference terminal output
+@codebase    - Reference the codebase
+@file        - Reference a specific file
+@selection   - Reference selected code
+@vscode      - Reference VS Code configuration
+@github      - Reference GitHub information
 ```
 
-**高级用法示例：**
+**Advanced usage examples:**
 
 ```text
-# 分析整个项目的架构
-@workspace 请分析这个项目的整体架构，包括主要模块和它们之间的依赖关系
+# Analyze the entire project architecture
+@workspace Please analyze the overall architecture of this project, including main modules and their dependencies
 
-# 基于终端输出调试
-@terminal 这个错误信息是什么意思？如何修复？
+# Debug based on terminal output
+@terminal What does this error message mean? How can I fix it?
 
-# 引用特定文件进行对比
-@file:src/old_api.py @file:src/new_api.py 请对比这两个 API 实现的差异
+# Reference specific files for comparison
+@file:src/old_api.py @file:src/new_api.py Please compare the differences between these two API implementations
 
-# 结合 GitHub Issues
-@github #123 这个 issue 描述的问题，应该如何修复？
+# Combine with GitHub Issues
+@github #123 How should I fix the issue described in this issue?
 ```
 
-### 2.4 多文件编辑（Multi-file Editing）
+### 2.4 Multi-file Editing
 
-Copilot Chat 的多文件编辑功能允许开发者通过一次对话修改多个文件，这在重构和功能开发中非常有用。
+Copilot Chat's multi-file editing feature allows developers to modify multiple files in a single conversation, which is very useful for refactoring and feature development.
 
 ```text
-# 在 Chat 中描述需求：
-我需要给用户注册功能添加邮箱验证，需要修改以下文件：
-1. models/user.py - 添加 email_verified 字段
-2. routes/auth.py - 添加验证路由
-3. services/email.py - 添加发送验证邮件的服务
-4. templates/verify.html - 添加验证页面模板
+# In Chat, describe your requirements:
+I need to add email verification to the user registration feature. The following files need to be modified:
+1. models/user.py - Add email_verified field
+2. routes/auth.py - Add verification route
+3. services/email.py - Add verification email service
+4. templates/verify.html - Add verification page template
 
-# Copilot 会生成所有需要的代码变更
+# Copilot will generate all the necessary code changes
 ```
 
-**Edit Mode（编辑模式）：**
+**Edit Mode:**
 
-在 VS Code 中，Copilot Chat 有一个特殊的 Edit Mode，可以直接将 AI 的建议应用到多个文件：
+In VS Code, Copilot Chat has a special Edit Mode that can apply AI suggestions directly to multiple files:
 
 ```text
-1. 打开 Copilot Chat
-2. 点击 Chat 输入框左侧的 "Edit" 图标
-3. 描述你想要做的更改
-4. Copilot 会生成一个 diff 预览
-5. 你可以逐个文件审查和接受更改
+1. Open Copilot Chat
+2. Click the "Edit" icon to the left of the Chat input box
+3. Describe the changes you want to make
+4. Copilot will generate a diff preview
+5. You can review and accept changes file by file
 ```
 
-### 2.5 Agent Mode（智能体模式）
+### 2.5 Agent Mode
 
-Agent Mode 是 Copilot Chat 的高级功能，允许 AI 自主执行多步骤任务：
+Agent Mode is an advanced feature of Copilot Chat that allows the AI to autonomously execute multi-step tasks:
 
 ```text
-# 在 Chat 中描述复杂任务：
-将这个 Express.js 应用从 JavaScript 迁移到 TypeScript
+# In Chat, describe the complex task:
+Migrate this Express.js application from JavaScript to TypeScript
 
-# Agent Mode 会：
-# 1. 分析项目结构
-# 2. 创建 tsconfig.json
-# 3. 安装必要的类型定义
-# 4. 逐个文件转换为 TypeScript
-# 5. 修复类型错误
-# 6. 验证构建成功
+# Agent Mode will:
+# 1. Analyze the project structure
+# 2. Create tsconfig.json
+# 3. Install necessary type definitions
+# 4. Convert files to TypeScript one by one
+# 5. Fix type errors
+# 6. Verify the build succeeds
 ```
 
 ---
 
-## 3. Copilot 代码补全最佳实践
+## 3. Copilot Code Completion Best Practices
 
-### 3.1 理解代码补全的工作原理
+### 3.1 Understanding How Code Completion Works
 
-Copilot 的代码补全基于上下文预测最可能的代码片段。它会分析：
+Copilot's code completion is based on predicting the most likely code snippets from context. It analyzes:
 
 ```text
-上下文来源：
-1. 当前文件的代码
-2. 打开的其他文件
-3. 项目结构和配置文件
-4. 注释和文档
-5. 类型信息（TypeScript、Python type hints）
-6. 函数签名和参数名
-7. 测试文件中的期望值
+Context sources:
+1. Code in the current file
+2. Other open files
+3. Project structure and configuration files
+4. Comments and documentation
+5. Type information (TypeScript, Python type hints)
+6. Function signatures and parameter names
+7. Expected values in test files
 ```
 
-### 3.2 通过注释引导补全
+### 3.2 Guiding Completion with Comments
 
-编写清晰的注释是引导 Copilot 生成高质量代码的关键技巧：
+Writing clear comments is a key technique for guiding Copilot to generate high-quality code:
 
 ```python
-# 不好的写法：注释太简单
-# 处理数据
+# Bad example: Comment too vague
+# Process data
 
-# 好的写法：注释具体明确
-# 从 CSV 文件读取用户数据，按注册日期排序，
-# 过滤掉未验证邮箱的用户，返回前 100 条记录
+# Good example: Comment is specific and clear
+# Read user data from CSV file, sort by registration date,
+# filter out users with unverified email, return the top 100 records
 def get_recent_verified_users(csv_path: str, limit: int = 100) -> list[dict]:
-    # Copilot 会根据这个详细的描述生成准确的实现
+    # Copilot will generate an accurate implementation based on this detailed description
 ```
 
-### 3.3 类型提示增强补全
+### 3.3 Type Hints to Enhance Completion
 
-在 Python 中使用类型提示可以显著提高 Copilot 的补全质量：
+Using type hints in Python can significantly improve Copilot's completion quality:
 
 ```python
 from typing import Optional
@@ -287,21 +287,21 @@ class UserProfile(BaseModel):
     created_at: datetime
     bio: Optional[str] = None
 
-# 类型提示帮助 Copilot 理解数据结构
+# Type hints help Copilot understand data structures
 def update_user_profile(
     user_id: int,
     profile_data: dict[str, any]
 ) -> Optional[UserProfile]:
-    """更新用户资料，返回更新后的资料或 None（如果用户不存在）"""
-    # Copilot 会根据类型提示生成类型安全的代码
+    """Update user profile, return updated profile or None (if user doesn't exist)"""
+    # Copilot will generate type-safe code based on the type hints
 ```
 
-### 3.4 测试驱动的代码生成
+### 3.4 Test-Driven Code Generation
 
-先写测试，再让 Copilot 生成实现代码：
+Write tests first, then let Copilot generate the implementation:
 
 ```python
-# 步骤 1：编写测试
+# Step 1: Write tests
 import pytest
 from calculator import Calculator
 
@@ -321,57 +321,57 @@ class TestCalculator:
         result = self.calc.evaluate("(2 + 3) * 4 / 2")
         assert result == 10.0
 
-# 步骤 2：在另一个文件中，输入类名
-# Copilot 会根据测试推断出完整的实现
+# Step 2: In another file, type the class name
+# Copilot will infer the complete implementation from the tests
 class Calculator:
-    # Copilot 会生成所有需要的方法
+    # Copilot will generate all the necessary methods
 ```
 
-### 3.5 代码补全的接受与拒绝
+### 3.5 Accepting and Rejecting Code Completions
 
 ```text
-操作指南：
-- Tab：接受整个建议
-- Ctrl+→ / Cmd+→：逐字接受建议
-- Esc：拒绝建议
-- Alt+] / Option+]：查看下一个建议
-- Alt+[ / Option+[：查看上一个建议
+Action guide:
+- Tab: Accept the entire suggestion
+- Ctrl+→ / Cmd+→: Accept suggestion word by word
+- Esc: Reject suggestion
+- Alt+] / Option+]: View next suggestion
+- Alt+[ / Option+[: View previous suggestion
 ```
 
-### 3.6 多行补全技巧
+### 3.6 Multi-line Completion Tips
 
 ```text
-技巧：
-1. 写好函数签名后换行，Copilot 会生成函数体
-2. 写好类的前几个方法，Copilot 会生成后续方法
-3. 在列表推导式中写好第一个条件，Copilot 会补全整个表达式
-4. 写好 if 语句的条件，Copilot 会生成 if 和 else 分支
+Tips:
+1. Write the function signature and press Enter; Copilot will generate the function body
+2. Write the first few methods of a class; Copilot will generate subsequent methods
+3. Write the first condition in a list comprehension; Copilot will complete the entire expression
+4. Write the condition of an if statement; Copilot will generate both if and else branches
 ```
 
 ---
 
-## 4. Copilot 与不同IDE的集成
+## 4. Copilot IDE Integration
 
-### 4.1 VS Code 集成
+### 4.1 VS Code Integration
 
-VS Code 是 Copilot 支持最完善的 IDE，所有功能都可以在这里使用。
+VS Code is the IDE with the most complete Copilot support; all features are available here.
 
-**安装步骤：**
+**Installation steps:**
 
 ```text
-1. 打开 VS Code
-2. 进入扩展市场（Ctrl+Shift+X）
-3. 搜索 "GitHub Copilot"
-4. 安装以下扩展：
-   - GitHub Copilot（核心功能）
-   - GitHub Copilot Chat（对话功能）
-5. 登录 GitHub 账号并授权
+1. Open VS Code
+2. Go to the Extensions Marketplace (Ctrl+Shift+X)
+3. Search for "GitHub Copilot"
+4. Install the following extensions:
+   - GitHub Copilot (core functionality)
+   - GitHub Copilot Chat (conversational functionality)
+5. Log in to your GitHub account and authorize
 ```
 
-**VS Code 特有功能：**
+**VS Code-specific features:**
 
 ```json
-// settings.json 配置
+// settings.json configuration
 {
   "github.copilot.enable": {
     "*": true,
@@ -385,40 +385,40 @@ VS Code 是 Copilot 支持最完善的 IDE，所有功能都可以在这里使�
 }
 ```
 
-### 4.2 JetBrains 集成
+### 4.2 JetBrains Integration
 
-Copilot 支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand 等所有 JetBrains IDE。
+Copilot supports IntelliJ IDEA, PyCharm, WebStorm, GoLand, and all other JetBrains IDEs.
 
-**安装步骤：**
-
-```text
-1. 打开 JetBrains IDE
-2. 进入 Settings → Plugins
-3. 搜索 "GitHub Copilot"
-4. 安装插件并重启 IDE
-5. 通过 Tools → GitHub Copilot 登录
-```
-
-**JetBrains 特有配置：**
+**Installation steps:**
 
 ```text
-# 自定义快捷键（Settings → Keymap）
-- 接受建议：Tab（默认）
-- 打开 Chat：Ctrl+Shift+I
-- 查看下一个建议：Alt+]
-- 内联聊天：Ctrl+Shift+I
+1. Open your JetBrains IDE
+2. Go to Settings → Plugins
+3. Search for "GitHub Copilot"
+4. Install the plugin and restart the IDE
+5. Log in via Tools → GitHub Copilot
 ```
 
-### 4.3 Neovim 集成
+**JetBrains-specific configuration:**
 
-Neovim 用户可以通过社区插件使用 Copilot。
+```text
+# Custom keyboard shortcuts (Settings → Keymap)
+- Accept suggestion: Tab (default)
+- Open Chat: Ctrl+Shift+I
+- View next suggestion: Alt+]
+- Inline chat: Ctrl+Shift+I
+```
 
-**安装配置（使用 lazy.nvim）：**
+### 4.3 Neovim Integration
+
+Neovim users can use Copilot through community plugins.
+
+**Installation configuration (using lazy.nvim):**
 
 ```lua
 -- ~/.config/nvim/lua/plugins/copilot.lua
 return {
-  -- Copilot 核心插件
+  -- Copilot core plugin
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -462,7 +462,7 @@ return {
       })
     end,
   },
-  -- Copilot Chat 插件
+  -- Copilot Chat plugin
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "canary",
@@ -475,22 +475,22 @@ return {
         debug = true,
         prompts = {
           Explain = {
-            prompt = "/COPILOT_EXPLAIN 请用中文解释这段代码的作用",
+            prompt = "/COPILOT_EXPLAIN Please explain what this code does in Chinese",
           },
           Review = {
-            prompt = "/COPILOT_REVIEW 请审查这段代码并提出改进建议",
+            prompt = "/COPILOT_REVIEW Please review this code and suggest improvements",
           },
           Fix = {
-            prompt = "/COPILOT_FIX 这段代码有问题，请修复",
+            prompt = "/COPILOT_FIX There is a problem with this code, please fix it",
           },
           Optimize = {
-            prompt = "/COPILOT_OPTIMIZE 请优化这段代码的性能",
+            prompt = "/COPILOT_OPTIMIZE Please optimize the performance of this code",
           },
           Docs = {
-            prompt = "/COPILOT_DOCS 请为这段代码添加中文文档注释",
+            prompt = "/COPILOT_DOCS Please add Chinese documentation comments to this code",
           },
           Tests = {
-            prompt = "/COPILOT_TESTS 请为这段代码生成单元测试",
+            prompt = "/COPILOT_TESTS Please generate unit tests for this code",
           },
         },
       })
@@ -499,63 +499,63 @@ return {
 }
 ```
 
-### 4.4 Xcode 集成
+### 4.4 Xcode Integration
 
-2024 年底，GitHub 推出了 Copilot for Xcode 的公开预览版。
+At the end of 2024, GitHub released a public preview of Copilot for Xcode.
 
-**安装步骤：**
+**Installation steps:**
 
 ```text
-1. 确保 macOS 版本 >= 13.0
-2. 从 GitHub 下载 Copilot for Xcode 扩展
-3. 安装扩展并在系统偏好设置中启用
-4. 在 Xcode 中激活扩展
-5. 登录 GitHub 账号
+1. Ensure macOS version >= 13.0
+2. Download the Copilot for Xcode extension from GitHub
+3. Install the extension and enable it in System Preferences
+4. Activate the extension in Xcode
+5. Log in to your GitHub account
 
-注意：Xcode 版本的 Copilot 功能相对有限，
-主要支持代码补全，不支持完整的 Chat 功能。
+Note: The Xcode version of Copilot has relatively limited features,
+mainly supporting code completion, without full Chat functionality.
 ```
 
 ---
 
-## 5. Copilot Extensions 开发入门
+## 5. Getting Started with Copilot Extensions
 
-### 5.1 什么是 Copilot Extensions
+### 5.1 What Are Copilot Extensions
 
-Copilot Extensions 允许开发者扩展 Copilot 的功能，集成第三方服务和工具。通过 Extensions，你可以：
+Copilot Extensions allow developers to extend Copilot's functionality by integrating third-party services and tools. Through Extensions, you can:
 
 ```text
-- 将内部 API 文档集成到 Copilot
-- 连接公司的知识库系统
-- 集成特定的开发工具
-- 创建自定义的 Chat 命令
-- 与数据库、CI/CD 系统等交互
+- Integrate internal API documentation into Copilot
+- Connect to your company's knowledge base system
+- Integrate specific development tools
+- Create custom Chat commands
+- Interact with databases, CI/CD systems, and more
 ```
 
-### 5.2 开发环境搭建
+### 5.2 Development Environment Setup
 
 ```bash
-# 安装 GitHub Copilot Extensions SDK
+# Install GitHub Copilot Extensions SDK
 npm install -g @github/copilot-extension-sdk
 
-# 创建新项目
+# Create a new project
 npx create-copilot-extension my-extension
 cd my-extension
 
-# 项目结构
+# Project structure
 my-extension/
 ├── src/
-│   ├── index.ts          # 入口文件
+│   ├── index.ts          # Entry file
 │   ├── handlers/
-│   │   ├── chat.ts       # Chat 处理器
-│   │   └── completion.ts # 补全处理器
+│   │   ├── chat.ts       # Chat handler
+│   │   └── completion.ts # Completion handler
 │   └── utils/
 ├── package.json
 ├── tsconfig.json
 └── README.md
 ```
 
-### 5.3 基础 Extension 实现
+### 5.3 Basic Extension Implementation
 
 ```typescript
 // src/index.ts
@@ -563,20 +563,20 @@ import { CopilotExtension, CopilotRequest, CopilotResponse } from '@github/copil
 
 const extension = new CopilotExtension({
   name: 'my-internal-docs',
-  description: '集成内部 API 文档的 Copilot 扩展',
+  description: 'Copilot extension that integrates internal API documentation',
   version: '1.0.0',
 });
 
-// 处理 Chat 请求
+// Handle Chat requests
 extension.onChat(async (request: CopilotRequest): Promise<CopilotResponse> => {
   const userMessage = request.message;
   
-  // 从内部知识库搜索相关文档
+  // Search for related documentation in the internal knowledge base
   const docs = await searchInternalDocs(userMessage);
   
-  // 构建响应
+  // Build response
   return {
-    message: `根据内部文档，以下是相关信息：\n\n${docs}`,
+    message: `Based on internal documentation, here is the relevant information:\n\n${docs}`,
     references: docs.map(doc => ({
       title: doc.title,
       url: doc.url,
@@ -585,11 +585,11 @@ extension.onChat(async (request: CopilotRequest): Promise<CopilotResponse> => {
   };
 });
 
-// 处理代码补全请求
+// Handle code completion requests
 extension.onCompletion(async (request: CopilotRequest) => {
   const context = request.context;
   
-  // 如果检测到 API 调用，提供内部 API 的建议
+  // If an API call is detected, provide internal API suggestions
   if (isApiCall(context)) {
     const suggestions = await getApiSuggestions(context);
     return { completions: suggestions };
@@ -598,30 +598,30 @@ extension.onCompletion(async (request: CopilotRequest) => {
   return { completions: [] };
 });
 
-// 启动服务
+// Start the service
 extension.listen(3000, () => {
   console.log('Copilot Extension running on port 3000');
 });
 
-// 辅助函数
+// Helper functions
 async function searchInternalDocs(query: string) {
-  // 实现内部文档搜索逻辑
+  // Implement internal document search logic
   const response = await fetch(`https://internal-api.company.com/docs/search?q=${query}`);
   return response.json();
 }
 
 function isApiCall(context: any): boolean {
-  // 检测是否在调用内部 API
+  // Detect if an internal API call is being made
   return context.code.includes('internal-api');
 }
 
 async function getApiSuggestions(context: any) {
-  // 获取 API 调用建议
+  // Get API call suggestions
   return [];
 }
 ```
 
-### 5.4 部署 Extension
+### 5.4 Deploying an Extension
 
 ```yaml
 # .github/workflows/deploy-extension.yml
@@ -650,326 +650,326 @@ jobs:
         
       - name: Deploy to cloud
         run: |
-          # 部署到你的云服务（AWS、Azure、Vercel 等）
+          # Deploy to your cloud service (AWS, Azure, Vercel, etc.)
           echo "Deploying extension..."
 ```
 
 ---
 
-## 6. Copilot Workspace 详解
+## 6. Copilot Workspace in Detail
 
-### 6.1 什么是 Copilot Workspace
+### 6.1 What Is Copilot Workspace
 
-Copilot Workspace 是一个 AI 驱动的开发环境，它可以帮助开发者从 Issue 到 Pull Request 的完整开发流程。目前仅对 Copilot Enterprise 用户开放。
+Copilot Workspace is an AI-driven development environment that helps developers through the complete workflow from Issue to Pull Request. It is currently only available to Copilot Enterprise users.
 
 ```text
-核心功能：
-1. 从 GitHub Issue 自动分析需求
-2. 生成实现计划（Specification）
-3. 自动生成代码变更
-4. 运行测试验证
-5. 创建 Pull Request
+Core features:
+1. Automatically analyze requirements from GitHub Issues
+2. Generate an implementation plan (Specification)
+3. Automatically generate code changes
+4. Run tests for verification
+5. Create a Pull Request
 ```
 
-### 6.2 使用流程
+### 6.2 Usage Workflow
 
 ```text
-步骤 1：在 GitHub Issue 页面点击 "Open in Copilot Workspace"
+Step 1: On the GitHub Issue page, click "Open in Copilot Workspace"
 
-步骤 2：Copilot 分析 Issue 内容
-- 理解需求描述
-- 分析相关代码
-- 识别需要修改的文件
+Step 2: Copilot analyzes the Issue content
+- Understand the requirement description
+- Analyze related code
+- Identify files that need to be modified
 
-步骤 3：生成实现计划
-- Copilot 提出实现方案
-- 开发者可以修改和调整
-- 讨论技术细节
+Step 3: Generate implementation plan
+- Copilot proposes an implementation approach
+- Developers can modify and adjust
+- Discuss technical details
 
-步骤 4：代码生成
-- Copilot 自动生成代码变更
-- 显示 diff 预览
-- 开发者审查和修改
+Step 4: Code generation
+- Copilot automatically generates code changes
+- Display a diff preview
+- Developers review and modify
 
-步骤 5：测试与验证
-- 自动运行测试
-- 检查代码质量
-- 修复发现的问题
+Step 5: Testing and verification
+- Automatically run tests
+- Check code quality
+- Fix discovered issues
 
-步骤 6：创建 PR
-- 自动生成 PR 描述
-- 关联相关 Issue
-- 提交代码审查
+Step 6: Create PR
+- Automatically generate PR description
+- Link related Issues
+- Submit for code review
 ```
 
-### 6.3 实际使用示例
+### 6.3 Practical Usage Example
 
 ```text
-场景：修复一个 Bug
+Scenario: Fix a bug
 
-Issue #456: 用户登录时偶尔出现 500 错误
+Issue #456: Users occasionally encounter 500 errors during login
 
-在 Copilot Workspace 中：
+In Copilot Workspace:
 
-1. Copilot 分析 Issue：
-   "根据错误日志和代码分析，问题出在数据库连接池
-    在高并发时连接超时。"
+1. Copilot analyzes the Issue:
+   "Based on error logs and code analysis, the issue is in the database connection pool
+    timing out under high concurrency."
 
-2. 生成计划：
-   - 修改 database.py 中的连接池配置
-   - 添加重试机制
-   - 增加连接超时的错误处理
-   - 添加相关的单元测试
+2. Generate plan:
+   - Modify connection pool configuration in database.py
+   - Add retry mechanism
+   - Add error handling for connection timeouts
+   - Add related unit tests
 
-3. 代码变更预览：
-   - database.py: 修改连接池参数，添加重试装饰器
-   - auth.py: 添加异常处理
-   - tests/test_database.py: 添加连接池测试
+3. Code change preview:
+   - database.py: Modify connection pool parameters, add retry decorator
+   - auth.py: Add exception handling
+   - tests/test_database.py: Add connection pool tests
 
-4. 运行测试：所有测试通过
+4. Run tests: All tests pass
 
-5. 创建 PR：自动关联 Issue #456
+5. Create PR: Automatically linked to Issue #456
 ```
 
 ---
 
 ## 7. Copilot for CLI
 
-### 7.1 安装与配置
+### 7.1 Installation and Configuration
 
-Copilot for CLI 是一个命令行工具，帮助开发者在终端中使用 AI。
+Copilot for CLI is a command-line tool that helps developers use AI in the terminal.
 
 ```bash
-# 安装（通过 npm）
+# Install (via npm)
 npm install -g @githubnext/github-copilot-cli
 
-# 或者通过 Homebrew（macOS）
+# Or via Homebrew (macOS)
 brew install github-copilot-cli
 
-# 登录
+# Log in
 gh auth login
 gh extension install github/gh-copilot
 
-# 验证安装
+# Verify installation
 gh copilot --version
 ```
 
-### 7.2 核心功能
+### 7.2 Core Features
 
 ```bash
-# 解释命令
+# Explain a command
 gh copilot explain "tar -czf archive.tar.gz /path/to/dir"
-# 输出：
-# tar - 打包工具
-# -c 创建新归档
-# -z 使用 gzip 压缩
-# -f 指定文件名
-# archive.tar.gz 输出文件名
-# /path/to/dir 要打包的目录
+# Output:
+# tar - archiving tool
+# -c create a new archive
+# -z use gzip compression
+# -f specify filename
+# archive.tar.gz output filename
+# /path/to/dir directory to archive
 
-# 建议命令
-gh copilot suggest "我想找到当前目录下所有大于 100MB 的文件"
-# 建议：find . -type f -size +100M
+# Suggest a command
+gh copilot suggest "I want to find all files larger than 100MB in the current directory"
+# Suggestion: find . -type f -size +100M
 
-# 修正命令
-gh copilot suggest "我运行了 'git push origin main' 但报错" --type fix
-# 建议：先运行 git pull origin main 解决冲突后再 push
+# Fix a command
+gh copilot suggest "I ran 'git push origin main' but got an error" --type fix
+# Suggestion: First run git pull origin main to resolve conflicts, then push
 ```
 
-### 7.3 实用别名配置
+### 7.3 Useful Alias Configuration
 
 ```bash
-# 在 ~/.bashrc 或 ~/.zshrc 中添加别名
+# Add aliases in ~/.bashrc or ~/.zshrc
 alias '??'='gh copilot suggest'
 alias '??explain'='gh copilot explain'
 
-# 使用示例
-?? "怎么查看 Docker 容器的日志"
+# Usage example
+?? "How to view Docker container logs"
 ??explain "docker logs -f container_name"
 ```
 
 ---
 
-## 8. Copilot 知识库
+## 8. Copilot Knowledge Bases
 
-### 8.1 什么是 Copilot Knowledge Bases
+### 8.1 What Are Copilot Knowledge Bases
 
-Copilot Knowledge Bases 允许组织创建自定义的知识库，让 Copilot 能够基于组织内部的文档和代码提供建议。
+Copilot Knowledge Bases allow organizations to create custom knowledge bases, enabling Copilot to provide suggestions based on internal documentation and code.
 
 ```text
-适用场景：
-- 公司内部 API 文档
-- 架构设计文档
-- 编码规范和最佳实践
-- 业务逻辑文档
-- 历史问题解决方案
+Use cases:
+- Internal company API documentation
+- Architecture design documents
+- Coding standards and best practices
+- Business logic documentation
+- Historical issue solutions
 ```
 
-### 8.2 创建知识库
+### 8.2 Creating a Knowledge Base
 
 ```text
-步骤：
-1. 进入 GitHub.com → 你的组织
+Steps:
+1. Go to GitHub.com → Your organization
 2. Settings → Copilot → Knowledge Bases
-3. 点击 "New Knowledge Base"
-4. 选择知识库来源：
-   - 指定仓库
-   - 指定目录
-   - 指定文件类型
-5. 配置索引选项
-6. 等待索引完成
+3. Click "New Knowledge Base"
+4. Select knowledge base source:
+   - Specify repositories
+   - Specify directories
+   - Specify file types
+5. Configure indexing options
+6. Wait for indexing to complete
 ```
 
-### 8.3 使用知识库
+### 8.3 Using Knowledge Bases
 
 ```text
-在 Copilot Chat 中引用知识库：
+Reference a knowledge base in Copilot Chat:
 
 @knowledgebase #internal-api-docs
-如何使用我们的支付 API 创建订单？
+How do I create an order using our payment API?
 
-# Copilot 会基于知识库中的文档提供准确的回答，
-# 包括 API 端点、请求格式、示例代码等
+# Copilot will provide accurate answers based on the knowledge base documentation,
+# including API endpoints, request formats, example code, and more
 ```
 
-### 8.4 知识库最佳实践
+### 8.4 Knowledge Base Best Practices
 
 ```text
-1. 组织文档结构
-   - 按功能模块分类
-   - 使用清晰的命名规范
-   - 保持文档更新
+1. Organize documentation structure
+   - Categorize by functional modules
+   - Use clear naming conventions
+   - Keep documentation up to date
 
-2. 优化索引质量
-   - 使用 Markdown 格式
-   - 添加代码示例
-   - 包含常见问题解答
+2. Optimize indexing quality
+   - Use Markdown format
+   - Add code examples
+   - Include FAQs
 
-3. 权限管理
-   - 控制哪些人可以访问
-   - 敏感信息不要放入知识库
-   - 定期审查访问权限
+3. Permission management
+   - Control who can access
+   - Don't put sensitive information in knowledge bases
+   - Regularly review access permissions
 ```
 
 ---
 
-## 9. Copilot 的AI模型选择
+## 9. Copilot AI Model Selection
 
-### 9.1 可用模型
+### 9.1 Available Models
 
-Copilot 支持多个 AI 模型，用户可以根据需求选择：
+Copilot supports multiple AI models, and users can choose based on their needs:
 
 ```text
-模型选择（2025 年）：
+Model options (2025):
 
-1. GPT-4o（默认）
-   - OpenAI 的旗舰模型
-   - 综合能力最强
-   - 代码生成质量高
+1. GPT-4o (default)
+   - OpenAI's flagship model
+   - Strongest overall capabilities
+   - High code generation quality
 
 2. Claude 3.5 Sonnet
-   - Anthropic 的模型
-   - 长文本理解能力强
-   - 代码解释详细
+   - Anthropic's model
+   - Strong long-text understanding
+   - Detailed code explanations
 
 3. Claude 3.7 Sonnet
-   - 最新的 Claude 模型
-   - 推理能力增强
-   - 复杂任务表现好
+   - Latest Claude model
+   - Enhanced reasoning capabilities
+   - Better performance on complex tasks
 
 4. Gemini 1.5 Pro
-   - Google 的模型
-   - 多语言支持好
-   - 上下文窗口大
+   - Google's model
+   - Good multilingual support
+   - Large context window
 
 5. o1-preview / o1-mini
-   - OpenAI 的推理模型
-   - 适合复杂算法问题
-   - 数学和逻辑推理强
+   - OpenAI's reasoning models
+   - Suitable for complex algorithm problems
+   - Strong mathematical and logical reasoning
 ```
 
-### 9.2 模型切换方法
+### 9.2 How to Switch Models
 
 ```text
-在 VS Code 中切换模型：
-1. 打开 Copilot Chat
-2. 点击 Chat 顶部的模型选择器
-3. 选择你想要使用的模型
+Switch models in VS Code:
+1. Open Copilot Chat
+2. Click the model selector at the top of Chat
+3. Select the model you want to use
 
-在 Chat 中直接指定：
+Specify directly in Chat:
 /model gpt-4o
 /model claude-3.5-sonnet
 /model gemini-1.5-pro
 ```
 
-### 9.3 模型选择建议
+### 9.3 Model Selection Recommendations
 
 ```text
-任务类型与模型匹配：
+Task type and model matching:
 
-| 任务类型 | 推荐模型 | 原因 |
-|---------|---------|------|
-| 日常代码补全 | GPT-4o | 速度快，质量稳定 |
-| 代码审查 | Claude 3.5 Sonnet | 详细分析能力强 |
-| 复杂算法 | o1-preview | 推理能力最强 |
-| 大文件重构 | Gemini 1.5 Pro | 上下文窗口大 |
-| 文档生成 | Claude 3.7 Sonnet | 文本生成质量高 |
-| 调试 Bug | GPT-4o | 综合能力强 |
+| Task Type | Recommended Model | Reason |
+|-----------|------------------|--------|
+| Daily code completion | GPT-4o | Fast, consistent quality |
+| Code review | Claude 3.5 Sonnet | Strong detailed analysis |
+| Complex algorithms | o1-preview | Strongest reasoning |
+| Large file refactoring | Gemini 1.5 Pro | Large context window |
+| Documentation generation | Claude 3.7 Sonnet | High text generation quality |
+| Bug debugging | GPT-4o | Strong overall capabilities |
 ```
 
 ---
 
-## 10. Copilot 企业部署与管理
+## 10. Copilot Enterprise Deployment and Management
 
-### 10.1 部署流程
+### 10.1 Deployment Process
 
 ```text
-企业部署步骤：
+Enterprise deployment steps:
 
-1. 准备工作
-   - 确保组织有 GitHub Enterprise 账号
-   - 评估需要购买的许可证数量
-   - 制定使用政策
+1. Preparation
+   - Ensure the organization has a GitHub Enterprise account
+   - Evaluate the number of licenses needed
+   - Establish usage policies
 
-2. 配置组织设置
-   - 进入 Organization Settings → Copilot
-   - 启用 Copilot
-   - 配置策略和权限
+2. Configure organization settings
+   - Go to Organization Settings → Copilot
+   - Enable Copilot
+   - Configure policies and permissions
 
-3. 分配许可证
-   - 手动分配：Settings → Copilot → Access
-   - 批量分配：通过 API 或 CSV 导入
-   - 自动分配：基于团队规则
+3. Assign licenses
+   - Manual assignment: Settings → Copilot → Access
+   - Bulk assignment: Via API or CSV import
+   - Automatic assignment: Based on team rules
 
-4. 配置安全策略
-   - 设置内容排除策略
-   - 配置数据保留策略
-   - 启用审计日志
+4. Configure security policies
+   - Set content exclusion policies
+   - Configure data retention policies
+   - Enable audit logs
 ```
 
-### 10.2 管理策略配置
+### 10.2 Management Policy Configuration
 
 ```yaml
 # .github/copilot-config.yml
 content_exclusions:
-  # 排除敏感文件的代码建议
+  # Exclude code suggestions for sensitive files
   - pattern: "**/*.env"
-    reason: "环境变量文件"
+    reason: "Environment variable files"
   - pattern: "**/secrets/**"
-    reason: "密钥文件"
+    reason: "Secret files"
   - pattern: "**/credentials/**"
-    reason: "凭证文件"
+    reason: "Credential files"
 
 model_access:
-  # 控制可用的 AI 模型
+  # Control available AI models
   allowed_models:
     - "gpt-4o"
     - "claude-3.5-sonnet"
   blocked_models:
-    - "o1-preview"  # 限制使用高成本模型
+    - "o1-preview"  # Restrict use of high-cost models
 
 features:
-  # 功能开关
+  # Feature toggles
   code_completion: true
   chat: true
   cli: true
@@ -977,355 +977,355 @@ features:
   knowledge_bases: true
 
 audit:
-  # 审计配置
+  # Audit configuration
   log_completions: true
   log_chat_messages: true
   retention_days: 90
 ```
 
-### 10.3 使用量监控
+### 10.3 Usage Monitoring
 
 ```text
-监控指标：
-1. 活跃用户数
-2. 代码接受率（Acceptance Rate）
-3. 聊天使用量
-4. 模型使用分布
-5. 功能使用统计
+Monitoring metrics:
+1. Active user count
+2. Code acceptance rate
+3. Chat usage
+4. Model usage distribution
+5. Feature usage statistics
 
-查看方式：
+Viewing methods:
 - Organization Settings → Copilot → Usage
-- 通过 API 获取详细数据
-- 集成到内部监控系统
+- Get detailed data via API
+- Integrate into internal monitoring systems
 ```
 
 ---
 
-## 11. Copilot 安全与隐私
+## 11. Copilot Security and Privacy
 
-### 11.1 数据处理
+### 11.1 Data Handling
 
 ```text
-Copilot 的数据处理策略：
+Copilot's data handling policy:
 
-1. 代码发送
-   - 代码片段发送到 AI 模型进行处理
-   - 不会永久存储你的代码
-   - 处理完成后立即删除
+1. Code transmission
+   - Code snippets are sent to AI models for processing
+   - Your code is not permanently stored
+   - Deleted immediately after processing
 
-2. 训练数据
-   - Copilot 不使用你的代码训练模型
-   - Business/Enterprise 版本有额外保障
-   - 可以选择排除公共代码建议
+2. Training data
+   - Copilot does not use your code to train models
+   - Business/Enterprise versions have additional safeguards
+   - Can choose to exclude public code suggestions
 
-3. 数据传输
-   - 使用 HTTPS 加密传输
-   - 支持数据驻留选项
-   - 符合 GDPR 和其他隐私法规
+3. Data transfer
+   - Uses HTTPS encrypted transfer
+   - Supports data residency options
+   - Complies with GDPR and other privacy regulations
 ```
 
-### 11.2 安全最佳实践
+### 11.2 Security Best Practices
 
 ```text
-1. 内容排除
-   - 将敏感文件添加到排除列表
-   - 定期审查排除规则
-   - 监控排除策略的有效性
+1. Content exclusion
+   - Add sensitive files to the exclusion list
+   - Regularly review exclusion rules
+   - Monitor the effectiveness of exclusion policies
 
-2. 代码审查
-   - 不要盲目接受 AI 建议
-   - 检查生成的代码是否有安全漏洞
-   - 使用自动化安全扫描工具
+2. Code review
+   - Don't blindly accept AI suggestions
+   - Check generated code for security vulnerabilities
+   - Use automated security scanning tools
 
-3. 密钥管理
-   - 不要在代码中硬编码密钥
-   - 使用环境变量或密钥管理服务
-   - 启用密钥扫描功能
+3. Key management
+   - Don't hardcode keys in code
+   - Use environment variables or key management services
+   - Enable key scanning functionality
 
-4. 依赖安全
-   - 检查 AI 建议的依赖是否安全
-   - 使用 Dependabot 监控依赖漏洞
-   - 定期更新依赖版本
+4. Dependency security
+   - Check if AI-suggested dependencies are secure
+   - Use Dependabot to monitor dependency vulnerabilities
+   - Regularly update dependency versions
 ```
 
-### 11.3 合规性
+### 11.3 Compliance
 
 ```text
-Copilot 的合规认证：
+Copilot compliance certifications:
 - SOC 2 Type II
 - ISO 27001
-- GDPR 合规
-- CCPA 合规
-- FedRAMP（政府版）
+- GDPR compliance
+- CCPA compliance
+- FedRAMP (Government edition)
 
-企业合规配置：
-- 数据驻留区域选择
-- 审计日志保留策略
-- 访问控制和权限管理
-- 第三方安全评估报告
+Enterprise compliance configuration:
+- Data residency region selection
+- Audit log retention policies
+- Access control and permission management
+- Third-party security assessment reports
 ```
 
 ---
 
-## 12. Copilot 使用技巧与效率提升
+## 12. Copilot Tips and Efficiency Boosters
 
-### 12.1 快捷键速查表
+### 12.1 Keyboard Shortcuts Quick Reference
 
 ```text
-VS Code 快捷键：
+VS Code keyboard shortcuts:
 
-代码补全：
-- Tab：接受建议
-- Esc：拒绝建议
-- Alt+]：下一个建议
-- Alt+[：上一个建议
-- Ctrl+Enter：查看所有建议
+Code completion:
+- Tab: Accept suggestion
+- Esc: Reject suggestion
+- Alt+]: Next suggestion
+- Alt+[: Previous suggestion
+- Ctrl+Enter: View all suggestions
 
-Chat：
-- Ctrl+Shift+I：打开 Chat
-- Ctrl+Shift+L：内联聊天
-- Ctrl+I：快速编辑（选中代码后）
+Chat:
+- Ctrl+Shift+I: Open Chat
+- Ctrl+Shift+L: Inline chat
+- Ctrl+I: Quick edit (after selecting code)
 
-高级：
-- Ctrl+Shift+P → "Copilot"：查看所有 Copilot 命令
-- /fix：修复代码
-- /explain：解释代码
-- /test：生成测试
+Advanced:
+- Ctrl+Shift+P → "Copilot": View all Copilot commands
+- /fix: Fix code
+- /explain: Explain code
+- /test: Generate tests
 ```
 
-### 12.2 提高补全质量的技巧
+### 12.2 Tips to Improve Completion Quality
 
 ```text
-技巧 1：提供清晰的上下文
-- 打开相关的文件
-- 编写详细的函数签名
-- 使用有意义的变量名
-- 添加类型注解
+Tip 1: Provide clear context
+- Open related files
+- Write detailed function signatures
+- Use meaningful variable names
+- Add type annotations
 
-技巧 2：使用注释引导
-- 在函数前写清楚功能描述
-- 注释说明参数和返回值
-- 描述边界条件和特殊情况
+Tip 2: Use comments to guide
+- Write clear function descriptions before functions
+- Document parameters and return values
+- Describe edge cases and special conditions
 
-技巧 3：渐进式开发
-- 先写框架代码
-- 再填充具体实现
-- 最后优化和完善
+Tip 3: Progressive development
+- Write the framework code first
+- Fill in specific implementations
+- Optimize and refine last
 
-技巧 4：利用测试驱动
-- 先写测试用例
-- 让 Copilot 根据测试生成代码
-- 通过测试验证代码正确性
+Tip 4: Leverage test-driven development
+- Write test cases first
+- Let Copilot generate code based on tests
+- Verify code correctness through tests
 ```
 
-### 12.3 常见工作流优化
+### 12.3 Common Workflow Optimizations
 
 ```text
-工作流 1：快速原型开发
-1. 用自然语言描述需求
-2. Copilot 生成初始代码
-3. 快速迭代和调整
-4. 添加错误处理和边界检查
+Workflow 1: Rapid prototyping
+1. Describe requirements in natural language
+2. Copilot generates initial code
+3. Quickly iterate and adjust
+4. Add error handling and boundary checks
 
-工作流 2：代码重构
-1. 选中要重构的代码
-2. 使用 /simplify 或 /optimize
-3. 审查建议的变更
-4. 运行测试验证
+Workflow 2: Code refactoring
+1. Select the code to refactor
+2. Use /simplify or /optimize
+3. Review suggested changes
+4. Run tests to verify
 
-工作流 3：学习新框架
-1. 描述你想要实现的功能
-2. Copilot 生成示例代码
-3. 使用 /explain 理解代码
-4. 修改和扩展代码
+Workflow 3: Learning a new framework
+1. Describe the feature you want to implement
+2. Copilot generates example code
+3. Use /explain to understand the code
+4. Modify and extend the code
 
-工作流 4：调试问题
-1. 选中有问题的代码
-2. 使用 /fix 命令
-3. 查看 Copilot 的修复建议
-4. 如果需要，提供更多信息
+Workflow 4: Debugging issues
+1. Select the problematic code
+2. Use the /fix command
+3. Review Copilot's fix suggestions
+4. Provide more information if needed
 ```
 
 ---
 
-## 13. 中国开发者使用Copilot的注意事项
+## 13. Notes for Developers in China Using Copilot
 
-### 13.1 网络访问
+### 13.1 Network Access
 
 ```text
-网络要求：
-1. 需要稳定的国际网络连接
-2. 建议使用企业级网络解决方案
-3. 延迟会影响代码补全的速度
+Network requirements:
+1. Requires stable international network connectivity
+2. Enterprise-grade network solutions are recommended
+3. Latency will affect code completion speed
 
-优化建议：
-- 选择离你最近的数据中心
-- 使用稳定的网络提供商
-- 考虑使用 GitHub Enterprise 的数据驻留选项
+Optimization suggestions:
+- Choose the nearest data center
+- Use a stable network provider
+- Consider GitHub Enterprise's data residency options
 ```
 
-### 13.2 支付方式
+### 13.2 Payment Methods
 
 ```text
-订阅方式：
-1. 信用卡支付（Visa、MasterCard）
-2. PayPal（部分区域支持）
-3. 企业采购（通过销售团队）
+Subscription methods:
+1. Credit card payment (Visa, MasterCard)
+2. PayPal (available in some regions)
+3. Enterprise procurement (through sales team)
 
-注意事项：
-- 需要国际信用卡
-- 以美元结算
-- 企业可以开具发票
-- 年付有折扣
+Notes:
+- International credit card required
+- Settled in US dollars
+- Enterprises can request invoices
+- Annual billing offers discounts
 ```
 
-### 13.3 替代方案
+### 13.3 Alternatives
 
 ```text
-如果无法使用 Copilot，可以考虑：
+If you cannot use Copilot, consider:
 
-1. 国产 AI 编程工具
-   - 通义灵码（阿里巴巴）
-   - CodeGeeX（智谱 AI）
-   - Baidu Comate（百度）
-   - MarsCode（字节跳动）
+1. Domestic AI programming tools
+   - Tongyi Lingma (Alibaba)
+   - CodeGeeX (Zhipu AI)
+   - Baidu Comate (Baidu)
+   - MarsCode (ByteDance)
 
-2. 开源替代方案
+2. Open source alternatives
    - Codeium
    - Tabnine
-   - Continue（本地模型）
+   - Continue (local models)
 
-3. 自部署方案
-   - 使用开源模型
-   - 部署在本地服务器
-   - 使用国内云服务
+3. Self-hosted solutions
+   - Use open source models
+   - Deploy on local servers
+   - Use domestic cloud services
 ```
 
-### 13.4 语言支持
+### 13.4 Language Support
 
 ```text
-Copilot 对中文的支持：
+Copilot's Chinese language support:
 
-1. 代码注释
-   - 可以用中文写注释，Copilot 能理解
-   - 但建议使用英文注释以提高兼容性
+1. Code comments
+   - You can write comments in Chinese; Copilot understands them
+   - But English comments are recommended for better compatibility
 
-2. Chat 对话
-   - 支持中文对话
-   - 可以用中文描述需求
-   - 响应语言会根据输入语言自动选择
+2. Chat conversations
+   - Supports Chinese conversations
+   - You can describe requirements in Chinese
+   - Response language is automatically selected based on input language
 
-3. 文档生成
-   - 可以生成中文文档
-   - 使用 /doc 命令时指定语言
+3. Documentation generation
+   - Can generate Chinese documentation
+   - Specify the language when using the /doc command
 ```
 
 ---
 
-## 14. Copilot vs 竞品对比
+## 14. Copilot vs Competitors
 
-### 14.1 主要竞品概览
+### 14.1 Major Competitors Overview
 
 ```text
-市场上的主要 AI 编程工具：
+Major AI programming tools on the market:
 
 1. Cursor
-   - 基于 VS Code 的 AI IDE
-   - 深度集成 AI 功能
-   - 支持多文件编辑
-   - 价格：$20/月
+   - AI IDE based on VS Code
+   - Deeply integrated AI features
+   - Supports multi-file editing
+   - Price: $20/month
 
 2. Codeium
-   - 免费的 AI 编程助手
-   - 支持多种 IDE
-   - 代码补全质量好
-   - 有付费高级版
+   - Free AI programming assistant
+   - Supports multiple IDEs
+   - Good code completion quality
+   - Paid premium version available
 
 3. Tabnine
-   - 老牌 AI 编程工具
-   - 支持本地模型部署
-   - 隐私保护好
-   - 价格：$12/月
+   - Established AI programming tool
+   - Supports local model deployment
+   - Strong privacy protection
+   - Price: $12/month
 
-4. Amazon CodeWhisperer（现为 Amazon Q Developer）
-   - AWS 生态集成
-   - 免费层可用
-   - 安全扫描功能
-   - 价格：$19/月
+4. Amazon CodeWhisperer (now Amazon Q Developer)
+   - AWS ecosystem integration
+   - Free tier available
+   - Security scanning features
+   - Price: $19/month
 
-5. 通义灵码
-   - 阿里巴巴出品
-   - 国内访问快
-   - 中文支持好
-   - 有免费版
+5. Tongyi Lingma
+   - Made by Alibaba
+   - Fast domestic access
+   - Good Chinese language support
+   - Free version available
 ```
 
-### 14.2 功能对比表
+### 14.2 Feature Comparison Table
 
 ```text
-| 功能 | Copilot | Cursor | Codeium | Tabnine |
-|------|---------|--------|---------|---------|
-| 代码补全 | ✅ 优秀 | ✅ 优秀 | ✅ 良好 | ✅ 良好 |
-| Chat 功能 | ✅ 完整 | ✅ 完整 | ✅ 基础 | ✅ 基础 |
-| 多文件编辑 | ✅ | ✅ | ❌ | ❌ |
-| IDE 支持 | ✅ 广泛 | ⚠️ VS Code | ✅ 广泛 | ✅ 广泛 |
-| 模型选择 | ✅ 多模型 | ✅ 多模型 | ⚠️ 有限 | ⚠️ 有限 |
-| 企业功能 | ✅ 完整 | ⚠️ 基础 | ⚠️ 基础 | ✅ 完整 |
-| 本地部署 | ❌ | ❌ | ❌ | ✅ |
-| 免费版 | ✅ | ✅ | ✅ | ✅ |
-| 中文支持 | ✅ | ✅ | ✅ | ✅ |
+| Feature | Copilot | Cursor | Codeium | Tabnine |
+|---------|---------|--------|---------|---------|
+| Code completion | ✅ Excellent | ✅ Excellent | ✅ Good | ✅ Good |
+| Chat functionality | ✅ Full | ✅ Full | ✅ Basic | ✅ Basic |
+| Multi-file editing | ✅ | ✅ | ❌ | ❌ |
+| IDE support | ✅ Broad | ⚠️ VS Code | ✅ Broad | ✅ Broad |
+| Model selection | ✅ Multiple | ✅ Multiple | ⚠️ Limited | ⚠️ Limited |
+| Enterprise features | ✅ Full | ⚠️ Basic | ⚠️ Basic | ✅ Full |
+| Local deployment | ❌ | ❌ | ❌ | ✅ |
+| Free version | ✅ | ✅ | ✅ | ✅ |
+| Chinese support | ✅ | ✅ | ✅ | ✅ |
 ```
 
-### 14.3 选择建议
+### 14.3 Selection Recommendations
 
 ```text
-选择 Copilot 的理由：
-- 与 GitHub 深度集成
-- 企业级管理功能
-- 最广泛的 IDE 支持
-- 持续的功能更新
-- 强大的生态系统
+Reasons to choose Copilot:
+- Deep integration with GitHub
+- Enterprise-grade management features
+- Broadest IDE support
+- Continuous feature updates
+- Strong ecosystem
 
-选择 Cursor 的理由：
-- 更好的 AI 原生体验
-- 更强的多文件编辑能力
-- 更现代的 UI 设计
-- 对 AI 功能有更多控制
+Reasons to choose Cursor:
+- Better AI-native experience
+- Stronger multi-file editing capabilities
+- More modern UI design
+- More control over AI features
 
-选择 Codeium 的理由：
-- 预算有限
-- 需要免费解决方案
-- 基本的 AI 辅助够用
+Reasons to choose Codeium:
+- Limited budget
+- Need a free solution
+- Basic AI assistance is sufficient
 
-选择 Tabnine 的理由：
-- 数据隐私要求高
-- 需要本地部署
-- 对延迟敏感
+Reasons to choose Tabnine:
+- High data privacy requirements
+- Need local deployment
+- Sensitive to latency
 ```
 
 ---
 
-## 总结
+## Summary
 
-GitHub Copilot 已经成为 AI 编程助手领域的领导者，它提供了从代码补全到完整开发工作流的全方位 AI 辅助。无论你是个人开发者还是企业团队，Copilot 都能显著提高你的开发效率。
+GitHub Copilot has become the leader in the AI programming assistant space, providing comprehensive AI assistance from code completion to complete development workflows. Whether you are an individual developer or an enterprise team, Copilot can significantly improve your development efficiency.
 
-**关键要点：**
+**Key takeaways:**
 
-1. **选择合适的版本**：根据你的需求选择 Free、Individual、Business 或 Enterprise
-2. **善用 Chat 功能**：利用斜杠命令和上下文引用提高效率
-3. **优化代码补全**：通过清晰的注释和类型提示提高补全质量
-4. **注意安全隐私**：配置合适的安全策略，不要接受所有 AI 建议
-5. **持续学习**：关注 Copilot 的新功能和最佳实践
+1. **Choose the right version**: Select Free, Individual, Business, or Enterprise based on your needs
+2. **Leverage Chat functionality**: Use slash commands and context references to boost efficiency
+3. **Optimize code completion**: Improve completion quality with clear comments and type hints
+4. **Pay attention to security and privacy**: Configure appropriate security policies, don't accept all AI suggestions
+5. **Keep learning**: Stay updated on Copilot's new features and best practices
 
-**下一步行动：**
+**Next steps:**
 
-- 如果你还没有使用 Copilot，从免费版开始体验
-- 探索 Chat 的各种命令和功能
-- 将 Copilot 集成到你的日常工作流中
-- 关注 GitHub 官方博客获取最新更新
+- If you haven't used Copilot yet, start with the free version
+- Explore Chat's various commands and features
+- Integrate Copilot into your daily workflow
+- Follow the official GitHub blog for the latest updates
 
 ---
 
-> **文档版本：** v1.0  
-> **最后更新：** 2025 年  
-> **作者：** GitHub 中文开发者社区
+> **Document version:** v1.0  
+> **Last updated:** 2025  
+> **Author:** GitHub Chinese Developer Community

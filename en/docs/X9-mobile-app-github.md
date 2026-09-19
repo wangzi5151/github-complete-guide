@@ -1,31 +1,31 @@
-# 移动端开发者的 GitHub 指南
+# GitHub Guide for Mobile Developers
 
-> 面向 Android、iOS、Flutter、React Native 开发者的完整 GitHub 工作流与 CI/CD 实践
-
----
-
-## 目录
-
-1. [Android 项目 GitHub Actions CI/CD](#1-android-项目-github-actions-cicd)
-2. [iOS 项目 GitHub Actions CI/CD](#2-ios-项目-github-actions-cicdxcode-fastlane)
-3. [Flutter 项目 GitHub Actions](#3-flutter-项目-github-actions)
-4. [React Native 项目 GitHub Actions](#4-react-native-项目-github-actions)
-5. [移动端自动化测试](#5-移动端自动化测试)
-6. [代码签名管理](#6-代码签名管理)
-7. [应用商店发布自动化](#7-应用商店发布自动化)
-8. [移动端代码质量](#8-移动端代码质量)
-9. [移动端依赖管理](#9-移动端依赖管理)
-10. [移动端 Crash 监控集成](#10-移动端-crash-监控集成)
-11. [移动端安全最佳实践](#11-移动端安全最佳实践)
-12. [中国开发者特殊配置](#12-中国开发者特殊配置)
+> Complete GitHub workflow and CI/CD practices for Android, iOS, Flutter, and React Native developers
 
 ---
 
-## 1. Android 项目 GitHub Actions CI/CD
+## Table of Contents
 
-### 1.1 基础 Android CI 工作流
+1. [Android Project GitHub Actions CI/CD](#1-android-project-github-actions-cicd)
+2. [iOS Project GitHub Actions CI/CD](#2-ios-project-github-actions-cicdxcode-fastlane)
+3. [Flutter Project GitHub Actions](#3-flutter-project-github-actions)
+4. [React Native Project GitHub Actions](#4-react-native-project-github-actions)
+5. [Mobile Automated Testing](#5-mobile-automated-testing)
+6. [Code Signing Management](#6-code-signing-management)
+7. [App Store Release Automation](#7-app-store-release-automation)
+8. [Mobile Code Quality](#8-mobile-code-quality)
+9. [Mobile Dependency Management](#9-mobile-dependency-management)
+10. [Mobile Crash Monitoring Integration](#10-mobile-crash-monitoring-integration)
+11. [Mobile Security Best Practices](#11-mobile-security-best-practices)
+12. [Special Configurations for Chinese Developers](#12-special-configurations-for-chinese-developers)
 
-对于 Android 项目，GitHub Actions 提供了强大的自动化能力。首先来看一个完整的基础 CI 配置文件：
+---
+
+## 1. Android Project GitHub Actions CI/CD
+
+### 1.1 Basic Android CI Workflow
+
+For Android projects, GitHub Actions provides powerful automation capabilities. Let's start with a complete basic CI configuration file:
 
 ```yaml
 # .github/workflows/android-ci.yml
@@ -68,9 +68,9 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
 ```
 
-### 1.2 多模块 Android 项目 CI
+### 1.2 Multi-Module Android Project CI
 
-大型 Android 项目通常采用多模块架构，CI 配置需要特别处理：
+Large Android projects typically use a multi-module architecture, which requires special handling in CI configuration:
 
 ```yaml
 # .github/workflows/android-multi-module-ci.yml
@@ -145,9 +145,9 @@ jobs:
       - run: ./gradlew assembleDebug
 ```
 
-### 1.3 Android 构建缓存优化
+### 1.3 Android Build Cache Optimization
 
-Gradle 构建可能非常耗时，合理配置缓存可以显著提升 CI 效率：
+Gradle builds can be very time-consuming. Proper cache configuration can significantly improve CI efficiency:
 
 ```yaml
       - name: Cache Gradle packages
@@ -172,11 +172,11 @@ Gradle 构建可能非常耗时，合理配置缓存可以显著提升 CI 效率
 
 ---
 
-## 2. iOS 项目 GitHub Actions CI/CD（Xcode、Fastlane）
+## 2. iOS Project GitHub Actions CI/CD (Xcode, Fastlane)
 
-### 2.1 基础 iOS CI 工作流
+### 2.1 Basic iOS CI Workflow
 
-iOS 项目必须在 macOS 环境下构建，这是与 Android 项目最大的区别：
+iOS projects must be built in a macOS environment, which is the biggest difference from Android projects:
 
 ```yaml
 # .github/workflows/ios-ci.yml
@@ -232,9 +232,9 @@ jobs:
           path: TestResults.xcresult
 ```
 
-### 2.2 Fastlane 集成
+### 2.2 Fastlane Integration
 
-Fastlane 是移动端自动化发布的利器，与 GitHub Actions 结合使用效果极佳：
+Fastlane is a powerful tool for mobile automation releases, and it works exceptionally well with GitHub Actions:
 
 ```ruby
 # fastlane/Fastfile
@@ -284,7 +284,7 @@ platform :ios do
 end
 ```
 
-GitHub Actions 中调用 Fastlane：
+Calling Fastlane in GitHub Actions:
 
 ```yaml
 # .github/workflows/ios-fastlane.yml
@@ -327,9 +327,9 @@ jobs:
         run: fastlane beta
 ```
 
-### 2.3 Xcode Cloud 与 GitHub 集成
+### 2.3 Xcode Cloud and GitHub Integration
 
-Xcode Cloud 是 Apple 提供的 CI/CD 服务，可以与 GitHub 仓库直接集成：
+Xcode Cloud is Apple's CI/CD service that can directly integrate with GitHub repositories:
 
 ```yaml
 # .github/workflows/xcode-cloud-trigger.yml
@@ -355,11 +355,11 @@ jobs:
 
 ---
 
-## 3. Flutter 项目 GitHub Actions
+## 3. Flutter Project GitHub Actions
 
-### 3.1 Flutter CI 基础配置
+### 3.1 Flutter CI Basic Configuration
 
-Flutter 项目需要同时支持 Android 和 iOS 两个平台的构建：
+Flutter projects need to support building for both Android and iOS platforms:
 
 ```yaml
 # .github/workflows/flutter-ci.yml
@@ -441,9 +441,9 @@ jobs:
           path: build/ios/iphoneos/Runner.app
 ```
 
-### 3.2 Flutter 多平台发布
+### 3.2 Flutter Multi-Platform Release
 
-Flutter 3.x 支持构建 Web、Windows、macOS、Linux 等多个平台：
+Flutter 3.x supports building for Web, Windows, macOS, Linux, and other platforms:
 
 ```yaml
 # .github/workflows/flutter-multi-platform.yml
@@ -497,11 +497,11 @@ jobs:
 
 ---
 
-## 4. React Native 项目 GitHub Actions
+## 4. React Native Project GitHub Actions
 
-### 4.1 React Native CI 基础
+### 4.1 React Native CI Basics
 
-React Native 项目需要处理 JavaScript 层和原生层的构建：
+React Native projects need to handle both JavaScript and native layer builds:
 
 ```yaml
 # .github/workflows/react-native-ci.yml
@@ -572,9 +572,9 @@ jobs:
             build
 ```
 
-### 4.2 React Native E2E 测试
+### 4.2 React Native E2E Testing
 
-使用 Detox 进行端到端测试是 React Native 项目的标配：
+End-to-end testing with Detox is a standard practice for React Native projects:
 
 ```yaml
 # .github/workflows/react-native-e2e.yml
@@ -630,9 +630,9 @@ jobs:
 
 ---
 
-## 5. 移动端自动化测试
+## 5. Mobile Automated Testing
 
-### 5.1 Espresso（Android UI 测试）
+### 5.1 Espresso (Android UI Testing)
 
 ```kotlin
 // android/app/src/androidTest/java/com/myapp/LoginActivityTest.kt
@@ -665,7 +665,7 @@ class LoginActivityTest {
 }
 ```
 
-GitHub Actions 中运行 Espresso 测试：
+Running Espresso tests in GitHub Actions:
 
 ```yaml
       - name: Run instrumentation tests
@@ -684,7 +684,7 @@ GitHub Actions 中运行 Espresso 测试：
           path: app/build/reports/androidTests/
 ```
 
-### 5.2 XCTest（iOS UI 测试）
+### 5.2 XCTest (iOS UI Testing)
 
 ```swift
 // ios/MyAppUITests/LoginUITests.swift
@@ -726,7 +726,7 @@ class LoginUITests: XCTestCase {
 }
 ```
 
-### 5.3 Detox（React Native E2E 测试）
+### 5.3 Detox (React Native E2E Testing)
 
 ```javascript
 // e2e/login.test.js
@@ -756,11 +756,11 @@ describe('Login Flow', () => {
 
 ---
 
-## 6. 代码签名管理
+## 6. Code Signing Management
 
-### 6.1 Android Keystore 管理
+### 6.1 Android Keystore Management
 
-Android 签名密钥的安全管理至关重要：
+Secure management of Android signing keys is crucial:
 
 ```yaml
 # .github/workflows/android-sign.yml
@@ -802,9 +802,9 @@ jobs:
         run: rm -f app/release.keystore
 ```
 
-### 6.2 iOS Provisioning Profile 管理
+### 6.2 iOS Provisioning Profile Management
 
-使用 Fastlane Match 管理 iOS 证书和描述文件：
+Using Fastlane Match to manage iOS certificates and provisioning profiles:
 
 ```yaml
       - name: Setup iOS signing
@@ -813,11 +813,11 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
         run: |
-          # 从 Secrets 中解码证书
+          # Decode certificates from Secrets
           echo "${{ secrets.DIST_CERT_BASE64 }}" | base64 -d > distribution.p12
           echo "${{ secrets.PROVISION_PROFILE_BASE64 }}" | base64 -d > profile.mobileprovision
           
-          # 导入证书到 Keychain
+          # Import certificate to Keychain
           security create-keychain -p "" build.keychain
           security import distribution.p12 \
             -k build.keychain \
@@ -826,13 +826,13 @@ jobs:
           security set-keychain-settings build.keychain
           security list-keychains -s build.keychain
           
-          # 安装描述文件
+          # Install provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp profile.mobileprovision \
             ~/Library/MobileDevice/Provisioning\ Profiles/
 ```
 
-### 6.3 密钥轮换策略
+### 6.3 Key Rotation Strategy
 
 ```yaml
 # .github/workflows/key-rotation-check.yml
@@ -840,7 +840,7 @@ name: Key Rotation Check
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # 每月检查一次
+    - cron: '0 0 1 * *'  # Check monthly
 
 jobs:
   check-keys:
@@ -848,7 +848,7 @@ jobs:
     steps:
       - name: Check Android keystore age
         run: |
-          # 检查 keystore 创建时间，如果超过 1 年则发送通知
+          # Check keystore creation time, send notification if over 1 year
           CREATED=$(gh api repos/${{ github.repository }}/actions/secrets/KEYSTORE_CREATED_AT --jq '.value' 2>/dev/null || echo "unknown")
           echo "Keystore created at: $CREATED"
           
@@ -863,11 +863,11 @@ jobs:
 
 ---
 
-## 7. 应用商店发布自动化
+## 7. App Store Release Automation
 
-### 7.1 Google Play 发布
+### 7.1 Google Play Release
 
-使用 `r0adkll/upload-google-play` Action 自动发布到 Google Play：
+Using the `r0adkll/upload-google-play` Action to automatically publish to Google Play:
 
 ```yaml
 # .github/workflows/google-play-release.yml
@@ -915,7 +915,7 @@ jobs:
             -zh-CN: 修复问题和性能改进
 ```
 
-### 7.2 App Store 发布
+### 7.2 App Store Release
 
 ```yaml
 # .github/workflows/app-store-release.yml
@@ -949,9 +949,9 @@ jobs:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
 ```
 
-### 7.3 国内应用市场发布
+### 7.3 Domestic App Market Release
 
-国内市场渠道众多，需要特殊的多渠道打包方案：
+The domestic market has many channels, requiring special multi-channel packaging solutions:
 
 ```yaml
 # .github/workflows/china-market-release.yml
@@ -1005,9 +1005,9 @@ jobs:
 
 ---
 
-## 8. 移动端代码质量
+## 8. Mobile Code Quality
 
-### 8.1 Android Lint 配置
+### 8.1 Android Lint Configuration
 
 ```yaml
 # .github/workflows/android-lint.yml
@@ -1046,7 +1046,7 @@ jobs:
           path: app/build/reports/lint-results-debug.html
 ```
 
-detekt 配置文件：
+detekt configuration file:
 
 ```yaml
 # config/detekt/detekt.yml
@@ -1070,7 +1070,7 @@ naming:
     functionPattern: '[a-z][a-zA-Z0-9]*'
 ```
 
-### 8.2 SwiftLint 配置
+### 8.2 SwiftLint Configuration
 
 ```yaml
 # .github/workflows/swiftlint.yml
@@ -1092,7 +1092,7 @@ jobs:
           args: --strict
 ```
 
-`.swiftlint.yml` 配置：
+`.swiftlint.yml` configuration:
 
 ```yaml
 # .swiftlint.yml
@@ -1130,11 +1130,11 @@ identifier_name:
 
 ---
 
-## 9. 移动端依赖管理
+## 9. Mobile Dependency Management
 
-### 9.1 Android 依赖管理
+### 9.1 Android Dependency Management
 
-使用 Gradle Version Catalog 统一管理依赖版本：
+Using Gradle Version Catalog to centrally manage dependency versions:
 
 ```toml
 # gradle/libs.versions.toml
@@ -1159,7 +1159,7 @@ android-application = { id = "com.android.application", version = "8.2.2" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ```
 
-依赖安全检查：
+Dependency security check:
 
 ```yaml
 # .github/workflows/dependency-check.yml
@@ -1167,7 +1167,7 @@ name: Dependency Security Check
 
 on:
   schedule:
-    - cron: '0 0 * * 1'  # 每周一检查
+    - cron: '0 0 * * 1'  # Check every Monday
 
 jobs:
   check:
@@ -1214,9 +1214,9 @@ jobs:
 
 ---
 
-## 10. 移动端 Crash 监控集成
+## 10. Mobile Crash Monitoring Integration
 
-### 10.1 Firebase Crashlytics 集成
+### 10.1 Firebase Crashlytics Integration
 
 ```yaml
 # .github/workflows/firebase-crashlytics.yml
@@ -1235,7 +1235,7 @@ jobs:
           ./gradlew uploadCrashlyticsMappingFileRelease
 ```
 
-### 10.2 Sentry 集成
+### 10.2 Sentry Integration
 
 ```yaml
 # .github/workflows/sentry-release.yml
@@ -1263,27 +1263,27 @@ jobs:
         run: |
           RELEASE_VERSION="${GITHUB_REF#refs/tags/}"
           
-          # 创建 release
+          # Create release
           sentry-cli releases new "$RELEASE_VERSION"
           sentry-cli releases set-commits "$RELEASE_VERSION" --auto
           
-          # 上传 iOS dSYMs
+          # Upload iOS dSYMs
           sentry-cli upload-dif --org $SENTRY_ORG \
             --project $SENTRY_PROJECT \
             path/to/dSYMs
           
-          # 上传 Android mapping
+          # Upload Android mapping
           sentry-cli upload-proguard \
             --android-manifest app/build/outputs/mapping/release/AndroidManifest.xml \
             app/build/outputs/mapping/release/mapping.txt
           
-          # 完成 release
+          # Finalize release
           sentry-cli releases finalize "$RELEASE_VERSION"
 ```
 
-### 10.3 Bugly 集成（腾讯）
+### 10.3 Bugly Integration (Tencent)
 
-国内项目常用腾讯 Bugly 进行 Crash 监控：
+Domestic projects commonly use Tencent Bugly for crash monitoring:
 
 ```yaml
       - name: Upload mapping to Bugly
@@ -1301,9 +1301,9 @@ jobs:
 
 ---
 
-## 11. 移动端安全最佳实践
+## 11. Mobile Security Best Practices
 
-### 11.1 Secrets 扫描
+### 11.1 Secrets Scanning
 
 ```yaml
 # .github/workflows/secrets-scan.yml
@@ -1325,7 +1325,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### 11.2 依赖漏洞扫描
+### 11.2 Dependency Vulnerability Scanning
 
 ```yaml
 # .github/workflows/security-scan.yml
@@ -1357,7 +1357,7 @@ jobs:
           cd ios && bundle-audit check --update
 ```
 
-### 11.3 代码混淆检查
+### 11.3 Code Obfuscation Check
 
 ```yaml
       - name: Verify ProGuard configuration
@@ -1375,12 +1375,12 @@ jobs:
 
 ---
 
-## 12. 中国开发者特殊配置
+## 12. Special Configurations for Chinese Developers
 
-### 12.1 Gradle 国内镜像配置
+### 12.1 Gradle Domestic Mirror Configuration
 
 ```groovy
-// settings.gradle.kts (项目级)
+// settings.gradle.kts (project-level)
 pluginManagement {
     repositories {
         maven("https://maven.aliyun.com/repository/gradle-plugin")
@@ -1404,7 +1404,7 @@ dependencyResolutionManagement {
 }
 ```
 
-### 12.2 npm/Flutter 国内镜像
+### 12.2 npm/Flutter Domestic Mirrors
 
 ```yaml
 # .github/workflows/flutter-china-mirror.yml
@@ -1423,10 +1423,10 @@ dependencyResolutionManagement {
           yarn config set registry https://registry.npmmirror.com
 ```
 
-### 12.3 GitHub Actions 加速配置
+### 12.3 GitHub Actions Acceleration Configuration
 
 ```yaml
-# 使用国内服务器自建 Runner 的方案
+# Using domestic server self-hosted Runner solution
 # .github/workflows/self-hosted-runner.yml
 name: Self-Hosted Runner Build
 
@@ -1436,7 +1436,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, linux, x64]  # 使用自建 Runner
+    runs-on: [self-hosted, linux, x64]  # Use self-hosted Runner
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -1445,7 +1445,7 @@ jobs:
           distribution: 'temurin'
       - name: Build with Gradle
         run: |
-          # 设置国内 Gradle 镜像
+          # Set up domestic Gradle mirror
           mkdir -p ~/.gradle
           cat > ~/.gradle/init.d/mirror.gradle << 'EOF'
           allprojects {
@@ -1459,20 +1459,20 @@ jobs:
           ./gradlew assembleDebug
 ```
 
-### 12.4 GitHub 访问加速方案
+### 12.4 GitHub Access Acceleration Solutions
 
 ```yaml
-# 使用 GitHub 代理方案
+# Using GitHub proxy solution
 # .github/workflows/ghproxy.yml
       - name: Setup with GitHub proxy
         run: |
-          # 配置 Git 使用 ghproxy
+          # Configure Git to use ghproxy
           git config --global url."https://ghproxy.com/https://github.com/".insteadOf "https://github.com/"
           
-          # 配置 Go 模块代理
+          # Configure Go module proxy
           go env -w GOPROXY=https://goproxy.cn,direct
           
-          # 配置 Rust crates 镜像
+          # Configure Rust crates mirror
           mkdir -p ~/.cargo
           cat > ~/.cargo/config.toml << 'EOF'
           [source.crates-io]
@@ -1482,35 +1482,35 @@ jobs:
           EOF
 ```
 
-### 12.5 国内 CI/CD 服务集成
+### 12.5 Domestic CI/CD Service Integration
 
-除了 GitHub Actions，国内开发者也可以考虑使用以下 CI/CD 服务：
+In addition to GitHub Actions, domestic developers can also consider using the following CI/CD services:
 
-- **Gitee Go**：Gitee 提供的 CI/CD 服务
-- **阿里云效**：阿里巴巴的 DevOps 平台
-- **腾讯云 CODING**：腾讯的 CI/CD 平台
-- **华为云 DevCloud**：华为的 DevOps 服务
+- **Gitee Go**: CI/CD service provided by Gitee
+- **Alibaba Cloud DevOps**: Alibaba's DevOps platform
+- **Tencent Cloud CODING**: Tencent's CI/CD platform
+- **Huawei Cloud DevCloud**: Huawei's DevOps service
 
-这些服务在国内访问速度快，与国内应用市场集成更好。
-
----
-
-## 总结
-
-本指南涵盖了移动端开发者在 GitHub 上进行项目管理的核心方面：
-
-| 主题 | 关键要点 |
-|------|----------|
-| CI/CD | 针对不同技术栈的完整工作流配置 |
-| 自动化测试 | Espresso、XCTest、Detox 的实际应用 |
-| 代码签名 | 安全管理签名证书和密钥 |
-| 应用发布 | Google Play、App Store 及国内市场的自动化发布 |
-| 代码质量 | Lint、静态分析工具的配置和使用 |
-| 安全实践 | 依赖漏洞扫描、密钥泄露防护 |
-| 国内优化 | 镜像配置、访问加速方案 |
-
-移动端开发的 CI/CD 是一个复杂但极其重要的领域。合理配置 GitHub Actions 可以大幅提升开发效率，减少人为错误，确保应用质量。建议从基础配置开始，逐步完善你的移动端 CI/CD 流程。
+These services have fast access speeds in China and better integration with domestic app markets.
 
 ---
 
-*最后更新：2026 年 9 月*
+## Summary
+
+This guide covers the core aspects of project management on GitHub for mobile developers:
+
+| Topic | Key Points |
+|-------|------------|
+| CI/CD | Complete workflow configurations for different tech stacks |
+| Automated Testing | Practical applications of Espresso, XCTest, Detox |
+| Code Signing | Secure management of signing certificates and keys |
+| App Release | Automated publishing to Google Play, App Store, and domestic markets |
+| Code Quality | Configuration and usage of Lint and static analysis tools |
+| Security Practices | Dependency vulnerability scanning, key leak prevention |
+| Domestic Optimization | Mirror configuration, access acceleration solutions |
+
+Mobile CI/CD is a complex but extremely important field. Proper GitHub Actions configuration can significantly improve development efficiency, reduce human errors, and ensure application quality. It is recommended to start with basic configurations and gradually improve your mobile CI/CD workflow.
+
+---
+
+*Last updated: September 2026*

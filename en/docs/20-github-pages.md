@@ -7,7 +7,7 @@ GitHub Pages is free static website hosting service, can deploy website directly
 **Applicable Scenarios:**
 - Personal blog
 - Project documentation
-- Portfolio展示
+- Portfolio showcase
 - Learning notes
 
 ## Create Website (Detailed with Screenshots)
@@ -292,7 +292,7 @@ plugins:
 | Repository size | 1GB |
 | Published site size | 1GB |
 | Bandwidth | 100GB/month |
-| Build次数 | Max 10 per hour |
+| Build count | Max 10 per hour |
 
 ## Common Framework Deployment
 

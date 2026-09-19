@@ -1,6 +1,6 @@
 # GitHub Team Collaboration Complete Guide
 
-> This guide面向 Chinese development teams, systematically explains GitHub team collaboration models, processes, tools and best practices, helping teams build efficient, standardized and secure collaboration systems.
+> This guide is targeted at Chinese development teams, systematically explains GitHub team collaboration models, processes, tools and best practices, helping teams build efficient, standardized and secure collaboration systems.
 
 ---
 
@@ -40,7 +40,7 @@ Developer C ──push──→ main
 
 **Advantages**: Simple process, low learning cost.
 
-**Disadvantages**: Easy to产生 conflicts, cannot parallel develop, not suitable for formal projects.
+**Disadvantages**: Easy to generate conflicts, cannot parallel develop, not suitable for formal projects.
 
 ### 1.2 Feature Branch Workflow
 
@@ -170,7 +170,7 @@ main ──●──●──●──●──●──●──●──●─
 
 **Core Principles**:
 
-- Branch lifespan extremely short (usually not超过 one day)
+- Branch lifespan extremely short (usually not exceeding one day)
 - Frequent integration, reduce merge conflicts
 - Depend on Feature Flags to control unfinished features
 - Highly depend on automated testing
@@ -494,7 +494,7 @@ Code Review is not just about finding bugs, but also a core means of knowledge s
 # Comment Prefix Conventions
 
 [Must Fix] Has bugs or serious issues, must fix
-[Suggest Fix] Can be improved, strongly建议 fix
+[Suggest Fix] Can be improved, strongly suggest fix
 [Question] Need author explanation or clarification
 [Praise] Code written well, worth learning
 [Non-blocking] Small suggestion, doesn't block merge
@@ -580,7 +580,7 @@ Create `CODEOWNERS` file in repository root or `.github/` directory:
 # Global owners - applies to all files
 *                       @team-lead @senior-dev
 
-# Frontend code由 frontend team responsible
+# Frontend code is responsible for frontend team
 /src/frontend/          @org/frontend-team
 *.css                   @org/frontend-team
 *.html                  @org/frontend-team
@@ -588,19 +588,19 @@ Create `CODEOWNERS` file in repository root or `.github/` directory:
 *.tsx                   @org/frontend-team
 *.ts                    @org/frontend-team
 
-# Backend code由 backend team responsible
+# Backend code is responsible for backend team
 /src/backend/           @org/backend-team
 *.py                    @org/backend-team
 *.java                  @org/backend-team
 
-# Database related由 DBA team responsible
+# Database related is responsible for DBA team
 *.sql                   @org/dba-team
 /db/migrations/         @org/dba-team
 
-# API documentation由 backend and docs teams jointly responsible
+# API documentation is jointly responsible for backend and docs teams
 /docs/api/              @org/backend-team @org/docs-team
 
-# CI/CD configuration由 DevOps team responsible
+# CI/CD configuration is responsible for DevOps team
 /.github/               @org/devops-team
 /Dockerfile             @org/devops-team
 /docker-compose.yml     @org/devops-team
@@ -673,7 +673,7 @@ Branch name pattern: main
 ☐ Allow deletions (Prohibited)
 
 # Administrators
-☐ Include administrators (Recommend checking,让 administrators also follow rules)
+☐ Include administrators (Recommend checking, let administrators also follow rules)
 ```
 
 ### 6.3 Protection Strategies for Different Branches
@@ -830,7 +830,7 @@ Priority: Repository level > Organization level
 
 ### 8.1 GitHub Permission Model Overview
 
-GitHub permissions分为 two levels: organization level and repository level.
+GitHub permissions are divided into two levels: organization level and repository level.
 
 **Organization Level Roles**:
 
@@ -853,20 +853,20 @@ GitHub permissions分为 two levels: organization level and repository level.
 
 ```
 Organization (Company/Organization)
-├── @company/admins        → Admin权限 (Infrastructure team)
-├── @company/maintainers   → Maintain权限 (Technical leads)
+├── @company/admins        → Admin permissions (Infrastructure team)
+├── @company/maintainers   → Maintain permissions (Technical leads)
 │
-├── @frontend-team         → Write权限
+├── @frontend-team         → Write permissions
 │   ├── @frontend-team/senior
 │   └── @frontend-team/junior
 │
-├── @backend-team          → Write权限
+├── @backend-team          → Write permissions
 │   ├── @backend-team/senior
 │   └── @backend-team/junior
 │
-├── @qa-team               → Triage权限
-├── @design-team           → Read权限
-└── @contractors           → Read权限 (Outsourced team)
+├── @qa-team               → Triage permissions
+├── @design-team           → Read permissions
+└── @contractors           → Read permissions (Outsourced team)
 ```
 
 ### 8.3 Permission Configuration Practice
@@ -972,7 +972,7 @@ assignees: ''
 
 ## Feature Description
 
-Briefly describe the feature you希望 to add.
+Briefly describe the feature you hope to add.
 
 ## Use Case
 
@@ -980,7 +980,7 @@ Describe the use case and value of this feature.
 
 ## Expected Solution
 
-Describe the implementation方式 you expect.
+Describe the implementation approach you expect.
 
 ## Alternative Solutions
 
@@ -993,7 +993,7 @@ Describe other alternative solutions you've considered.
 
 ### 9.2 Issue Label System
 
-Establishing a完善的 label system有助于 Issue classification and priority management.
+Establishing a complete label system helps Issue classification and priority management.
 
 **Recommended Label Categories**:
 
@@ -1040,7 +1040,7 @@ security: Security related
 
 ### 9.3 GitHub Projects Management
 
-GitHub Projects provides Kanban-like project management功能.
+GitHub Projects provides Kanban-like project management functionality.
 
 **Board Column Design**:
 
@@ -1123,7 +1123,7 @@ This can improve testability."
 
 "This code is wrong"              # Too vague, didn't say what's wrong
 "LGTM"                            # Too simple for complex changes
-"Why did you do it this way?"     #带有 questioning tone, suggest改为
+"Why did you do it this way?"     # With questioning tone, suggest changing to
                                   # "What's the consideration for this implementation?"
 ```
 
@@ -1155,7 +1155,7 @@ GitHub Mobile:
 1. **Write Clearly**: Provide sufficient context information
 2. **Use Documentation Instead of Verbal**: Record important decisions in Issues or Wikis
 3. **Set Reasonable Response Time**: Reply within 24 hours for non-urgent issues
-4. **Use Emoji Responses**: Use 👀 to indicate已 seen, 👍 to indicate同意
+4. **Use Emoji Responses**: Use 👀 to indicate seen, 👍 to indicate agreed
 5. **Use Quotes Well**: Quote specific content to respond
 
 ---
@@ -1230,7 +1230,7 @@ git subtree push --prefix=libs/shared-lib https://github.com/org/shared-lib.git 
 | Feature | Submodule | Subtree |
 |---------|-----------|---------|
 | Code Storage | Only stores reference | Stores complete code |
-| Clone Speed | Slower (needs额外 pull) | Faster |
+| Clone Speed | Slower (needs additional pull) | Faster |
 | Operation Complexity | High | Medium |
 | History Record | Separate | Merged |
 | Learning Cost | High | Medium |
@@ -1587,8 +1587,8 @@ Asynchronous Collaboration Key Points:
 
   4. Use GitHub Features Well:
      - @mention relevant personnel
-     - Use 👀 to indicate已 seen
-     - Use 👍 to indicate同意
+      - Use 👀 to indicate seen
+      - Use 👍 to indicate agreed
      - Draft PR for early feedback
 ```
 
@@ -1745,7 +1745,7 @@ Data Compliance:
 
 Intellectual Property:
   - Choose appropriate open source license
-  -注意 third-party library license compatibility
+  - Note third-party library license compatibility
   - Separate enterprise code from personal code
 
 Security Practices:
@@ -1759,9 +1759,9 @@ Security Practices:
 
 ```yaml
 Code Hosting and Collaboration:
-  - GitHub (首选 for international projects)
+  - GitHub (preferred for international projects)
   - Gitee (Fast domestic access)
-  - Coding (Tencent旗下)
+  - Coding (Tencent subsidiary)
 
 Instant Messaging:
   - Feishu (Comprehensive features, integrated docs)
@@ -1788,7 +1788,7 @@ CI/CD:
 
 ## Summary
 
-Efficient GitHub team collaboration needs to establish standards at以下几个 levels:
+Efficient GitHub team collaboration needs to establish standards at the following levels:
 
 ```
                     ┌─────────────┐
@@ -1824,11 +1824,11 @@ Efficient GitHub team collaboration needs to establish standards at以下几个 
 
 **Key Points Review**:
 
-1. **Choose collaboration model suitable for team**, don't盲目 pursue complexity
+1. **Choose collaboration model suitable for team**, don't blindly pursue complexity
 2. **Establish unified branch naming and commit standards**, keep code history clear
 3. **PRs should be small and focused**, reduce Review cost
 4. **Code Review is learning opportunity**, not fault-finding competition
 5. **Use CODEOWNERS and branch protection well**, automate standard enforcement
 6. **Documentation is team's common wealth**, continuously maintain and update
-7. **Asynchronous优先**, reduce unnecessary meetings
+7. **Asynchronous first**, reduce unnecessary meetings
 8. **Focus on network and compliance**, Chinese characteristic practical experience

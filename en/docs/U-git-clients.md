@@ -190,8 +190,8 @@ gitui
 
 ## Best Practices
 
-1. **Choose tool that suits you**: Don't blindly追求 feature-rich
-2. **Master basic commands**: Visualization tools are辅助, not replacements
+1. **Choose tool that suits you**: Don't blindly chase feature-rich
+2. **Master basic commands**: Visualization tools are an aid, not replacements
 3. **Stay synced**: Regularly pull latest code
 4. **Use branches well**: Use visualization tools to manage branches
 5. **Resolve conflicts**: Use tool's conflict resolution features

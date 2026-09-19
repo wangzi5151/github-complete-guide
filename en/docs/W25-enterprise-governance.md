@@ -321,7 +321,7 @@ jobs:
 
 ## Best Practices
 
-1. **Establish Clear Policies**:制定明确的治理策略
+1. **Establish Clear Policies**: Formulate clear governance strategies
 2. **Automate Governance**: Use tools to automate governance processes
 3. **Regular Review**: Regularly review and update policies
 4. **Train Team**: Ensure team understands and follows policies

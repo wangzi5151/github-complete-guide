@@ -1,14 +1,14 @@
-# 练习 19：GitHub Actions 复用工作流
+# Exercise 19: GitHub Actions Reusable Workflows
 
-## 学习目标
+## Learning Objectives
 
-- 创建复用工作流
-- 调用复用工作流
-- 使用矩阵策略
+- Create reusable workflows
+- Invoke reusable workflows
+- Use matrix strategies
 
-## 步骤
+## Steps
 
-### 步骤 1：创建复用工作流
+### Step 1: Create a Reusable Workflow
 
 ```yaml
 # .github/workflows/reusable-build.yml
@@ -27,7 +27,7 @@ on:
         default: true
     outputs:
       build-version:
-        description: "构建版本"
+        description: "Build version"
         value: ${{ jobs.build.outputs.version }}
     secrets:
       NPM_TOKEN:
@@ -58,7 +58,7 @@ jobs:
       run: npm test
 ```
 
-### 步骤 2：调用复用工作流
+### Step 2: Invoke the Reusable Workflow
 
 ```yaml
 # .github/workflows/ci.yml
@@ -80,7 +80,7 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
-### 步骤 3：使用矩阵策略
+### Step 3: Use a Matrix Strategy
 
 ```yaml
 # .github/workflows/matrix.yml
@@ -110,21 +110,21 @@ jobs:
     - run: npm test
 ```
 
-## 实战任务
+## Hands-On Task
 
-1. 创建复用工作流
-2. 配置输入参数和输出
-3. 调用复用工作流
-4. 使用矩阵策略测试多个环境
+1. Create a reusable workflow
+2. Configure input parameters and outputs
+3. Invoke the reusable workflow
+4. Use a matrix strategy to test across multiple environments
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 复用工作流已创建
-- [ ] 输入参数已配置
-- [ ] 输出已配置
-- [ ] 调用工作流正常
-- [ ] 矩阵策略正常
+- [ ] Reusable workflow has been created
+- [ ] Input parameters are configured
+- [ ] Outputs are configured
+- [ ] Calling the workflow works correctly
+- [ ] Matrix strategy works correctly
 
-## 下一步
+## Next Steps
 
-继续 [练习 20：GitHub Projects 看板管理](exercise-20-project-board.md)
+Continue to [Exercise 20: GitHub Projects Board Management](exercise-20-project-board.md)

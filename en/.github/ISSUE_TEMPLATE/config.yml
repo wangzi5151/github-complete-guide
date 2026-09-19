@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and Discussion
+    url: https://github.com/wangzi5151/chinese-use-github-helper/discussions
+    about: Use GitHub Discussions for communication and discussion

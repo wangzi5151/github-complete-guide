@@ -1,152 +1,152 @@
-# 前端开发者的 GitHub 工作流
+# GitHub Workflow for Frontend Developers
 
-> 本文档为前端开发者提供完整的 GitHub 工作流指南，涵盖仓库管理、CI/CD、自动化测试、性能监控、代码质量保障等核心环节，帮助前端团队建立高效规范的开发流程。
-
----
-
-## 目录
-
-1. [前端项目 GitHub 仓库结构](#1-前端项目-github-仓库结构)
-2. [前端项目 CI/CD](#2-前端项目-cicd)
-3. [静态网站部署方案](#3-静态网站部署方案)
-4. [前端自动化测试](#4-前端自动化测试)
-5. [Lighthouse CI 自动化性能测试](#5-lighthouse-ci-自动化性能测试)
-6. [前端代码质量工具](#6-前端代码质量工具)
-7. [依赖管理与安全](#7-依赖管理与安全)
-8. [Storybook 与组件库管理](#8-storybook-与组件库管理)
-9. [前端 Monorepo 管理](#9-前端-monorepo-管理)
-10. [npm/pnpm 包发布流程](#10-npmpnpm-包发布流程)
-11. [前端国际化（i18n）协作](#11-前端国际化i18n协作)
-12. [设计稿与代码协作](#12-设计稿与代码协作)
-13. [国内前端团队 GitHub 使用经验](#13-国内前端团队-github-使用经验)
+> This document provides a complete GitHub workflow guide for frontend developers, covering repository management, CI/CD, automated testing, performance monitoring, code quality assurance, and other core aspects, helping frontend teams establish an efficient and standardized development process.
 
 ---
 
-## 1. 前端项目 GitHub 仓库结构
+## Table of Contents
 
-### 1.1 标准前端项目目录结构
+1. [Frontend Project GitHub Repository Structure](#1-frontend-project-github-repository-structure)
+2. [Frontend Project CI/CD](#2-frontend-project-cicd)
+3. [Static Website Deployment Solutions](#3-static-website-deployment-solutions)
+4. [Frontend Automated Testing](#4-frontend-automated-testing)
+5. [Lighthouse CI Automated Performance Testing](#5-lighthouse-ci-automated-performance-testing)
+6. [Frontend Code Quality Tools](#6-frontend-code-quality-tools)
+7. [Dependency Management and Security](#7-dependency-management-and-security)
+8. [Storybook and Component Library Management](#8-storybook-and-component-library-management)
+9. [Frontend Monorepo Management](#9-frontend-monorepo-management)
+10. [npm/pnpm Package Publishing Workflow](#10-npmpnpm-package-publishing-workflow)
+11. [Frontend Internationalization (i18n) Collaboration](#11-frontend-internationalization-i18n-collaboration)
+12. [Design Mockups and Code Collaboration](#12-design-mockups-and-code-collaboration)
+13. [GitHub Usage Experience for Domestic Frontend Teams](#13-github-usage-experience-for-domestic-frontend-teams)
 
-一个规范的前端项目仓库应该具备清晰的目录结构，便于团队协作和自动化工具集成。以下是一个典型的 React 项目结构：
+---
+
+## 1. Frontend Project GitHub Repository Structure
+
+### 1.1 Standard Frontend Project Directory Structure
+
+A well-structured frontend project repository should have a clear directory structure to facilitate team collaboration and automated tool integration. Below is a typical React project structure:
 
 ```
 my-frontend-app/
 ├── .github/
 │   ├── workflows/
-│   │   ├── ci.yml                  # 持续集成流水线
-│   │   ├── deploy.yml              # 部署流水线
-│   │   ├── lighthouse.yml          # 性能检测流水线
-│   │   └── release.yml             # 发布流水线
+│   │   ├── ci.yml                  # Continuous integration pipeline
+│   │   ├── deploy.yml              # Deployment pipeline
+│   │   ├── lighthouse.yml          # Performance testing pipeline
+│   │   └── release.yml             # Release pipeline
 │   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.md           # Bug 报告模板
-│   │   └── feature_request.md      # 功能需求模板
-│   ├── PULL_REQUEST_TEMPLATE.md    # PR 模板
-│   ├── CODEOWNERS                  # 代码所有者配置
-│   └── dependabot.yml              # 依赖更新配置
+│   │   ├── bug_report.md           # Bug report template
+│   │   └── feature_request.md      # Feature request template
+│   ├── PULL_REQUEST_TEMPLATE.md    # PR template
+│   ├── CODEOWNERS                  # Code owners configuration
+│   └── dependabot.yml              # Dependency update configuration
 ├── src/
-│   ├── components/                 # 通用组件
+│   ├── components/                 # Shared components
 │   │   ├── Button/
 │   │   │   ├── Button.tsx
 │   │   │   ├── Button.test.tsx
 │   │   │   ├── Button.stories.tsx
 │   │   │   └── index.ts
 │   │   └── index.ts
-│   ├── pages/                      # 页面组件
-│   ├── hooks/                      # 自定义 Hook
-│   ├── utils/                      # 工具函数
-│   ├── services/                   # API 服务层
-│   ├── stores/                     # 状态管理
-│   ├── styles/                     # 全局样式
-│   ├── types/                      # TypeScript 类型定义
-│   ├── locales/                    # 国际化资源
+│   ├── pages/                      # Page components
+│   ├── hooks/                      # Custom hooks
+│   ├── utils/                      # Utility functions
+│   ├── services/                   # API service layer
+│   ├── stores/                     # State management
+│   ├── styles/                     # Global styles
+│   ├── types/                      # TypeScript type definitions
+│   ├── locales/                    # Internationalization resources
 │   └── App.tsx
-├── public/                         # 静态资源
-├── tests/                          # 测试配置和工具
+├── public/                         # Static assets
+├── tests/                          # Test configuration and utilities
 │   ├── setup.ts
 │   └── mocks/
-├── scripts/                        # 构建和部署脚本
-├── docs/                           # 项目文档
-├── .eslintrc.js                    # ESLint 配置
-├── .prettierrc                     # Prettier 配置
-├── .stylelintrc.js                 # Stylelint 配置
-├── .lintstagedrc.js                # lint-staged 配置
-├── tsconfig.json                   # TypeScript 配置
-├── vite.config.ts                  # Vite 构建配置
+├── scripts/                        # Build and deployment scripts
+├── docs/                           # Project documentation
+├── .eslintrc.js                    # ESLint configuration
+├── .prettierrc                     # Prettier configuration
+├── .stylelintrc.js                 # Stylelint configuration
+├── .lintstagedrc.js                # lint-staged configuration
+├── tsconfig.json                   # TypeScript configuration
+├── vite.config.ts                  # Vite build configuration
 ├── package.json
 ├── pnpm-lock.yaml
 └── README.md
 ```
 
-### 1.2 `.github` 目录详解
+### 1.2 `.github` Directory Details
 
-`.github` 目录是 GitHub 项目的核心配置目录，包含工作流、模板、代码审查规则等关键配置。
+The `.github` directory is the core configuration directory for GitHub projects, containing workflows, templates, code review rules, and other key configurations.
 
-**CODEOWNERS 文件示例：**
+**CODEOWNERS File Example:**
 
 ```
-# 全局代码所有者
+# Global code owners
 *                       @frontend-team
 
-# 组件库由特定成员维护
+# Component library maintained by specific members
 /src/components/        @zhangsan @lisi
 
-# 构建配置变更需要架构师审批
+# Build configuration changes require architect approval
 /vite.config.ts         @architect-wang
 /tsconfig.json          @architect-wang
 /.github/               @devops-team
 
-# 国际化文件由翻译团队维护
+# Internationalization files maintained by the translation team
 /src/locales/           @i18n-team
 ```
 
-**Issue 模板配置（`.github/ISSUE_TEMPLATE/config.yml`）：**
+**Issue Template Configuration (`.github/ISSUE_TEMPLATE/config.yml`):**
 
 ```yaml
 blank_issues_enabled: false
 contact_links:
-  - name: 功能讨论
+  - name: Feature Discussion
     url: https://github.com/orgs/your-org/discussions
-    about: 请在 Discussions 中讨论新功能想法
-  - name: 查看文档
+    about: Please discuss new feature ideas in Discussions
+  - name: View Documentation
     url: https://your-docs-site.com
-    about: 查看项目文档获取帮助
+    about: View project documentation for help
 ```
 
-### 1.3 分支管理策略
+### 1.3 Branch Management Strategy
 
-前端项目推荐采用 Git Flow 或 Trunk-Based Development：
+Frontend projects are recommended to adopt Git Flow or Trunk-Based Development:
 
-| 策略 | 适用场景 | 分支模型 | 优点 | 缺点 |
+| Strategy | Use Case | Branch Model | Pros | Cons |
 |------|---------|---------|------|------|
-| Git Flow | 大型项目、版本发布 | main/develop/feature/release/hotfix | 规范清晰、适合多版本并行 | 流程复杂、合并冲突多 |
-| Trunk-Based | 持续部署、小团队 | main/feature-short-lived | 速度快、冲突少 | 需要完善的自动化测试 |
-| GitHub Flow | 简单项目、快速迭代 | main/feature | 简单易学 | 不适合复杂发布流程 |
+| Git Flow | Large projects, version releases | main/develop/feature/release/hotfix | Clear standards, suitable for multi-version parallel development | Complex process, frequent merge conflicts |
+| Trunk-Based | Continuous deployment, small teams | main/feature-short-lived | Fast speed, fewer conflicts | Requires comprehensive automated testing |
+| GitHub Flow | Simple projects, rapid iteration | main/feature | Simple and easy to learn | Not suitable for complex release processes |
 
-**Git Flow 示例：**
+**Git Flow Example:**
 
 ```bash
-# 创建功能分支
+# Create feature branch
 git checkout develop
 git pull origin develop
 git checkout -b feature/user-login
 
-# 开发完成后推送
+# Push after development is complete
 git push origin feature/user-login
 
-# 在 GitHub 上创建 PR，目标分支为 develop
-# Code Review 通过后合并
+# Create PR on GitHub with target branch as develop
+# Merge after Code Review passes
 
-# 发布流程
+# Release process
 git checkout -b release/v1.2.0 develop
-# 修复发布相关问题后
+# After fixing release-related issues
 git checkout main
 git merge release/v1.2.0
 git tag -a v1.2.0 -m "Release v1.2.0"
 git push origin main --tags
 ```
 
-### 1.4 Commit 规范
+### 1.4 Commit Standards
 
-前端项目应严格遵循 Conventional Commits 规范，便于生成 CHANGELOG 和自动化版本管理：
+Frontend projects should strictly follow the Conventional Commits specification to facilitate CHANGELOG generation and automated version management:
 
 ```
 <type>(<scope>): <subject>
@@ -156,22 +156,22 @@ git push origin main --tags
 [footer]
 ```
 
-**常用 type 说明：**
+**Common type descriptions:**
 
-| type | 说明 | 示例 |
+| type | Description | Example |
 |------|------|------|
-| feat | 新功能 | `feat(login): 添加微信扫码登录` |
-| fix | 修复 Bug | `fix(cart): 修复数量选择器溢出问题` |
-| docs | 文档更新 | `docs: 更新 API 接口文档` |
-| style | 代码格式调整 | `style: 统一缩进为 2 空格` |
-| refactor | 代码重构 | `refactor(hooks): 抽取 useRequest 通用逻辑` |
-| perf | 性能优化 | `perf(list): 虚拟列表优化大数据渲染` |
-| test | 测试相关 | `test(login): 补充登录模块单元测试` |
-| chore | 构建/工具变更 | `chore: 升级 vite 至 5.0` |
-| ci | CI 配置变更 | `ci: 添加 Lighthouse CI 检测` |
-| revert | 回滚 | `revert: 回滚 feat(login) 微信登录` |
+| feat | New feature | `feat(login): Add WeChat QR code login` |
+| fix | Bug fix | `fix(cart): Fix quantity selector overflow issue` |
+| docs | Documentation update | `docs: Update API documentation` |
+| style | Code formatting adjustment | `style: Standardize indentation to 2 spaces` |
+| refactor | Code refactoring | `refactor(hooks): Extract common useRequest logic` |
+| perf | Performance optimization | `perf(list): Optimize large data rendering with virtual list` |
+| test | Test-related | `test(login): Add unit tests for login module` |
+| chore | Build/tool changes | `chore: Upgrade vite to 5.0` |
+| ci | CI configuration changes | `ci: Add Lighthouse CI checks` |
+| revert | Rollback | `revert: Revert feat(login) WeChat login` |
 
-**使用 commitlint 自动校验：**
+**Using commitlint for automatic validation:**
 
 ```bash
 pnpm add -D @commitlint/cli @commitlint/config-conventional husky
@@ -198,11 +198,11 @@ module.exports = {
 
 ---
 
-## 2. 前端项目 CI/CD
+## 2. Frontend Project CI/CD
 
-### 2.1 React 项目 GitHub Actions
+### 2.1 React Project GitHub Actions
 
-**完整的 React + TypeScript 项目 CI 流水线：**
+**Complete React + TypeScript Project CI Pipeline:**
 
 ```yaml
 # .github/workflows/ci.yml
@@ -220,39 +220,39 @@ env:
 
 jobs:
   lint:
-    name: 代码检查
+    name: Code Linting
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 安装 pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: ESLint 检查
+      - name: ESLint check
         run: pnpm eslint . --ext .ts,.tsx --format json --output-file eslint-report.json
 
-      - name: Prettier 检查
+      - name: Prettier check
         run: pnpm prettier --check "src/**/*.{ts,tsx,css,scss}"
 
-      - name: Stylelint 检查
+      - name: Stylelint check
         run: pnpm stylelint "src/**/*.{css,scss}"
 
-      - name: TypeScript 类型检查
+      - name: TypeScript type check
         run: pnpm tsc --noEmit
 
-      - name: 上传检查报告
+      - name: Upload check report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -260,87 +260,87 @@ jobs:
           path: eslint-report.json
 
   test:
-    name: 自动化测试
+    name: Automated Testing
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 安装 pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 运行单元测试
+      - name: Run unit tests
         run: pnpm test -- --coverage --reporters=default --reporters=jest-junit
         env:
           JEST_JUNIT_OUTPUT_DIR: ./test-results
 
-      - name: 上传测试结果
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: test-results/
 
-      - name: 上传覆盖率报告
+      - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage/
 
-      - name: 检查覆盖率阈值
+      - name: Check coverage threshold
         run: |
           COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-          echo "当前代码覆盖率: ${COVERAGE}%"
+          echo "Current code coverage: ${COVERAGE}%"
           if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "::warning::代码覆盖率 ${COVERAGE}% 低于阈值 80%"
+            echo "::warning::Code coverage ${COVERAGE}% is below threshold of 80%"
           fi
 
   build:
-    name: 构建验证
+    name: Build Verification
     runs-on: ubuntu-latest
     needs: test
     strategy:
       matrix:
         node-version: [18, 20, 22]
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 安装 pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - name: 设置 Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 构建项目
+      - name: Build project
         run: pnpm build
         env:
           NODE_ENV: production
 
-      - name: 分析构建产物大小
+      - name: Analyze build artifact size
         run: |
-          echo "## 构建产物分析" >> $GITHUB_STEP_SUMMARY
-          echo "| 文件类型 | 大小 | 文件数量 |" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Artifact Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "| File Type | Size | File Count |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|------|---------|" >> $GITHUB_STEP_SUMMARY
           for ext in js css html json png jpg svg woff2; do
             SIZE=$(find dist -name "*.${ext}" -exec du -ch {} + 2>/dev/null | tail -1 | cut -f1)
@@ -350,7 +350,7 @@ jobs:
             fi
           done
 
-      - name: 上传构建产物
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.node-version }}
@@ -358,7 +358,7 @@ jobs:
           retention-days: 7
 ```
 
-### 2.2 Vue 3 项目 GitHub Actions
+### 2.2 Vue 3 Project GitHub Actions
 
 ```yaml
 # .github/workflows/vue-ci.yml
@@ -387,21 +387,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Vue 类型检查 (vue-tsc)
+      - name: Vue type check (vue-tsc)
         run: pnpm vue-tsc --noEmit
 
       - name: ESLint
         run: pnpm eslint . --ext .vue,.ts,.tsx
 
-      - name: 单元测试 (Vitest)
+      - name: Unit tests (Vitest)
         run: pnpm vitest run --coverage
         env:
           VITE_API_BASE_URL: https://test-api.example.com
 
-      - name: 构建
+      - name: Build
         run: pnpm build
 
-      - name: 部署预览（PR 环境）
+      - name: Deploy preview (PR environment)
         if: github.event_name == 'pull_request'
         uses: amondnet/vercel-action@v25
         with:
@@ -411,7 +411,7 @@ jobs:
           working-directory: ./
 ```
 
-### 2.3 Angular 项目 GitHub Actions
+### 2.3 Angular Project GitHub Actions
 
 ```yaml
 # .github/workflows/angular-ci.yml
@@ -439,23 +439,23 @@ jobs:
       - name: Lint
         run: npx ng lint
 
-      - name: 单元测试 (Karma)
+      - name: Unit tests (Karma)
         run: npx ng test --watch=false --code-coverage --browsers=ChromeHeadless
 
-      - name: E2E 测试 (Playwright)
+      - name: E2E tests (Playwright)
         run: npx playwright install --with-deps chromium && npx ng e2e
 
-      - name: 构建
+      - name: Build
         run: npx ng build --configuration=production
 
-      - name: 上传覆盖率到 Codecov
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           directory: ./coverage
           token: ${{ secrets.CODECOV_TOKEN }}
 ```
 
-### 2.4 Svelte/SvelteKit 项目 GitHub Actions
+### 2.4 Svelte/SvelteKit Project GitHub Actions
 
 ```yaml
 # .github/workflows/sveltekit-ci.yml
@@ -495,39 +495,39 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Adapter 验证
+      - name: Adapter verification
         run: ls -la build/
 ```
 
-### 2.5 前端项目的完整 CI/CD 流水线设计
+### 2.5 Complete CI/CD Pipeline Design for Frontend Projects
 
-一个成熟的前端项目 CI/CD 流水线应包含以下阶段：
+A mature frontend project CI/CD pipeline should include the following stages:
 
 ```
-代码提交 → 代码检查 → 单元测试 → 构建验证 → E2E测试 → 预览部署 → 生产部署 → 监控
+Code Commit → Code Linting → Unit Testing → Build Verification → E2E Testing → Preview Deployment → Production Deployment → Monitoring
 ```
 
-**各阶段职责：**
+**Responsibilities of each stage:**
 
-| 阶段 | 工具 | 耗时 | 失败处理 |
+| Stage | Tools | Duration | Failure Handling |
 |------|------|------|---------|
-| 代码检查 | ESLint/Prettier/Stylelint | 1-2 分钟 | 阻止合并 |
-| 单元测试 | Jest/Vitest | 2-5 分钟 | 阻止合并 |
-| 构建验证 | Vite/Webpack | 2-4 分钟 | 阻止合并 |
-| E2E 测试 | Playwright/Cypress | 5-15 分钟 | 阻止合并（可选） |
-| 预览部署 | Vercel/Netlify | 1-3 分钟 | 告警通知 |
-| 生产部署 | GitHub Actions | 3-10 分钟 | 自动回滚 |
-| 监控 | Sentry/Lighthouse | 持续 | 告警通知 |
+| Code Linting | ESLint/Prettier/Stylelint | 1-2 minutes | Block merge |
+| Unit Testing | Jest/Vitest | 2-5 minutes | Block merge |
+| Build Verification | Vite/Webpack | 2-4 minutes | Block merge |
+| E2E Testing | Playwright/Cypress | 5-15 minutes | Block merge (optional) |
+| Preview Deployment | Vercel/Netlify | 1-3 minutes | Alert notification |
+| Production Deployment | GitHub Actions | 3-10 minutes | Automatic rollback |
+| Monitoring | Sentry/Lighthouse | Continuous | Alert notification |
 
 ---
 
-## 3. 静态网站部署方案
+## 3. Static Website Deployment Solutions
 
-### 3.1 GitHub Pages 部署
+### 3.1 GitHub Pages Deployment
 
-GitHub Pages 是最简单的免费静态网站托管方案，适合个人项目、文档站点和小型应用。
+GitHub Pages is the simplest free static website hosting solution, suitable for personal projects, documentation sites, and small applications.
 
-**基础部署配置：**
+**Basic deployment configuration:**
 
 ```yaml
 # .github/workflows/deploy-pages.yml
@@ -565,10 +565,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      - name: 配置 GitHub Pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
 
-      - name: 上传构建产物
+      - name: Upload build artifacts
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -580,40 +580,40 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 ```
 
-**SPA 路由处理（Vue Router / React Router）：**
+**SPA Route Handling (Vue Router / React Router):**
 
-由于 GitHub Pages 不支持服务端路由，SPA 应用需要特殊处理：
+Since GitHub Pages does not support server-side routing, SPA applications need special handling:
 
 ```yaml
-# 在构建后创建 404.html 处理 SPA 路由
-- name: SPA 路由处理
+# Create 404.html after build to handle SPA routing
+- name: SPA route handling
   run: |
     cp dist/index.html dist/404.html
 ```
 
-或者使用 `spa-github-pages` 方案，在 `index.html` 中添加重定向脚本。
+Or use the `spa-github-pages` solution, adding a redirect script in `index.html`.
 
-**自定义域名配置：**
+**Custom Domain Configuration:**
 
 ```yaml
-# 在仓库 Settings > Pages 中配置自定义域名
-# 或在构建步骤中自动配置
-- name: 配置自定义域名
+# Configure custom domain in repository Settings > Pages
+# Or auto-configure in the build step
+- name: Configure custom domain
   if: github.ref == 'refs/heads/main'
   run: |
     echo "www.example.com" > dist/CNAME
 ```
 
-### 3.2 Vercel 部署
+### 3.2 Vercel Deployment
 
-Vercel 是前端项目最流行的部署平台之一，提供极佳的开发者体验。
+Vercel is one of the most popular deployment platforms for frontend projects, offering an excellent developer experience.
 
-**自动部署配置：**
+**Auto-deployment configuration:**
 
 ```json
 // vercel.json
@@ -635,7 +635,7 @@ Vercel 是前端项目最流行的部署平台之一，提供极佳的开发者�
 }
 ```
 
-**GitHub Actions 与 Vercel 集成：**
+**GitHub Actions and Vercel Integration:**
 
 ```yaml
 # .github/workflows/vercel-deploy.yml
@@ -653,16 +653,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 安装 Vercel CLI
+      - name: Install Vercel CLI
         run: npm install -g vercel
 
-      - name: 拉取 Vercel 环境配置
+      - name: Pull Vercel environment configuration
         run: vercel pull --yes --environment=${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: 构建
+      - name: Build
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: 部署
+      - name: Deploy
         id: deploy
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
@@ -672,7 +672,7 @@ jobs:
           fi
           echo "url=$url" >> $GITHUB_OUTPUT
 
-      - name: 评论 PR 部署链接
+      - name: Comment PR deployment link
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
@@ -681,11 +681,11 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 预览部署: ${{ steps.deploy.outputs.url }}`
+              body: `🚀 Preview deployment: ${{ steps.deploy.outputs.url }}`
             })
 ```
 
-### 3.3 Netlify 部署
+### 3.3 Netlify Deployment
 
 ```yaml
 # .github/workflows/netlify-deploy.yml
@@ -709,7 +709,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile && pnpm build
 
-      - name: 部署到 Netlify
+      - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3
         with:
           publish-dir: ./dist
@@ -722,7 +722,7 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 ```
 
-**Netlify 配置文件：**
+**Netlify configuration file:**
 
 ```toml
 # netlify.toml
@@ -744,9 +744,9 @@ jobs:
   package = "@netlify/plugin-lighthouse"
 ```
 
-### 3.4 Cloudflare Pages 部署
+### 3.4 Cloudflare Pages Deployment
 
-Cloudflare Pages 提供全球 CDN 和 Workers 支持，适合对性能要求高的项目。
+Cloudflare Pages provides global CDN and Workers support, suitable for performance-demanding projects.
 
 ```yaml
 # .github/workflows/cloudflare-pages.yml
@@ -770,7 +770,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile && pnpm build
 
-      - name: 部署到 Cloudflare Pages
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -778,28 +778,28 @@ jobs:
           command: pages deploy dist --project-name=my-app
 ```
 
-### 3.5 部署方案对比
+### 3.5 Deployment Solution Comparison
 
-| 特性 | GitHub Pages | Vercel | Netlify | Cloudflare Pages |
+| Feature | GitHub Pages | Vercel | Netlify | Cloudflare Pages |
 |------|-------------|--------|---------|-----------------|
-| 免费额度 | 100GB/月 | 100GB/月 | 100GB/月 | 无限带宽 |
-| 构建时间 | 需自建 CI | 6000分钟/月 | 300分钟/月 | 500次/月 |
-| 自定义域名 | 支持 | 支持 | 支持 | 支持 |
-| SSL 证书 | 自动 | 自动 | 自动 | 自动 |
-| Serverless | 不支持 | 支持 | 支持 | Workers |
-| 预览部署 | 不支持 | 支持 | 支持 | 支持 |
-| 国内访问 | 较慢 | 较慢 | 较慢 | 较快 |
-| 适合场景 | 文档/博客 | 全栈应用 | 静态站点 | 全球化应用 |
+| Free Quota | 100GB/month | 100GB/month | 100GB/month | Unlimited bandwidth |
+| Build Time | Requires self-built CI | 6000 minutes/month | 300 minutes/month | 500 runs/month |
+| Custom Domain | Supported | Supported | Supported | Supported |
+| SSL Certificate | Automatic | Automatic | Automatic | Automatic |
+| Serverless | Not supported | Supported | Supported | Workers |
+| Preview Deployment | Not supported | Supported | Supported | Supported |
+| Domestic Access | Slower | Slower | Slower | Faster |
+| Suitable Scenarios | Documentation/Blogs | Full-stack applications | Static sites | Globalized applications |
 
 ---
 
-## 4. 前端自动化测试
+## 4. Frontend Automated Testing
 
-### 4.1 Jest 单元测试
+### 4.1 Jest Unit Testing
 
-Jest 是 React 生态中最流行的测试框架，也广泛用于 Vue 和 Angular 项目。
+Jest is the most popular testing framework in the React ecosystem, also widely used in Vue and Angular projects.
 
-**Jest 配置示例：**
+**Jest configuration example:**
 
 ```javascript
 // jest.config.js
@@ -828,7 +828,7 @@ module.exports = {
 };
 ```
 
-**React 组件测试示例：**
+**React component test example:**
 
 ```typescript
 // src/components/UserCard/UserCard.test.tsx
@@ -855,7 +855,7 @@ describe('UserCard', () => {
     vi.clearAllMocks();
   });
 
-  it('应该正确渲染用户信息', async () => {
+  it('should render user information correctly', async () => {
     render(<UserCard userId="1" />);
 
     await waitFor(() => {
@@ -864,22 +864,22 @@ describe('UserCard', () => {
     });
   });
 
-  it('应该显示加载状态', () => {
+  it('should show loading state', () => {
     render(<UserCard userId="1" />);
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
-  it('应该处理加载失败', async () => {
-    vi.mocked(fetchUser).mockRejectedValue(new Error('网络错误'));
+  it('should handle loading failure', async () => {
+    vi.mocked(fetchUser).mockRejectedValue(new Error('Network error'));
 
     render(<UserCard userId="1" />);
 
     await waitFor(() => {
-      expect(screen.getByText('加载失败')).toBeInTheDocument();
+      expect(screen.getByText('Failed to load')).toBeInTheDocument();
     });
   });
 
-  it('点击按钮应该触发回调', async () => {
+  it('should trigger callback when button is clicked', async () => {
     const onEdit = vi.fn();
     render(<UserCard userId="1" onEdit={onEdit} />);
 
@@ -887,38 +887,38 @@ describe('UserCard', () => {
       expect(screen.getByText('张三')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '编辑' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
     expect(onEdit).toHaveBeenCalledWith(mockUser);
   });
 });
 ```
 
-### 4.2 Cypress E2E 测试
+### 4.2 Cypress E2E Testing
 
 ```javascript
 // cypress/e2e/login.cy.ts
-describe('登录功能', () => {
+describe('Login functionality', () => {
   beforeEach(() => {
     cy.visit('/login');
   });
 
-  it('应该显示登录表单', () => {
+  it('should display login form', () => {
     cy.get('[data-testid="login-form"]').should('be.visible');
     cy.get('input[name="username"]').should('exist');
     cy.get('input[name="password"]').should('exist');
-    cy.get('button[type="submit"]').should('contain', '登录');
+    cy.get('button[type="submit"]').should('contain', 'Login');
   });
 
-  it('空表单提交应该显示验证错误', () => {
+  it('should show validation errors on empty form submission', () => {
     cy.get('button[type="submit"]').click();
     cy.get('.error-message').should('have.length', 2);
-    cy.get('.error-message').first().should('contain', '请输入用户名');
+    cy.get('.error-message').first().should('contain', 'Please enter username');
   });
 
-  it('应该成功登录并跳转', () => {
+  it('should login successfully and redirect', () => {
     cy.intercept('POST', '/api/auth/login', {
       statusCode: 200,
-      body: { token: 'fake-jwt-token', user: { name: '测试用户' } },
+      body: { token: 'fake-jwt-token', user: { name: 'Test User' } },
     }).as('loginRequest');
 
     cy.get('input[name="username"]').type('testuser');
@@ -927,85 +927,85 @@ describe('登录功能', () => {
 
     cy.wait('@loginRequest');
     cy.url().should('include', '/dashboard');
-    cy.get('.user-name').should('contain', '测试用户');
+    cy.get('.user-name').should('contain', 'Test User');
   });
 
-  it('登录失败应该显示错误提示', () => {
+  it('should show error message on login failure', () => {
     cy.intercept('POST', '/api/auth/login', {
       statusCode: 401,
-      body: { message: '用户名或密码错误' },
+      body: { message: 'Invalid username or password' },
     });
 
     cy.get('input[name="username"]').type('wronguser');
     cy.get('input[name="password"]').type('wrongpass');
     cy.get('button[type="submit"]').click();
 
-    cy.get('.alert-error').should('contain', '用户名或密码错误');
+    cy.get('.alert-error').should('contain', 'Invalid username or password');
   });
 });
 ```
 
-### 4.3 Playwright E2E 测试
+### 4.3 Playwright E2E Testing
 
-Playwright 是新一代 E2E 测试工具，支持多浏览器、自动等待和更好的调试体验。
+Playwright is a next-generation E2E testing tool that supports multiple browsers, automatic waiting, and better debugging experience.
 
 ```typescript
 // tests/e2e/shopping.spec.ts
 import { test, expect } from '@playwright/test';
 
-test.describe('购物流程', () => {
+test.describe('Shopping flow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('浏览商品并添加到购物车', async ({ page }) => {
-    // 浏览商品列表
-    await page.getByRole('link', { name: '商品列表' }).click();
+  test('browse products and add to cart', async ({ page }) => {
+    // Browse product list
+    await page.getByRole('link', { name: 'Product List' }).click();
     await expect(page.getByTestId('product-list')).toBeVisible();
 
-    // 点击第一个商品
+    // Click first product
     const firstProduct = page.getByTestId('product-card').first();
     const productName = await firstProduct.getByTestId('product-name').textContent();
     await firstProduct.click();
 
-    // 添加到购物车
-    await page.getByRole('button', { name: '加入购物车' }).click();
+    // Add to cart
+    await page.getByRole('button', { name: 'Add to Cart' }).click();
 
-    // 验证购物车数量
+    // Verify cart count
     await expect(page.getByTestId('cart-count')).toHaveText('1');
 
-    // 验证购物车内容
+    // Verify cart content
     await page.getByTestId('cart-icon').click();
     await expect(page.getByTestId('cart-item')).toContainText(productName!);
   });
 
-  test('完整的下单流程', async ({ page }) => {
-    // 登录
+  test('complete checkout flow', async ({ page }) => {
+    // Login
     await page.goto('/login');
-    await page.getByLabel('用户名').fill('testuser');
-    await page.getByLabel('密码').fill('password123');
-    await page.getByRole('button', { name: '登录' }).click();
-    await expect(page.getByText('欢迎回来')).toBeVisible();
+    await page.getByLabel('Username').fill('testuser');
+    await page.getByLabel('Password').fill('password123');
+    await page.getByRole('button', { name: 'Login' }).click();
+    await expect(page.getByText('Welcome back')).toBeVisible();
 
-    // 添加商品
+    // Add product
     await page.goto('/products/1');
-    await page.getByRole('button', { name: '加入购物车' }).click();
+    await page.getByRole('button', { name: 'Add to Cart' }).click();
 
-    // 结算
-    await page.getByRole('button', { name: '去结算' }).click();
+    // Checkout
+    await page.getByRole('button', { name: 'Go to Checkout' }).click();
     await expect(page).toHaveURL('/checkout');
 
-    // 填写收货地址
-    await page.getByLabel('收货人').fill('张三');
-    await page.getByLabel('手机号').fill('13800138000');
-    await page.getByLabel('详细地址').fill('北京市朝阳区xxx路xxx号');
+    // Fill in shipping address
+    await page.getByLabel('Recipient').fill('John Doe');
+    await page.getByLabel('Phone').fill('13800138000');
+    await page.getByLabel('Detailed Address').fill('123 Main Street, Chaoyang District, Beijing');
 
-    // 提交订单
-    await page.getByRole('button', { name: '提交订单' }).click();
-    await expect(page.getByText('订单提交成功')).toBeVisible();
+    // Submit order
+    await page.getByRole('button', { name: 'Submit Order' }).click();
+    await expect(page.getByText('Order submitted successfully')).toBeVisible();
   });
 
-  test('页面性能验证', async ({ page }) => {
+  test('page performance verification', async ({ page }) => {
     const startTime = Date.now();
     await page.goto('/');
     await page.waitForLoadState('networkidle');
@@ -1013,7 +1013,7 @@ test.describe('购物流程', () => {
 
     expect(loadTime).toBeLessThan(3000);
 
-    // 验证核心 Web 指标
+    // Verify core Web Vitals
     const metrics = await page.evaluate(() => {
       return new Promise((resolve) => {
         new PerformanceObserver((list) => {
@@ -1022,12 +1022,12 @@ test.describe('购物流程', () => {
         }).observe({ type: 'largest-contentful-paint', buffered: true });
       });
     });
-    console.log('性能指标:', metrics);
+    console.log('Performance metrics:', metrics);
   });
 });
 ```
 
-**Playwright 配置文件：**
+**Playwright configuration file:**
 
 ```typescript
 // playwright.config.ts
@@ -1065,9 +1065,9 @@ export default defineConfig({
 
 ---
 
-## 5. Lighthouse CI 自动化性能测试
+## 5. Lighthouse CI Automated Performance Testing
 
-### 5.1 基础 Lighthouse CI 配置
+### 5.1 Basic Lighthouse CI Configuration
 
 ```yaml
 # .github/workflows/lighthouse.yml
@@ -1091,15 +1091,15 @@ jobs:
 
       - run: pnpm install --frozen-lockfile && pnpm build
 
-      - name: 启动本地服务器
+      - name: Start local server
         run: pnpm preview &
         env:
           PORT: 4173
 
-      - name: 等待服务器就绪
+      - name: Wait for server to be ready
         run: npx wait-on http://localhost:4173 --timeout 30000
 
-      - name: 运行 Lighthouse CI
+      - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
@@ -1111,7 +1111,7 @@ jobs:
           temporaryPublicStorage: true
 ```
 
-**Lighthouse CI 配置文件：**
+**Lighthouse CI configuration file:**
 
 ```json
 // .lighthouserc.json
@@ -1143,10 +1143,10 @@ jobs:
 }
 ```
 
-### 5.2 Lighthouse CI 与 PR 评论集成
+### 5.2 Lighthouse CI and PR Comment Integration
 
 ```yaml
-- name: 运行 Lighthouse CI 并评论
+- name: Run Lighthouse CI and comment
   uses: treosh/lighthouse-ci-action@v12
   id: lighthouse
   with:
@@ -1154,15 +1154,15 @@ jobs:
       http://localhost:4173/
     uploadArtifacts: true
 
-- name: 生成 Lighthouse 报告评论
+- name: Generate Lighthouse report comment
   uses: actions/github-script@v7
   with:
     script: |
       const fs = require('fs');
       const results = JSON.parse(fs.readFileSync('${{ steps.lighthouse.outputs.manifest }}', 'utf8'));
 
-      let comment = '## 🔦 Lighthouse 性能报告\n\n';
-      comment += '| 页面 | 性能 | 可访问性 | 最佳实践 | SEO |\n';
+      let comment = '## 🔦 Lighthouse Performance Report\n\n';
+      comment += '| Page | Performance | Accessibility | Best Practices | SEO |\n';
       comment += '|------|------|---------|---------|----|\n';
 
       for (const result of results) {
@@ -1187,11 +1187,11 @@ jobs:
 
 ---
 
-## 6. 前端代码质量工具
+## 6. Frontend Code Quality Tools
 
-### 6.1 ESLint 配置
+### 6.1 ESLint Configuration
 
-现代前端项目推荐使用 ESLint Flat Config 格式：
+Modern frontend projects are recommended to use ESLint Flat Config format:
 
 ```javascript
 // eslint.config.js
@@ -1222,25 +1222,25 @@ export default [
       'import': importPlugin,
     },
     rules: {
-      // TypeScript 规则
+      // TypeScript rules
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
 
-      // React 规则
+      // React rules
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
-      // Import 规则
+      // Import rules
       'import/order': ['error', {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
         'newlines-between': 'always',
         alphabetize: { order: 'asc' },
       }],
 
-      // 通用规则
+      // General rules
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
       'no-var': 'error',
@@ -1253,7 +1253,7 @@ export default [
 ];
 ```
 
-### 6.2 Prettier 配置
+### 6.2 Prettier Configuration
 
 ```json
 // .prettierrc
@@ -1276,7 +1276,7 @@ export default [
 }
 ```
 
-### 6.3 Stylelint 配置
+### 6.3 Stylelint Configuration
 
 ```javascript
 // .stylelintrc.js
@@ -1295,7 +1295,7 @@ module.exports = {
 };
 ```
 
-### 6.4 Husky + lint-staged 配置
+### 6.4 Husky + lint-staged Configuration
 
 ```json
 // package.json
@@ -1322,7 +1322,7 @@ module.exports = {
 }
 ```
 
-### 6.5 GitHub Actions 中的代码质量检查
+### 6.5 Code Quality Checks in GitHub Actions
 
 ```yaml
 # .github/workflows/quality.yml
@@ -1344,12 +1344,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 检查代码格式
+      - name: Check code formatting
         run: |
           pnpm eslint . --format json --output-file eslint.json || true
           pnpm prettier --check "src/**/*" || true
 
-      - name: 代码质量报告
+      - name: Code quality report
         uses: actions/github-script@v7
         if: always()
         with:
@@ -1360,13 +1360,13 @@ jobs:
               const errors = eslintResults.reduce((sum, f) => sum + f.errorCount, 0);
               const warnings = eslintResults.reduce((sum, f) => sum + f.warningCount, 0);
 
-              let report = `## 📊 代码质量报告\n\n`;
-              report += `- ❌ 错误: ${errors}\n`;
-              report += `- ⚠️ 警告: ${warnings}\n`;
-              report += `- 📁 检查文件数: ${eslintResults.length}\n`;
+              let report = `## 📊 Code Quality Report\n\n`;
+              report += `- ❌ Errors: ${errors}\n`;
+              report += `- ⚠️ Warnings: ${warnings}\n`;
+              report += `- 📁 Files checked: ${eslintResults.length}\n`;
 
               if (errors > 0) {
-                report += `\n### 错误详情\n`;
+                report += `\n### Error Details\n`;
                 for (const file of eslintResults.filter(f => f.errorCount > 0)) {
                   report += `\n**${file.filePath}**\n`;
                   for (const msg of file.messages.filter(m => m.severity === 2)) {
@@ -1382,15 +1382,15 @@ jobs:
                 body: report
               });
             } catch (e) {
-              console.log('无法生成报告:', e.message);
+              console.log('Failed to generate report:', e.message);
             }
 ```
 
 ---
 
-## 7. 依赖管理与安全
+## 7. Dependency Management and Security
 
-### 7.1 Dependabot 配置
+### 7.1 Dependabot Configuration
 
 ```yaml
 # .github/dependabot.yml
@@ -1443,9 +1443,9 @@ updates:
       - "dependencies"
 ```
 
-### 7.2 Renovate 配置
+### 7.2 Renovate Configuration
 
-Renovate 是 Dependabot 的替代方案，提供更多自定义选项：
+Renovate is an alternative to Dependabot, offering more customization options:
 
 ```json
 // renovate.json
@@ -1487,7 +1487,7 @@ Renovate 是 Dependabot 的替代方案，提供更多自定义选项：
 }
 ```
 
-### 7.3 依赖安全审计
+### 7.3 Dependency Security Auditing
 
 ```yaml
 # .github/workflows/security.yml
@@ -1495,7 +1495,7 @@ name: Dependency Security
 
 on:
   schedule:
-    - cron: '0 9 * * 1'  # 每周一早上9点
+    - cron: '0 9 * * 1'  # Every Monday at 9 AM
   push:
     branches: [main]
 
@@ -1513,20 +1513,20 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 安全审计
+      - name: Security audit
         run: pnpm audit --json > audit-report.json || true
 
-      - name: 检查许可证
+      - name: Check licenses
         run: |
           pnpm add -D license-checker
           npx license-checker --json --out licenses.json
-          # 检查是否有 GPL 或 AGPL 许可证
+          # Check for GPL or AGPL licenses
           node -e "
             const licenses = require('./licenses.json');
             const problematic = Object.entries(licenses)
               .filter(([_, info]) => /GPL|AGPL/.test(info.licenses));
             if (problematic.length > 0) {
-              console.error('发现受限许可证:');
+              console.error('Found restricted licenses:');
               problematic.forEach(([pkg, info]) => {
                 console.error('  ' + pkg + ': ' + info.licenses);
               });
@@ -1534,7 +1534,7 @@ jobs:
             }
           "
 
-      - name: 创建 Issue（发现漏洞时）
+      - name: Create Issue (when vulnerability found)
         if: failure()
         uses: actions/github-script@v7
         with:
@@ -1542,20 +1542,20 @@ jobs:
             const fs = require('fs');
             const report = JSON.parse(fs.readFileSync('audit-report.json', 'utf8'));
 
-            let body = '## 🔒 依赖安全漏洞报告\n\n';
-            body += `发现 ${report.metadata.vulnerabilities.total} 个漏洞\n\n`;
-            body += '| 严重程度 | 数量 |\n|---------|------|\n';
+            let body = '## 🔒 Dependency Security Vulnerability Report\n\n';
+            body += `Found ${report.metadata.vulnerabilities.total} vulnerabilities\n\n`;
+            body += '| Severity | Count |\n|---------|------|\n';
 
             const vulns = report.metadata.vulnerabilities;
-            body += `| 🔴 严重 | ${vulns.critical} |\n`;
-            body += `| 🟠 高 | ${vulns.high} |\n`;
-            body += `| 🟡 中 | ${vulns.moderate} |\n`;
-            body += `| 🟢 低 | ${vulns.low} |\n`;
+            body += `| 🔴 Critical | ${vulns.critical} |\n`;
+            body += `| 🟠 High | ${vulns.high} |\n`;
+            body += `| 🟡 Moderate | ${vulns.moderate} |\n`;
+            body += `| 🟢 Low | ${vulns.low} |\n`;
 
             github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '🔒 发现依赖安全漏洞',
+              title: '🔒 Dependency Security Vulnerability Found',
               body: body,
               labels: ['security', 'dependencies']
             });
@@ -1563,9 +1563,9 @@ jobs:
 
 ---
 
-## 8. Storybook 与组件库管理
+## 8. Storybook and Component Library Management
 
-### 8.1 Storybook 基础配置
+### 8.1 Storybook Basic Configuration
 
 ```yaml
 # .github/workflows/storybook.yml
@@ -1591,10 +1591,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 构建 Storybook
+      - name: Build Storybook
         run: pnpm build-storybook
 
-      - name: 部署 Storybook 到 Chromatic
+      - name: Deploy Storybook to Chromatic
         if: github.event_name == 'push'
         uses: chromaui/action@latest
         with:
@@ -1602,7 +1602,7 @@ jobs:
           buildScriptName: build-storybook
           exitOnceUploaded: true
 
-      - name: PR 预览部署
+      - name: PR preview deployment
         if: github.event_name == 'pull_request'
         uses: chromaui/action@latest
         with:
@@ -1611,7 +1611,7 @@ jobs:
           exitZeroOnChanges: true
 ```
 
-### 8.2 Storybook 组件文档示例
+### 8.2 Storybook Component Documentation Example
 
 ```typescript
 // src/components/Button/Button.stories.tsx
@@ -1640,21 +1640,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    children: '主要按钮',
+    children: 'Primary Button',
     variant: 'primary',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    children: '次要按钮',
+    children: 'Secondary Button',
     variant: 'secondary',
   },
 };
 
 export const Loading: Story = {
   args: {
-    children: '加载中...',
+    children: 'Loading...',
     variant: 'primary',
     isLoading: true,
   },
@@ -1663,15 +1663,15 @@ export const Loading: Story = {
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-      <Button size="sm">小按钮</Button>
-      <Button size="md">中按钮</Button>
-      <Button size="lg">大按钮</Button>
+      <Button size="sm">Small Button</Button>
+      <Button size="md">Medium Button</Button>
+      <Button size="lg">Large Button</Button>
     </div>
   ),
 };
 ```
 
-### 8.3 视觉回归测试
+### 8.3 Visual Regression Testing
 
 ```yaml
 # .github/workflows/visual-test.yml
@@ -1695,7 +1695,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 运行视觉回归测试
+      - name: Run visual regression test
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -1706,9 +1706,9 @@ jobs:
 
 ---
 
-## 9. 前端 Monorepo 管理
+## 9. Frontend Monorepo Management
 
-### 9.1 Turborepo 配置
+### 9.1 Turborepo Configuration
 
 ```yaml
 # .github/workflows/monorepo-ci.yml
@@ -1725,7 +1725,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Turborepo 需要完整 git 历史
+          fetch-depth: 0  # Turborepo requires full git history
 
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
@@ -1735,23 +1735,23 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 构建（仅变更的包）
+      - name: Build (only changed packages)
         run: pnpm turbo build --filter=...[origin/main]
 
-      - name: 测试（仅变更的包）
+      - name: Test (only changed packages)
         run: pnpm turbo test --filter=...[origin/main]
 
-      - name: Lint（仅变更的包）
+      - name: Lint (only changed packages)
         run: pnpm turbo lint --filter=...[origin/main]
 
-      - name: 变更检测报告
+      - name: Change detection report
         run: |
-          echo "## 📦 变更包分析" >> $GITHUB_STEP_SUMMARY
-          CHANGED=$(pnpm turbo --filter=...[origin/main] --dry=json 2>/dev/null | jq -r '.packages[]' || echo "无法检测")
-          echo "变更的包: $CHANGED" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Changed Package Analysis" >> $GITHUB_STEP_SUMMARY
+          CHANGED=$(pnpm turbo --filter=...[origin/main] --dry=json 2>/dev/null | jq -r '.packages[]' || echo "Unable to detect")
+          echo "Changed packages: $CHANGED" >> $GITHUB_STEP_SUMMARY
 ```
 
-**Turborepo 配置文件：**
+**Turborepo configuration file:**
 
 ```json
 // turbo.json
@@ -1779,7 +1779,7 @@ jobs:
 }
 ```
 
-### 9.2 Nx 配置
+### 9.2 Nx Configuration
 
 ```yaml
 # .github/workflows/nx-ci.yml
@@ -1806,16 +1806,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Nx 受影响的项目
+      - name: Nx affected projects
         run: npx nx affected -t lint test build --base=origin/main --head=HEAD
 
-      - name: Nx Cloud 分布式缓存
+      - name: Nx Cloud distributed caching
         run: npx nx run-many -t build --parallel=3
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 ```
 
-### 9.3 Monorepo 包发布
+### 9.3 Monorepo Package Publishing
 
 ```yaml
 # .github/workflows/monorepo-release.yml
@@ -1842,13 +1842,13 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 创建 Release PR
+      - name: Create Release PR
         uses: changesets/action@v1
         with:
           publish: pnpm release
           version: pnpm changeset version
-          title: "chore: 版本发布"
-          commit: "chore: 版本发布"
+          title: "chore: version release"
+          commit: "chore: version release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -1856,9 +1856,9 @@ jobs:
 
 ---
 
-## 10. npm/pnpm 包发布流程
+## 10. npm/pnpm Package Publishing Workflow
 
-### 10.1 自动化包发布
+### 10.1 Automated Package Publishing
 
 ```yaml
 # .github/workflows/publish.yml
@@ -1886,24 +1886,24 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: 运行测试
+      - name: Run tests
         run: pnpm test
 
-      - name: 构建
+      - name: Build
         run: pnpm build
 
-      - name: 发布到 npm
+      - name: Publish to npm
         run: pnpm publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: 发布到 GitHub Packages
+      - name: Publish to GitHub Packages
         run: pnpm publish --no-git-checks --access public --registry https://npm.pkg.github.com
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### 10.2 语义化版本管理
+### 10.2 Semantic Versioning Management
 
 ```yaml
 # .github/workflows/release.yml
@@ -1929,17 +1929,17 @@ jobs:
         with:
           node-version: 20
 
-      - name: 安装 semantic-release
+      - name: Install semantic-release
         run: npm install -g semantic-release @semantic-release/changelog @semantic-release/git
 
-      - name: 执行发布
+      - name: Execute release
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
-**semantic-release 配置：**
+**semantic-release configuration:**
 
 ```javascript
 // .releaserc.js
@@ -1961,9 +1961,9 @@ module.exports = {
 
 ---
 
-## 11. 前端国际化（i18n）协作
+## 11. Frontend Internationalization (i18n) Collaboration
 
-### 11.1 国际化资源管理
+### 11.1 Internationalization Resource Management
 
 ```yaml
 # .github/workflows/i18n.yml
@@ -1981,14 +1981,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 检查翻译完整性
+      - name: Check translation completeness
         run: |
           node scripts/check-translations.js
 
-      - name: 检查翻译格式
+      - name: Check translation format
         run: |
           pnpm i18next-parser src/**/*.{ts,tsx} --config i18next-parser.config.js
-          git diff --exit-code src/locales/ || (echo "翻译文件有未处理的键值" && exit 1)
+          git diff --exit-code src/locales/ || (echo "Translation files have unprocessed keys" && exit 1)
 
   sync-translations:
     runs-on: ubuntu-latest
@@ -1997,14 +1997,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 同步翻译到 Crowdin
+      - name: Sync translations to Crowdin
         uses: crowdin/github-action@v1
         with:
           upload_sources: true
           upload_translations: false
           download_translations: true
           create_pull_request: true
-          pull_request_title: 'chore(i18n): 更新翻译文件'
+          pull_request_title: 'chore(i18n): Update translation files'
           pull_request_labels: 'i18n'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -2012,7 +2012,7 @@ jobs:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 ```
 
-### 11.2 翻译完整性检查脚本
+### 11.2 Translation Completeness Check Script
 
 ```javascript
 // scripts/check-translations.js
@@ -2054,31 +2054,31 @@ for (const lang of TARGET_LANGS) {
   const extra = langKeys.filter((k) => !baseKeys.includes(k));
 
   if (missing.length > 0) {
-    console.error(`❌ ${lang} 缺少以下翻译键:`);
+    console.error(`❌ ${lang} is missing the following translation keys:`);
     missing.forEach((k) => console.error(`   - ${k}`));
     hasError = true;
   }
 
   if (extra.length > 0) {
-    console.warn(`⚠️ ${lang} 有多余的翻译键:`);
+    console.warn(`⚠️ ${lang} has extra translation keys:`);
     extra.forEach((k) => console.warn(`   - ${k}`));
   }
 
-  console.log(`✅ ${lang}: ${langKeys.length}/${baseKeys.length} 个翻译键`);
+  console.log(`✅ ${lang}: ${langKeys.length}/${baseKeys.length} translation keys`);
 }
 
 if (hasError) {
   process.exit(1);
 }
 
-console.log('\n🎉 所有翻译文件完整！');
+console.log('\n🎉 All translation files are complete!');
 ```
 
 ---
 
-## 12. 设计稿与代码协作
+## 12. Design Mockups and Code Collaboration
 
-### 12.1 Figma + GitHub 集成工作流
+### 12.1 Figma + GitHub Integration Workflow
 
 ```yaml
 # .github/workflows/design-sync.yml
@@ -2095,7 +2095,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 提取 Figma 链接
+      - name: Extract Figma link
         id: figma
         uses: actions/github-script@v7
         with:
@@ -2105,24 +2105,24 @@ jobs:
             const links = body.match(figmaRegex) || [];
             return links[0] || '';
 
-      - name: 同步设计 Token
+      - name: Sync design tokens
         run: |
-          # 从 Figma 导出设计 Token
+          # Export design tokens from Figma
           npx style-dictionary build --config design-tokens.config.js
 
-      - name: 生成设计规范 PR
+      - name: Create design spec PR
         if: steps.figma.outputs.result != ''
         uses: peter-evans/create-pull-request@v5
         with:
-          title: 'design: 同步设计 Token'
+          title: 'design: Sync design tokens'
           body: |
-            自动从 Figma 设计稿同步的设计 Token 变更。
-            Figma 链接: ${{ steps.figma.outputs.result }}
+            Automatically synced design token changes from Figma.
+            Figma link: ${{ steps.figma.outputs.result }}
           branch: design/token-sync
           labels: design, automated
 ```
 
-### 12.2 设计 Token 管理
+### 12.2 Design Token Management
 
 ```javascript
 // design-tokens.config.js
@@ -2168,27 +2168,27 @@ module.exports = {
 
 ---
 
-## 13. 国内前端团队 GitHub 使用经验
+## 13. GitHub Usage Experience for Domestic Frontend Teams
 
-### 13.1 网络加速方案
+### 13.1 Network Acceleration Solutions
 
-国内访问 GitHub 经常遇到速度慢的问题，以下是几种解决方案：
+Accessing GitHub from China often encounters slow speeds. Here are several solutions:
 
-**方案一：使用 GitHub Actions 镜像加速**
+**Solution 1: Using GitHub Actions Mirror Acceleration**
 
 ```yaml
-# 使用国内 npm 镜像
-- name: 设置 npm 镜像
+# Use domestic npm mirror
+- name: Set npm mirror
   run: |
     pnpm config set registry https://registry.npmmirror.com
 
-# 使用国内 pip 镜像（如果有 Python 工具）
-- name: 设置 pip 镜像
+# Use domestic pip mirror (if using Python tools)
+- name: Set pip mirror
   run: |
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-**方案二：使用 Gitee 镜像同步**
+**Solution 2: Using Gitee Mirror Sync**
 
 ```yaml
 # .github/workflows/mirror.yml
@@ -2206,7 +2206,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 同步到 Gitee
+      - name: Sync to Gitee
         uses: wearerequired/git-mirror-action@master
         env:
           SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
@@ -2215,17 +2215,17 @@ jobs:
           destination-repo: git@gitee.com:your-org/your-repo.git
 ```
 
-**方案三：GitHub Proxy 加速**
+**Solution 3: GitHub Proxy Acceleration**
 
 ```yaml
-# 在 CI 中使用代理
-- name: 设置 Git 代理
+# Use proxy in CI
+- name: Set Git proxy
   run: |
     git config --global http.proxy http://your-proxy:port
     git config --global https.proxy http://your-proxy:port
 ```
 
-### 13.2 国内部署方案集成
+### 13.2 Domestic Deployment Solution Integration
 
 ```yaml
 # .github/workflows/deploy-china.yml
@@ -2251,7 +2251,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      - name: 上传到阿里云 OSS
+      - name: Upload to Alibaba Cloud OSS
         uses: manyuanrong/setup-ossutil@v3.0
         with:
           access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
@@ -2259,16 +2259,16 @@ jobs:
           endpoint: oss-cn-hangzhou.aliyuncs.com
           bucket: your-bucket-name
 
-      - name: 部署到 OSS
+      - name: Deploy to OSS
         run: |
           ossutil cp -r dist/ oss://your-bucket-name/ --update
           ossutil set-meta oss://your-bucket-name/ --update \
             --header "Cache-Control:public,max-age=31536000" \
             --include "*.js" --include "*.css"
 
-      - name: 刷新 CDN 缓存
+      - name: Refresh CDN cache
         run: |
-          # 使用阿里云 CDN API 刷新缓存
+          # Use Alibaba Cloud CDN API to refresh cache
           aliyun cdn RefreshObjectCaches \
             --ObjectPath "https://www.example.com/" \
             --ObjectType "Directory"
@@ -2277,7 +2277,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: 部署到腾讯云 COS
+      - name: Deploy to Tencent Cloud COS
         uses: zkqiang/tencent-cos-action@v1.0.0
         with:
           args: delete -r -f / && upload -r dist/ /
@@ -2286,15 +2286,15 @@ jobs:
           bucket: your-bucket-name
           region: ap-guangzhou
 
-      - name: 刷新腾讯云 CDN
+      - name: Refresh Tencent Cloud CDN
         run: |
           pip install coscmd
           coscmd refresh-cdn --url "https://www.example.com/*"
 ```
 
-### 13.3 国内前端团队最佳实践
+### 13.3 Best Practices for Domestic Frontend Teams
 
-**1. 代码规范统一**
+**1. Code Standards Unification**
 
 ```json
 // .editorconfig
@@ -2312,73 +2312,73 @@ trim_trailing_whitespace = true
 trim_trailing_whitespace = false
 ```
 
-**2. 团队协作规范文档模板**
+**2. Team Collaboration Standards Document Template**
 
 ```markdown
-# 前端团队 GitHub 协作规范
+# Frontend Team GitHub Collaboration Standards
 
-## 分支命名规范
-- 功能分支: `feature/需求编号-简短描述`
-- 修复分支: `fix/Bug编号-简短描述`
-- 热修复: `hotfix/问题描述`
+## Branch Naming Standards
+- Feature branches: `feature/requirement-number-short-description`
+- Fix branches: `fix/bug-number-short-description`
+- Hotfix: `hotfix/issue-description`
 
-## PR 规范
-1. 标题格式: `type(scope): 描述`
-2. 必须关联 Issue
-3. 必须通过 CI 检查
-4. 至少 2 人 Code Review
-5. 使用 PR 模板填写变更说明
+## PR Standards
+1. Title format: `type(scope): description`
+2. Must link to Issue
+3. Must pass CI checks
+4. At least 2 people Code Review
+5. Use PR template to fill in change description
 
-## Code Review 关注点
-- 代码风格是否符合规范
-- 是否有潜在的性能问题
-- 是否有安全风险
-- 测试是否充分
-- 文档是否更新
+## Code Review Focus Points
+- Whether code style conforms to standards
+- Whether there are potential performance issues
+- Whether there are security risks
+- Whether tests are sufficient
+- Whether documentation is updated
 ```
 
-**3. 国内 CI/CD 优化**
+**3. Domestic CI/CD Optimization**
 
-| 优化项 | 方案 | 效果 |
+| Optimization Item | Solution | Effect |
 |--------|------|------|
-| npm 安装速度 | 使用 npmmirror 镜像 | 提速 5-10 倍 |
-| Docker 镜像 | 使用阿里云镜像仓库 | 提速 3-5 倍 |
-| 构建缓利 | GitHub Actions Cache | 减少 50% 构建时间 |
-| 并行测试 | 分片测试 + 并行执行 | 减少 60% 测试时间 |
-| 增量构建 | Turborepo/Nx 缓存 | 减少 70% 构建时间 |
+| npm install speed | Use npmmirror | 5-10x speedup |
+| Docker images | Use Alibaba Cloud image registry | 3-5x speedup |
+| Build cache | GitHub Actions Cache | 50% build time reduction |
+| Parallel testing | Sharded testing + parallel execution | 60% test time reduction |
+| Incremental builds | Turborepo/Nx caching | 70% build time reduction |
 
-### 13.4 常见问题与解决方案
+### 13.4 Common Issues and Solutions
 
-**问题 1：GitHub Actions 下载依赖超时**
+**Issue 1: GitHub Actions dependency download timeout**
 
 ```yaml
-# 解决方案：增加超时时间和重试机制
-- name: 安装依赖
+# Solution: Increase timeout and add retry mechanism
+- name: Install dependencies
   run: |
     for i in 1 2 3; do
       pnpm install --frozen-lockfile && break
-      echo "第 $i 次尝试失败，等待 10 秒后重试..."
+      echo "Attempt $i failed, waiting 10 seconds before retrying..."
       sleep 10
     done
   timeout-minutes: 15
 ```
 
-**问题 2：Git LFS 大文件传输慢**
+**Issue 2: Git LFS large file transfer slow**
 
 ```yaml
-# 解决方案：使用 CDN 托管静态资源
-- name: 上传静态资源到 CDN
+# Solution: Use CDN to host static assets
+- name: Upload static assets to CDN
   run: |
-    # 将大文件上传到 CDN，Git 仓库只存储引用
+    # Upload large files to CDN, Git repository only stores references
     curl -T dist/assets/vendor.js \
       -H "Authorization: ${{ secrets.CDN_TOKEN }}" \
       https://cdn.example.com/upload/
 ```
 
-**问题 3：多团队协作冲突频繁**
+**Issue 3: Frequent multi-team collaboration conflicts**
 
 ```yaml
-# 解决方案：使用 CODEOWNERS + 必须的 Review
+# Solution: Use CODEOWNERS + required reviews
 # .github/CODEOWNERS
 /src/components/  @component-team
 /src/pages/       @page-team
@@ -2386,30 +2386,30 @@ trim_trailing_whitespace = false
 /.github/         @devops-team
 ```
 
-### 13.5 推荐的工具链组合
+### 13.5 Recommended Toolchain Combinations
 
-| 项目类型 | 包管理器 | 构建工具 | 测试框架 | 部署平台 |
+| Project Type | Package Manager | Build Tool | Testing Framework | Deployment Platform |
 |---------|---------|---------|---------|---------|
 | React SPA | pnpm | Vite | Vitest + Playwright | Vercel |
-| Vue 3 项目 | pnpm | Vite | Vitest + Cypress | Netlify |
-| Next.js 项目 | pnpm | Next.js | Jest + Playwright | Vercel |
-| Nuxt 项目 | pnpm | Nuxt | Vitest + Playwright | Cloudflare Pages |
-| 组件库 | pnpm | Vite/Storybook | Vitest + Chromatic | npm + Storybook |
-| Monorepo | pnpm | Turborepo | Vitest | 各平台独立部署 |
-| 文档站点 | pnpm | VitePress | - | GitHub Pages |
+| Vue 3 Project | pnpm | Vite | Vitest + Cypress | Netlify |
+| Next.js Project | pnpm | Next.js | Jest + Playwright | Vercel |
+| Nuxt Project | pnpm | Nuxt | Vitest + Playwright | Cloudflare Pages |
+| Component Library | pnpm | Vite/Storybook | Vitest + Chromatic | npm + Storybook |
+| Monorepo | pnpm | Turborepo | Vitest | Independent deployment per platform |
+| Documentation Site | pnpm | VitePress | - | GitHub Pages |
 
 ---
 
-## 总结
+## Summary
 
-本文档涵盖了前端开发者在 GitHub 上进行高效协作的完整工作流。从仓库结构设计、CI/CD 流水线搭建、自动化测试、性能监控到代码质量保障，每个环节都提供了详细的配置示例和最佳实践。
+This document covers the complete GitHub workflow for frontend developers to collaborate efficiently. From repository structure design, CI/CD pipeline setup, automated testing, performance monitoring to code quality assurance, each aspect provides detailed configuration examples and best practices.
 
-**核心要点：**
+**Key Takeaways:**
 
-1. **自动化优先**：将代码检查、测试、构建、部署全部自动化，减少人工操作
-2. **质量门禁**：通过 CI 流水线设置质量门禁，确保代码质量
-3. **安全第一**：使用 Dependabot/Renovate 管理依赖安全
-4. **团队协作**：通过 CODEOWNERS、PR 模板、Commit 规范提升协作效率
-5. **国内优化**：使用镜像加速、CDN 部署等方案优化国内使用体验
+1. **Automation First**: Fully automate code linting, testing, building, and deployment to reduce manual operations
+2. **Quality Gates**: Set up quality gates through CI pipelines to ensure code quality
+3. **Security First**: Use Dependabot/Renovate to manage dependency security
+4. **Team Collaboration**: Improve collaboration efficiency through CODEOWNERS, PR templates, and Commit standards
+5. **Domestic Optimization**: Use mirror acceleration, CDN deployment, and other solutions to optimize domestic usage experience
 
-通过合理运用这些工具和流程，前端团队可以显著提升开发效率和代码质量，实现快速迭代和稳定发布。
+By leveraging these tools and processes, frontend teams can significantly improve development efficiency and code quality, achieving rapid iteration and stable releases.

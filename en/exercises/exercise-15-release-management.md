@@ -1,14 +1,14 @@
-# 练习 15：发布管理实战
+# Exercise 15: Release Management in Practice
 
-## 学习目标
+## Learning Objectives
 
-- 使用语义化版本
-- 自动生成 Release Notes
-- 自动发布到 npm
+- Use semantic versioning
+- Automatically generate Release Notes
+- Automatically publish to npm
 
-## 步骤
+## Steps
 
-### 步骤 1：创建发布工作流
+### Step 1: Create a Release Workflow
 
 ```yaml
 # .github/workflows/release.yml
@@ -47,7 +47,7 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
-### 步骤 2：配置 Release Notes 模板
+### Step 2: Configure Release Notes Template
 
 ```yaml
 # .github/release.yml
@@ -67,20 +67,20 @@ changelog:
         - security
 ```
 
-## 实战任务
+## Hands-On Tasks
 
-1. 创建自动发布工作流
-2. 配置 Release Notes 模板
-3. 测试发布流程
-4. 发布一个版本
+1. Create an automated release workflow
+2. Configure Release Notes template
+3. Test the release process
+4. Publish a release
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 能够创建发布工作流
-- [ ] 能够配置 Release Notes
-- [ ] 能够发布到 npm
-- [ ] 能够使用语义化版本
+- [ ] Able to create a release workflow
+- [ ] Able to configure Release Notes
+- [ ] Able to publish to npm
+- [ ] Able to use semantic versioning
 
-## 下一步
+## Next Steps
 
-继续 [练习 16：Monorepo 管理实战](exercise-16-monorepo.md)
+Continue to [Exercise 16: Monorepo Management in Practice](exercise-16-monorepo.md)

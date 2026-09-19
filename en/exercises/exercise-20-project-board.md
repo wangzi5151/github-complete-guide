@@ -1,28 +1,28 @@
-# 练习 20：GitHub Projects 看板管理
+# Exercise 20: GitHub Projects Board Management
 
-## 学习目标
+## Learning Objectives
 
-- 创建 GitHub Project
-- 配置看板视图
-- 使用自动化
+- Create a GitHub Project
+- Configure board views
+- Use automation
 
-## 步骤
+## Steps
 
-### 步骤 1：创建项目
+### Step 1: Create Project
 
 ```bash
-# 创建项目
+# Create project
 gh project create --title "My Project" --owner your-org
 ```
 
-### 步骤 2：添加 Issue 到项目
+### Step 2: Add Issues to Project
 
 ```bash
-# 添加 Issue
+# Add Issue
 gh project item-add 1 --owner your-org --url https://github.com/your-org/your-repo/issues/1
 ```
 
-### 步骤 3：配置自动化
+### Step 3: Configure Automation
 
 ```yaml
 # .github/workflows/project-automation.yml
@@ -45,39 +45,39 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### 步骤 4：创建视图
+### Step 4: Create Views
 
 ```bash
-# 使用 CLI 查看项目
+# Use CLI to view projects
 gh project list --owner your-org
 gh project item-list 1 --owner your-org
 ```
 
-## 实战任务
+## Hands-on Tasks
 
-1. 创建 GitHub Project
-2. 添加多个 Issue 到项目
-3. 配置自动化工作流
-4. 创建不同视图（看板、表格、路线图）
+1. Create a GitHub Project
+2. Add multiple Issues to the project
+3. Configure automation workflows
+4. Create different views (Board, Table, Roadmap)
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 项目已创建
-- [ ] Issue 已添加到项目
-- [ ] 自动化已配置
-- [ ] 视图已创建
+- [ ] Project created
+- [ ] Issues added to the project
+- [ ] Automation configured
+- [ ] Views created
 
-## 完成
+## Completion
 
-恭喜完成所有练习！你已经掌握了：
-- Git 基础操作
-- GitHub 核心功能
-- CI/CD 流水线
-- Docker 容器化
-- 安全扫描
-- 发布管理
-- Monorepo 管理
-- 国内环境配置
-- 企业配置
-- 复用工作流
-- 项目管理
+Congratulations on completing all exercises! You have mastered:
+- Git basics
+- GitHub core features
+- CI/CD pipelines
+- Docker containerization
+- Security scanning
+- Release management
+- Monorepo management
+- China environment configuration
+- Enterprise configuration
+- Reusable workflows
+- Project management

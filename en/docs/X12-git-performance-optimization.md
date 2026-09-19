@@ -1,64 +1,64 @@
-# Git 性能优化完全指南
+# Git Performance Optimization Complete Guide
 
-> 本章将全面介绍 Git 性能优化的策略和技巧，从克隆到日常操作，从客户端到 CI/CD，帮助你在大型仓库中保持高效的开发体验。
-
----
-
-## 目录
-
-1. [大型仓库的性能挑战](#1-大型仓库的性能挑战)
-2. [git clone 优化](#2-git-clone-优化)
-3. [git fetch/pull 优化](#3-git-fetchpull-优化)
-4. [git status 优化](#4-git-status-优化)
-5. [git diff 优化](#5-git-diff-优化)
-6. [git gc 与 git repack 配置](#6-git-gc-与-git-repack-配置)
-7. [Git LFS 性能调优](#7-git-lfs-性能调优)
-8. [Git Hooks 性能优化](#8-git-hooks-性能优化)
-9. [CI/CD 中的 Git 性能优化](#9-cicd-中的-git-性能优化)
-10. [Monorepo Git 性能策略](#10-monorepo-git-性能策略)
-11. [Git 客户端性能对比](#11-git-客户端性能对比)
-12. [Git 缓存与预加载策略](#12-git-缓存与预加载策略)
-13. [网络层优化](#13-网络层优化)
-14. [监控与诊断工具](#14-监控与诊断工具)
+> This chapter provides a comprehensive overview of Git performance optimization strategies and techniques, from cloning to daily operations, from client to CI/CD, helping you maintain an efficient development experience in large repositories.
 
 ---
 
-## 1. 大型仓库的性能挑战
+## Table of Contents
 
-### 1.1 什么是大型仓库
+1. [Performance Challenges of Large Repositories](#1-performance-challenges-of-large-repositories)
+2. [git clone Optimization](#2-git-clone-optimization)
+3. [git fetch/pull Optimization](#3-git-fetchpull-optimization)
+4. [git status Optimization](#4-git-status-optimization)
+5. [git diff Optimization](#5-git-diff-optimization)
+6. [git gc and git repack Configuration](#6-git-gc-and-git-repack-configuration)
+7. [Git LFS Performance Tuning](#7-git-lfs-performance-tuning)
+8. [Git Hooks Performance Optimization](#8-git-hooks-performance-optimization)
+9. [Git Performance Optimization in CI/CD](#9-git-performance-optimization-in-cicd)
+10. [Monorepo Git Performance Strategies](#10-monorepo-git-performance-strategies)
+11. [Git Client Performance Comparison](#11-git-client-performance-comparison)
+12. [Git Caching and Preloading Strategies](#12-git-caching-and-preloading-strategies)
+13. [Network Layer Optimization](#13-network-layer-optimization)
+14. [Monitoring and Diagnostic Tools](#14-monitoring-and-diagnostic-tools)
 
-大型仓库通常具有以下特征：
+---
+
+## 1. Performance Challenges of Large Repositories
+
+### 1.1 What Are Large Repositories
+
+Large repositories typically have the following characteristics:
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│              大型仓库特征分析                               │
+│              Large Repository Characteristic Analysis     │
 ├──────────────────┬───────────────────────────────────────┤
-│     特征         │           描述                         │
+│   Characteristic │           Description                 │
 ├──────────────────┼───────────────────────────────────────┤
-│ 代码量大         │ 文件数量 > 10,000 或代码行数 > 1,000,000 │
-│ 历史悠久         │ 提交历史 > 100,000 次                   │
-│ 二进制文件多     │ 图片、视频、模型等大文件                   │
-│ 分支众多         │ 活跃分支 > 100 个                       │
-│ 子模块复杂       │ 多层嵌套子模块                           │
-│ Monorepo        │ 多个项目共享一个仓库                      │
+│ Large codebase   │ File count > 10,000 or lines > 1,000,000 │
+│ Long history     │ Commit history > 100,000               │
+│ Many binaries    │ Images, videos, models, etc.           │
+│ Many branches    │ Active branches > 100                  │
+│ Complex submodules│ Multi-level nested submodules         │
+│ Monorepo         │ Multiple projects share one repo       │
 └──────────────────┴───────────────────────────────────────┘
 ```
 
-典型的大型仓库案例包括：
+Typical large repository examples include:
 
-- **Linux 内核仓库**：超过 100 万个提交，数十万个文件
-- **Windows 操作系统仓库**：超过 300GB，数百万个文件
-- **Google 的 Monorepo**：数十亿行代码
-- **大型游戏项目**：大量纹理、模型、音频等二进制资产
+- **Linux kernel repository**: Over 1 million commits, hundreds of thousands of files
+- **Windows operating system repository**: Over 300GB, millions of files
+- **Google's Monorepo**: Billions of lines of code
+- **Large game projects**: Extensive textures, models, audio, and other binary assets
 
-### 1.2 性能瓶颈分析方法
+### 1.2 Performance Bottleneck Analysis Methods
 
-要优化 Git 性能，首先需要识别瓶颈所在。以下是系统性的分析方法：
+To optimize Git performance, you first need to identify where the bottlenecks are. Here is a systematic analysis approach:
 
 ```bash
-# 分析仓库大小
+# Analyze repository size
 git count-objects -v --human-readable
-# 输出示例:
+# Output example:
 # count: 150
 # size: 620K
 # in-pack: 12000
@@ -67,57 +67,57 @@ git count-objects -v --human-readable
 # garbage: 0
 # size-garbage: 0
 
-# 分析 packfile 内容分布
+# Analyze packfile content distribution
 git verify-pack -v .git/objects/pack/pack-*.idx | \
     awk '{print $2}' | sort | uniq -c | sort -rn
-# 输出示例:
+# Output example:
 # 8000 blob
 # 3000 tree
 # 800 commit
 # 200 tag
 
-# 找出最大的文件（按对象大小排序）
+# Find the largest files (sorted by object size)
 git rev-list --objects --all | \
     git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | \
     sed -n 's/^blob //p' | \
     sort -rnk2 | head -20
 
-# 分析提交历史规模
-echo "提交总数: $(git log --oneline | wc -l)"
-echo "合并提交: $(git log --merges --oneline | wc -l)"
-echo "分支总数: $(git branch -a | wc -l)"
-echo "文件总数: $(git ls-files | wc -l)"
-echo "未跟踪文件: $(git ls-files --others --exclude-standard | wc -l)"
+# Analyze commit history scale
+echo "Total commits: $(git log --oneline | wc -l)"
+echo "Merge commits: $(git log --merges --oneline | wc -l)"
+echo "Total branches: $(git branch -a | wc -l)"
+echo "Total files: $(git ls-files | wc -l)"
+echo "Untracked files: $(git ls-files --others --exclude-standard | wc -l)"
 
-# 分析 packfile 数量和大小
+# Analyze packfile count and size
 ls -lhS .git/objects/pack/
 ```
 
-### 1.3 性能指标基准测试
+### 1.3 Performance Benchmark Testing
 
 ```bash
-# 测量 Git 操作耗时
+# Measure Git operation duration
 time git status
 time git diff
 time git log --oneline -100
 time git add .
 time git commit -m "test"
 
-# 使用 Git 内置追踪
+# Use Git built-in tracing
 GIT_TRACE=1 git status
 GIT_TRACE=1 git add .
 GIT_TRACE=1 git commit -m "test"
 
-# 详细追踪（包含性能数据）
+# Detailed tracing (includes performance data)
 GIT_TRACE=1 GIT_TRACE_PERFORMANCE=1 git status
 
-# 性能基准测试脚本
+# Performance benchmark script
 cat > git-benchmark.sh << 'EOF'
 #!/bin/bash
-echo "Git 性能基准测试"
-echo "================"
-echo "仓库: $(pwd)"
-echo "时间: $(date)"
+echo "Git Performance Benchmark"
+echo "========================"
+echo "Repository: $(pwd)"
+echo "Time: $(date)"
 echo ""
 
 echo "1. git status"
@@ -141,172 +141,172 @@ echo "5. git branch -a"
 time git branch -a > /dev/null 2>&1
 
 echo ""
-echo "================"
-echo "测试完成"
+echo "========================"
+echo "Test complete"
 EOF
 
 chmod +x git-benchmark.sh
 ./git-benchmark.sh
 ```
 
-### 1.4 性能问题的常见原因
+### 1.4 Common Causes of Performance Problems
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│              Git 性能问题常见原因                               │
+│              Common Causes of Git Performance Problems        │
 ├──────────────────────┬───────────────────────────────────────┤
-│      原因类别        │           具体原因                      │
+│      Cause Category  │           Specific Causes             │
 ├──────────────────────┼───────────────────────────────────────┤
-│ 仓库规模过大         │ 文件数量多、历史长、二进制文件大           │
-│ 松散对象过多         │ 未及时 gc、频繁创建小文件                 │
-│ 网络传输慢           │ 仓库远程、网络带宽低、协议低效            │
-│ 索引缓存未启用       │ fsmonitor、untrackedCache 未开启        │
-│ Hooks 耗时           │ pre-commit 运行完整测试、代码分析        │
-│ 子模块嵌套深         │ 多层子模块、递归更新                     │
-│ 大文件未用 LFS       │ 二进制文件直接存储在 Git 中               │
-│ 配置不当             │ 压缩级别、并行度等配置不合理              │
+│ Repository too large │ Many files, long history, large binaries │
+│ Too many loose objects│ Not running gc timely, frequent small file creation │
+│ Slow network transfer│ Remote repo, low bandwidth, inefficient protocol │
+│ Index cache not enabled│ fsmonitor, untrackedCache not enabled │
+│ Slow hooks           │ pre-commit running full tests, code analysis │
+│ Deep submodule nesting│ Multi-level submodules, recursive updates │
+│ Large files not using LFS│ Binary files stored directly in Git │
+│ Improper configuration│ Compression level, parallelism, etc. not optimal │
 └──────────────────────┴───────────────────────────────────────┘
 ```
 
 ---
 
-## 2. git clone 优化
+## 2. git clone Optimization
 
-### 2.1 浅克隆（Shallow Clone）
+### 2.1 Shallow Clone
 
-浅克隆是减少克隆时间最直接有效的方法，它只获取最近的 N 次提交。
+Shallow clone is the most direct and effective way to reduce clone time, as it only fetches the most recent N commits.
 
 ```bash
-# 基本浅克隆 - 只获取最新提交
+# Basic shallow clone - only fetch the latest commit
 git clone --depth=1 https://github.com/user/repo.git
 
-# 指定深度 - 获取最近 50 次提交
+# Specify depth - fetch the last 50 commits
 git clone --depth=50 https://github.com/user/repo.git
 
-# 浅克隆特定分支
+# Shallow clone a specific branch
 git clone --depth=1 --branch=main https://github.com/user/repo.git
 
-# 浅克隆特定标签
+# Shallow clone a specific tag
 git clone --depth=1 --branch=v1.0.0 https://github.com/user/repo.git
 
-# 浅克隆的大小对比示例:
-# 完整克隆: 450MB
-# 浅克隆 (depth=1): 50MB
-# 浅克隆 (depth=50): 120MB
+# Shallow clone size comparison example:
+# Full clone: 450MB
+# Shallow clone (depth=1): 50MB
+# Shallow clone (depth=50): 120MB
 ```
 
 ```bash
-# 后续增加克隆深度
+# Later increase clone depth
 cd repo
 git fetch --deepen=50
 
-# 获取完整历史（取消浅克隆）
+# Fetch full history (undo shallow clone)
 git fetch --unshallow
 
-# 检查当前是否为浅克隆
+# Check if current repo is shallow
 git rev-parse --is-shallow-repository
 
-# 浅克隆的限制：
-# - 无法进行某些三方合并操作
-# - git blame 只能显示浅层历史
-# - git rebase 可能有问题
-# - 某些 CI/CD 工具可能不支持
+# Limitations of shallow clone:
+# - Cannot perform some three-way merge operations
+# - git blame can only show shallow history
+# - git rebase may have issues
+# - Some CI/CD tools may not support it
 ```
 
-### 2.2 部分克隆（Partial Clone）
+### 2.2 Partial Clone
 
-部分克隆是 Git 2.19 引入的革命性特性，允许按需下载对象。
+Partial clone is a revolutionary feature introduced in Git 2.19, allowing objects to be downloaded on demand.
 
 ```bash
-# 只克隆 commit 和 tree，blob 按需下载
+# Clone only commits and trees, blobs downloaded on demand
 git clone --filter=blob:none https://github.com/user/repo.git
 
-# 按大小过滤 blob - 不下载大于 1MB 的 blob
+# Filter blobs by size - don't download blobs larger than 1MB
 git clone --filter=blob:limit=1m https://github.com/user/repo.git
 
-# 按树过滤 - 不下载树对象（极度精简）
+# Filter by tree - don't download tree objects (extremely minimal)
 git clone --filter=tree:0 https://github.com/user/repo.git
 
-# 组合过滤
+# Combined filtering
 git clone --filter=blob:none,tree:0 https://github.com/user/repo.git
 
-# 过滤类型说明:
-# blob:none      - 不下载任何 blob（按需获取）
-# blob:limit=N   - 不下载大于 N 字节的 blob
-# tree:N         - 不下载深度大于 N 的 tree
-# tree:0         - 不下载任何 tree（最激进）
+# Filter type explanation:
+# blob:none      - Don't download any blobs (fetch on demand)
+# blob:limit=N   - Don't download blobs larger than N bytes
+# tree:N         - Don't download trees deeper than N
+# tree:0         - Don't download any trees (most aggressive)
 ```
 
 ```bash
-# 部分克隆的工作原理:
-# 1. 客户端请求克隆，带上过滤条件
-# 2. 服务端只传输符合过滤条件的对象
-# 3. 客户端在需要时按需获取缺失的对象
-# 4. 缺失的对象会缓存在本地
+# How partial clone works:
+# 1. Client requests clone with filter criteria
+# 2. Server only transfers objects matching the filter
+# 3. Client fetches missing objects on demand when needed
+# 4. Missing objects are cached locally
 
-# 配置服务器支持部分克隆
+# Configure server to support partial clone
 git config uploadpack.allowFilter true
 git config uploadpack.blobPackfileUri true
 
-# 查看部分克隆配置
+# View partial clone configuration
 git config --list | grep partialclone
 
-# 手动触发按需下载
-git checkout -- src/large-file.bin  # 自动下载缺失的 blob
+# Manually trigger on-demand download
+git checkout -- src/large-file.bin  # Automatically downloads missing blobs
 ```
 
-### 2.3 稀疏检出（Sparse Checkout）
+### 2.3 Sparse Checkout
 
-稀疏检出允许只检出仓库中的特定目录，显著减少工作区大小。
+Sparse checkout allows you to check out only specific directories from the repository, significantly reducing the working tree size.
 
 ```bash
-# 方法 1: 克隆时启用稀疏检出
+# Method 1: Enable sparse checkout during clone
 git clone --sparse https://github.com/user/repo.git
 cd repo
 git sparse-checkout init --cone
 git sparse-checkout set src/ docs/
 
-# 方法 2: 对已有仓库启用稀疏检出
+# Method 2: Enable sparse checkout on existing repository
 git sparse-checkout init --cone
 git sparse-checkout set src/ docs/ tests/
 
-# 添加更多目录
+# Add more directories
 git sparse-checkout add packages/core/
 
-# 查看当前稀疏检出配置
+# View current sparse checkout configuration
 git sparse-checkout list
 
-# 禁用稀疏检出（检出所有文件）
+# Disable sparse checkout (check out all files)
 git sparse-checkout disable
 
-# 重新启用
+# Re-enable
 git sparse-checkout init --cone
 git sparse-checkout set .
 ```
 
 ```bash
-# cone 模式（推荐）vs 传统模式
+# Cone mode (recommended) vs traditional mode
 
-# cone 模式 - 只支持目录级别过滤，性能更好
+# Cone mode - only supports directory-level filtering, better performance
 git sparse-checkout init --cone
 git sparse-checkout set src/ docs/
 
-# 传统模式 - 支持通配符，更灵活但较慢
+# Traditional mode - supports wildcards, more flexible but slower
 git sparse-checkout init
 git sparse-checkout set "src/*.py" "docs/**/*.md" "!docs/internal/"
 
-# cone 模式的性能优势:
-# - 使用文件系统级别的目录匹配
-# - 不需要逐个文件检查 .gitignore 规则
-# - 大型仓库中快数倍
+# Performance advantages of cone mode:
+# - Uses filesystem-level directory matching
+# - No need to check .gitignore rules for each file
+# - Several times faster in large repositories
 ```
 
-### 2.4 组合优化策略
+### 2.4 Combined Optimization Strategies
 
-将多种优化技术组合使用，可以获得最佳效果：
+Combining multiple optimization techniques yields the best results:
 
 ```bash
-# 最佳组合: 浅克隆 + 部分克隆 + 稀疏检出
+# Best combination: Shallow clone + Partial clone + Sparse checkout
 git clone \
     --depth=1 \
     --filter=blob:none \
@@ -316,22 +316,22 @@ git clone \
 
 cd repo
 
-# 初始化稀疏检出
+# Initialize sparse checkout
 git sparse-checkout init --cone
 git sparse-checkout set src/ docs/ tests/
 
-# 大小对比:
-# 完整克隆: 450MB + 2GB 工作区 = 2.45GB
-# 优化后:   50MB  + 500MB 工作区 = 550MB
+# Size comparison:
+# Full clone: 450MB + 2GB working tree = 2.45GB
+# Optimized:  50MB  + 500MB working tree = 550MB
 ```
 
 ```bash
-# CI/CD 中的典型优化配置
+# Typical optimization configuration in CI/CD
 # GitHub Actions
 - name: Checkout
   uses: actions/checkout@v4
   with:
-    fetch-depth: 1              # 浅克隆
+    fetch-depth: 1              # Shallow clone
     sparse-checkout: |
       src/
       docs/
@@ -343,114 +343,115 @@ variables:
   GIT_DEPTH: 1
   GIT_SPARSE_CHECKOUT_PATHS: "src/ docs/ tests/"
 
-# 自定义 CI 脚本
+# Custom CI script
 git clone --depth=1 --filter=blob:none --sparse URL
 cd repo
 git sparse-checkout init --cone
 git sparse-checkout set $(cat .ci-paths.txt)
 ```
 
-### 2.5 克隆优化效果对比
+### 2.5 Clone Optimization Results Comparison
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                    克隆优化效果对比                                │
+│                    Clone Optimization Results Comparison          │
 ├──────────────────┬──────────┬──────────┬──────────┬──────────────┤
-│     方法         │ 下载大小  │ 工作区    │ 克隆时间  │ 适用场景      │
+│     Method       │ Download │ Working  │ Clone    │ Use Case     │
+│                  │ Size     │ Tree     │ Time     │              │
 ├──────────────────┼──────────┼──────────┼──────────┼──────────────┤
-│ 完整克隆         │ 450MB    │ 2GB      │ 120s     │ 完整开发      │
-│ 浅克隆(depth=1)  │ 50MB     │ 2GB      │ 15s      │ CI/CD        │
-│ 部分克隆(blob:none)│ 80MB   │ 2GB      │ 20s      │ 按需开发      │
-│ 稀疏检出         │ 450MB    │ 500MB    │ 100s     │ 特定模块开发  │
-│ 组合优化         │ 50MB     │ 500MB    │ 10s      │ 最佳实践      │
+│ Full clone       │ 450MB    │ 2GB      │ 120s     │ Full dev     │
+│ Shallow (depth=1)│ 50MB     │ 2GB      │ 15s      │ CI/CD        │
+│ Partial (blob:none)│ 80MB   │ 2GB      │ 20s      │ On-demand dev│
+│ Sparse checkout  │ 450MB    │ 500MB    │ 100s     │ Specific module dev│
+│ Combined optim.  │ 50MB     │ 500MB    │ 10s      │ Best practice│
 └──────────────────┴──────────┴──────────┴──────────┴──────────────┘
 ```
 
 ---
 
-## 3. git fetch/pull 优化
+## 3. git fetch/pull Optimization
 
-### 3.1 fetch 优化
+### 3.1 fetch Optimization
 
 ```bash
-# 只获取特定分支（而非所有分支）
+# Fetch only specific branches (instead of all branches)
 git fetch origin main
 
-# 获取所有分支
+# Fetch all branches
 git fetch --all
 
-# 配置并行获取
+# Configure parallel fetching
 git config --global fetch.parallel 4
 
-# 浅获取 - 增加克隆深度
+# Shallow fetch - increase clone depth
 git fetch --deepen=50
 
-# 获取但不获取标签
+# Fetch without fetching tags
 git fetch --no-tags
 
-# 获取并修剪已删除的远程分支
+# Fetch and prune deleted remote branches
 git fetch --prune
 
-# 配置自动 prune
+# Configure automatic prune
 git config --global fetch.prune true
 git config --global fetch.pruneTags true
 ```
 
 ```bash
-# 使用 refspec 进行精确获取
-# 只获取 main 和 develop 分支
+# Use refspec for precise fetching
+# Only fetch main and develop branches
 git config --add remote.origin.fetch '+refs/heads/main:refs/remotes/origin/main'
 git config --add remote.origin.fetch '+refs/heads/develop:refs/remotes/origin/develop'
 
-# 使用协议 v2 优化（Git 2.18+）
+# Use protocol v2 optimization (Git 2.18+)
 git config --global protocol.version 2
-# 协议 v2 的优势:
-# - 只传输需要的引用
-# - 支持引用过滤
-# - 减少网络往返
+# Advantages of protocol v2:
+# - Only transfers needed references
+# - Supports reference filtering
+# - Reduces network round trips
 
-# 查看 fetch 详情
+# View fetch details
 GIT_TRACE=1 GIT_TRANSFER_TRACE=1 git fetch origin main
 ```
 
-### 3.2 pull 优化
+### 3.2 pull Optimization
 
 ```bash
-# 配置 pull 行为为 rebase（避免不必要的合并提交）
+# Configure pull behavior to rebase (avoid unnecessary merge commits)
 git config --global pull.rebase true
 
-# 只允许快进合并
+# Only allow fast-forward merges
 git config --global pull.ff only
 
-# 自动 stash 未提交的更改
+# Auto stash uncommitted changes
 git config --global rebase.autoStash true
 
-# 推荐的 pull 配置组合
+# Recommended pull configuration combination
 git config --global pull.rebase true
 git config --global pull.ff only
 git config --global rebase.autoStash true
 git config --global rebase.updateRefs true
 
-# 使用 rebase + autostash 进行 pull
+# Use rebase + autostash for pull
 git pull --rebase --autostash origin main
 
-# 查看 pull 的详细信息
+# View detailed pull information
 git pull --verbose origin main
 ```
 
-### 3.3 子模块优化
+### 3.3 Submodule Optimization
 
 ```bash
-# 并行更新子模块
+# Update submodules in parallel
 git submodule update --init --recursive --jobs=4
 
-# 浅克隆子模块
+# Shallow clone submodules
 git submodule update --init --depth=1
 
-# 只更新特定子模块
+# Only update specific submodules
 git submodule update --init -- src/lib
 
-# 配置子模块为浅克隆
+# Configure submodule for shallow clone
 cat > .gitmodules << 'EOF'
 [submodule "src/lib"]
     path = src/lib
@@ -459,186 +460,186 @@ cat > .gitmodules << 'EOF'
     branch = main
 EOF
 
-# 全局子模块配置
+# Global submodule configuration
 git config --global submodule.recurse true
 git config --global submodule.shallow true
 git config --global submodule.fetchJobs 4
 
-# 批量更新子模块
+# Batch update submodules
 git submodule foreach --recursive 'git fetch --depth=1 && git checkout main && git pull'
 ```
 
-### 3.4 增量更新策略
+### 3.4 Incremental Update Strategy
 
 ```bash
-# 使用 refspec 进行增量更新
+# Use refspec for incremental updates
 git fetch origin \
     refs/heads/main:refs/remotes/origin/main \
     refs/heads/develop:refs/remotes/origin/develop
 
-# 只获取新提交（浅获取）
+# Only fetch new commits (shallow fetch)
 git fetch --depth=1 origin main
 
-# 增加深度
+# Increase depth
 git fetch --deepen=100 origin main
 
-# 获取特定标签
+# Fetch specific tags
 git fetch origin tag v1.0.0
 
-# 使用 prune 清理已删除的分支
+# Use prune to clean up deleted branches
 git fetch --prune origin
 
-# 配置自动 prune
+# Configure automatic prune
 git config --global fetch.prune true
 git config --global fetch.pruneTags true
 ```
 
 ---
 
-## 4. git status 优化
+## 4. git status Optimization
 
-### 4.1 文件系统监控（fsmonitor）
+### 4.1 File System Monitor (fsmonitor)
 
-fsmonitor 是 Git 最重要的性能优化之一，它利用操作系统级别的文件系统事件来避免全量扫描。
+fsmonitor is one of Git's most important performance optimizations, using OS-level file system events to avoid full scans.
 
 ```bash
-# 启用 fsmonitor（Git 2.37+）
+# Enable fsmonitor (Git 2.37+)
 git config core.fsmonitor true
 
-# 使用 Watchman 作为 fsmonitor 后端
-# 安装 Watchman:
+# Use Watchman as fsmonitor backend
+# Install Watchman:
 # Ubuntu/Debian:
 sudo apt-get install watchman
 
 # macOS:
 brew install watchman
 
-# 配置 Git 使用 Watchman
+# Configure Git to use Watchman
 git config core.fsmonitor "git-fsmonitor--daemon"
 
-# 启动 fsmonitor 守护进程
+# Start fsmonitor daemon
 git fsmonitor--daemon start
 
-# 查看 fsmonitor 状态
+# Check fsmonitor status
 git fsmonitor--daemon status
 
-# 停止 fsmonitor 守护进程
+# Stop fsmonitor daemon
 git fsmonitor--daemon stop
 
-# fsmonitor 的性能提升效果:
-# 未启用: git status 耗时 2.5 秒
-# 启用后: git status 耗时 0.1 秒
-# 提升幅度: 25 倍
+# fsmonitor performance improvement:
+# Without: git status takes 2.5 seconds
+# With: git status takes 0.1 seconds
+# Improvement: 25x faster
 ```
 
-### 4.2 未跟踪文件缓存（untrackedCache）
+### 4.2 Untracked File Cache (untrackedCache)
 
 ```bash
-# 启用 untracked cache
+# Enable untracked cache
 git config core.untrackedCache true
 
-# untracked cache 的工作原理:
-# 1. 首次运行时扫描所有未跟踪文件
-# 2. 将结果缓存到 .git/untracked-cache/ 目录
-# 3. 后续运行时只检查变更的目录
-# 4. 使用 mtime 判断目录是否变更
+# How untracked cache works:
+# 1. First run scans all untracked files
+# 2. Caches results to .git/untracked-cache/ directory
+# 3. Subsequent runs only check changed directories
+# 4. Uses mtime to determine if directories changed
 
-# 查看 untracked cache 状态
+# Check untracked cache status
 git ls-files --untracked --debug
 
-# 清理 untracked cache
-git clean -fdx  # 删除未跟踪的文件和目录
+# Clean untracked cache
+git clean -fdx  # Delete untracked files and directories
 
-# untracked cache 的性能提升效果:
-# 未启用: git status 耗时 1.5 秒
-# 启用后: git status 耗时 0.3 秒
-# 提升幅度: 5 倍
+# untracked cache performance improvement:
+# Without: git status takes 1.5 seconds
+# With: git status takes 0.3 seconds
+# Improvement: 5x faster
 ```
 
-### 4.3 综合状态优化配置
+### 4.3 Comprehensive Status Optimization Configuration
 
 ```bash
-# 完整的 status 优化配置
+# Complete status optimization configuration
 git config core.fsmonitor true
 git config core.untrackedCache true
 git config feature.manyFiles true
 
-# feature.manyFiles 启用以下优化:
+# feature.manyFiles enables the following optimizations:
 # - core.untrackedCache = true
 # - core.fsmonitor = true
 # - index.version = 4
 # - index.skipHash = false
 
-# 查看当前配置
+# View current configuration
 git config --get core.fsmonitor
 git config --get core.untrackedCache
 git config --get feature.manyFiles
 ```
 
 ```bash
-# 性能对比测试
-echo "优化前:"
+# Performance comparison test
+echo "Before optimization:"
 git config --unset core.fsmonitor
 git config --unset core.untrackedCache
 time git status > /dev/null 2>&1
 
-echo "优化后:"
+echo "After optimization:"
 git config core.fsmonitor true
 git config core.untrackedCache true
 time git status > /dev/null 2>&1
 ```
 
-### 4.4 status 高级用法
+### 4.4 Advanced status Usage
 
 ```bash
-# 快速查看状态（简洁格式）
+# Quick status view (short format)
 git status --short
 git status -s
 
-# 只显示未跟踪的文件
+# Show only untracked files
 git status --untracked-files
 git status -u
 
-# 忽略子模块的状态
+# Ignore submodule status
 git status --ignore-submodules=dirty
 
-# 使用 porcelain 格式（适合脚本解析）
+# Use porcelain format (suitable for script parsing)
 git status --porcelain
 git status --porcelain=v2
 
-# 查看分支信息
+# View branch information
 git status --branch
 git status -b
 
-# 性能优化的状态检查技巧
-git diff --quiet           # 只检查是否有修改，返回退出码
-git diff --cached --quiet  # 只检查暂存区是否有修改
+# Performance-optimized status check tips
+git diff --quiet           # Only check if there are modifications, return exit code
+git diff --cached --quiet  # Only check if staged area has modifications
 ```
 
 ```bash
-# 批量状态检查脚本
+# Batch status check script
 cat > check-status.sh << 'EOF'
 #!/bin/bash
-# 快速检查仓库状态
+# Quick repository status check
 
-# 检查是否有未提交的更改
+# Check for unstaged changes
 if ! git diff --quiet; then
-    echo "有未暂存的更改"
+    echo "There are unstaged changes"
 fi
 
-# 检查是否有暂存的更改
+# Check for staged changes
 if ! git diff --cached --quiet; then
-    echo "有暂存的更改"
+    echo "There are staged changes"
 fi
 
-# 检查是否有未跟踪的文件
+# Check for untracked files
 if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-    echo "有未跟踪的文件"
+    echo "There are untracked files"
 fi
 
-# 检查是否有冲突
+# Check for conflicts
 if [ -n "$(git ls-files -u)" ]; then
-    echo "有未解决的冲突"
+    echo "There are unresolved conflicts"
 fi
 EOF
 
@@ -647,34 +648,34 @@ chmod +x check-status.sh
 
 ---
 
-## 5. git diff 优化
+## 5. git diff Optimization
 
-### 5.1 diff 算法选择
+### 5.1 diff Algorithm Selection
 
-Git 支持四种 diff 算法，各有优缺点：
+Git supports four diff algorithms, each with its own pros and cons:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                   Git Diff 算法对比                           │
+│                   Git Diff Algorithm Comparison              │
 ├──────────────┬──────────┬──────────┬────────────────────────┤
-│     算法     │   速度    │  质量    │        特点            │
+│   Algorithm  │  Speed   │  Quality │        Characteristics│
 ├──────────────┼──────────┼──────────┼────────────────────────┤
-│ myers        │ 最快     │ 一般     │ 默认算法               │
-│ minimal      │ 最慢     │ 最小     │ 最小化 diff 行数       │
-│ patience     │ 中等     │ 较好     │ 更好的重命名检测       │
-│ histogram    │ 较快     │ 最好     │ 最佳的重命名检测       │
+│ myers        │ Fastest  │ Average  │ Default algorithm      │
+│ minimal      │ Slowest  │ Minimum  │ Minimize diff lines    │
+│ patience     │ Medium   │ Better   │ Better rename detection│
+│ histogram    │ Fast     │ Best     │ Best rename detection  │
 └──────────────┴──────────┴──────────┴────────────────────────┘
 ```
 
 ```bash
-# 配置 diff 算法
+# Configure diff algorithm
 git config diff.algorithm histogram
 
-# 临时使用不同算法
+# Temporarily use different algorithm
 git diff --diff-algorithm=patience
 git diff --diff-algorithm=minimal
 
-# 算法性能测试
+# Algorithm performance test
 echo "myers:"
 time git diff --diff-algorithm=myers > /dev/null 2>&1
 
@@ -685,233 +686,233 @@ echo "histogram:"
 time git diff --diff-algorithm=histogram > /dev/null 2>&1
 ```
 
-### 5.2 diff 输出优化
+### 5.2 diff Output Optimization
 
 ```bash
-# 使用 stat 模式（只显示统计，不显示详细差异）
+# Use stat mode (show only statistics, no detailed diffs)
 git diff --stat
 git diff --shortstat
 
-# 使用摘要模式
+# Use summary mode
 git diff --summary
 
-# 限制 diff 的上下文行数（减少输出量）
-git diff --unified=3  # 默认
-git diff --unified=1  # 减少上下文
+# Limit diff context lines (reduce output)
+git diff --unified=3  # Default
+git diff --unified=1  # Reduce context
 
-# 只比较特定类型的文件
+# Only compare specific file types
 git diff -- '*.py'
 git diff -- 'src/*.js'
 
-# 忽略空白字符差异
+# Ignore whitespace differences
 git diff --ignore-all-space
 git diff -w
 
-# 忽略空白字符变更
+# Ignore whitespace changes
 git diff --ignore-space-change
 git diff -b
 
-# 使用颜色高亮
+# Use color highlighting
 git diff --color-words
 git diff --color-moved
 ```
 
-### 5.3 大文件 diff 优化
+### 5.3 Large File diff Optimization
 
 ```bash
-# 配置大文件 diff 驱动（只显示元数据差异）
+# Configure large file diff driver (show only metadata differences)
 git config diff.psd.textconv "identify -verbose"
 git config diff.pdf.textconv "pdftotext"
 git config diff.docx.textconv "pandoc -t plain"
 git config diff.xlsx.textconv "xlsx2csv"
 
-# .gitattributes 配置
+# .gitattributes configuration
 *.psd  diff=psd
 *.pdf  diff=pdf
 *.docx diff=docx
 *.xlsx diff=xlsx
 
-# 跳过二进制文件的 diff
+# Skip binary file diffs
 git diff --binary
 
-# 只显示二进制文件的统计
+# Show only binary file statistics
 git diff --stat --binary
 
-# 配置外部 diff 工具
+# Configure external diff tool
 git config diff.tool vscode
 git config difftool.vscode.cmd "code --wait --diff $LOCAL $REMOTE"
 ```
 
-### 5.4 diff 性能优化配置
+### 5.4 diff Performance Optimization Configuration
 
 ```bash
-# diff 相关的性能优化配置
+# diff-related performance optimization configuration
 git config diff.algorithm histogram
 git config diff.colorMoved default
 git config diff.renames true
 git config diff.submodule log
 
-# 配置 rename 检测阈值
+# Configure rename detection threshold
 git config diff.renameLimit 10000
 
-# 启用 diff 的索引缓存
+# Enable diff index cache
 git config diff.cached true
 ```
 
 ---
 
-## 6. git gc 与 git repack 配置
+## 6. git gc and git repack Configuration
 
-### 6.1 自动 gc 配置
+### 6.1 Automatic gc Configuration
 
 ```bash
-# 自动 gc 阈值
-git config gc.auto 6700        # 松散对象数量阈值（默认值）
-git config gc.autoPackLimit 50 # packfile 数量阈值（默认值）
+# Automatic gc threshold
+git config gc.auto 6700        # Loose object count threshold (default)
+git config gc.autoPackLimit 50 # Packfile count threshold (default)
 
-# 自动 gc 策略
-git config gc.autoDetach true       # 后台运行 gc
-git config gc.writeCommitGraph true # 写入 commit-graph 加速 log
+# Automatic gc strategy
+git config gc.autoDetach true       # Run gc in background
+git config gc.writeCommitGraph true # Write commit-graph to speed up log
 
-# 禁用自动 gc（适用于 CI/CD 环境）
+# Disable automatic gc (suitable for CI/CD environments)
 git config gc.auto 0
 
-# 手动触发 gc
+# Manually trigger gc
 git gc
 
-# 查看当前 gc 配置
+# View current gc configuration
 git config --get gc.auto
 git config --get gc.autoPackLimit
 git config --get gc.writeCommitGraph
 ```
 
-### 6.2 激进 gc 策略
+### 6.2 Aggressive gc Strategy
 
 ```bash
-# 激进 gc（更彻底的压缩，但耗时更长）
+# Aggressive gc (more thorough compression, but takes longer)
 git gc --aggressive
 
-# 配置激进 gc 的参数
+# Configure aggressive gc parameters
 git config gc.aggressiveDepth 50
 git config gc.aggressiveWindow 250
 
-# 激进 gc 的适用场景:
-# 1. 仓库大小显著增大
-# 2. 首次 gc 后仍有大量松散对象
-# 3. 需要最大化压缩率
+# Applicable scenarios for aggressive gc:
+# 1. Repository size has significantly increased
+# 2. Still many loose objects after initial gc
+# 3. Need to maximize compression ratio
 
-# 激进 gc 的缺点:
-# 1. 耗时较长（可能需要数分钟甚至数小时）
-# 2. CPU 使用率高
-# 3. 可能影响其他 Git 操作
+# Drawbacks of aggressive gc:
+# 1. Takes longer (may take minutes or even hours)
+# 2. High CPU usage
+# 3. May affect other Git operations
 ```
 
-### 6.3 repack 优化
+### 6.3 repack Optimization
 
 ```bash
-# 基本 repack
+# Basic repack
 git repack -a -d
 
-# 参数说明:
-# -a: 打包所有对象（包括不在任何 packfile 中的）
-# -d: 删除多余的 packfile
-# -l: 只打包本地引用
-# -f: 强制重新打包
-# -n: 不更新服务器信息
+# Parameter explanation:
+# -a: Pack all objects (including those not in any packfile)
+# -d: Delete redundant packfiles
+# -l: Only pack local references
+# -f: Force repack
+# -n: Don't update server info
 
-# 增量 repack（指定 delta 参数）
+# Incremental repack (specify delta parameters)
 git repack -a -d --depth=250 --window=250
 
-# 使用几何级数 repack（Git 2.24+，推荐）
+# Use geometric series repack (Git 2.24+, recommended)
 git repack --geometric=2 -d
 
-# 几何级数 repack 的优势:
-# 1. 自动平衡 packfile 大小
-# 2. 减少 packfile 数量
-# 3. 优化查找效率
-# 4. 避免单个超大 packfile
+# Advantages of geometric series repack:
+# 1. Automatically balances packfile sizes
+# 2. Reduces packfile count
+# 3. Optimizes lookup efficiency
+# 4. Avoids single oversized packfile
 ```
 
 ```bash
-# repack 相关配置
-git config pack.window 250       # delta 搜索窗口大小
-git config pack.depth 50         # delta 链最大深度
-git config pack.threads 4        # 并行压缩线程数
-git config pack.windowMemory 1g  # delta 搜索内存限制
-git config pack.packSizeLimit 2g # 单个 packfile 大小限制
+# repack-related configuration
+git config pack.window 250       # Delta search window size
+git config pack.depth 50         # Maximum delta chain depth
+git config pack.threads 4        # Parallel compression threads
+git config pack.windowMemory 1g  # Delta search memory limit
+git config pack.packSizeLimit 2g # Single packfile size limit
 
-# 定期 repack 脚本
+# Periodic repack script
 cat > git-repack.sh << 'EOF'
 #!/bin/bash
-echo "开始 Git repack..."
+echo "Starting Git repack..."
 
-# 基本 repack
-echo "1. 基本 repack..."
+# Basic repack
+echo "1. Basic repack..."
 git repack -a -d
 
-# 几何级数 repack
-echo "2. 几何级数 repack..."
+# Geometric series repack
+echo "2. Geometric series repack..."
 git repack --geometric=2 -d
 
-# 清理不可达对象
-echo "3. 清理不可达对象..."
+# Clean unreachable objects
+echo "3. Cleaning unreachable objects..."
 git prune
 
-# 更新服务器信息
-echo "4. 更新服务器信息..."
+# Update server info
+echo "4. Updating server info..."
 git update-server-info
 
-# 写入 commit-graph
-echo "5. 写入 commit-graph..."
+# Write commit-graph
+echo "5. Writing commit-graph..."
 git commit-graph write --reachable
 
-echo "repack 完成"
+echo "Repack complete"
 EOF
 
 chmod +x git-repack.sh
 ```
 
-### 6.4 commit-graph 优化
+### 6.4 commit-graph Optimization
 
 ```bash
-# commit-graph 用于加速 git log 和 git merge-base
+# commit-graph is used to speed up git log and git merge-base
 
-# 写入 commit-graph
+# Write commit-graph
 git commit-graph write
 
-# 只写入可达的提交
+# Only write reachable commits
 git commit-graph write --reachable
 
-# 验证 commit-graph
+# Verify commit-graph
 git commit-graph verify
 
-# 配置自动更新 commit-graph
+# Configure automatic commit-graph updates
 git config gc.writeCommitGraph true
 
-# commit-graph 的性能提升:
-# 未启用: git log --oneline -1000 耗时 2 秒
-# 启用后: git log --oneline -1000 耗时 0.1 秒
-# 提升幅度: 20 倍
+# commit-graph performance improvement:
+# Without: git log --oneline -1000 takes 2 seconds
+# With: git log --oneline -1000 takes 0.1 seconds
+# Improvement: 20x faster
 
-# 查看 commit-graph 文件
+# View commit-graph file
 ls -la .git/objects/info/commit-graph*
 
-# commit-graph 的链式结构
-# 支持多个 commit-graph 文件链接
-# 增量更新时只需写入新的 commit-graph
+# commit-graph chain structure
+# Supports linking multiple commit-graph files
+# Incremental updates only require writing new commit-graph
 ```
 
 ---
 
-## 7. Git LFS 性能调优
+## 7. Git LFS Performance Tuning
 
-### 7.1 LFS 基础配置
+### 7.1 LFS Basic Configuration
 
 ```bash
-# 安装 Git LFS
+# Install Git LFS
 git lfs install
 
-# 跟踪大文件
+# Track large files
 git lfs track "*.psd"
 git lfs track "*.zip"
 git lfs track "*.mp4"
@@ -919,62 +920,62 @@ git lfs track "*.bin"
 git lfs track "*.so"
 git lfs track "*.dll"
 
-# 查看跟踪规则
+# View tracking rules
 git lfs track
 
-# 查看 LFS 文件列表
+# View LFS file list
 git lfs ls-files
 
-# 查看 LFS 状态
+# View LFS status
 git lfs status
 ```
 
-### 7.2 LFS 性能优化配置
+### 7.2 LFS Performance Optimization Configuration
 
 ```bash
-# 1. 增加并行传输数
-git config lfs.concurrenttransfers 8  # 默认 3
+# 1. Increase parallel transfers
+git config lfs.concurrenttransfers 8  # Default 3
 
-# 2. 使用 LFS 本地缓存
+# 2. Use LFS local cache
 git config lfs.storage ~/.git-lfs-cache
 
-# 3. 只获取需要的 LFS 文件
+# 3. Only fetch needed LFS files
 git lfs pull --include="src/**"
 git lfs pull --exclude="tests/**"
 
-# 4. 配置 LFS smudge 过滤器
+# 4. Configure LFS smudge filter
 git config filter.lfs.smudge "git-lfs smudge -- %f"
 git config filter.lfs.clean "git-lfs clean -- %f"
 git config filter.lfs.required true
 
-# 5. 延迟 LFS 下载（按需获取）
+# 5. Delay LFS downloads (fetch on demand)
 git config filter.lfs.smudge "git-lfs smudge --skip -- %f"
-# 之后手动下载: git lfs pull
+# Then manually download: git lfs pull
 
-# 6. 配置 LFS 传输重试
+# 6. Configure LFS transfer retries
 git config lfs.transfer.maxretries 3
 git config lfs.transfer.maxrequests 100
 
-# 7. 查看 LFS 配置
+# 7. View LFS configuration
 git config --list | grep lfs
 ```
 
-### 7.3 LFS 缓存策略
+### 7.3 LFS Caching Strategy
 
 ```bash
-# 配置 LFS 缓存目录
+# Configure LFS cache directory
 git config lfs.storage ~/.git-lfs-cache
 
-# 查看缓存大小
+# View cache size
 du -sh ~/.git-lfs-cache
 
-# 清理旧的缓存
+# Clean old cache
 git lfs prune
 
-# 共享 LFS 缓存（团队共享服务器）
+# Share LFS cache (team shared server)
 git config lfs.storage /shared/git-lfs-cache
 
-# LFS 缓存的目录结构:
+# LFS cache directory structure:
 # ~/.git-lfs-cache/
 # ├── lfs/
 # │   ├── objects/
@@ -985,104 +986,104 @@ git config lfs.storage /shared/git-lfs-cache
 # │   └── tmp/
 # └── ...
 
-# LFS 性能对比:
-# 未缓存: git lfs pull 耗时 30 秒
-# 缓存后: git lfs pull 耗时 2 秒
+# LFS performance comparison:
+# Without cache: git lfs pull takes 30 seconds
+# With cache: git lfs pull takes 2 seconds
 ```
 
-### 7.4 LFS 迁移
+### 7.4 LFS Migration
 
 ```bash
-# 将现有大文件迁移到 LFS
+# Migrate existing large files to LFS
 git lfs migrate import --include="*.psd" --everything
 git lfs migrate import --include="*.zip,*.mp4" --everything
 
-# 从 LFS 迁移回来
+# Migrate back from LFS
 git lfs migrate export --include="*.psd" --everything
 
-# 查看迁移信息
+# View migration information
 git lfs migrate info
 git lfs migrate info --include="*.psd"
 
-# LFS 迁移注意事项:
-# 1. 迁移会重写历史
-# 2. 需要强制推送到远程
-# 3. 团队成员需要重新克隆
+# LFS migration notes:
+# 1. Migration will rewrite history
+# 2. Need to force push to remote
+# 3. Team members need to re-clone
 ```
 
 ---
 
-## 8. Git Hooks 性能优化
+## 8. Git Hooks Performance Optimization
 
-### 8.1 Hooks 性能问题分析
+### 8.1 Hooks Performance Problem Analysis
 
 ```bash
-# 常见的性能问题:
-# 1. pre-commit hook 运行完整的测试套件
-# 2. pre-push hook 运行耗时的代码分析
-# 3. post-checkout hook 安装依赖
+# Common performance problems:
+# 1. pre-commit hook running full test suite
+# 2. pre-push hook running time-consuming code analysis
+# 3. post-checkout hook installing dependencies
 
-# 分析 hooks 耗时
+# Analyze hooks execution time
 GIT_TRACE=1 git commit -m "test" 2>&1 | grep -E "hook|time"
 
-# 查看 hooks 执行时间
+# Check hooks execution time
 time git commit -m "test" 2>&1
 ```
 
-### 8.2 优化 pre-commit hook
+### 8.2 Optimizing pre-commit Hook
 
 ```bash
 #!/bin/bash
-# 优化后的 pre-commit hook
+# Optimized pre-commit hook
 
-# 1. 只检查暂存的文件（而非所有文件）
+# 1. Only check staged files (not all files)
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
 
-# 2. 如果没有暂存的文件，直接退出
+# 2. If no staged files, exit immediately
 if [ -z "$STAGED_FILES" ]; then
     exit 0
 fi
 
-# 3. 只运行相关的检查（按文件类型）
+# 3. Only run relevant checks (by file type)
 for file in $STAGED_FILES; do
-    # Python 文件检查
+    # Python file check
     if [[ "$file" == *.py ]]; then
         python -m black --check "$file" || exit 1
     fi
 
-    # JavaScript/TypeScript 文件检查
+    # JavaScript/TypeScript file check
     if [[ "$file" == *.js ]] || [[ "$file" == *.ts ]]; then
         npx prettier --check "$file" || exit 1
     fi
 done
 
-# 4. 使用 lint 缓存避免重复检查
+# 4. Use lint cache to avoid redundant checks
 LINT_CACHE=".git/lint-cache"
 if [ -f "$LINT_CACHE" ]; then
     LAST_LINT=$(cat "$LINT_CACHE")
     CURRENT_HASH=$(echo "$STAGED_FILES" | md5sum | cut -d' ' -f1)
     if [ "$LAST_LINT" = "$CURRENT_HASH" ]; then
-        echo "Lint 缓存命中，跳过检查"
+        echo "Lint cache hit, skipping check"
         exit 0
     fi
 fi
 
-# 5. 运行 lint
+# 5. Run lint
 npm run lint
 
-# 6. 保存缓存
+# 6. Save cache
 echo "$STAGED_FILES" | md5sum | cut -d' ' -f1 > "$LINT_CACHE"
 
 exit 0
 ```
 
-### 8.3 使用 pre-commit 框架
+### 8.3 Using pre-commit Framework
 
 ```bash
-# 安装 pre-commit 框架
+# Install pre-commit framework
 pip install pre-commit
 
-# 创建配置文件
+# Create configuration file
 cat > .pre-commit-config.yaml << 'EOF'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -1107,49 +1108,49 @@ repos:
         args: ['--max-line-length=120']
 EOF
 
-# 安装 hooks
+# Install hooks
 pre-commit install
 
-# 运行所有 hooks
+# Run all hooks
 pre-commit run --all-files
 
-# 跳过特定 hook
+# Skip specific hook
 SKIP=flake8 git commit -m "test"
 
-# pre-commit 的缓存机制:
-# 1. 首次运行时下载和安装工具到缓存目录
-# 2. 后续运行时使用缓存的工具
-# 3. 只检查修改的文件（自动暂存后检查）
+# pre-commit caching mechanism:
+# 1. Downloads and installs tools to cache directory on first run
+# 2. Uses cached tools on subsequent runs
+# 3. Only checks modified files (checks after auto-staging)
 ```
 
-### 8.4 异步和条件化 Hooks
+### 8.4 Asynchronous and Conditional Hooks
 
 ```bash
 #!/bin/bash
-# post-commit hook - 异步运行耗时任务
+# post-commit hook - run time-consuming tasks asynchronously
 
-# 后台运行测试和构建
+# Run tests and build in background
 (
     npm test &
     npm run build &
 
-    # 等待所有后台任务完成
+    # Wait for all background tasks to complete
     wait
 ) &
 
-# 立即返回，不阻塞提交
+# Return immediately, don't block commit
 exit 0
 ```
 
 ```bash
 #!/bin/bash
-# pre-push hook - 只在必要时运行测试
+# pre-push hook - only run tests when necessary
 
-# 检查是否有测试文件被修改
+# Check if test files were modified
 MODIFIED_TESTS=$(git diff --name-only HEAD@{1}..HEAD 2>/dev/null | grep -E "test.*\.(py|js|ts)$")
 
 if [ -n "$MODIFIED_TESTS" ]; then
-    echo "检测到测试文件修改，运行测试..."
+    echo "Test file modifications detected, running tests..."
     npm test
 fi
 
@@ -1158,12 +1159,12 @@ exit 0
 
 ---
 
-## 9. CI/CD 中的 Git 性能优化
+## 9. Git Performance Optimization in CI/CD
 
-### 9.1 CI/CD 克隆优化
+### 9.1 CI/CD Clone Optimization
 
 ```yaml
-# GitHub Actions 优化配置
+# GitHub Actions optimization configuration
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -1171,8 +1172,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1                    # 浅克隆
-          sparse-checkout: |                # 稀疏检出
+          fetch-depth: 1                    # Shallow clone
+          sparse-checkout: |                # Sparse checkout
             src/
             docs/
             tests/
@@ -1188,7 +1189,7 @@ jobs:
 ```
 
 ```yaml
-# GitLab CI 优化配置
+# GitLab CI optimization configuration
 variables:
   GIT_DEPTH: 1
   GIT_SUBMODULE_STRATEGY: none
@@ -1206,10 +1207,10 @@ build:
     - npm run build
 ```
 
-### 9.2 CI/CD 缓存策略
+### 9.2 CI/CD Caching Strategy
 
 ```yaml
-# 多层缓存策略
+# Multi-layer caching strategy
 - name: Cache Git LFS
   uses: actions/cache@v3
   with:
@@ -1235,10 +1236,10 @@ build:
       ${{ runner.os }}-build-
 ```
 
-### 9.3 CI/CD 增量构建
+### 9.3 CI/CD Incremental Builds
 
 ```yaml
-# 只在特定文件变更时运行作业
+# Only run jobs when specific files change
 on:
   push:
     paths:
@@ -1275,10 +1276,10 @@ jobs:
         run: npm run deploy-docs
 ```
 
-### 9.4 CI/CD 并行化
+### 9.4 CI/CD Parallelization
 
 ```yaml
-# 并行测试分片
+# Parallel test sharding
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -1300,41 +1301,41 @@ jobs:
 
 ---
 
-## 10. Monorepo Git 性能策略
+## 10. Monorepo Git Performance Strategies
 
-### 10.1 Monorepo 的性能挑战
+### 10.1 Monorepo Performance Challenges
 
 ```bash
-# Monorepo 的典型问题:
-# 1. 仓库巨大（>10GB）
-# 2. 文件数量多（>100,000）
-# 3. 提交频繁（每天数百次）
-# 4. 分支众多（数百个）
-# 5. CI/CD 构建时间长
+# Typical Monorepo problems:
+# 1. Repository is huge (>10GB)
+# 2. Many files (>100,000)
+# 3. Frequent commits (hundreds per day)
+# 4. Many branches (hundreds)
+# 5. Long CI/CD build times
 
-# 分析 Monorepo 仓库
-echo "仓库大小: $(git count-objects -v --human-readable | grep size-pack)"
-echo "文件总数: $(git ls-files | wc -l)"
-echo "提交总数: $(git log --oneline | wc -l)"
-echo "分支总数: $(git branch -a | wc -l)"
+# Analyze Monorepo repository
+echo "Repository size: $(git count-objects -v --human-readable | grep size-pack)"
+echo "Total files: $(git ls-files | wc -l)"
+echo "Total commits: $(git log --oneline | wc -l)"
+echo "Total branches: $(git branch -a | wc -l)"
 ```
 
-### 10.2 稀疏检出策略
+### 10.2 Sparse Checkout Strategy
 
 ```bash
-# 初始化稀疏检出
+# Initialize sparse checkout
 git sparse-checkout init --cone
 
-# 按团队/项目设置检出目录
+# Set checkout directories by team/project
 git sparse-checkout set \
     packages/core \
     packages/shared \
     packages/team-a
 
-# 动态添加目录
+# Dynamically add directories
 git sparse-checkout add packages/team-b
 
-# 创建稀疏检出配置文件（可提交到仓库）
+# Create sparse checkout configuration file (can be committed to repo)
 cat > .sparse-checkout << 'EOF'
 packages/core/
 packages/shared/
@@ -1343,14 +1344,14 @@ tools/
 configs/
 EOF
 
-# 应用配置
+# Apply configuration
 git sparse-checkout set --stdin < .sparse-checkout
 ```
 
-### 10.3 部分克隆策略
+### 10.3 Partial Clone Strategy
 
 ```bash
-# 部分克隆 + 稀疏检出组合
+# Partial clone + Sparse checkout combination
 git clone \
     --filter=blob:none \
     --sparse \
@@ -1362,75 +1363,75 @@ cd monorepo
 git sparse-checkout init --cone
 git sparse-checkout set packages/team-a/
 
-# 按需获取文件
+# Fetch files on demand
 git checkout -- packages/team-a/src/index.ts
 ```
 
-### 10.4 工作区策略
+### 10.4 Worktree Strategy
 
 ```bash
-# 使用 git worktree 管理多个工作区
+# Use git worktree to manage multiple working trees
 git worktree add ../monorepo-feature-a feature-a
 git worktree add ../monorepo-bugfix-123 bugfix-123
 
-# 查看工作区列表
+# View worktree list
 git worktree list
 
-# 删除工作区
+# Remove worktree
 git worktree remove ../monorepo-feature-a
 
-# 工作区的优势:
-# 1. 可以同时在多个分支工作
-# 2. 避免频繁的 checkout（大型仓库中很慢）
-# 3. 每个工作区有独立的文件状态
-# 4. 共享同一个 .git 目录
+# Advantages of worktrees:
+# 1. Can work on multiple branches simultaneously
+# 2. Avoids frequent checkouts (very slow in large repos)
+# 3. Each worktree has independent file state
+# 4. Shares the same .git directory
 ```
 
-### 10.5 Monorepo 工具集成
+### 10.5 Monorepo Tool Integration
 
 ```bash
-# 使用 Nx（JavaScript/TypeScript Monorepo）
+# Using Nx (JavaScript/TypeScript Monorepo)
 npx nx run-many --target=build --all
-npx nx affected --target=test    # 只测试受影响的项目
+npx nx affected --target=test    # Only test affected projects
 
-# 使用 Turborepo
+# Using Turborepo
 npx turbo run build
 npx turbo run test
 
-# 使用 Bazel（Google 的构建系统）
+# Using Bazel (Google's build system)
 bazel build //packages/core:all
 bazel test //packages/core:tests
 
-# 使用 Lerna
+# Using Lerna
 npx lerna run build
 npx lerna run test
 
-# 这些工具的共同优势:
-# 1. 增量构建（只构建变更的部分）
-# 2. 任务缓存（避免重复构建）
-# 3. 并行执行（利用多核 CPU）
-# 4. 依赖分析（自动确定构建顺序）
+# Common advantages of these tools:
+# 1. Incremental builds (only build changed parts)
+# 2. Task caching (avoid redundant builds)
+# 3. Parallel execution (utilize multi-core CPUs)
+# 4. Dependency analysis (automatically determine build order)
 ```
 
 ---
 
-## 11. Git 客户端性能对比
+## 11. Git Client Performance Comparison
 
-### 11.1 原生 Git
+### 11.1 Native Git
 
 ```bash
-# 原生 Git 的优势:
-# 1. 最新特性支持
-# 2. 广泛的文档和社区支持
-# 3. 跨平台兼容性
-# 4. 无额外依赖
+# Advantages of native Git:
+# 1. Latest feature support
+# 2. Extensive documentation and community support
+# 3. Cross-platform compatibility
+# 4. No additional dependencies
 
-# 原生 Git 的性能特点:
-# - 小型仓库: 优秀（毫秒级）
-# - 中型仓库: 良好（秒级）
-# - 大型仓库: 需要优化配置
+# Performance characteristics of native Git:
+# - Small repositories: Excellent (millisecond level)
+# - Medium repositories: Good (second level)
+# - Large repositories: Requires optimized configuration
 
-# 原生 Git 优化配置
+# Native Git optimization configuration
 git config core.fsmonitor true
 git config core.untrackedCache true
 git config feature.manyFiles true
@@ -1440,18 +1441,18 @@ git config protocol.version 2
 ### 11.2 Git LFS
 
 ```bash
-# Git LFS 的优势:
-# 1. 大文件支持（GB 级别）
-# 2. 与原生 Git 无缝集成
-# 3. 广泛的平台支持
-# 4. 按需下载
+# Advantages of Git LFS:
+# 1. Large file support (GB-level)
+# 2. Seamless integration with native Git
+# 3. Wide platform support
+# 4. On-demand download
 
-# Git LFS 的性能特点:
-# - 大文件存储: 优秀
-# - 网络传输: 良好（支持并行）
-# - 缓存机制: 良好
+# Performance characteristics of Git LFS:
+# - Large file storage: Excellent
+# - Network transfer: Good (supports parallel)
+# - Caching mechanism: Good
 
-# Git LFS 优化配置
+# Git LFS optimization configuration
 git config lfs.concurrenttransfers 8
 git config lfs.storage ~/.git-lfs-cache
 ```
@@ -1459,125 +1460,125 @@ git config lfs.storage ~/.git-lfs-cache
 ### 11.3 Gitless
 
 ```bash
-# Gitless 是 Git 的简化前端
-# 安装: pip install gitless
+# Gitless is a simplified frontend for Git
+# Install: pip install gitless
 
-# Gitless 的优势:
-# 1. 简化的命令（不需要 index/stage）
-# 2. 更直观的工作流
-# 3. 自动处理常见操作
+# Advantages of Gitless:
+# 1. Simplified commands (no index/stage needed)
+# 2. More intuitive workflow
+# 3. Automatic handling of common operations
 
-# Gitless 的性能特点:
-# - 与原生 Git 相同（底层使用 Git）
-# - 无额外性能开销
+# Performance characteristics of Gitless:
+# - Same as native Git (uses Git under the hood)
+# - No additional performance overhead
 ```
 
 ### 11.4 Jujutsu (jj)
 
 ```bash
-# Jujutsu 是新一代版本控制系统
-# 安装: cargo install --git https://github.com/martinvonz/jj
+# Jujutsu is a next-generation version control system
+# Install: cargo install --git https://github.com/martinvonz/jj
 
-# Jujutsu 的优势:
-# 1. 与 Git 仓库兼容
-# 2. 更好的合并处理
-# 3. 工作区概念（类似 worktree）
-# 4. 操作日志和撤销
+# Advantages of Jujutsu:
+# 1. Compatible with Git repositories
+# 2. Better merge handling
+# 3. Worktree concept (similar to worktree)
+# 4. Operation log and undo
 
-# Jujutsu 的性能特点:
-# - 某些操作比 Git 更快
-# - 内存使用更低
-# - 更好的大仓库支持
+# Performance characteristics of Jujutsu:
+# - Some operations faster than Git
+# - Lower memory usage
+# - Better large repository support
 ```
 
-### 11.5 性能对比测试方法
+### 11.5 Performance Comparison Testing Method
 
 ```bash
 #!/bin/bash
-# Git 客户端性能对比测试脚本
+# Git client performance comparison test script
 
 REPO_URL="https://github.com/user/large-repo.git"
 TEST_DIR="/tmp/git-perf-test"
 
-echo "Git 客户端性能对比测试"
-echo "======================"
+echo "Git Client Performance Comparison Test"
+echo "======================================"
 
-# 清理测试目录
+# Clean up test directory
 rm -rf "$TEST_DIR"
 mkdir -p "$TEST_DIR"
 
-# 测试克隆时间
+# Test clone time
 echo ""
-echo "1. 克隆测试"
+echo "1. Clone test"
 time git clone "$REPO_URL" "$TEST_DIR/repo" 2>&1
 
 cd "$TEST_DIR/repo"
 
-# 测试 status 时间
+# Test status time
 echo ""
-echo "2. Status 测试"
+echo "2. Status test"
 time git status > /dev/null 2>&1
 
-# 测试 diff 时间
+# Test diff time
 echo ""
-echo "3. Diff 测试"
+echo "3. Diff test"
 time git diff > /dev/null 2>&1
 
-# 测试 log 时间
+# Test log time
 echo ""
-echo "4. Log 测试"
+echo "4. Log test"
 time git log --oneline -100 > /dev/null 2>&1
 
-# 测试 add 时间
+# Test add time
 echo ""
-echo "5. Add 测试"
+echo "5. Add test"
 echo "test" > test-file.txt
 time git add . > /dev/null 2>&1
 git reset > /dev/null 2>&1
 rm test-file.txt
 
 echo ""
-echo "======================"
-echo "测试完成"
+echo "======================================"
+echo "Test complete"
 
-# 清理
+# Clean up
 cd /
 rm -rf "$TEST_DIR"
 ```
 
 ---
 
-## 12. Git 缓存与预加载策略
+## 12. Git Caching and Preloading Strategies
 
-### 12.1 Git 内置缓存
+### 12.1 Git Built-in Caching
 
 ```bash
-# untracked cache - 缓存未跟踪文件列表
+# untracked cache - cache untracked file list
 git config core.untrackedCache true
 
-# fsmonitor - 文件系统监控缓存
+# fsmonitor - file system monitoring cache
 git config core.fsmonitor true
 
-# commit-graph - 提交图缓存
+# commit-graph - commit graph cache
 git config gc.writeCommitGraph true
 
-# packfile delta 缓存
+# packfile delta cache
 git config pack.deltaCacheSize 1g
 git config pack.deltaCacheLimit 1000
 
-# packfile 窗口缓存
+# packfile window cache
 git config core.packedGitLimit 1g
 git config core.packedGitWindowSize 1g
 
-# 索引版本（v4 更快）
+# index version (v4 is faster)
 git config index.version 4
 ```
 
-### 12.2 预加载脚本
+### 12.2 Preloading Script
 
 ```bash
 #!/bin/bash
-# Git 仓库预加载脚本
+# Git repository preloading script
 
 REPO_DIR="$1"
 
@@ -1588,39 +1589,39 @@ fi
 
 cd "$REPO_DIR"
 
-echo "预加载 Git 仓库: $REPO_DIR"
-echo "开始时间: $(date)"
+echo "Preloading Git repository: $REPO_DIR"
+echo "Start time: $(date)"
 
-# 1. 预加载索引（触发 fsmonitor 和 untracked cache）
-echo "1. 预加载索引..."
+# 1. Preload index (trigger fsmonitor and untracked cache)
+echo "1. Preloading index..."
 time git status > /dev/null 2>&1
 
-# 2. 写入 commit-graph
-echo "2. 写入 commit-graph..."
+# 2. Write commit-graph
+echo "2. Writing commit-graph..."
 time git commit-graph write --reachable
 
-# 3. 重新打包
-echo "3. 重新打包..."
+# 3. Repack
+echo "3. Repacking..."
 time git repack -a -d
 
-# 4. 预加载 untracked cache
-echo "4. 预加载 untracked cache..."
+# 4. Preload untracked cache
+echo "4. Preloading untracked cache..."
 time git ls-files --others --exclude-standard > /dev/null 2>&1
 
-# 5. 预加载 LFS 文件
+# 5. Preload LFS files
 if git lfs version > /dev/null 2>&1; then
-    echo "5. 预加载 LFS 文件..."
+    echo "5. Preloading LFS files..."
     time git lfs pull > /dev/null 2>&1
 fi
 
-echo "预加载完成: $(date)"
+echo "Preload complete: $(date)"
 ```
 
-### 12.3 缓存预热策略
+### 12.3 Cache Warmup Strategy
 
 ```bash
 #!/bin/bash
-# Git 缓存预热脚本（适用于服务器）
+# Git cache warmup script (for servers)
 
 REPOS=(
     "/srv/git/repo1.git"
@@ -1630,34 +1631,34 @@ REPOS=(
 
 for repo in "${REPOS[@]}"; do
     if [ -d "$repo" ]; then
-        echo "预热: $repo"
+        echo "Warming up: $repo"
         cd "$repo"
 
-        # 更新服务器信息
+        # Update server info
         git update-server-info
 
-        # 写入 commit-graph
+        # Write commit-graph
         git commit-graph write --reachable
 
-        # 重新打包
+        # Repack
         git repack -a -d --geometric=2
 
-        # 清理不可达对象
+        # Clean unreachable objects
         git prune
 
         cd - > /dev/null
     fi
 done
 
-echo "缓存预热完成"
+echo "Cache warmup complete"
 ```
 
 ```bash
-# 在 cron 中定期运行缓存预热
-# 每天凌晨 2 点运行
+# Run cache warmup periodically in cron
+# Run at 2 AM daily
 # 0 2 * * * /path/to/git-cache-warmup.sh
 
-# 在 systemd 中运行
+# Run in systemd
 cat > /etc/systemd/git-cache-warmup.service << 'EOF'
 [Unit]
 Description=Git Cache Warmup
@@ -1686,33 +1687,33 @@ WantedBy=timers.target
 EOF
 ```
 
-### 12.4 内存缓存配置
+### 12.4 Memory Cache Configuration
 
 ```bash
-# Git 的内存缓存配置
+# Git memory cache configuration
 
-# packfile 内存限制
+# packfile memory limit
 git config core.packedGitLimit 1g
 
-# packfile 窗口大小
+# packfile window size
 git config core.packedGitWindowSize 1g
 
-# delta 缓存大小
+# delta cache size
 git config pack.deltaCacheSize 1g
 
-# delta 缓存条目限制
+# delta cache entry limit
 git config pack.deltaCacheLimit 1000
 
-# 大文件阈值
+# large file threshold
 git config core.bigFileThreshold 512m
 
-# 性能对比测试
-echo "未优化:"
+# Performance comparison test
+echo "Unoptimized:"
 git config --unset core.packedGitLimit
 git config --unset core.packedGitWindowSize
 time git log --oneline -1000 > /dev/null 2>&1
 
-echo "优化后:"
+echo "Optimized:"
 git config core.packedGitLimit 1g
 git config core.packedGitWindowSize 1g
 time git log --oneline -1000 > /dev/null 2>&1
@@ -1720,109 +1721,109 @@ time git log --oneline -1000 > /dev/null 2>&1
 
 ---
 
-## 13. 网络层优化
+## 13. Network Layer Optimization
 
-### 13.1 压缩优化
+### 13.1 Compression Optimization
 
 ```bash
-# 配置压缩级别（1-9）
-git config core.compression 6        # 默认级别
-git config core.looseCompression 6   # 松散对象压缩
-git config pack.compression 6        # packfile 压缩
+# Configure compression level (1-9)
+git config core.compression 6        # Default level
+git config core.looseCompression 6   # Loose object compression
+git config pack.compression 6        # Packfile compression
 
-# 压缩级别对比:
-# 1: 最快，压缩率最低（适合快速网络）
-# 6: 平衡（默认，推荐）
-# 9: 最慢，压缩率最高（适合慢速网络）
+# Compression level comparison:
+# 1: Fastest, lowest compression ratio (suitable for fast networks)
+# 6: Balanced (default, recommended)
+# 9: Slowest, highest compression ratio (suitable for slow networks)
 
-# HTTP 传输缓冲区
+# HTTP transfer buffer
 git config http.postBuffer 524288000  # 500MB
 
-# 大文件阈值
+# Large file threshold
 git config core.bigFileThreshold 512m
 ```
 
-### 13.2 代理配置
+### 13.2 Proxy Configuration
 
 ```bash
-# HTTP 代理
+# HTTP proxy
 git config --global http.proxy http://proxy.example.com:8080
 git config --global https.proxy https://proxy.example.com:8080
 
-# SOCKS 代理
+# SOCKS proxy
 git config --global http.proxy socks5://proxy.example.com:1080
 
-# 特定域名的代理
+# Domain-specific proxy
 git config --global http.https://github.com.proxy http://proxy.example.com:8080
 
-# 代理认证
+# Proxy authentication
 git config --global http.proxy http://user:password@proxy.example.com:8080
 
-# 禁用代理
+# Disable proxy
 git config --global --unset http.proxy
 git config --global --unset https.proxy
 
-# 环境变量代理
+# Environment variable proxy
 export http_proxy=http://proxy.example.com:8080
 export https_proxy=https://proxy.example.com:8080
 export no_proxy=github.com,gitlab.com
 ```
 
-### 13.3 CDN 和镜像加速
+### 13.3 CDN and Mirror Acceleration
 
 ```bash
-# 使用 GitHub 镜像（中国大陆加速）
+# Use GitHub mirror (China mainland acceleration)
 git config url."https://ghproxy.com/https://github.com/".insteadOf "https://github.com/"
 
-# 使用 GitLab 镜像
+# Use GitLab mirror
 git config url."https://gitlab.example.com/".insteadOf "https://gitlab.com/"
 
-# 使用 Gitee 镜像
+# Use Gitee mirror
 git config url."https://gitee.com/".insteadOf "https://github.com/"
 
-# 查看镜像配置
+# View mirror configuration
 git config --get-regexp url
 
-# 移除镜像配置
+# Remove mirror configuration
 git config --unset url."https://ghproxy.com/https://github.com/".insteadOf
 
-# 为特定仓库设置镜像
+# Set mirror for specific repository
 git config url."https://mirror.example.com/".insteadOf "https://github.com/specific-org/"
 ```
 
-### 13.4 网络超时配置
+### 13.4 Network Timeout Configuration
 
 ```bash
-# 配置 HTTP 超时
-git config --global http.lowSpeedLimit 1000    # 最低速度 (bytes/s)
-git config --global http.lowSpeedTime 30       # 低速持续时间 (秒)
+# Configure HTTP timeout
+git config --global http.lowSpeedLimit 1000    # Minimum speed (bytes/s)
+git config --global http.lowSpeedTime 30       # Low speed duration (seconds)
 
-# 配置连接超时
-git config --global http.connectTimeout 30     # 连接超时 (秒)
+# Configure connection timeout
+git config --global http.connectTimeout 30     # Connection timeout (seconds)
 
-# 禁用证书验证（不推荐，仅用于测试）
+# Disable certificate verification (not recommended, for testing only)
 git config --global http.sslVerify false
 
-# 配置 DNS 缓存
-git config --global http.dnsCacheTimeout 600   # DNS 缓存时间 (秒)
+# Configure DNS cache
+git config --global http.dnsCacheTimeout 600   # DNS cache time (seconds)
 ```
 
-### 13.5 多通道传输
+### 13.5 Multi-Channel Transfer
 
 ```bash
-# 并行获取
+# Parallel fetching
 git config --global fetch.parallel 4
 
-# 并行推送
+# Parallel pushing
 git config --global push.parallel 4
 
-# 并行子模块更新
+# Parallel submodule updates
 git config --global submodule.fetchJobs 4
 
-# 并行 LFS 传输
+# Parallel LFS transfers
 git config lfs.concurrenttransfers 8
 
-# 查看当前配置
+# View current configuration
 echo "fetch.parallel: $(git config --get fetch.parallel)"
 echo "push.parallel: $(git config --get push.parallel)"
 echo "submodule.fetchJobs: $(git config --get submodule.fetchJobs)"
@@ -1831,100 +1832,100 @@ echo "lfs.concurrenttransfers: $(git config --get lfs.concurrenttransfers)"
 
 ---
 
-## 14. 监控与诊断工具
+## 14. Monitoring and Diagnostic Tools
 
-### 14.1 Git 内置追踪
+### 14.1 Git Built-in Tracing
 
 ```bash
-# 基本追踪（显示 Git 内部操作）
+# Basic tracing (shows Git internal operations)
 GIT_TRACE=1 git status
 
-# 详细追踪（包含性能数据）
+# Detailed tracing (includes performance data)
 GIT_TRACE=1 GIT_TRACE_PERFORMANCE=1 git status
 
-# 网络追踪
+# Network tracing
 GIT_TRACE=1 GIT_TRANSFER_TRACE=1 git fetch origin
 
-# 打包追踪
+# Packing tracing
 GIT_TRACE=1 GIT_PACK_TRACE=1 git gc
 
-# 追踪输出到文件
+# Trace output to file
 GIT_TRACE=/tmp/git-trace.log git status
 GIT_TRACE_PERFORMANCE=/tmp/git-perf.log git status
 
-# 追踪特定操作
+# Trace specific operations
 GIT_TRACE=1 git add .
 GIT_TRACE=1 git commit -m "test"
 GIT_TRACE=1 git push origin main
 ```
 
-### 14.2 系统性能分析工具
+### 14.2 System Performance Analysis Tools
 
 ```bash
-# 使用 time 命令
+# Using time command
 time git status
 time git diff
 time git log --oneline -100
 
-# 使用 strace 追踪系统调用（Linux）
+# Using strace to trace system calls (Linux)
 strace -c git status
 
-# 使用 dtruss 追踪系统调用（macOS）
+# Using dtruss to trace system calls (macOS)
 sudo dtruss -c git status
 
-# 使用 perf 进行性能分析（Linux）
+# Using perf for performance analysis (Linux)
 perf record -g git status
 perf report
 
-# 使用火焰图分析
+# Using flame graph for analysis
 git clone https://github.com/brendangregg/FlameGraph.git
 perf record -g git status
 perf script | FlameGraph/stackcollapse-perf.pl | FlameGraph/flamegraph.pl > git-status.svg
 ```
 
-### 14.3 仓库健康检查脚本
+### 14.3 Repository Health Check Script
 
 ```bash
 #!/bin/bash
-# Git 仓库健康检查脚本
+# Git repository health check script
 
-echo "Git 仓库健康检查"
-echo "================"
-echo "仓库: $(pwd)"
-echo "时间: $(date)"
+echo "Git Repository Health Check"
+echo "=========================="
+echo "Repository: $(pwd)"
+echo "Time: $(date)"
 echo ""
 
-# 1. 检查仓库大小
-echo "1. 仓库大小:"
+# 1. Check repository size
+echo "1. Repository size:"
 git count-objects -v --human-readable
 echo ""
 
-# 2. 检查对象数量
-echo "2. 对象统计:"
+# 2. Check object count
+echo "2. Object statistics:"
 git count-objects -v
 echo ""
 
-# 3. 检查 packfile
-echo "3. Packfile 信息:"
-ls -lhS .git/objects/pack/ 2>/dev/null || echo "无 packfile"
+# 3. Check packfile
+echo "3. Packfile information:"
+ls -lhS .git/objects/pack/ 2>/dev/null || echo "No packfiles"
 echo ""
 
-# 4. 检查引用
-echo "4. 引用统计:"
-echo "  总引用: $(git show-ref | wc -l)"
-echo "  分支: $(git branch | wc -l)"
-echo "  远程分支: $(git branch -r | wc -l)"
-echo "  标签: $(git tag | wc -l)"
+# 4. Check references
+echo "4. Reference statistics:"
+echo "  Total refs: $(git show-ref | wc -l)"
+echo "  Branches: $(git branch | wc -l)"
+echo "  Remote branches: $(git branch -r | wc -l)"
+echo "  Tags: $(git tag | wc -l)"
 echo ""
 
-# 5. 检查未跟踪文件
-echo "5. 文件统计:"
-echo "  已跟踪: $(git ls-files | wc -l)"
-echo "  未跟踪: $(git ls-files --others --exclude-standard | wc -l)"
+# 5. Check untracked files
+echo "5. File statistics:"
+echo "  Tracked: $(git ls-files | wc -l)"
+echo "  Untracked: $(git ls-files --others --exclude-standard | wc -l)"
 echo ""
 
-# 6. 检查大文件
-echo "6. 大文件 (>10MB):"
+# 6. Check large files
+echo "6. Large files (>10MB):"
 git rev-list --objects --all | \
     git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | \
     sed -n 's/^blob //p' | \
@@ -1932,28 +1933,28 @@ git rev-list --objects --all | \
     sort -k2 -rn | head -10
 echo ""
 
-# 7. 检查完整性
-echo "7. 完整性检查:"
+# 7. Check integrity
+echo "7. Integrity check:"
 git fsck --no-reflogs --unreachable 2>&1 | head -20
 echo ""
 
-# 8. 检查配置
-echo "8. 性能配置:"
-echo "  core.fsmonitor: $(git config --get core.fsmonitor || echo '未设置')"
-echo "  core.untrackedCache: $(git config --get core.untrackedCache || echo '未设置')"
-echo "  feature.manyFiles: $(git config --get feature.manyFiles || echo '未设置')"
-echo "  protocol.version: $(git config --get protocol.version || echo '未设置')"
+# 8. Check configuration
+echo "8. Performance configuration:"
+echo "  core.fsmonitor: $(git config --get core.fsmonitor || echo 'Not set')"
+echo "  core.untrackedCache: $(git config --get core.untrackedCache || echo 'Not set')"
+echo "  feature.manyFiles: $(git config --get feature.manyFiles || echo 'Not set')"
+echo "  protocol.version: $(git config --get protocol.version || echo 'Not set')"
 echo ""
 
-echo "================"
-echo "检查完成"
+echo "=========================="
+echo "Check complete"
 ```
 
-### 14.4 性能监控脚本
+### 14.4 Performance Monitoring Script
 
 ```bash
 #!/bin/bash
-# Git 性能监控脚本
+# Git performance monitoring script
 
 LOG_FILE="/var/log/git-performance.log"
 REPO_DIR="${1:-.}"
@@ -1978,12 +1979,12 @@ monitor_operation() {
 
 cd "$REPO_DIR" || exit 1
 
-echo "开始性能监控..."
-echo "仓库: $(pwd)"
-echo "时间: $(date)"
+echo "Starting performance monitoring..."
+echo "Repository: $(pwd)"
+echo "Time: $(date)"
 echo ""
 
-# 监控常用操作
+# Monitor common operations
 monitor_operation "status" git status
 monitor_operation "diff" git diff
 monitor_operation "log-100" git log --oneline -100
@@ -1992,76 +1993,76 @@ monitor_operation "add" git add .
 git reset > /dev/null 2>&1
 
 echo ""
-echo "监控完成"
-echo "日志文件: $LOG_FILE"
+echo "Monitoring complete"
+echo "Log file: $LOG_FILE"
 ```
 
-### 14.5 可视化监控
+### 14.5 Visual Monitoring
 
 ```bash
-# 使用 git-stats 查看统计
+# Using git-stats for statistics
 pip install git-stats
 
-# 生成统计报告
+# Generate statistics report
 git-stats --since="2024-01-01" --until="2024-12-31"
 
-# 使用 gitstats 生成 HTML 报告
-# 安装: apt-get install gitstats
+# Using gitstats to generate HTML report
+# Install: apt-get install gitstats
 gitstats /path/to/repo /output/dir
 
-# 使用 Gource 可视化提交历史
-# 安装: apt-get install gource
+# Using Gource to visualize commit history
+# Install: apt-get install gource
 gource --seconds-per-day 0.1
 
-# 使用 GitKraken 查看仓库状态
-# GitKraken 是一个图形化的 Git 客户端，提供直观的性能分析
+# Using GitKraken to view repository status
+# GitKraken is a graphical Git client that provides intuitive performance analysis
 
-# 使用 VS Code Git 扩展
-# VS Code 内置了 Git 支持，可以查看状态、差异、历史等
+# Using VS Code Git extension
+# VS Code has built-in Git support, allowing you to view status, diffs, history, etc.
 ```
 
 ---
 
-## 总结
+## Summary
 
-本章全面介绍了 Git 性能优化的策略和技巧：
+This chapter provides a comprehensive overview of Git performance optimization strategies and techniques:
 
-- **克隆优化**：使用浅克隆、部分克隆、稀疏检出减少下载量和工作区大小
-- **fetch/pull 优化**：配置并行获取、使用协议 v2、优化子模块更新
-- **status 优化**：启用 fsmonitor 和 untrackedCache，提升状态检查速度
-- **diff 优化**：选择合适的 diff 算法、配置缓存、优化输出格式
-- **gc/repack 配置**：优化自动 gc 阈值、使用几何级数 repack、启用 commit-graph
-- **LFS 调优**：配置并行传输、使用缓存、延迟下载
-- **Hooks 优化**：只检查修改的文件、使用缓存、异步执行
-- **CI/CD 优化**：使用浅克隆、配置缓存、并行化构建
-- **Monorepo 策略**：使用稀疏检出、部分克隆、工作区管理
-- **客户端对比**：了解不同客户端的性能特点和适用场景
-- **缓存策略**：配置内置缓存、创建预加载脚本、定期预热
-- **网络优化**：配置压缩、代理、CDN 加速
-- **监控工具**：使用 Git 内置追踪、系统性能分析工具、仓库健康检查
+- **Clone optimization**: Use shallow clone, partial clone, sparse checkout to reduce download size and working tree size
+- **fetch/pull optimization**: Configure parallel fetching, use protocol v2, optimize submodule updates
+- **status optimization**: Enable fsmonitor and untrackedCache to improve status check speed
+- **diff optimization**: Choose appropriate diff algorithm, configure caching, optimize output format
+- **gc/repack configuration**: Optimize automatic gc thresholds, use geometric series repack, enable commit-graph
+- **LFS tuning**: Configure parallel transfers, use caching, delay downloads
+- **Hooks optimization**: Only check modified files, use caching, execute asynchronously
+- **CI/CD optimization**: Use shallow clone, configure caching, parallelize builds
+- **Monorepo strategies**: Use sparse checkout, partial clone, worktree management
+- **Client comparison**: Understand performance characteristics and use cases of different clients
+- **Caching strategies**: Configure built-in caching, create preloading scripts, periodic warmup
+- **Network optimization**: Configure compression, proxy, CDN acceleration
+- **Monitoring tools**: Use Git built-in tracing, system performance analysis tools, repository health checks
 
-通过合理配置和优化，可以在大型仓库中保持高效的开发体验。关键是要根据具体的仓库特征和工作流程，选择合适的优化策略，并持续监控和调整。
+Through proper configuration and optimization, you can maintain an efficient development experience in large repositories. The key is to choose appropriate optimization strategies based on specific repository characteristics and workflows, and continuously monitor and adjust.
 
 ---
 
-## 附录一：性能优化的系统方法论
+## Appendix 1: Systematic Methodology for Performance Optimization
 
-性能优化不是简单地调整几个配置参数，而是一个系统性的工程过程。在进行 Git 性能优化之前，我们需要建立一套完整的方法论，包括问题识别、瓶颈分析、方案设计和效果验证四个阶段。
+Performance optimization is not simply adjusting a few configuration parameters, but a systematic engineering process. Before performing Git performance optimization, we need to establish a complete methodology, including problem identification, bottleneck analysis, solution design, and result verification.
 
-### 问题识别阶段
+### Problem Identification Phase
 
-在问题识别阶段，我们需要收集性能数据，了解当前的性能状况。这包括测量各种 Git 操作的耗时，分析仓库的规模和结构，以及了解团队的工作流程。通过这些数据，我们可以识别出哪些操作是最耗时的，哪些仓库是最大的，哪些工作流程是最频繁的。
+In the problem identification phase, we need to collect performance data and understand the current performance status. This includes measuring the duration of various Git operations, analyzing the repository's scale and structure, and understanding the team's workflow. Through this data, we can identify which operations are most time-consuming, which repositories are largest, and which workflows are most frequent.
 
 ```bash
-# 收集性能数据
-echo "=== 仓库基本信息 ==="
-echo "仓库大小: $(git count-objects -v --human-readable | grep 'size-pack' | awk '{print $2}')"
-echo "文件数量: $(git ls-files | wc -l)"
-echo "提交数量: $(git log --oneline | wc -l)"
-echo "分支数量: $(git branch -a | wc -l)"
+# Collect performance data
+echo "=== Repository Basic Information ==="
+echo "Repository size: $(git count-objects -v --human-readable | grep 'size-pack' | awk '{print $2}')"
+echo "File count: $(git ls-files | wc -l)"
+echo "Commit count: $(git log --oneline | wc -l)"
+echo "Branch count: $(git branch -a | wc -l)"
 
 echo ""
-echo "=== 操作耗时测试 ==="
+echo "=== Operation Duration Test ==="
 echo -n "git status: "
 time git status > /dev/null 2>&1
 
@@ -2072,49 +2073,49 @@ echo -n "git log -100: "
 time git log --oneline -100 > /dev/null 2>&1
 ```
 
-### 瓶颈分析阶段
+### Bottleneck Analysis Phase
 
-在瓶颈分析阶段，我们需要深入分析性能数据，找出导致性能问题的根本原因。这可能包括仓库过大、网络传输慢、配置不当等多种因素。通过使用 Git 内置的追踪工具和系统性能分析工具，我们可以精确定位瓶颈所在。
+In the bottleneck analysis phase, we need to deeply analyze performance data to find the root causes of performance problems. This may include factors such as repository being too large, slow network transfer, improper configuration, etc. By using Git's built-in tracing tools and system performance analysis tools, we can precisely locate where the bottlenecks are.
 
 ```bash
-# 使用 Git 追踪工具分析瓶颈
+# Use Git tracing tools to analyze bottlenecks
 GIT_TRACE=1 GIT_TRACE_PERFORMANCE=1 git status 2>&1 | grep -E "trace|time"
 
-# 使用系统工具分析
+# Use system tools for analysis
 strace -c git status 2>&1 | tail -20
 
-# 分析文件系统性能
+# Analyze filesystem performance
 time find . -name "*.py" | wc -l
 time git ls-files "*.py" | wc -l
 ```
 
-### 方案设计阶段
+### Solution Design Phase
 
-在方案设计阶段，我们需要根据瓶颈分析的结果，设计合适的优化方案。这可能包括配置调整、工具升级、流程改进等多种措施。在设计方案时，我们需要考虑方案的可行性、成本和收益，确保方案能够有效地解决问题。
+In the solution design phase, we need to design appropriate optimization solutions based on the bottleneck analysis results. This may include configuration adjustments, tool upgrades, workflow improvements, and other measures. When designing solutions, we need to consider feasibility, cost, and benefits to ensure the solution can effectively solve the problem.
 
 ```bash
-# 根据瓶颈设计优化方案
-# 如果瓶颈是 git status 太慢:
+# Design optimization solution based on bottleneck
+# If the bottleneck is git status being too slow:
 git config core.fsmonitor true
 git config core.untrackedCache true
 
-# 如果瓶颈是网络传输太慢:
+# If the bottleneck is network transfer being too slow:
 git config --global fetch.parallel 4
 git config --global protocol.version 2
 git clone --depth=1 --filter=blob:none URL
 
-# 如果瓶颈是仓库太大:
+# If the bottleneck is repository being too large:
 git gc --aggressive
 git repack -a -d --geometric=2
 ```
 
-### 效果验证阶段
+### Result Verification Phase
 
-在效果验证阶段，我们需要测量优化后的性能数据，与优化前的数据进行对比，验证优化效果。如果效果不理想，我们需要重新分析瓶颈，调整优化方案。通过持续的监控和调整，我们可以确保仓库始终保持最佳性能。
+In the result verification phase, we need to measure the performance data after optimization and compare it with pre-optimization data to verify the optimization results. If the results are not satisfactory, we need to re-analyze the bottleneck and adjust the optimization solution. Through continuous monitoring and adjustment, we can ensure the repository always maintains optimal performance.
 
 ```bash
-# 验证优化效果
-echo "=== 优化后性能测试 ==="
+# Verify optimization results
+echo "=== Post-optimization Performance Test ==="
 echo -n "git status: "
 time git status > /dev/null 2>&1
 
@@ -2124,124 +2125,124 @@ time git diff > /dev/null 2>&1
 echo -n "git log -100: "
 time git log --oneline -100 > /dev/null 2>&1
 
-# 对比优化前后的数据
+# Compare pre and post optimization data
 echo ""
-echo "=== 性能对比 ==="
-echo "优化前 git status: 2.5 秒"
-echo "优化后 git status: 0.1 秒"
-echo "提升幅度: 25 倍"
+echo "=== Performance Comparison ==="
+echo "Before optimization git status: 2.5 seconds"
+echo "After optimization git status: 0.1 seconds"
+echo "Improvement: 25x faster"
 ```
 
 ---
 
-## 附录二：常见性能问题的诊断流程
+## Appendix 2: Diagnostic Workflow for Common Performance Problems
 
-在日常开发中，我们经常会遇到各种 Git 性能问题。以下是一些常见问题的诊断流程，可以帮助我们快速定位和解决问题。
+In daily development, we often encounter various Git performance problems. Here are some diagnostic workflows for common problems that can help us quickly locate and resolve issues.
 
-### git status 很慢
+### git status is slow
 
-当 `git status` 变慢时，通常是因为文件系统扫描耗时过长。这可能是因为仓库中文件数量过多，或者未跟踪文件过多。通过启用 fsmonitor 和 untracked cache，我们可以显著提高 `git status` 的性能。
+When `git status` becomes slow, it is usually because file system scanning takes too long. This may be due to too many files in the repository or too many untracked files. By enabling fsmonitor and untracked cache, we can significantly improve `git status` performance.
 
 ```bash
-# 诊断 git status 慢的问题
+# Diagnose slow git status problem
 GIT_TRACE=1 git status 2>&1 | grep -E "trace|time"
 
-# 检查文件数量
-echo "已跟踪文件: $(git ls-files | wc -l)"
-echo "未跟踪文件: $(git ls-files --others --exclude-standard | wc -l)"
+# Check file count
+echo "Tracked files: $(git ls-files | wc -l)"
+echo "Untracked files: $(git ls-files --others --exclude-standard | wc -l)"
 
-# 启用优化
+# Enable optimization
 git config core.fsmonitor true
 git config core.untrackedCache true
 
-# 验证优化效果
+# Verify optimization results
 time git status > /dev/null 2>&1
 ```
 
-### git clone 很慢
+### git clone is slow
 
-当 `git clone` 变慢时，通常是因为仓库太大或网络传输太慢。通过使用浅克隆、部分克隆和稀疏检出，我们可以显著减少克隆时间和下载量。
+When `git clone` becomes slow, it is usually because the repository is too large or network transfer is too slow. By using shallow clone, partial clone, and sparse checkout, we can significantly reduce clone time and download size.
 
 ```bash
-# 诊断 git clone 慢的问题
+# Diagnose slow git clone problem
 GIT_TRACE=1 git clone URL 2>&1 | grep -E "trace|time|transfer"
 
-# 检查仓库大小
+# Check repository size
 git count-objects -v --human-readable
 
-# 使用优化克隆
+# Use optimized clone
 git clone --depth=1 --filter=blob:none --sparse URL
 cd repo
 git sparse-checkout init --cone
 git sparse-checkout set src/ docs/
 
-# 验证优化效果
+# Verify optimization results
 time git clone --depth=1 --filter=blob:none URL
 ```
 
-### git push 很慢
+### git push is slow
 
-当 `git push` 变慢时，通常是因为要推送的对象太多或太大。通过使用增量推送和优化 packfile，我们可以显著提高推送速度。
+When `git push` becomes slow, it is usually because there are too many or too large objects to push. By using incremental pushing and optimizing packfiles, we can significantly improve push speed.
 
 ```bash
-# 诊断 git push 慢的问题
+# Diagnose slow git push problem
 GIT_TRACE=1 git push origin main 2>&1 | grep -E "trace|time|transfer"
 
-# 检查要推送的对象
+# Check objects to push
 git log origin/main..main --oneline
 
-# 使用增量推送
+# Use incremental push
 git push origin main
 
-# 优化 packfile
+# Optimize packfile
 git repack -a -d
 git gc --auto
 
-# 验证优化效果
+# Verify optimization results
 time git push origin main
 ```
 
-### git log 很慢
+### git log is slow
 
-当 `git log` 变慢时，通常是因为提交历史太长或需要遍历的提交太多。通过使用 commit-graph 和限制输出数量，我们可以显著提高日志查询速度。
+When `git log` becomes slow, it is usually because the commit history is too long or there are too many commits to traverse. By using commit-graph and limiting output count, we can significantly improve log query speed.
 
 ```bash
-# 诊断 git log 慢的问题
+# Diagnose slow git log problem
 GIT_TRACE=1 git log --oneline -100 2>&1 | grep -E "trace|time"
 
-# 检查提交数量
+# Check commit count
 git log --oneline | wc -l
 
-# 启用 commit-graph
+# Enable commit-graph
 git config gc.writeCommitGraph true
 git commit-graph write --reachable
 
-# 限制输出数量
+# Limit output count
 git log --oneline -100
 
-# 验证优化效果
+# Verify optimization results
 time git log --oneline -100 > /dev/null 2>&1
 ```
 
 ---
 
-## 附录三：团队协作中的性能优化
+## Appendix 3: Performance Optimization in Team Collaboration
 
-在团队协作中，Git 性能优化不仅影响个人效率，还影响整个团队的生产力。以下是一些团队协作中的性能优化策略。
+In team collaboration, Git performance optimization not only affects individual efficiency but also impacts the overall team productivity. Here are some performance optimization strategies for team collaboration.
 
-### 统一的优化配置
+### Unified Optimization Configuration
 
-团队应该统一使用相同的优化配置，以确保所有成员都能获得一致的性能体验。这可以通过在项目中提供配置脚本或使用配置管理工具来实现。
+Teams should use the same optimization configuration to ensure all members get a consistent performance experience. This can be achieved by providing configuration scripts in the project or using configuration management tools.
 
 ```bash
-# 创建团队配置脚本
+# Create team configuration script
 cat > setup-git-performance.sh << 'EOF'
 #!/bin/bash
-# 团队 Git 性能优化配置
+# Team Git performance optimization configuration
 
-echo "配置 Git 性能优化..."
+echo "Configuring Git performance optimization..."
 
-# 全局性能优化
+# Global performance optimization
 git config --global core.fsmonitor true
 git config --global core.untrackedCache true
 git config --global feature.manyFiles true
@@ -2249,81 +2250,81 @@ git config --global protocol.version 2
 git config --global fetch.parallel 4
 git config --global push.parallel 4
 
-# 仓库级性能优化
+# Repository-level performance optimization
 git config core.fsmonitor true
 git config core.untrackedCache true
 git config gc.writeCommitGraph true
 
-# 优化 packfile
+# Optimize packfile
 git config pack.window 250
 git config pack.depth 50
 git config pack.threads 4
 
-echo "配置完成"
+echo "Configuration complete"
 EOF
 
 chmod +x setup-git-performance.sh
 
-# 在项目 README 中说明
-echo "## 性能优化" >> README.md
-echo "运行 ./setup-git-performance.sh 配置 Git 性能优化" >> README.md
+# Add instructions in project README
+echo "## Performance Optimization" >> README.md
+echo "Run ./setup-git-performance.sh to configure Git performance optimization" >> README.md
 ```
 
-### 代码审查中的性能考虑
+### Performance Considerations in Code Review
 
-在代码审查中，我们应该关注可能影响 Git 性能的问题。例如，大文件不应该直接提交到仓库中，而应该使用 Git LFS；频繁的小提交可以合并为较大的提交，以减少提交历史的长度。
+In code review, we should pay attention to issues that may affect Git performance. For example, large files should not be committed directly to the repository but should use Git LFS; frequent small commits can be merged into larger commits to reduce commit history length.
 
 ```bash
-# 在 pre-commit hook 中检查大文件
+# Check for large files in pre-commit hook
 #!/bin/bash
-# 检查是否有大文件被提交
+# Check if large files are being committed
 STAGED_FILES=$(git diff --cached --name-only)
 for file in $STAGED_FILES; do
     size=$(git cat-file -s ":$file" 2>/dev/null || echo 0)
     if [ "$size" -gt 10485760 ]; then  # 10MB
-        echo "警告: 文件 $file 超过 10MB"
-        echo "建议使用 Git LFS 存储大文件"
+        echo "Warning: File $file exceeds 10MB"
+        echo "Consider using Git LFS for large files"
         exit 1
     fi
 done
 
-# 检查是否有二进制文件被提交
+# Check if binary files are being committed
 for file in $STAGED_FILES; do
     if file "$file" | grep -q "binary"; then
-        echo "警告: 二进制文件 $file 被提交"
-        echo "建议使用 Git LFS 存储二进制文件"
+        echo "Warning: Binary file $file is being committed"
+        echo "Consider using Git LFS for binary files"
     fi
 done
 
 exit 0
 ```
 
-### 共享的性能监控
+### Shared Performance Monitoring
 
-团队应该建立共享的性能监控系统，以便及时发现和解决性能问题。这可以通过定期运行性能测试脚本并将结果上传到共享平台来实现。
+Teams should establish a shared performance monitoring system to promptly discover and resolve performance issues. This can be achieved by periodically running performance test scripts and uploading results to a shared platform.
 
 ```bash
 #!/bin/bash
-# 团队性能监控脚本
+# Team performance monitoring script
 
 REPO_NAME=$(basename $(pwd))
 LOG_FILE="/var/log/git-performance/${REPO_NAME}.log"
 
-# 确保日志目录存在
+# Ensure log directory exists
 mkdir -p $(dirname "$LOG_FILE")
 
-# 记录性能数据
+# Record performance data
 {
-    echo "=== 性能监控报告 ==="
-    echo "仓库: $(pwd)"
-    echo "时间: $(date)"
+    echo "=== Performance Monitoring Report ==="
+    echo "Repository: $(pwd)"
+    echo "Time: $(date)"
     echo ""
 
-    echo "--- 仓库信息 ---"
+    echo "--- Repository Information ---"
     git count-objects -v --human-readable
     echo ""
 
-    echo "--- 操作耗时 ---"
+    echo "--- Operation Duration ---"
     echo -n "git status: "
     time git status > /dev/null 2>&1
 
@@ -2337,92 +2338,92 @@ mkdir -p $(dirname "$LOG_FILE")
     echo "========================"
 } >> "$LOG_FILE" 2>&1
 
-echo "性能数据已记录到 $LOG_FILE"
+echo "Performance data recorded to $LOG_FILE"
 ```
 
 ---
 
-## 附录四：性能优化的持续改进
+## Appendix 4: Continuous Improvement of Performance Optimization
 
-性能优化不是一次性的任务，而是一个持续的过程。我们需要建立一套持续改进的机制，以确保仓库始终保持最佳性能。
+Performance optimization is not a one-time task, but an ongoing process. We need to establish a continuous improvement mechanism to ensure the repository always maintains optimal performance.
 
-### 定期性能评估
+### Regular Performance Assessment
 
-团队应该定期进行性能评估，以了解仓库的性能状况和优化效果。这可以通过每月运行一次性能测试脚本来实现。
+Teams should conduct regular performance assessments to understand the repository's performance status and optimization results. This can be achieved by running performance test scripts monthly.
 
 ```bash
 #!/bin/bash
-# 月度性能评估脚本
+# Monthly performance assessment script
 
-echo "=== 月度性能评估 ==="
-echo "仓库: $(pwd)"
-echo "日期: $(date)"
+echo "=== Monthly Performance Assessment ==="
+echo "Repository: $(pwd)"
+echo "Date: $(date)"
 echo ""
 
-# 运行性能测试
+# Run performance test
 ./git-benchmark.sh
 
-# 生成性能报告
+# Generate performance report
 echo ""
-echo "=== 性能趋势分析 ==="
+echo "=== Performance Trend Analysis ==="
 if [ -f /var/log/git-performance/$(basename $(pwd)).log ]; then
-    echo "历史数据可用"
+    echo "Historical data available"
     tail -100 /var/log/git-performance/$(basename $(pwd)).log | \
         grep "git status" | \
         awk '{print $3}' | \
         sort -n | \
         head -1
 else
-    echo "暂无历史数据"
+    echo "No historical data available yet"
 fi
 ```
 
-### 性能优化的文档化
+### Documentation of Performance Optimization
 
-团队应该将性能优化的经验和最佳实践文档化，以便新成员可以快速了解和应用。这可以通过在项目中维护一个性能优化指南来实现。
+Teams should document performance optimization experiences and best practices so new members can quickly understand and apply them. This can be achieved by maintaining a performance optimization guide in the project.
 
 ```bash
-# 创建性能优化指南
+# Create performance optimization guide
 cat > PERFORMANCE.md << 'EOF'
-# Git 性能优化指南
+# Git Performance Optimization Guide
 
-## 快速开始
+## Quick Start
 
-运行以下命令配置性能优化：
+Run the following commands to configure performance optimization:
 
 ```bash
 ./setup-git-performance.sh
 ```
 
-## 常见问题
+## Common Problems
 
-### git status 很慢
+### git status is slow
 
-启用 fsmonitor 和 untracked cache：
+Enable fsmonitor and untracked cache:
 
 ```bash
 git config core.fsmonitor true
 git config core.untrackedCache true
 ```
 
-### git clone 很慢
+### git clone is slow
 
-使用浅克隆和部分克隆：
+Use shallow clone and partial clone:
 
 ```bash
 git clone --depth=1 --filter=blob:none URL
 ```
 
-## 最佳实践
+## Best Practices
 
-1. 使用 Git LFS 存储大文件
-2. 定期运行 git gc 和 git repack
-3. 使用协议 v2 进行网络传输
-4. 启用 commit-graph 加速日志查询
+1. Use Git LFS for large files
+2. Run git gc and git repack regularly
+3. Use protocol v2 for network transfers
+4. Enable commit-graph to speed up log queries
 
-## 监控
+## Monitoring
 
-运行性能监控脚本：
+Run the performance monitoring script:
 
 ```bash
 ./git-performance-monitor.sh
@@ -2430,17 +2431,17 @@ git clone --depth=1 --filter=blob:none URL
 EOF
 ```
 
-### 性能优化的自动化
+### Automation of Performance Optimization
 
-团队应该将性能优化的过程自动化，以减少人工干预和提高效率。这可以通过使用 CI/CD 工具和自动化脚本来实现。
+Teams should automate the performance optimization process to reduce manual intervention and improve efficiency. This can be achieved by using CI/CD tools and automation scripts.
 
 ```yaml
-# GitHub Actions 自动化性能优化
+# GitHub Actions automated performance optimization
 name: Git Performance Optimization
 
 on:
   schedule:
-    - cron: '0 2 * * 0'  # 每周日凌晨 2 点
+    - cron: '0 2 * * 0'  # Every Sunday at 2 AM
 
 jobs:
   optimize:
@@ -2472,102 +2473,102 @@ jobs:
 
 ---
 
-## 附录五：性能优化的工具链
+## Appendix 5: Performance Optimization Toolchain
 
-在进行 Git 性能优化时，我们需要使用各种工具来收集数据、分析问题和验证效果。以下是一些常用的性能优化工具。
+When performing Git performance optimization, we need to use various tools to collect data, analyze problems, and verify results. Here are some commonly used performance optimization tools.
 
-### Git 内置工具
+### Git Built-in Tools
 
-Git 提供了多种内置工具来帮助我们进行性能优化。这些工具包括 `git count-objects`、`git verify-pack`、`git fsck` 等。
+Git provides several built-in tools to help us with performance optimization. These tools include `git count-objects`, `git verify-pack`, `git fsck`, etc.
 
 ```bash
-# 使用 git count-objects 分析仓库大小
+# Use git count-objects to analyze repository size
 git count-objects -v --human-readable
 
-# 使用 git verify-pack 分析 packfile
+# Use git verify-pack to analyze packfile
 git verify-pack -v .git/objects/pack/pack-*.idx
 
-# 使用 git fsck 检查仓库完整性
+# Use git fsck to check repository integrity
 git fsck --full --strict
 
-# 使用 git reflog 分析引用历史
+# Use git reflog to analyze reference history
 git reflog show --all
 ```
 
-### 系统性能工具
+### System Performance Tools
 
-除了 Git 内置工具外，我们还可以使用系统性能工具来分析 Git 的性能。这些工具包括 `time`、`strace`、`perf` 等。
+In addition to Git built-in tools, we can also use system performance tools to analyze Git's performance. These tools include `time`, `strace`, `perf`, etc.
 
 ```bash
-# 使用 time 测量命令耗时
+# Use time to measure command duration
 time git status
 
-# 使用 strace 追踪系统调用
+# Use strace to trace system calls
 strace -c git status
 
-# 使用 perf 进行性能分析
+# Use perf for performance analysis
 perf record -g git status
 perf report
 
-# 使用火焰图分析
+# Use flame graph for analysis
 perf script | FlameGraph/stackcollapse-perf.pl | FlameGraph/flamegraph.pl > git-status.svg
 ```
 
-### 第三方工具
+### Third-party Tools
 
-除了上述工具外，还有一些第三方工具可以帮助我们进行 Git 性能优化。这些工具包括 `git-lfs`、`git-filter-repo`、`git-stats` 等。
+In addition to the above tools, there are some third-party tools that can help us with Git performance optimization. These tools include `git-lfs`, `git-filter-repo`, `git-stats`, etc.
 
 ```bash
-# 使用 git-lfs 管理大文件
+# Use git-lfs for large file management
 git lfs install
 git lfs track "*.psd"
 git lfs track "*.zip"
 
-# 使用 git-filter-repo 清理历史
+# Use git-filter-repo to clean history
 pip install git-filter-repo
 git filter-repo --path-glob '*.env' --invert-paths
 
-# 使用 git-stats 生成统计报告
+# Use git-stats to generate statistics reports
 pip install git-stats
 git-stats --since="2024-01-01" --until="2024-12-31"
 ```
 
-### 自定义工具
+### Custom Tools
 
-除了使用现有工具外，我们还可以创建自定义工具来满足特定的需求。这些工具可以封装常用的操作，提高工作效率。
+In addition to using existing tools, we can also create custom tools to meet specific needs. These tools can encapsulate common operations and improve work efficiency.
 
 ```bash
 #!/bin/bash
-# 自定义 Git 性能工具
+# Custom Git performance tool
 
 case "$1" in
     "analyze")
-        echo "分析仓库性能..."
+        echo "Analyzing repository performance..."
         git count-objects -v --human-readable
         echo ""
-        echo "文件统计:"
-        echo "  已跟踪: $(git ls-files | wc -l)"
-        echo "  未跟踪: $(git ls-files --others --exclude-standard | wc -l)"
+        echo "File statistics:"
+        echo "  Tracked: $(git ls-files | wc -l)"
+        echo "  Untracked: $(git ls-files --others --exclude-standard | wc -l)"
         echo ""
-        echo "提交统计:"
-        echo "  总提交: $(git log --oneline | wc -l)"
-        echo "  合并提交: $(git log --merges --oneline | wc -l)"
+        echo "Commit statistics:"
+        echo "  Total commits: $(git log --oneline | wc -l)"
+        echo "  Merge commits: $(git log --merges --oneline | wc -l)"
         ;;
     "optimize")
-        echo "优化仓库性能..."
+        echo "Optimizing repository performance..."
         git gc --auto
         git repack -a -d
         git commit-graph write --reachable
-        echo "优化完成"
+        echo "Optimization complete"
         ;;
     "benchmark")
-        echo "运行性能基准测试..."
+        echo "Running performance benchmark..."
         time git status > /dev/null 2>&1
         time git diff > /dev/null 2>&1
         time git log --oneline -100 > /dev/null 2>&1
         ;;
     *)
-        echo "用法: $0 {analyze|optimize|benchmark}"
+        echo "Usage: $0 {analyze|optimize|benchmark}"
         exit 1
         ;;
 esac
@@ -2575,30 +2576,30 @@ esac
 
 ---
 
-## 附录六：性能优化的监控告警
+## Appendix 6: Performance Optimization Monitoring and Alerting
 
-为了及时发现和解决性能问题，我们需要建立一套监控告警系统。这个系统可以定期检查仓库的性能指标，并在指标超过阈值时发送告警通知。
+To promptly discover and resolve performance issues, we need to establish a monitoring and alerting system. This system can periodically check repository performance metrics and send alert notifications when thresholds are exceeded.
 
-### 监控指标
+### Monitoring Metrics
 
-我们需要监控以下关键指标：
+We need to monitor the following key metrics:
 
-- 仓库大小：包括对象数量、packfile 大小等
-- 操作耗时：包括 git status、git diff、git log 等常用操作的耗时
-- 网络传输：包括克隆、推送、拉取等操作的传输时间和数据量
-- 错误率：包括操作失败的次数和原因
+- Repository size: including object count, packfile size, etc.
+- Operation duration: including git status, git diff, git log, and other common operations
+- Network transfer: including clone, push, pull transfer time and data volume
+- Error rate: including operation failure count and reasons
 
 ```bash
 #!/bin/bash
-# 性能监控脚本
+# Performance monitoring script
 
 REPO_NAME=$(basename $(pwd))
 METRICS_FILE="/var/log/git-metrics/${REPO_NAME}.json"
 
-# 确保目录存在
+# Ensure directory exists
 mkdir -p $(dirname "$METRICS_FILE")
 
-# 收集指标
+# Collect metrics
 {
     echo "{"
     echo "  \"timestamp\": \"$(date -Iseconds)\","
@@ -2619,56 +2620,56 @@ mkdir -p $(dirname "$METRICS_FILE")
     echo "}"
 } > "$METRICS_FILE"
 
-echo "指标已记录到 $METRICS_FILE"
+echo "Metrics recorded to $METRICS_FILE"
 ```
 
-### 告警规则
+### Alert Rules
 
-我们需要定义合理的告警规则，以便在性能问题发生时及时通知相关人员。以下是一些常见的告警规则：
+We need to define reasonable alert rules to promptly notify relevant personnel when performance issues occur. Here are some common alert rules:
 
-- 仓库大小超过阈值
-- 操作耗时超过阈值
-- 网络传输失败率超过阈值
-- 对象损坏或丢失
+- Repository size exceeds threshold
+- Operation duration exceeds threshold
+- Network transfer failure rate exceeds threshold
+- Objects corrupted or missing
 
 ```bash
 #!/bin/bash
-# 告警检查脚本
+# Alert check script
 
 REPO_NAME=$(basename $(pwd))
-ALERT_THRESHOLD_STATUS=5  # git status 耗时阈值（秒）
-ALERT_THRESHOLD_SIZE=1073741824  # 仓库大小阈值（1GB）
+ALERT_THRESHOLD_STATUS=5  # git status duration threshold (seconds)
+ALERT_THRESHOLD_SIZE=1073741824  # Repository size threshold (1GB)
 
-# 检查 git status 耗时
+# Check git status duration
 STATUS_TIME=$(TIMEFORMAT='%R'; time git status > /dev/null 2>&1)
 if (( $(echo "$STATUS_TIME > $ALERT_THRESHOLD_STATUS" | bc -l) )); then
-    echo "告警: git status 耗时 ${STATUS_TIME} 秒，超过阈值 ${ALERT_THRESHOLD_STATUS} 秒"
-    # 发送告警通知
-    # curl -X POST "https://hooks.slack.com/..." -d "{\"text\": \"Git 性能告警: git status 耗时 ${STATUS_TIME} 秒\"}"
+    echo "Alert: git status took ${STATUS_TIME} seconds, exceeding threshold of ${ALERT_THRESHOLD_STATUS} seconds"
+    # Send alert notification
+    # curl -X POST "https://hooks.slack.com/..." -d "{\"text\": \"Git performance alert: git status took ${STATUS_TIME} seconds\"}"
 fi
 
-# 检查仓库大小
+# Check repository size
 REPO_SIZE=$(git count-objects -v | grep 'size-pack' | awk '{print $2}')
 if [ "$REPO_SIZE" -gt "$ALERT_THRESHOLD_SIZE" ]; then
-    echo "告警: 仓库大小 ${REPO_SIZE} 字节，超过阈值 ${ALERT_THRESHOLD_SIZE} 字节"
-    # 发送告警通知
+    echo "Alert: Repository size is ${REPO_SIZE} bytes, exceeding threshold of ${ALERT_THRESHOLD_SIZE} bytes"
+    # Send alert notification
 fi
 ```
 
-### 告警通知
+### Alert Notifications
 
-当告警触发时，我们需要及时通知相关人员。这可以通过多种方式实现，包括邮件、即时通讯工具、短信等。
+When alerts are triggered, we need to promptly notify relevant personnel. This can be achieved through various methods, including email, instant messaging tools, SMS, etc.
 
 ```bash
 #!/bin/bash
-# 告警通知脚本
+# Alert notification script
 
 ALERT_TYPE=$1
 ALERT_MESSAGE=$2
 
 case "$ALERT_TYPE" in
     "email")
-        echo "$ALERT_MESSAGE" | mail -s "Git 性能告警" team@example.com
+        echo "$ALERT_MESSAGE" | mail -s "Git Performance Alert" team@example.com
         ;;
     "slack")
         curl -X POST \
@@ -2683,7 +2684,7 @@ case "$ALERT_TYPE" in
             https://oapi.dingtalk.com/robot/send?access_token=xxx
         ;;
     *)
-        echo "未知的告警类型: $ALERT_TYPE"
+        echo "Unknown alert type: $ALERT_TYPE"
         exit 1
         ;;
 esac
@@ -2691,204 +2692,204 @@ esac
 
 ---
 
-## 附录七：性能优化的案例分析
+## Appendix 7: Performance Optimization Case Studies
 
-通过分析实际的性能优化案例，我们可以更好地理解性能优化的方法和技巧。以下是一些典型的性能优化案例。
+By analyzing real-world performance optimization cases, we can better understand optimization methods and techniques. Here are some typical performance optimization cases.
 
-### 案例一：大型 Monorepo 的性能优化
+### Case 1: Large Monorepo Performance Optimization
 
-某公司的 Monorepo 包含了 50 万个文件和 100 万次提交，git status 需要 30 秒才能完成。通过启用 fsmonitor 和 untracked cache，并使用稀疏检出，git status 的耗时降低到了 1 秒。
+A company's Monorepo contained 500,000 files and 1 million commits, and git status took 30 seconds to complete. By enabling fsmonitor and untracked cache, and using sparse checkout, git status duration was reduced to 1 second.
 
 ```bash
-# 优化前
-time git status  # 30 秒
+# Before optimization
+time git status  # 30 seconds
 
-# 启用 fsmonitor
+# Enable fsmonitor
 git config core.fsmonitor true
 
-# 启用 untracked cache
+# Enable untracked cache
 git config core.untrackedCache true
 
-# 使用稀疏检出
+# Use sparse checkout
 git sparse-checkout init --cone
 git sparse-checkout set src/team-a/
 
-# 优化后
-time git status  # 1 秒
+# After optimization
+time git status  # 1 second
 
-# 性能提升: 30 倍
+# Performance improvement: 30x
 ```
 
-### 案例二：CI/CD 中的克隆优化
+### Case 2: CI/CD Clone Optimization
 
-某团队的 CI/CD 流水线需要克隆一个 2GB 的仓库，每次克隆需要 10 分钟。通过使用浅克隆和部分克隆，克隆时间降低到了 30 秒。
+A team's CI/CD pipeline needed to clone a 2GB repository, taking 10 minutes each time. By using shallow clone and partial clone, clone time was reduced to 30 seconds.
 
 ```bash
-# 优化前
-time git clone URL  # 10 分钟
+# Before optimization
+time git clone URL  # 10 minutes
 
-# 使用浅克隆
-time git clone --depth=1 URL  # 3 分钟
+# Use shallow clone
+time git clone --depth=1 URL  # 3 minutes
 
-# 使用部分克隆
-time git clone --depth=1 --filter=blob:none URL  # 1 分钟
+# Use partial clone
+time git clone --depth=1 --filter=blob:none URL  # 1 minute
 
-# 使用稀疏检出
-time git clone --depth=1 --filter=blob:none --sparse URL  # 30 秒
+# Use sparse checkout
+time git clone --depth=1 --filter=blob:none --sparse URL  # 30 seconds
 
-# 性能提升: 20 倍
+# Performance improvement: 20x
 ```
 
-### 案例三：大文件存储优化
+### Case 3: Large File Storage Optimization
 
-某游戏开发团队的仓库包含了大量纹理和模型文件，导致仓库大小超过 10GB。通过使用 Git LFS，仓库大小降低到了 500MB，克隆时间从 1 小时降低到了 5 分钟。
+A game development team's repository contained extensive textures and model files, causing the repository size to exceed 10GB. By using Git LFS, the repository size was reduced to 500MB, and clone time went from 1 hour to 5 minutes.
 
 ```bash
-# 优化前
+# Before optimization
 git count-objects -v --human-readable
 # size-pack: 10GB
 
-# 安装 Git LFS
+# Install Git LFS
 git lfs install
 
-# 迁移大文件到 LFS
+# Migrate large files to LFS
 git lfs migrate import --include="*.psd,*.fbx,*.png" --everything
 
-# 优化后
+# After optimization
 git count-objects -v --human-readable
 # size-pack: 500MB
 
-# 性能提升: 20 倍
+# Performance improvement: 20x
 ```
 
-### 案例四：网络传输优化
+### Case 4: Network Transfer Optimization
 
-某跨国团队在网络条件较差的环境下工作，git push 和 git pull 经常超时。通过配置代理和优化压缩参数，网络传输的稳定性得到了显著提升。
+A multinational team worked in an environment with poor network conditions, and git push and git pull frequently timed out. By configuring proxy and optimizing compression parameters, network transfer stability was significantly improved.
 
 ```bash
-# 配置 HTTP 代理
+# Configure HTTP proxy
 git config --global http.proxy http://proxy.example.com:8080
 
-# 配置压缩级别
+# Configure compression level
 git config --global core.compression 1
 
-# 配置缓冲区大小
+# Configure buffer size
 git config --global http.postBuffer 524288000
 
-# 配置超时
+# Configure timeout
 git config --global http.lowSpeedLimit 1000
 git config --global http.lowSpeedTime 60
 
-# 验证优化效果
+# Verify optimization results
 time git push origin main
 time git pull origin main
 ```
 
 ---
 
-## 附录八：性能优化的自动化测试
+## Appendix 8: Automated Performance Testing
 
-为了确保性能优化的效果，我们需要建立自动化的性能测试体系。这个体系可以定期运行性能测试，并生成测试报告。
+To ensure performance optimization effectiveness, we need to establish an automated performance testing system. This system can periodically run performance tests and generate test reports.
 
-### 性能测试脚本
+### Performance Test Script
 
 ```bash
 #!/bin/bash
-# Git 性能自动化测试脚本
+# Git performance automated test script
 
 TEST_DIR="/tmp/git-perf-test-$(date +%Y%m%d_%H%M%S)"
 REPORT_FILE="$TEST_DIR/report.txt"
 
 mkdir -p "$TEST_DIR"
 
-echo "=== Git 性能自动化测试 ===" > "$REPORT_FILE"
-echo "测试时间: $(date)" >> "$REPORT_FILE"
-echo "仓库: $(pwd)" >> "$REPORT_FILE"
+echo "=== Git Performance Automated Test ===" > "$REPORT_FILE"
+echo "Test time: $(date)" >> "$REPORT_FILE"
+echo "Repository: $(pwd)" >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 
-# 测试 git status
-echo "测试 git status..." >> "$REPORT_FILE"
+# Test git status
+echo "Testing git status..." >> "$REPORT_FILE"
 for i in {1..5}; do
     TIME=$(TIMEFORMAT='%R'; time git status > /dev/null 2>&1)
-    echo "  第 $i 次: ${TIME} 秒" >> "$REPORT_FILE"
+    echo "  Run $i: ${TIME} seconds" >> "$REPORT_FILE"
 done
 
-# 测试 git diff
-echo "测试 git diff..." >> "$REPORT_FILE"
+# Test git diff
+echo "Testing git diff..." >> "$REPORT_FILE"
 for i in {1..5}; do
     TIME=$(TIMEFORMAT='%R'; time git diff > /dev/null 2>&1)
-    echo "  第 $i 次: ${TIME} 秒" >> "$REPORT_FILE"
+    echo "  Run $i: ${TIME} seconds" >> "$REPORT_FILE"
 done
 
-# 测试 git log
-echo "测试 git log -100..." >> "$REPORT_FILE"
+# Test git log
+echo "Testing git log -100..." >> "$REPORT_FILE"
 for i in {1..5}; do
     TIME=$(TIMEFORMAT='%R'; time git log --oneline -100 > /dev/null 2>&1)
-    echo "  第 $i 次: ${TIME} 秒" >> "$REPORT_FILE"
+    echo "  Run $i: ${TIME} seconds" >> "$REPORT_FILE"
 done
 
 echo "" >> "$REPORT_FILE"
-echo "测试完成" >> "$REPORT_FILE"
+echo "Test complete" >> "$REPORT_FILE"
 
-echo "测试报告已生成: $REPORT_FILE"
+echo "Test report generated: $REPORT_FILE"
 cat "$REPORT_FILE"
 ```
 
-### 性能回归测试
+### Performance Regression Test
 
 ```bash
 #!/bin/bash
-# Git 性能回归测试脚本
+# Git performance regression test script
 
-# 定义性能基线
-BASELINE_STATUS=1.0  # git status 基线耗时（秒）
-BASELINE_DIFF=0.5    # git diff 基线耗时（秒）
-BASELINE_LOG=0.3     # git log 基线耗时（秒）
+# Define performance baselines
+BASELINE_STATUS=1.0  # git status baseline duration (seconds)
+BASELINE_DIFF=0.5    # git diff baseline duration (seconds)
+BASELINE_LOG=0.3     # git log baseline duration (seconds)
 
-# 运行测试
+# Run tests
 STATUS_TIME=$(TIMEFORMAT='%R'; time git status > /dev/null 2>&1)
 DIFF_TIME=$(TIMEFORMAT='%R'; time git diff > /dev/null 2>&1)
 LOG_TIME=$(TIMEFORMAT='%R'; time git log --oneline -100 > /dev/null 2>&1)
 
-# 检查是否超过基线
+# Check if baselines are exceeded
 FAILED=0
 
 if (( $(echo "$STATUS_TIME > $BASELINE_STATUS * 2" | bc -l) )); then
-    echo "失败: git status 耗时 ${STATUS_TIME} 秒，超过基线 $BASELINE_STATUS 秒的 2 倍"
+    echo "Failed: git status took ${STATUS_TIME} seconds, exceeding 2x baseline of $BASELINE_STATUS seconds"
     FAILED=1
 fi
 
 if (( $(echo "$DIFF_TIME > $BASELINE_DIFF * 2" | bc -l) )); then
-    echo "失败: git diff 耗时 ${DIFF_TIME} 秒，超过基线 $BASELINE_DIFF 秒的 2 倍"
+    echo "Failed: git diff took ${DIFF_TIME} seconds, exceeding 2x baseline of $BASELINE_DIFF seconds"
     FAILED=1
 fi
 
 if (( $(echo "$LOG_TIME > $BASELINE_LOG * 2" | bc -l) )); then
-    echo "失败: git log 耗时 ${LOG_TIME} 秒，超过基线 $BASELINE_LOG 秒的 2 倍"
+    echo "Failed: git log took ${LOG_TIME} seconds, exceeding 2x baseline of $BASELINE_LOG seconds"
     FAILED=1
 fi
 
 if [ "$FAILED" -eq 0 ]; then
-    echo "通过: 所有测试都在基线范围内"
+    echo "Passed: All tests within baseline range"
     exit 0
 else
-    echo "失败: 存在性能回归"
+    echo "Failed: Performance regression detected"
     exit 1
 fi
 ```
 
 ---
 
-## 附录九：性能优化的最佳实践总结
+## Appendix 9: Performance Optimization Best Practices Summary
 
-通过前面的讨论，我们可以总结出以下性能优化的最佳实践。
+Based on the previous discussions, we can summarize the following performance optimization best practices.
 
-### 克隆优化的最佳实践
+### Clone Optimization Best Practices
 
-在克隆大型仓库时，我们应该根据实际需求选择合适的克隆策略。如果只需要最新代码，使用浅克隆；如果只需要部分目录，使用稀疏检出；如果仓库包含大文件，使用部分克隆。
+When cloning large repositories, we should choose the appropriate clone strategy based on actual needs. If only the latest code is needed, use shallow clone; if only specific directories are needed, use sparse checkout; if the repository contains large files, use partial clone.
 
 ```bash
-# 最佳实践：组合使用多种优化策略
+# Best practice: Combine multiple optimization strategies
 git clone \
     --depth=1 \
     --filter=blob:none \
@@ -2902,12 +2903,12 @@ git sparse-checkout init --cone
 git sparse-checkout set src/ docs/ tests/
 ```
 
-### 日常操作的优化最佳实践
+### Daily Operation Optimization Best Practices
 
-在日常开发中，我们应该启用各种缓存和优化选项，以提高常用操作的性能。这包括启用 fsmonitor、untracked cache 和 commit-graph。
+In daily development, we should enable various caching and optimization options to improve common operation performance. This includes enabling fsmonitor, untracked cache, and commit-graph.
 
 ```bash
-# 最佳实践：启用所有性能优化选项
+# Best practice: Enable all performance optimization options
 git config core.fsmonitor true
 git config core.untrackedCache true
 git config feature.manyFiles true
@@ -2918,45 +2919,45 @@ git config fetch.parallel 4
 git config push.parallel 4
 ```
 
-### 仓库维护的最佳实践
+### Repository Maintenance Best Practices
 
-为了保持仓库的最佳性能，我们应该定期进行仓库维护。这包括运行 gc、repack 和 prune，以及清理不可达对象。
+To maintain optimal repository performance, we should perform regular repository maintenance. This includes running gc, repack, and prune, as well as cleaning up unreachable objects.
 
 ```bash
-# 最佳实践：定期维护仓库
+# Best practice: Regular repository maintenance
 git gc --auto
 git repack -a -d --geometric=2
 git commit-graph write --reachable
 git prune --expire=30.days.ago
 ```
 
-### 团队协作的最佳实践
+### Team Collaboration Best Practices
 
-在团队协作中，我们应该统一使用相同的优化配置，并建立共享的性能监控系统。这可以确保所有成员都能获得一致的性能体验，并及时发现和解决性能问题。
+In team collaboration, we should use the same optimization configuration and establish a shared performance monitoring system. This ensures all members get a consistent performance experience and can promptly discover and resolve performance issues.
 
 ```bash
-# 最佳实践：统一团队配置
-# 在项目中提供配置脚本
+# Best practice: Unified team configuration
+# Provide configuration scripts in the project
 ./setup-git-performance.sh
 
-# 在 CI/CD 中定期运行性能测试
-# 在 GitHub Actions 中配置性能监控
+# Run performance tests periodically in CI/CD
+# Configure performance monitoring in GitHub Actions
 ```
 
-### 大仓库管理的最佳实践
+### Large Repository Management Best Practices
 
-对于大型仓库，我们应该使用稀疏检出、部分克隆和 Git LFS 等技术来管理仓库的规模。这可以显著减少克隆时间和工作区大小。
+For large repositories, we should use sparse checkout, partial clone, Git LFS, and other techniques to manage repository scale. This can significantly reduce clone time and working tree size.
 
 ```bash
-# 最佳实践：大型仓库管理策略
-# 使用稀疏检出
+# Best practice: Large repository management strategies
+# Use sparse checkout
 git sparse-checkout init --cone
 git sparse-checkout set src/ docs/
 
-# 使用部分克隆
+# Use partial clone
 git clone --filter=blob:none URL
 
-# 使用 Git LFS
+# Use Git LFS
 git lfs install
 git lfs track "*.psd"
 git lfs track "*.zip"
@@ -2964,12 +2965,12 @@ git lfs track "*.zip"
 
 ---
 
-## 附录十：性能优化速查表
+## Appendix 10: Performance Optimization Quick Reference
 
 ```bash
-# ===== 快速优化配置 =====
+# ===== Quick Optimization Configuration =====
 
-# 1. 全局性能优化
+# 1. Global performance optimization
 git config --global core.fsmonitor true
 git config --global core.untrackedCache true
 git config --global feature.manyFiles true
@@ -2977,30 +2978,30 @@ git config --global protocol.version 2
 git config --global fetch.parallel 4
 git config --global push.parallel 4
 
-# 2. 克隆优化
+# 2. Clone optimization
 git clone --depth=1 --filter=blob:none --sparse URL
 
-# 3. 状态优化
+# 3. Status optimization
 git config core.fsmonitor true
 git config core.untrackedCache true
 
-# 4. Diff 优化
+# 4. Diff optimization
 git config diff.algorithm histogram
 
-# 5. GC 优化
+# 5. GC optimization
 git config gc.auto 6700
 git config gc.autoPackLimit 50
 git config gc.writeCommitGraph true
 
-# 6. LFS 优化
+# 6. LFS optimization
 git config lfs.concurrenttransfers 8
 git config lfs.storage ~/.git-lfs-cache
 
-# 7. 网络优化
+# 7. Network optimization
 git config --global http.postBuffer 524288000
 git config --global fetch.parallel 4
 
-# 8. 监控诊断
+# 8. Monitoring and diagnostics
 GIT_TRACE=1 git status
 git count-objects -v --human-readable
 git fsck --no-reflogs
@@ -3008,12 +3009,12 @@ git fsck --no-reflogs
 
 ---
 
-> **上一章**: [Git 内部机制深度解析](./X11-git-internals-deep-dive.md)
+> **Previous Chapter**: [Git Internals Deep Dive](./X11-git-internals-deep-dive.md)
 
 ```bash
-# ===== 快速优化配置 =====
+# ===== Quick Optimization Configuration =====
 
-# 1. 全局性能优化
+# 1. Global performance optimization
 git config --global core.fsmonitor true
 git config --global core.untrackedCache true
 git config --global feature.manyFiles true
@@ -3021,30 +3022,30 @@ git config --global protocol.version 2
 git config --global fetch.parallel 4
 git config --global push.parallel 4
 
-# 2. 克隆优化
+# 2. Clone optimization
 git clone --depth=1 --filter=blob:none --sparse URL
 
-# 3. 状态优化
+# 3. Status optimization
 git config core.fsmonitor true
 git config core.untrackedCache true
 
-# 4. Diff 优化
+# 4. Diff optimization
 git config diff.algorithm histogram
 
-# 5. GC 优化
+# 5. GC optimization
 git config gc.auto 6700
 git config gc.autoPackLimit 50
 git config gc.writeCommitGraph true
 
-# 6. LFS 优化
+# 6. LFS optimization
 git config lfs.concurrenttransfers 8
 git config lfs.storage ~/.git-lfs-cache
 
-# 7. 网络优化
+# 7. Network optimization
 git config --global http.postBuffer 524288000
 git config --global fetch.parallel 4
 
-# 8. 监控诊断
+# 8. Monitoring and diagnostics
 GIT_TRACE=1 git status
 git count-objects -v --human-readable
 git fsck --no-reflogs
@@ -3052,4 +3053,4 @@ git fsck --no-reflogs
 
 ---
 
-> **上一章**: [Git 内部机制深度解析](./X11-git-internals-deep-dive.md)
+> **Previous Chapter**: [Git Internals Deep Dive](./X11-git-internals-deep-dive.md)

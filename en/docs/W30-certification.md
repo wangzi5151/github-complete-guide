@@ -1,244 +1,244 @@
-# GitHub 认证考试指南
+# GitHub Certification Exam Guide
 
-## 认证类型
+## Certification Types
 
-| 认证 | 说明 | 适合人群 |
+| Certification | Description | Target Audience |
 |------|------|----------|
-| GitHub Actions | GitHub Actions 专家 | DevOps 工程师 |
-| GitHub Advanced Security | 安全专家 | 安全工程师 |
-| GitHub Copilot | AI 编程助手 | 开发者 |
-| GitHub Administration | 管理员 | IT 管理员 |
+| GitHub Actions | GitHub Actions Expert | DevOps Engineers |
+| GitHub Advanced Security | Security Expert | Security Engineers |
+| GitHub Copilot | AI Coding Assistant | Developers |
+| GitHub Administration | Administrator | IT Administrators |
 
-## GitHub Actions 认证
+## GitHub Actions Certification
 
-### 考试内容
+### Exam Content
 
 ```markdown
-## 考试范围
+## Exam Scope
 
-### 1. 核心概念（25%）
-- 工作流语法
-- 触发器
-- 作业和步骤
-- 环境变量
+### 1. Core Concepts (25%)
+- Workflow Syntax
+- Triggers
+- Jobs and Steps
+- Environment Variables
 
-### 2. 工作流构建（30%）
-- 复用工作流
-- 矩阵策略
-- 缓存
-- 并发控制
+### 2. Workflow Building (30%)
+- Reusable Workflows
+- Matrix Strategy
+- Caching
+- Concurrency Control
 
-### 3. 安全和权限（20%）
-- Secrets 管理
-- 权限控制
-- 环境保护
+### 3. Security and Permissions (20%)
+- Secrets Management
+- Permission Control
+- Environment Protection
 
-### 4. 调试和故障排除（15%）
-- 日志分析
-- 常见错误
-- 调试技巧
+### 4. Debugging and Troubleshooting (15%)
+- Log Analysis
+- Common Errors
+- Debugging Tips
 
-### 5. 优化（10%）
-- 性能优化
-- 成本优化
+### 5. Optimization (10%)
+- Performance Optimization
+- Cost Optimization
 ```
 
-### 学习资源
+### Learning Resources
 
 ```markdown
-## 学习资源
+## Learning Resources
 
-### 官方文档
-- [GitHub Actions 文档](https://docs.github.com/en/actions)
-- [工作流语法](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
+### Official Documentation
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
 
-### 课程
-- [GitHub Actions 课程](https://learn.microsoft.com/en-us/training/paths/automate-development-tasks-with-github-actions/)
+### Courses
+- [GitHub Actions Course](https://learn.microsoft.com/en-us/training/paths/automate-development-tasks-with-github-actions/)
 
-### 实践
-- 创建自己的工作流
-- 参与开源项目的 CI/CD
-- 模拟考试
+### Practice
+- Create your own workflows
+- Participate in open source project CI/CD
+- Practice exams
 ```
 
-### 学习计划
+### Study Plan
 
 ```markdown
-## 学习计划（2周）
+## Study Plan (2 Weeks)
 
-### 第 1 周：基础
-- Day 1-2: 工作流语法
-- Day 3-4: 触发器和事件
-- Day 5-7: 作业、步骤和动作
+### Week 1: Fundamentals
+- Day 1-2: Workflow Syntax
+- Day 3-4: Triggers and Events
+- Day 5-7: Jobs, Steps, and Actions
 
-### 第 2 周：进阶
-- Day 8-9: 复用工作流和矩阵
-- Day 10-11: 安全和权限
-- Day 12-14: 调试和优化
+### Week 2: Advanced
+- Day 8-9: Reusable Workflows and Matrix
+- Day 10-11: Security and Permissions
+- Day 12-14: Debugging and Optimization
 ```
 
-## GitHub Advanced Security 认证
+## GitHub Advanced Security Certification
 
-### 考试内容
+### Exam Content
 
 ```markdown
-## 考试范围
+## Exam Scope
 
-### 1. 安全基础（20%）
-- 安全开发生命周期
+### 1. Security Fundamentals (20%)
+- Security Development Lifecycle
 - OWASP Top 10
-- 安全编码实践
+- Secure Coding Practices
 
-### 2. GitHub 安全功能（30%）
+### 2. GitHub Security Features (30%)
 - Secret Scanning
 - Code Scanning
 - Dependabot
-- 依赖审查
+- Dependency Review
 
-### 3. 安全配置（25%）
-- 分支保护
-- 代码所有者
-- 环境保护
+### 3. Security Configuration (25%)
+- Branch Protection
+- Code Owners
+- Environment Protection
 
-### 4. 安全监控（15%）
-- 安全警报
-- 安全报告
-- 审计日志
+### 4. Security Monitoring (15%)
+- Security Alerts
+- Security Reports
+- Audit Logs
 
-### 5. 事件响应（10%）
-- 漏洞响应
-- 安全事件处理
+### 5. Incident Response (10%)
+- Vulnerability Response
+- Security Incident Handling
 ```
 
-### 学习资源
+### Learning Resources
 
 ```markdown
-## 学习资源
+## Learning Resources
 
-### 官方文档
-- [GitHub 安全文档](https://docs.github.com/en/code-security)
-- [CodeQL 文档](https://codeql.github.com/)
+### Official Documentation
+- [GitHub Security Documentation](https://docs.github.com/en/code-security)
+- [CodeQL Documentation](https://codeql.github.com/)
 
-### 课程
-- [GitHub 安全课程](https://learn.microsoft.com/en-us/training/paths/protect-code-with-github-advanced-security/)
+### Courses
+- [GitHub Security Course](https://learn.microsoft.com/en-us/training/paths/protect-code-with-github-advanced-security/)
 
-### 实践
-- 配置安全功能
-- 分析安全警报
-- 处理安全事件
+### Practice
+- Configure security features
+- Analyze security alerts
+- Handle security incidents
 ```
 
-## GitHub Copilot 认证
+## GitHub Copilot Certification
 
-### 考试内容
+### Exam Content
 
 ```markdown
-## 考试范围
+## Exam Scope
 
-### 1. Copilot 基础（25%）
-- 功能概述
-- 安装和配置
-- 使用场景
+### 1. Copilot Fundamentals (25%)
+- Feature Overview
+- Installation and Configuration
+- Use Cases
 
-### 2. 提示词工程（30%）
-- 有效提示词
-- 上下文使用
-- 最佳实践
+### 2. Prompt Engineering (30%)
+- Effective Prompts
+- Context Usage
+- Best Practices
 
-### 3. 高级功能（25%）
-- Agent 模式
+### 3. Advanced Features (25%)
+- Agent Mode
 - Extensions
 - Workspace
 
-### 4. 团队协作（20%）
-- 项目配置
-- 安全合规
-- 效率度量
+### 4. Team Collaboration (20%)
+- Project Configuration
+- Security Compliance
+- Efficiency Metrics
 ```
 
-### 学习资源
+### Learning Resources
 
 ```markdown
-## 学习资源
+## Learning Resources
 
-### 官方文档
-- [Copilot 文档](https://docs.github.com/en/copilot)
-- [Copilot 课程](https://docs.github.com/en/copilot/using-github-citpilot/learning-about-github-copilot)
+### Official Documentation
+- [Copilot Documentation](https://docs.github.com/en/copilot)
+- [Copilot Course](https://docs.github.com/en/copilot/using-github-citpilot/learning-about-github-copilot)
 
-### 实践
-- 日常使用 Copilot
-- 编写有效提示词
-- 参与团队项目
+### Practice
+- Use Copilot daily
+- Write effective prompts
+- Participate in team projects
 ```
 
-## GitHub Administration 认证
+## GitHub Administration Certification
 
-### 考试内容
+### Exam Content
 
 ```markdown
-## 考试范围
+## Exam Scope
 
-### 1. 组织管理（25%）
-- 组织设置
-- 成员管理
-- 团队管理
+### 1. Organization Management (25%)
+- Organization Settings
+- Member Management
+- Team Management
 
-### 2. 仓库管理（25%）
-- 仓库设置
-- 分支保护
-- 访问控制
+### 2. Repository Management (25%)
+- Repository Settings
+- Branch Protection
+- Access Control
 
-### 3. 安全管理（25%）
-- 安全策略
-- 合规管理
-- 审计日志
+### 3. Security Management (25%)
+- Security Policies
+- Compliance Management
+- Audit Logs
 
-### 4. 自动化（25%）
+### 4. Automation (25%)
 - GitHub Actions
 - GitHub Apps
-- API 使用
+- API Usage
 ```
 
-## 考试技巧
+## Exam Tips
 
-### 1. 充分准备
+### 1. Thorough Preparation
 
 ```markdown
-## 准备策略
+## Preparation Strategy
 
-1. 通读官方文档
-2. 完成官方课程
-3. 动手实践
-4. 模拟考试
+1. Read through official documentation
+2. Complete official courses
+3. Hands-on practice
+4. Practice exams
 ```
 
-### 2. 时间管理
+### 2. Time Management
 
 ```markdown
-## 时间管理
+## Time Management
 
-- 先回答简单的问题
-- 跳过不确定的题目
-- 留出检查时间
+- Answer easy questions first
+- Skip uncertain questions
+- Leave time for review
 ```
 
-### 3. 实践为主
+### 3. Practice-Oriented
 
 ```markdown
-## 实践建议
+## Practice Recommendations
 
-1. 创建自己的项目
-2. 参与开源项目
-3. 配置各种功能
-4. 解决实际问题
+1. Create your own projects
+2. Participate in open source projects
+3. Configure various features
+4. Solve real-world problems
 ```
 
-## 相关资源
+## Related Resources
 
-- [GitHub 认证](https://github.com/skills)
+- [GitHub Certification](https://github.com/skills)
 - [Microsoft Learn](https://learn.microsoft.com/en-us/certifications/github/)
 - [GitHub Skills](https://skills.github.com/)
 
 ---
 
-**上一篇：[开源指南](W29-open-source-guide.md) | 下一篇：[附录](A-common-commands.md)**
+**Previous: [Open Source Guide](W29-open-source-guide.md) | Next: [Appendix](A-common-commands.md)**

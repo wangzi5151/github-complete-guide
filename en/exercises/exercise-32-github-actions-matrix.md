@@ -1,22 +1,22 @@
-# 练习 32：GitHub Actions 矩阵策略
+# Exercise 32: GitHub Actions Matrix Strategy
 
-## 目标
+## Goal
 
-学习如何使用 GitHub Actions 矩阵策略来并行测试多个配置。
+Learn how to use GitHub Actions matrix strategy to test multiple configurations in parallel.
 
-## 前置条件
+## Prerequisites
 
-- 有 GitHub 账号
-- 熟悉 GitHub Actions 基础
-- 有一个测试项目
+- Have a GitHub account
+- Familiar with GitHub Actions basics
+- Have a test project
 
-## 步骤
+## Steps
 
-### 1. 理解矩阵策略
+### 1. Understanding Matrix Strategy
 
-矩阵策略允许你在一个工作流中并行运行多个作业，每个作业使用不同的配置。
+Matrix strategy allows you to run multiple jobs in parallel in a single workflow, each using different configurations.
 
-**基本语法**：
+**Basic syntax**:
 
 ```yaml
 jobs:
@@ -35,9 +35,9 @@ jobs:
       - run: npm test
 ```
 
-### 2. 创建基本矩阵
+### 2. Creating a Basic Matrix
 
-**示例：测试多个 Node.js 版本**：
+**Example: Testing multiple Node.js versions**:
 
 ```yaml
 # .github/workflows/test-matrix.yml
@@ -71,9 +71,9 @@ jobs:
         run: npm test
 ```
 
-### 3. 使用多维矩阵
+### 3. Using a Multi-Dimensional Matrix
 
-**示例：测试多个操作系统和 Node.js 版本**：
+**Example: Testing multiple operating systems and Node.js versions**:
 
 ```yaml
 # .github/workflows/test-multi-dim.yml
@@ -108,9 +108,9 @@ jobs:
         run: npm test
 ```
 
-### 4. 使用矩阵排除
+### 4. Using Matrix Exclusions
 
-**示例：排除特定组合**：
+**Example: Excluding specific combinations**:
 
 ```yaml
 # .github/workflows/test-exclude.yml
@@ -150,9 +150,9 @@ jobs:
         run: npm test
 ```
 
-### 5. 使用矩阵包含
+### 5. Using Matrix Inclusions
 
-**示例：包含特定配置**：
+**Example: Including specific configurations**:
 
 ```yaml
 # .github/workflows/test-include.yml
@@ -192,9 +192,9 @@ jobs:
         continue-on-error: ${{ matrix.experimental || false }}
 ```
 
-### 6. 使用矩阵变量
+### 6. Using Matrix Variables
 
-**示例：使用矩阵变量**：
+**Example: Using matrix variables**:
 
 ```yaml
 # .github/workflows/test-variables.yml
@@ -244,9 +244,9 @@ jobs:
           python -m pytest
 ```
 
-### 7. 使用矩阵进行部署
+### 7. Using Matrix for Deployment
 
-**示例：部署到多个环境**：
+**Example: Deploying to multiple environments**:
 
 ```yaml
 # .github/workflows/deploy-matrix.yml
@@ -276,12 +276,12 @@ jobs:
         run: |
           echo "Deploying to ${{ matrix.environment }}"
           echo "URL: ${{ matrix.url }}"
-          # 部署命令
+          # Deployment commands
 ```
 
-### 8. 使用矩阵进行代码质量检查
+### 8. Using Matrix for Code Quality Checks
 
-**示例：运行多个代码质量工具**：
+**Example: Running multiple code quality tools**:
 
 ```yaml
 # .github/workflows/quality-matrix.yml
@@ -315,9 +315,9 @@ jobs:
         run: npx ${{ matrix.tool }} .
 ```
 
-### 9. 使用矩阵进行安全扫描
+### 9. Using Matrix for Security Scanning
 
-**示例：运行多个安全扫描工具**：
+**Example: Running multiple security scanning tools**:
 
 ```yaml
 # .github/workflows/security-matrix.yml
@@ -342,12 +342,12 @@ jobs:
       - name: Run ${{ matrix.tool }}
         uses: ${{ matrix.tool }}-action@v1
         with:
-          # 工具特定配置
+          # Tool-specific configuration
 ```
 
-### 10. 使用矩阵进行性能测试
+### 10. Using Matrix for Performance Testing
 
-**示例：运行多个性能测试**：
+**Example: Running multiple performance tests**:
 
 ```yaml
 # .github/workflows/performance-matrix.yml
@@ -381,27 +381,27 @@ jobs:
         run: npm run test:${{ matrix.test }}
 ```
 
-## 挑战
+## Challenges
 
-1. **挑战 1**：创建一个矩阵策略，测试多个 Python 版本
-2. **挑战 2**：创建一个矩阵策略，部署到多个环境
-3. **挑战 3**：创建一个矩阵策略，运行多个安全扫描工具
-4. **挑战 4**：创建一个矩阵策略，进行性能测试
-5. **挑战 5**：创建一个矩阵策略，进行代码质量检查
+1. **Challenge 1**: Create a matrix strategy to test multiple Python versions
+2. **Challenge 2**: Create a matrix strategy to deploy to multiple environments
+3. **Challenge 3**: Create a matrix strategy to run multiple security scanning tools
+4. **Challenge 4**: Create a matrix strategy to perform performance testing
+5. **Challenge 5**: Create a matrix strategy to perform code quality checks
 
-## 思考
+## Reflection
 
-1. 矩阵策略如何提高 CI/CD 效率？
-2. 如何平衡矩阵的全面性和执行时间？
-3. 矩阵策略的局限性是什么？
-4. 如何优化矩阵策略的成本？
+1. How does matrix strategy improve CI/CD efficiency?
+2. How to balance the comprehensiveness of the matrix and execution time?
+3. What are the limitations of matrix strategy?
+4. How to optimize the cost of matrix strategy?
 
-## 相关资源
+## Related Resources
 
-- [GitHub Actions 矩阵策略文档](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
-- [GitHub Actions 工作流语法](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
-- [GitHub Actions 最佳实践](https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions)
+- [GitHub Actions matrix strategy documentation](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
+- [GitHub Actions workflow syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
+- [GitHub Actions best practices](https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions)
 
 ---
 
-**上一篇：[练习 31：GitHub Copilot 高级使用](exercise-31-github-copilot-advanced.md) | 下一篇：[练习 33：GitHub API 集成](exercise-33-github-api-integration.md)**
+**Previous: [Exercise 31: GitHub Copilot Advanced Usage](exercise-31-github-copilot-advanced.md) | Next: [Exercise 33: GitHub API Integration](exercise-33-github-api-integration.md)**

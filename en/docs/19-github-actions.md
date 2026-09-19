@@ -167,7 +167,7 @@ on:
 
 ## Actions Marketplace
 
-Visit [github.com/marketplace?type=actions](https://github.com/marketplace?type=actions) to discover常用 Actions.
+Visit [github.com/marketplace?type=actions](https://github.com/marketplace?type=actions) to discover commonly used Actions.
 
 ## Next Step
 

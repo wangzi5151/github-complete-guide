@@ -1,12 +1,12 @@
-# 练习 7：使用 GitHub Actions
+# Exercise 7: Using GitHub Actions
 
-## 目标
+## Goal
 
-学习如何创建和使用 GitHub Actions 工作流。
+Learn how to create and use GitHub Actions workflows.
 
-## 步骤
+## Steps
 
-### 1. 创建练习仓库
+### 1. Create a Practice Repository
 
 ```bash
 mkdir actions-practice
@@ -17,13 +17,13 @@ echo "# Actions Practice" > README.md
 git add README.md
 git commit -m "Initial commit"
 
-git remote add origin git@github.com:你的用户名/actions-practice.git
+git remote add origin git@github.com:your-username/actions-practice.git
 git push -u origin main
 ```
 
-### 2. 创建基本工作流
+### 2. Create a Basic Workflow
 
-创建 `.github/workflows/ci.yml`：
+Create `.github/workflows/ci.yml`:
 
 ```yaml
 name: CI
@@ -57,7 +57,7 @@ jobs:
       run: npm run build
 ```
 
-### 3. 创建 package.json
+### 3. Create package.json
 
 ```json
 {
@@ -70,23 +70,23 @@ jobs:
 }
 ```
 
-### 4. 提交并推送
+### 4. Commit and Push
 
 ```bash
 git add .
-git commit -m "feat: 添加 CI 工作流"
+git commit -m "feat: Add CI workflow"
 git push
 ```
 
-### 5. 观察工作流运行
+### 5. Observe the Workflow Run
 
-1. 进入仓库 **Actions** 标签
-2. 查看工作流运行状态
-3. 点击查看详情
+1. Go to the repository **Actions** tab
+2. Check the workflow run status
+3. Click to view details
 
-### 6. 添加更多步骤
+### 6. Add More Steps
 
-更新 `.github/workflows/ci.yml`：
+Update `.github/workflows/ci.yml`:
 
 ```yaml
 name: CI
@@ -135,13 +135,13 @@ jobs:
         path: dist/
 ```
 
-### 7. 使用 Secrets
+### 7. Using Secrets
 
-1. 进入仓库 **Settings** → **Secrets and variables** → **Actions**
-2. 点击 **New repository secret**
-3. 添加 secret：`MY_SECRET`
+1. Go to the repository **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Add a secret: `MY_SECRET`
 
-在工作流中使用：
+Use it in the workflow:
 
 ```yaml
 - name: Use secret
@@ -150,7 +150,7 @@ jobs:
     MY_SECRET: ${{ secrets.MY_SECRET }}
 ```
 
-### 8. 创建矩阵构建
+### 8. Create a Matrix Build
 
 ```yaml
 name: Matrix Build
@@ -177,17 +177,17 @@ jobs:
     - run: npm test
 ```
 
-## 知识点
+## Key Concepts
 
-- 工作流文件结构
-- 触发事件
-- 作业和步骤
-- 使用 Actions
-- 缓存依赖
-- 上传制品
-- 矩阵构建
-- Secrets 使用
+- Workflow file structure
+- Trigger events
+- Jobs and steps
+- Using Actions
+- Caching dependencies
+- Uploading artifacts
+- Matrix builds
+- Using Secrets
 
-## 下一步
+## Next Steps
 
-[练习 8：设置 GitHub Discussions →](exercise-8-discussions.md)
+[Exercise 8: Setting Up GitHub Discussions →](exercise-8-discussions.md)

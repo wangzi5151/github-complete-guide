@@ -1,84 +1,84 @@
-# 练习 22：配置 Dependabot 自动依赖更新
+# Exercise 22: Setting Up Dependabot for Automatic Dependency Updates
 
-## 学习目标
+## Learning Objectives
 
-通过本次练习，你将掌握以下技能：
+In this exercise, you will master the following skills:
 
-- 理解 Dependabot 的工作原理和价值
-- 创建和配置 `dependabot.yml` 文件
-- 配置包生态系统（npm、pip、Maven 等）的自动更新
-- 理解并自定义更新策略
-- 配置 Dependabot 安全警报
-- 处理 Dependabot 创建的 Pull Request
-- 配置自动合并和自动修复
+- Understand how Dependabot works and its value
+- Create and configure the `dependabot.yml` file
+- Configure automatic updates for package ecosystems (npm, pip, Maven, etc.)
+- Understand and customize update strategies
+- Configure Dependabot security alerts
+- Handle Pull Requests created by Dependabot
+- Configure auto-merge and auto-fix
 
-## 前置要求
+## Prerequisites
 
-- 拥有 GitHub 账号
-- 一个包含依赖文件的代码仓库
-- 基本的 Git 和 GitHub 操作知识
-- 了解项目的依赖管理工具（npm、pip、Maven 等）
+- A GitHub account
+- A repository containing dependency files
+- Basic Git and GitHub knowledge
+- Understanding of the project's dependency management tools (npm, pip, Maven, etc.)
 
-## 第一部分：理解 Dependabot
+## Part 1: Understanding Dependabot
 
-### 什么是 Dependabot？
+### What is Dependabot?
 
-Dependabot 是 GitHub 提供的自动化工具，专门用于管理项目依赖。它的主要功能包括：
+Dependabot is an automation tool provided by GitHub, specifically designed to manage project dependencies. Its main features include:
 
-1. **版本更新**：定期检查依赖是否有新版本，并自动创建 Pull Request 来更新
-2. **安全警报**：当发现依赖中存在已知安全漏洞时，及时发出警报
-3. **安全更新**：自动创建 Pull Request 来修复安全漏洞
+1. **Version Updates**: Regularly checks if dependencies have new versions and automatically creates Pull Requests to update them
+2. **Security Alerts**: Sends alerts when known security vulnerabilities are found in dependencies
+3. **Security Updates**: Automatically creates Pull Requests to fix security vulnerabilities
 
-Dependabot 的工作原理是定期扫描你项目的依赖文件（例如 `package.json`、`requirements.txt`、`pom.xml` 等），与各个包注册中心的数据进行比对，检查是否有更新的版本可用。当发现新版本时，它会自动创建一个包含更新内容的 Pull Request，并附上详细的更新说明和兼容性评估。你只需要审查这些 Pull Request 并决定是否合并即可。这种方式大大降低了依赖管理的人工成本，同时确保你的项目始终保持在安全和最新的状态。
+Dependabot works by periodically scanning your project's dependency files (e.g., `package.json`, `requirements.txt`, `pom.xml`, etc.), comparing them with data from various package registries, and checking for newer versions. When a new version is found, it automatically creates a Pull Request with the update, along with detailed release notes and compatibility assessments. You simply need to review these Pull Requests and decide whether to merge. This approach greatly reduces the manual cost of dependency management while ensuring your project stays secure and up-to-date.
 
-### 为什么需要 Dependabot？
+### Why Do You Need Dependabot?
 
-手动管理依赖存在以下问题：
+Manually managing dependencies has the following problems:
 
-- 依赖版本过旧可能包含已知安全漏洞，给项目带来安全风险
-- 长期不更新依赖，未来升级时会遇到兼容性问题，导致升级困难
-- 大量依赖难以逐一跟踪更新状态，容易遗漏重要的安全更新
-- 安全漏洞信息需要及时响应，人工监控效率低下且容易错过关键信息
-- 团队成员可能使用不同版本的依赖，导致开发环境不一致
+- Outdated dependencies may contain known security vulnerabilities, posing security risks to the project
+- Long-term dependency updates can lead to compatibility issues when upgrading in the future, making upgrades difficult
+- It's hard to track the update status of many dependencies one by one, making it easy to miss important security updates
+- Security vulnerability information needs to be responded to promptly, but manual monitoring is inefficient and prone to missing critical information
+- Team members may use different dependency versions, leading to inconsistent development environments
 
-Dependabot 可以自动化这些工作，让你的项目始终保持依赖在最新且安全的状态。通过合理配置 Dependabot，你可以实现依赖管理的全面自动化，让团队将更多精力投入到核心业务功能的开发中。同时，Dependabot 与 GitHub 的安全警报系统深度集成，可以在第一时间通知你项目中发现的安全漏洞，并提供修复方案。
+Dependabot can automate these tasks, keeping your project's dependencies up-to-date and secure. By properly configuring Dependabot, you can achieve comprehensive automation of dependency management, allowing teams to focus more on developing core business features. Meanwhile, Dependabot integrates deeply with GitHub's security alert system, notifying you immediately of discovered security vulnerabilities in your project and providing fix solutions.
 
-## 第二部分：创建 Dependabot 配置文件
+## Part 2: Creating the Dependabot Configuration File
 
-在开始配置 Dependabot 之前，你需要了解它的配置文件结构。Dependabot 的配置文件使用 YAML 格式编写，文件名为 `dependabot.yml`，必须放置在仓库根目录的 `.github` 文件夹中。这个配置文件定义了 Dependabot 如何检查和更新你的项目依赖。每个配置项都对应一个包生态系统，你可以为不同的生态系统设置不同的更新策略。理解配置文件的结构对于正确使用 Dependabot 至关重要，因为不同的项目可能有不同的依赖管理需求。例如，一个同时包含前端和后端代码的项目可能需要同时配置 npm 和 pip 两种生态系统。此外，你还可以为不同的目录配置不同的更新策略，这在 monorepo（单体仓库）项目中非常有用。
+Before configuring Dependabot, you need to understand its configuration file structure. Dependabot's configuration file is written in YAML format, named `dependabot.yml`, and must be placed in the `.github` folder at the repository root. This configuration file defines how Dependabot checks and updates your project dependencies. Each configuration entry corresponds to a package ecosystem, and you can set different update strategies for different ecosystems. Understanding the configuration file structure is crucial for correctly using Dependabot, as different projects may have different dependency management needs. For example, a project with both frontend and backend code may need to configure both npm and pip ecosystems. Additionally, you can configure different update strategies for different directories, which is very useful in monorepo projects.
 
-### 步骤 1：创建配置文件目录
+### Step 1: Create the Configuration File Directory
 
-在你的项目根目录下创建 `.github` 目录：
+Create the `.github` directory in your project root:
 
 ```bash
-# 进入你的项目目录
+# Navigate to your project directory
 cd your-project
 
-# 创建 .github 目录（如果不存在）
+# Create the .github directory (if it doesn't exist)
 mkdir -p .github
 
-# 查看目录结构
+# View the directory structure
 ls -la .github/
 ```
 
-### 步骤 2：创建 dependabot.yml 文件
+### Step 2: Create the dependabot.yml File
 
-在 `.github` 目录下创建 `dependabot.yml` 文件：
+Create the `dependabot.yml` file in the `.github` directory:
 
 ```bash
 touch .github/dependabot.yml
 ```
 
-### 步骤 3：编写基本配置
+### Step 3: Write the Basic Configuration
 
-在 `dependabot.yml` 中添加以下内容：
+Add the following content to `dependabot.yml`:
 
 ```yaml
 # .github/dependabot.yml
 version: 2
 updates:
-  # 配置 npm 包的自动更新
+  # Configure automatic updates for npm packages
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -88,21 +88,21 @@ updates:
       timezone: "Asia/Shanghai"
 ```
 
-这个配置的基本含义是：
+The basic meaning of this configuration is:
 
-- `version: 2`：使用 Dependabot 配置文件的第2版格式
-- `package-ecosystem`：指定包管理生态系统
-- `directory`：依赖文件所在的目录
-- `schedule`：更新检查的时间计划
+- `version: 2`: Use version 2 format of the Dependabot configuration file
+- `package-ecosystem`: Specify the package management ecosystem
+- `directory`: The directory where dependency files are located
+- `schedule`: The schedule for update checks
 
-### 步骤 4：配置多个包生态系统
+### Step 4: Configure Multiple Package Ecosystems
 
-大多数项目会使用多种依赖管理工具。例如，一个典型的全栈项目可能同时使用 npm 管理前端依赖、pip 管理后端依赖、Docker 管理容器镜像、GitHub Actions 管理持续集成工作流。Dependabot 支持在一个配置文件中同时配置多种包生态系统，这样你就可以在一个地方管理所有类型的依赖更新。以下是一个完整的多生态系统配置：
+Most projects use multiple dependency management tools. For example, a typical full-stack project might use npm for frontend dependencies, pip for backend dependencies, Docker for container images, and GitHub Actions for CI/CD workflows. Dependabot supports configuring multiple package ecosystems in a single configuration file, so you can manage all types of dependency updates in one place. Here is a complete multi-ecosystem configuration:
 
 ```yaml
 version: 2
 updates:
-  # npm/yarn/pnpm - 前端依赖
+  # npm/yarn/pnpm - Frontend dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -117,7 +117,7 @@ updates:
       - "dependencies"
       - "frontend"
 
-  # pip - Python 依赖
+  # pip - Python dependencies
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -132,7 +132,7 @@ updates:
       - "dependencies"
       - "python"
 
-  # Docker - Dockerfile 中的基础镜像
+  # Docker - Base images in Dockerfiles
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
@@ -141,7 +141,7 @@ updates:
       - "dependencies"
       - "docker"
 
-  # GitHub Actions - CI/CD 工作流中的 Actions 版本
+  # GitHub Actions - Action versions in CI/CD workflows
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -150,7 +150,7 @@ updates:
       - "dependencies"
       - "ci"
 
-  # Maven - Java 依赖
+  # Maven - Java dependencies
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
@@ -160,7 +160,7 @@ updates:
       - "dependencies"
       - "java"
 
-  # NuGet - .NET 依赖
+  # NuGet - .NET dependencies
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -170,34 +170,34 @@ updates:
       - "dotnet"
 ```
 
-## 第三部分：理解更新策略
+## Part 3: Understanding Update Strategies
 
-选择合适的更新策略对于平衡项目稳定性和安全性至关重要。更新过于频繁可能会给审查者带来负担，而更新过少则可能导致安全风险。你需要根据项目的实际情况来制定合理的更新策略。一般来说，建议对安全相关的更新采用更积极的策略，而对功能性的更新采用更保守的策略。同时，你还可以为不同的依赖类型设置不同的更新策略，以满足项目的具体需求。
+Choosing the right update strategy is essential for balancing project stability and security. Updating too frequently may burden reviewers, while updating too infrequently may lead to security risks. You need to develop a reasonable update strategy based on your project's actual situation. Generally, it's recommended to use a more aggressive strategy for security-related updates and a more conservative strategy for feature updates. Additionally, you can set different update strategies for different dependency types to meet your project's specific needs.
 
-### 更新频率选项
+### Update Frequency Options
 
-Dependabot 支持以下更新频率：
+Dependabot supports the following update frequencies:
 
 ```yaml
 schedule:
-  interval: "daily"    # 每天检查一次
-  interval: "weekly"   # 每周检查一次
-  interval: "monthly"  # 每月检查一次
+  interval: "daily"    # Check once a day
+  interval: "weekly"   # Check once a week
+  interval: "monthly"  # Check once a month
 ```
 
-对于每周或每月的更新，可以指定具体的日期和时间：
+For weekly or monthly updates, you can specify the exact day and time:
 
 ```yaml
 schedule:
   interval: "weekly"
-  day: "monday"        # 可选: monday-sunday
-  time: "09:00"        # UTC 时间格式
-  timezone: "Asia/Shanghai"  # 时区设置
+  day: "monday"        # Options: monday-sunday
+  time: "09:00"        # UTC time format
+  timezone: "Asia/Shanghai"  # Timezone setting
 ```
 
-### 更新类型配置
+### Update Type Configuration
 
-Depindabot 支持三种版本更新策略：
+Dependabot supports three version update strategies:
 
 ```yaml
 updates:
@@ -205,26 +205,26 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    # 指定更新的版本类型
+    # Specify the type of version updates
     allow:
-      - dependency-type: "production"     # 只更新生产依赖
-    # 或者
+      - dependency-type: "production"     # Only update production dependencies
+    # Or
     ignore:
-      - dependency-name: "lodash"         # 忽略特定依赖
-        update-types: ["version-update:semver-major"]  # 忽略主版本更新
+      - dependency-name: "lodash"         # Ignore a specific dependency
+        update-types: ["version-update:semver-major"]  # Ignore major version updates
 ```
 
-**更新类型说明：**
+**Update Type Descriptions:**
 
-| 更新类型 | 说明 | 示例 |
-|---------|------|------|
-| `version-update:semver-major` | 主版本更新，可能有破坏性变更 | 1.x.x → 2.x.x |
-| `version-update:semver-minor` | 次版本更新，新增功能 | 1.0.x → 1.1.x |
-| `version-update:semver-patch` | 补丁更新，修复bug | 1.0.0 → 1.0.1 |
+| Update Type | Description | Example |
+|-------------|-------------|---------|
+| `version-update:semver-major` | Major version update, may have breaking changes | 1.x.x → 2.x.x |
+| `version-update:semver-minor` | Minor version update, new features | 1.0.x → 1.1.x |
+| `version-update:semver-patch` | Patch update, bug fixes | 1.0.0 → 1.0.1 |
 
-### 排除特定依赖
+### Excluding Specific Dependencies
 
-如果某些依赖你不想自动更新，可以使用 `ignore` 配置：
+If you don't want certain dependencies to be automatically updated, you can use the `ignore` configuration:
 
 ```yaml
 updates:
@@ -233,19 +233,19 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      # 忽略 lodash 的所有更新
+      # Ignore all updates for lodash
       - dependency-name: "lodash"
-      # 忽略 react 的主版本更新
+      # Ignore major version updates for react
       - dependency-name: "react"
         update-types: ["version-update:semver-major"]
-      # 忽略所有 @types 开头的包的主版本更新
+      # Ignore major version updates for all @types packages
       - dependency-name: "@types/*"
         update-types: ["version-update:semver-major"]
 ```
 
-### 设置 Pull Request 限制
+### Setting Pull Request Limits
 
-为了避免同时创建过多的 Pull Request，可以设置限制：
+To avoid creating too many Pull Requests at once, you can set limits:
 
 ```yaml
 updates:
@@ -253,16 +253,16 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10  # 最多同时打开10个PR
+    open-pull-requests-limit: 10  # At most 10 open PRs at a time
 ```
 
-## 第四部分：配置审核者和标签
+## Part 4: Configuring Reviewers and Labels
 
-配置审核者和标签是优化 Dependabot 工作流的重要步骤。通过指定审核者，你可以确保每个依赖更新的 Pull Request 都能得到合适的人员审查。通过添加标签，你可以在 Pull Request 列表中快速识别和筛选 Dependabot 创建的更新。这些配置项虽然简单，但对于大型团队和复杂项目来说，它们可以显著提高依赖更新的处理效率。建议为不同类型的依赖指定不同的审核者，例如让前端团队审查前端依赖更新，让后端团队审查后端依赖更新。
+Configuring reviewers and labels is an important step in optimizing the Dependabot workflow. By specifying reviewers, you can ensure that each dependency update Pull Request gets appropriate review. By adding labels, you can quickly identify and filter updates created by Dependabot in the Pull Request list. Although these configuration items are simple, they can significantly improve the efficiency of handling dependency updates for large teams and complex projects. It's recommended to assign different reviewers for different types of dependencies, for example, having the frontend team review frontend dependency updates and the backend team review backend dependency updates.
 
-### 添加审核者
+### Adding Reviewers
 
-指定谁应该审查 Dependabot 创建的 Pull Request：
+Specify who should review Pull Requests created by Dependabot:
 
 ```yaml
 updates:
@@ -273,14 +273,14 @@ updates:
     reviewers:
       - "team-lead-username"
       - "senior-developer"
-    # 也可以指定团队
+    # You can also specify teams
     # reviewers:
     #   - "my-org/frontend-team"
 ```
 
-### 添加标签
+### Adding Labels
 
-为 Dependabot 的 Pull Request 自动添加标签，便于分类和管理：
+Automatically add labels to Dependabot's Pull Requests for classification and management:
 
 ```yaml
 updates:
@@ -294,9 +294,9 @@ updates:
       - "frontend"
 ```
 
-### 配置提交信息
+### Configuring Commit Messages
 
-自定义 Dependabot 创建提交时的信息格式：
+Customize the commit message format when Dependabot creates commits:
 
 ```yaml
 updates:
@@ -310,85 +310,85 @@ updates:
       include: "scope"
 ```
 
-生成的提交信息格式示例：
-- 生产依赖：`deps: bump express from 4.18.0 to 4.18.2`
-- 开发依赖：`deps-dev: bump jest from 29.0.0 to 29.1.0`
+Generated commit message format examples:
+- Production dependency: `deps: bump express from 4.18.0 to 4.18.2`
+- Development dependency: `deps-dev: bump jest from 29.0.0 to 29.1.0`
 
-## 第五部分：处理 Dependabot Pull Request
+## Part 5: Handling Dependabot Pull Requests
 
-当 Dependabot 检测到依赖有新版本可用时，它会自动创建一个 Pull Request 来更新依赖。这些 Pull Request 包含了更新的具体信息，例如版本变更详情、更新日志链接、兼容性评估以及已知的安全漏洞信息。作为项目维护者，你需要定期检查和处理这些 Pull Request。对于补丁版本更新和次版本更新，通常可以比较放心地合并。但对于主版本更新，建议仔细阅读更新日志，了解可能的破坏性变更，并在本地测试后再决定是否合并。养成定期处理 Dependabot Pull Request 的习惯，可以避免依赖积压过多导致的更新困难。
+When Dependabot detects that a dependency has a new version available, it automatically creates a Pull Request to update the dependency. These Pull Requests contain detailed update information, such as version change details, changelog links, compatibility assessments, and known security vulnerability information. As a project maintainer, you need to regularly check and handle these Pull Requests. For patch version updates and minor version updates, you can usually merge them with confidence. However, for major version updates, it's recommended to carefully read the changelog, understand potential breaking changes, and test locally before deciding whether to merge. Developing a habit of regularly handling Dependabot Pull Requests can prevent dependency backlog from causing update difficulties.
 
-### 步骤 1：查看 Dependabot 创建的 PR
+### Step 1: View PRs Created by Dependabot
 
-当 Dependabot 发现可更新的依赖时，会自动创建 Pull Request。你可以在仓库的 Pull Requests 页面查看这些 PR。
+When Dependabot finds updatable dependencies, it automatically creates Pull Requests. You can view these PRs in the repository's Pull Requests page.
 
-每个 PR 都会包含以下信息：
-- 依赖名称和版本变更
-- 更新日志或发布说明
-- 兼容性分数（如果可用）
-- 已知安全漏洞信息（如果是安全更新）
+Each PR contains the following information:
+- Dependency name and version changes
+- Changelog or release notes
+- Compatibility score (if available)
+- Known security vulnerability information (if it's a security update)
 
-### 步骤 2：本地测试更新
+### Step 2: Test Updates Locally
 
-在合并 Dependabot 的 PR 之前，建议先在本地测试：
+Before merging Dependabot's PR, it's recommended to test locally first:
 
 ```bash
-# 拉取 Dependabot 的分支
+# Fetch Dependabot's branch
 git fetch origin
 git checkout dependabot/npm_and_yarn/lodash-4.17.21
 
-# 安装更新后的依赖
+# Install updated dependencies
 npm install
 
-# 运行测试确保一切正常
+# Run tests to ensure everything works
 npm test
 
-# 如果测试通过，回到主分支并合并
+# If tests pass, go back to the main branch and merge
 git checkout main
 git merge dependabot/npm_and_yarn/lodash-4.17.21
 ```
 
-### 步骤 3：处理合并冲突
+### Step 3: Handle Merge Conflicts
 
-如果 Dependabot 的 PR 存在合并冲突，你可以：
+If Dependabot's PR has merge conflicts, you can:
 
 ```bash
-# 方法一：在 Dependabot PR 的评论中输入以下命令
+# Option 1: Type the following command in the Dependabot PR comments
 @dependabot rebase
 
-# 方法二：在 Dependabot PR 的评论中输入
+# Option 2: Type in the Dependabot PR comments
 @dependabot recreate
 
-# 方法三：手动解决冲突
+# Option 3: Resolve conflicts manually
 git checkout dependabot/npm_and_yarn/example-dep-1.0.0
 git merge main
-# 解决冲突后
+# After resolving conflicts
 git push origin dependabot/npm_and_yarn/example-dep-1.0.0
 ```
 
-## 第六部分：配置安全警报和自动修复
+## Part 6: Configuring Security Alerts and Auto-Fix
 
-安全漏洞管理是现代软件开发中不可忽视的重要环节。当项目依赖的第三方库被发现存在安全漏洞时，如果不能及时响应和修复，可能会导致严重的安全事故。GitHub 的 Dependabot 安全警报功能可以自动监测你的项目依赖中是否存在已知的安全漏洞，并在发现漏洞时立即通知你。更强大的是，Dependabot 还可以自动创建修复这些安全漏洞的 Pull Request，让你能够快速地修复安全问题。对于企业级项目来说，及时处理安全漏洞是合规性的基本要求。通过配置自动化的工作流，你可以进一步简化安全更新的处理流程，例如自动合并低风险的安全补丁更新。
+Security vulnerability management is an important aspect that cannot be ignored in modern software development. When third-party libraries used by your project are found to have security vulnerabilities, failure to respond and fix them in a timely manner can lead to serious security incidents. GitHub's Dependabot security alert feature can automatically monitor your project dependencies for known security vulnerabilities and notify you immediately when vulnerabilities are discovered. Even more powerful, Dependabot can automatically create Pull Requests to fix these security vulnerabilities, allowing you to quickly address security issues. For enterprise-level projects, handling security vulnerabilities in a timely manner is a basic requirement for compliance. By configuring automated workflows, you can further simplify the security update process, such as automatically merging low-risk security patch updates.
 
-### 步骤 1：启用安全警报
+### Step 1: Enable Security Alerts
 
-安全警报默认对所有公共仓库启用。对于私有仓库，需要手动启用：
+Security alerts are enabled by default for all public repositories. For private repositories, you need to enable them manually:
 
-1. 进入仓库的 Settings 页面
-2. 点击左侧的 "Security & analysis"
-3. 在 "Dependabot alerts" 部分点击 "Enable"
-4. 同时启用 "Dependabot security updates"
+1. Go to the repository's Settings page
+2. Click on "Security & analysis" in the left sidebar
+3. Click "Enable" in the "Dependabot alerts" section
+4. Also enable "Dependabot security updates"
 
-### 步骤 2：查看安全警报
+### Step 2: View Security Alerts
 
-在仓库的 "Security" 标签页中，你可以查看所有 Dependabot 发现的安全问题：
+In the repository's "Security" tab, you can view all security issues discovered by Dependabot:
 
-- **安全警报**：列出存在已知漏洞的依赖
-- **安全更新**：自动创建的修复漏洞的 PR
+- **Security alerts**: Lists dependencies with known vulnerabilities
+- **Security updates**: Automatically created PRs to fix vulnerabilities
 
-### 步骤 3：配置自动修复工作流
+### Step 3: Configure Auto-Fix Workflow
 
-创建 GitHub Actions 工作流来自动处理 Dependabot 的 PR：
+Create a GitHub Actions workflow to automatically handle Dependabot's PRs:
 
 ```yaml
 # .github/workflows/dependabot-auto-merge.yml
@@ -422,9 +422,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-这个工作流会自动合并补丁版本和次版本的更新，但主版本更新仍需人工审查。
+This workflow will automatically merge patch and minor version updates, but major version updates still require manual review.
 
-### 步骤 4：配置 Dependabot 自动审批
+### Step 4: Configure Dependabot Auto-Approval
 
 ```yaml
 # .github/workflows/dependabot-auto-approve.yml
@@ -456,18 +456,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## 第七部分：进阶挑战
+## Part 7: Advanced Challenges
 
-完成基础的 Dependabot 配置后，你可以进一步探索更高级的配置选项来满足复杂的项目需求。以下进阶挑战将帮助你掌握 Dependabot 的高级功能，包括分目录配置不同策略、监控依赖状态、以及使用分组更新来减少 Pull Request 数量。这些高级技巧在大型项目和企业级应用中非常实用，能够帮助你更好地管理复杂的依赖关系。
+After completing the basic Dependabot configuration, you can further explore more advanced configuration options to meet complex project needs. The following advanced challenges will help you master Dependabot's advanced features, including configuring different strategies per directory, monitoring dependency status, and using grouped updates to reduce the number of Pull Requests. These advanced techniques are very practical in large projects and enterprise applications, helping you better manage complex dependency relationships.
 
-### 挑战 1：配置自定义 Dependabot 规则
+### Challenge 1: Configure Custom Dependabot Rules
 
-为不同目录下的依赖配置不同的更新策略：
+Configure different update strategies for dependencies in different directories:
 
 ```yaml
 version: 2
 updates:
-  # 前端依赖 - 激进更新
+  # Frontend dependencies - Aggressive updates
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
@@ -478,7 +478,7 @@ updates:
       - "frontend"
       - "priority-high"
 
-  # 后端依赖 - 保守更新
+  # Backend dependencies - Conservative updates
   - package-ecosystem: "npm"
     directory: "/backend"
     schedule:
@@ -492,7 +492,7 @@ updates:
       - "backend"
       - "needs-review"
 
-  # 文档站点 - 每月更新
+  # Documentation site - Monthly updates
   - package-ecosystem: "npm"
     directory: "/docs"
     schedule:
@@ -502,22 +502,22 @@ updates:
       - "docs"
 ```
 
-### 挑战 2：创建 Dependabot 监控仪表板
+### Challenge 2: Create a Dependabot Monitoring Dashboard
 
-使用 GitHub API 查询 Dependabot 的状态：
+Use the GitHub API to query Dependabot's status:
 
 ```bash
-# 查看仓库的安全警报
+# View repository security alerts
 curl -H "Authorization: token YOUR_TOKEN" \
   https://api.github.com/repos/OWNER/REPO/dependabot/alerts
 
-# 查看待处理的 Dependabot PR
+# View pending Dependabot PRs
 gh pr list --author "dependabot[bot]" --state open
 ```
 
-### 挑战 3：配置 Dependabot Grouped Updates
+### Challenge 3: Configure Dependabot Grouped Updates
 
-将多个依赖更新合并到一个 PR 中：
+Merge multiple dependency updates into a single PR:
 
 ```yaml
 version: 2
@@ -527,18 +527,18 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      # 将所有 eslint 相关包合并为一个 PR
+      # Merge all eslint-related packages into one PR
       eslint:
         patterns:
           - "eslint*"
           - "@typescript-eslint/*"
-      # 将所有 react 相关包合并为一个 PR
+      # Merge all react-related packages into one PR
       react:
         patterns:
           - "react"
           - "react-dom"
           - "react-scripts"
-      # 将所有测试相关包合并为一个 PR
+      # Merge all testing-related packages into one PR
       testing:
         patterns:
           - "jest"
@@ -546,35 +546,35 @@ updates:
           - "msw"
 ```
 
-## 验证清单
+## Verification Checklist
 
-完成练习后，请确认以下事项：
+After completing the exercise, please confirm the following:
 
-- [ ] 成功创建了 `dependabot.yml` 配置文件
-- [ ] 配置了至少一个包生态系统的自动更新
-- [ ] 理解了不同的更新频率和版本类型
-- [ ] 配置了审核者和标签
-- [ ] 了解如何处理 Dependabot 创建的 PR
-- [ ] 配置了安全警报或自动合并工作流
+- [ ] Successfully created the `dependabot.yml` configuration file
+- [ ] Configured automatic updates for at least one package ecosystem
+- [ ] Understand the different update frequencies and version types
+- [ ] Configured reviewers and labels
+- [ ] Know how to handle PRs created by Dependabot
+- [ ] Configured security alerts or auto-merge workflow
 
-## 常见问题
+## Frequently Asked Questions
 
-### Q1：Dependabot 创建了太多 PR 怎么办？
+### Q1: What if Dependabot creates too many PRs?
 
-可以通过以下方式减少 PR 数量：
-- 设置 `open-pull-requests-limit` 限制数量
-- 使用 `ignore` 忽略不需要更新的依赖
-- 调整更新频率为 `monthly`
-- 使用 `groups` 将相关依赖合并到一个 PR
+You can reduce the number of PRs through the following methods:
+- Set `open-pull-requests-limit` to limit the number
+- Use `ignore` to skip dependencies that don't need updating
+- Adjust the update frequency to `monthly`
+- Use `groups` to merge related dependencies into a single PR
 
-### Q2：如何暂停 Dependabot 更新？
+### Q2: How do I pause Dependabot updates?
 
-在 GitHub 仓库设置中临时禁用 Dependabot，或者在配置文件中注释掉相应的配置。
+Temporarily disable Dependabot in the GitHub repository settings, or comment out the relevant configuration in the configuration file.
 
-### Q3：私有仓库可以使用 Dependabot 吗？
+### Q3: Can private repositories use Dependabot?
 
-可以，但需要确保 Dependabot 能够访问你的私有依赖注册表。在仓库设置的 "Security & analysis" 部分可以启用。
+Yes, but you need to ensure Dependabot can access your private dependency registries. It can be enabled in the repository's "Security & analysis" settings.
 
-## 总结
+## Summary
 
-通过本次练习，你学会了如何配置 Dependabot 来自动管理项目依赖。Dependabot 可以帮助你及时发现安全漏洞、保持依赖更新，并通过自动化工作流减少手动操作。合理配置 Dependabot 可以显著提高项目的安全性和可维护性。在实际项目中，建议根据项目的实际情况灵活调整 Dependabot 的配置策略。对于核心业务依赖，可以设置更频繁的更新检查和更严格的审查流程；对于开发工具类依赖，可以适当放宽更新策略。同时，建议团队建立完善的依赖管理规范，定期审查和清理不再使用的依赖，保持项目依赖的整洁和安全。通过持续优化你的 Dependabot 配置，你可以在保障项目安全的同时，最大限度地减少维护工作量，让团队能够专注于核心业务功能的开发。
+In this exercise, you learned how to configure Dependabot to automatically manage project dependencies. Dependabot can help you discover security vulnerabilities in a timely manner, keep dependencies updated, and reduce manual operations through automated workflows. Properly configuring Dependabot can significantly improve your project's security and maintainability. In practice, it's recommended to flexibly adjust Dependabot's configuration strategy based on your project's actual needs. For core business dependencies, you can set more frequent update checks and stricter review processes; for development tool dependencies, you can relax the update strategy accordingly. Additionally, it's recommended that teams establish comprehensive dependency management standards, regularly review and clean up unused dependencies, and maintain a clean and secure project dependency set. By continuously optimizing your Dependabot configuration, you can minimize maintenance workload while ensuring project security, allowing teams to focus on developing core business features.

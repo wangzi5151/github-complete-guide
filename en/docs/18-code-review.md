@@ -249,14 +249,14 @@ jobs:
 1. **Review promptly**: Don't delay
 2. **Stay friendly**: Constructive criticism
 3. **Distinguish priority**: Must fix vs suggested fix
-4. **Point out优点**: Don't just pick faults
+4. **Point out strengths**: Don't just pick faults
 
 ### As Reviewee
 
 1. **Don't personalize**: Review is about code, not about people
 2. **Consider seriously**: Every feedback has value
 3. **Respond promptly**: Don't let PR sit too long
-4. **Can discuss**: Can discuss if不同意
+4. **Can discuss**: Can discuss if you disagree
 
 ---
 

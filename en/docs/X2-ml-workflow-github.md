@@ -1,66 +1,66 @@
-# GitHub 上的机器学习工作流
+# Machine Learning Workflow on GitHub
 
-> 本文档面向中国开发者，全面介绍如何在 GitHub 上构建高效的机器学习开发工作流。
-
----
-
-## 目录
-
-1. [GitHub + Jupyter Notebook 协作](#1-github--jupyter-notebook-协作)
-2. [GitHub Models 使用指南](#2-github-models-使用指南)
-3. [ML 项目结构最佳实践](#3-ml-项目结构最佳实践)
-4. [DVC 数据版本控制](#4-dvc-数据版本控制)
-5. [ML Pipeline 与 GitHub Actions 集成](#5-ml-pipeline-与-github-actions-集成)
-6. [模型注册与部署](#6-模型注册与部署)
-7. [MLflow 与 GitHub 集成](#7-mlflow-与-github-集成)
-8. [Hugging Face + GitHub 工作流](#8-hugging-face--github-工作流)
-9. [GPU Runner 与自托管 Runner](#9-gpu-runner-与自托管-runner)
-10. [ML 项目的 CI/CD 最佳实践](#10-ml-项目的-cicd-最佳实践)
-11. [大模型项目管理](#11-大模型项目管理)
-12. [AI 安全与负责任的 AI 开发](#12-ai-安全与负责任的-ai-开发)
-13. [国内 ML 开发者工具链](#13-国内-ml-开发者工具链)
+> This document is aimed at Chinese developers, providing a comprehensive introduction to building efficient machine learning development workflows on GitHub.
 
 ---
 
-## 1. GitHub + Jupyter Notebook 协作
+## Table of Contents
 
-### 1.1 Jupyter Notebook 的版本控制挑战
+1. [GitHub + Jupyter Notebook Collaboration](#1-github--jupyter-notebook-collaboration)
+2. [GitHub Models Usage Guide](#2-github-models-usage-guide)
+3. [ML Project Structure Best Practices](#3-ml-project-structure-best-practices)
+4. [DVC Data Version Control](#4-dvc-data-version-control)
+5. [ML Pipeline and GitHub Actions Integration](#5-ml-pipeline-and-github-actions-integration)
+6. [Model Registration and Deployment](#6-model-registration-and-deployment)
+7. [MLflow and GitHub Integration](#7-mlflow-and-github-integration)
+8. [Hugging Face + GitHub Workflow](#8-hugging-face--github-workflow)
+9. [GPU Runner and Self-Hosted Runner](#9-gpu-runner-and-self-hosted-runner)
+10. [ML Project CI/CD Best Practices](#10-ml-project-cicd-best-practices)
+11. [Large Model Project Management](#11-large-model-project-management)
+12. [AI Safety and Responsible AI Development](#12-ai-safety-and-responsible-ai-development)
+13. [Domestic ML Developer Toolchain](#13-domestic-ml-developer-toolchain)
 
-Jupyter Notebook（.ipynb 文件）本质上是 JSON 格式的文件，包含代码、输出、元数据等信息。直接使用 Git 进行版本控制会遇到一些问题：
+---
+
+## 1. GitHub + Jupyter Notebook Collaboration
+
+### 1.1 Version Control Challenges with Jupyter Notebooks
+
+Jupyter Notebooks (.ipynb files) are essentially JSON-formatted files containing code, outputs, metadata, and other information. Using Git directly for version control can encounter some issues:
 
 ```text
-常见问题：
-1. 输出结果（如图片、大段文本）导致文件过大
-2. 执行顺序混乱导致 diff 难以阅读
-3. 元数据频繁变化产生噪音
-4. 合并冲突难以解决
+Common issues:
+1. Output results (such as images, large blocks of text) cause files to become too large
+2. Disordered execution order makes diffs difficult to read
+3. Frequent metadata changes produce noise
+4. Merge conflicts are hard to resolve
 ```
 
-### 1.2 配置 Git 优化 Notebook 版本控制
+### 1.2 Configuring Git to Optimize Notebook Version Control
 
 ```bash
-# 项目根目录创建 .gitattributes 文件
+# Create .gitattributes file in the project root directory
 *.ipynb filter=strip-notebook-output
 
-# 配置 Git filter
+# Configure Git filter
 git config --global filter.strip-notebook-output.clean 'jupyter nbconvert --ClearOutputPreprocessor.enabled=True --to=notebook --stdin --stdout --log-level=ERROR'
 git config --global filter.strip-notebook-output.smudge cat
 git config --global filter.strip-notebook-output.required true
 ```
 
 ```bash
-# 使用 nbstripout 工具（推荐）
+# Use nbstripout tool (recommended)
 pip install nbstripout
 
-# 在项目中启用
+# Enable in the project
 nbstripout --install
 
-# .gitattributes 自动生成：
+# .gitattributes auto-generated:
 *.ipynb filter=strip-notebook-output
 *.ipynb diff=ipynb
 ```
 
-### 1.3 Notebook 友好的项目结构
+### 1.3 Notebook-Friendly Project Structure
 
 ```
 ml-project/
@@ -102,105 +102,105 @@ ml-project/
 └── README.md
 ```
 
-### 1.4 使用 ReviewNB 进行 Notebook Review
+### 1.4 Using ReviewNB for Notebook Review
 
 ```text
-ReviewNB 是 GitHub 的 Notebook 代码审查工具：
+ReviewNB is GitHub's Notebook code review tool:
 
-功能：
-- 可视化 Notebook diff
-- 支持行级评论
-- 渲染图表和输出
-- 与 GitHub PR 集成
+Features:
+- Visual Notebook diff
+- Line-level comments
+- Rendered charts and outputs
+- Integration with GitHub PRs
 
-安装：
-1. 访问 reviewnb.com
-2. 安装 GitHub App
-3. 在仓库设置中启用
+Installation:
+1. Visit reviewnb.com
+2. Install the GitHub App
+3. Enable in repository settings
 
-使用：
-- 创建 PR 时自动显示 Notebook diff
-- 可以在特定 cell 上添加评论
-- 支持查看历史版本
+Usage:
+- Automatically displays Notebook diff when creating a PR
+- Can add comments on specific cells
+- Supports viewing historical versions
 ```
 
-### 1.5 JupyterLab Git 扩展
+### 1.5 JupyterLab Git Extension
 
 ```bash
-# 安装 JupyterLab Git 扩展
+# Install JupyterLab Git extension
 pip install jupyterlab-git
 
-# 配置 JupyterLab
+# Configure JupyterLab
 jupyter labextension install @jupyterlab/git
 
-# 在 JupyterLab 中使用
-# 左侧边栏会出现 Git 图标
-# 支持 commit、push、pull 等操作
-# 支持查看 diff 和历史
+# Use in JupyterLab
+# A Git icon will appear in the left sidebar
+# Supports commit, push, pull and other operations
+# Supports viewing diffs and history
 ```
 
 ---
 
-## 2. GitHub Models 使用指南
+## 2. GitHub Models Usage Guide
 
-### 2.1 什么是 GitHub Models
+### 2.1 What Are GitHub Models
 
-GitHub Models 是 GitHub 提供的 AI 模型测试平台，允许开发者直接在 GitHub 上测试和评估各种 AI 模型。
+GitHub Models is an AI model testing platform provided by GitHub, allowing developers to test and evaluate various AI models directly on GitHub.
 
 ```text
-支持的模型类别：
-1. 语言模型（LLM）
-   - GPT-4o、GPT-4o mini
-   - Claude 3.5 Sonnet、Claude 3 Haiku
-   - Llama 3.1、Mistral Large
+Supported model categories:
+1. Language Models (LLM)
+   - GPT-4o, GPT-4o mini
+   - Claude 3.5 Sonnet, Claude 3 Haiku
+   - Llama 3.1, Mistral Large
 
-2. 嵌入模型（Embedding）
+2. Embedding Models
    - OpenAI text-embedding-3-small
    - Cohere embed-v3
 
-3. 图像模型
+3. Image Models
    - DALL-E 3
    - Stable Diffusion
 
-4. 语音模型
-   - Whisper（语音识别）
-   - TTS（文本转语音）
+4. Audio Models
+   - Whisper (Speech Recognition)
+   - TTS (Text-to-Speech)
 ```
 
-### 2.2 使用 GitHub Models 测试模型
+### 2.2 Testing Models with GitHub Models
 
 ```text
-访问方式：
-1. 访问 github.com/marketplace/models
-2. 选择想要测试的模型
-3. 在 Playground 中输入提示
-4. 查看模型响应
+Access method:
+1. Visit github.com/marketplace/models
+2. Select the model you want to test
+3. Enter prompts in the Playground
+4. View model responses
 
-Playground 功能：
-- 调整模型参数（temperature、top_p 等）
-- 对比多个模型的响应
-- 保存和分享提示模板
-- 查看 API 调用示例
+Playground features:
+- Adjust model parameters (temperature, top_p, etc.)
+- Compare responses from multiple models
+- Save and share prompt templates
+- View API call examples
 ```
 
-### 2.3 通过 API 使用 GitHub Models
+### 2.3 Using GitHub Models via API
 
 ```python
-# 使用 OpenAI SDK 调用 GitHub Models
+# Using OpenAI SDK to call GitHub Models
 from openai import OpenAI
 
-# 初始化客户端（使用 GitHub Token）
+# Initialize client (using GitHub Token)
 client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
     api_key="your-github-token"
 )
 
-# 调用 GPT-4o 模型
+# Call GPT-4o model
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=[
-        {"role": "system", "content": "你是一个有帮助的AI助手。"},
-        {"role": "user", "content": "请解释什么是机器学习？"}
+        {"role": "system", "content": "You are a helpful AI assistant."},
+        {"role": "user", "content": "Please explain what machine learning is?"}
     ],
     temperature=0.7,
     max_tokens=1000
@@ -210,7 +210,7 @@ print(response.choices[0].message.content)
 ```
 
 ```python
-# 使用 Azure AI SDK
+# Using Azure AI SDK
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
@@ -222,8 +222,8 @@ client = ChatCompletionsClient(
 
 response = client.complete(
     messages=[
-        SystemMessage(content="你是一个有帮助的AI助手。"),
-        UserMessage(content="请解释什么是深度学习？")
+        SystemMessage(content="You are a helpful AI assistant."),
+        UserMessage(content="Please explain what deep learning is?")
     ],
     model="gpt-4o"
 )
@@ -231,15 +231,15 @@ response = client.complete(
 print(response.choices[0].message.content)
 ```
 
-### 2.4 模型评估与对比
+### 2.4 Model Evaluation and Comparison
 
 ```python
-# 模型评估脚本
+# Model evaluation script
 import json
 from openai import OpenAI
 
 def evaluate_model(client, model_name, test_cases):
-    """评估模型在测试用例上的表现"""
+    """Evaluate model performance on test cases"""
     results = []
     
     for case in test_cases:
@@ -249,7 +249,7 @@ def evaluate_model(client, model_name, test_cases):
                 {"role": "system", "content": case["system_prompt"]},
                 {"role": "user", "content": case["input"]}
             ],
-            temperature=0.0  # 使用确定性输出
+            temperature=0.0  # Use deterministic output
         )
         
         output = response.choices[0].message.content
@@ -267,21 +267,21 @@ def evaluate_model(client, model_name, test_cases):
         "results": results
     }
 
-# 测试用例
+# Test cases
 test_cases = [
     {
-        "input": "什么是梯度下降？",
-        "expected": "优化算法",
-        "system_prompt": "用一句话回答"
+        "input": "What is gradient descent?",
+        "expected": "optimization algorithm",
+        "system_prompt": "Answer in one sentence"
     },
     {
-        "input": "什么是过拟合？",
-        "expected": "泛化能力",
-        "system_prompt": "用一句话回答"
+        "input": "What is overfitting?",
+        "expected": "generalization ability",
+        "system_prompt": "Answer in one sentence"
     }
 ]
 
-# 对比多个模型
+# Compare multiple models
 models = ["gpt-4o", "gpt-4o-mini", "claude-3-5-sonnet"]
 client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
@@ -290,78 +290,78 @@ client = OpenAI(
 
 for model in models:
     result = evaluate_model(client, model, test_cases)
-    print(f"{model}: {result['accuracy']:.2%} 准确率")
+    print(f"{model}: {result['accuracy']:.2%} accuracy")
 ```
 
 ---
 
-## 3. ML 项目结构最佳实践
+## 3. ML Project Structure Best Practices
 
-### 3.1 标准项目结构
+### 3.1 Standard Project Structure
 
 ```text
 ml-project/
 ├── .github/
 │   ├── workflows/
-│   │   ├── train.yml         # 训练流水线
-│   │   ├── evaluate.yml      # 评估流水线
-│   │   └── deploy.yml        # 部署流水线
+│   │   ├── train.yml         # Training pipeline
+│   │   ├── evaluate.yml      # Evaluation pipeline
+│   │   └── deploy.yml        # Deployment pipeline
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
 │   └── CODEOWNERS
 ├── configs/
-│   ├── data_config.yaml      # 数据配置
-│   ├── model_config.yaml     # 模型配置
-│   ├── train_config.yaml     # 训练配置
-│   └── eval_config.yaml      # 评估配置
+│   ├── data_config.yaml      # Data configuration
+│   ├── model_config.yaml     # Model configuration
+│   ├── train_config.yaml     # Training configuration
+│   └── eval_config.yaml      # Evaluation configuration
 ├── data/
-│   ├── raw/                  # 原始数据（不提交到 Git）
-│   ├── processed/            # 处理后的数据
-│   └── features/             # 特征数据
+│   ├── raw/                  # Raw data (not committed to Git)
+│   ├── processed/            # Processed data
+│   └── features/             # Feature data
 ├── docs/
-│   ├── data_dictionary.md    # 数据字典
-│   ├── model_card.md         # 模型卡
-│   └── experiments.md        # 实验记录
+│   ├── data_dictionary.md    # Data dictionary
+│   ├── model_card.md         # Model card
+│   └── experiments.md        # Experiment records
 ├── models/
-│   ├── checkpoints/          # 模型检查点
-│   └── final/                # 最终模型
+│   ├── checkpoints/          # Model checkpoints
+│   └── final/                # Final model
 ├── notebooks/
-│   ├── exploration/          # 探索性分析
-│   ├── training/             # 训练实验
-│   └── evaluation/           # 评估分析
+│   ├── exploration/          # Exploratory analysis
+│   ├── training/             # Training experiments
+│   └── evaluation/           # Evaluation analysis
 ├── scripts/
-│   ├── data_download.py      # 数据下载脚本
-│   ├── preprocess.py         # 数据预处理
-│   ├── train.py              # 训练脚本
-│   ├── evaluate.py           # 评估脚本
-│   └── predict.py            # 推理脚本
+│   ├── data_download.py      # Data download script
+│   ├── preprocess.py         # Data preprocessing
+│   ├── train.py              # Training script
+│   ├── evaluate.py           # Evaluation script
+│   └── predict.py            # Inference script
 ├── src/
 │   ├── __init__.py
 │   ├── data/
 │   │   ├── __init__.py
-│   │   ├── dataset.py        # 数据集类
-│   │   ├── dataloader.py     # 数据加载器
-│   │   └── transforms.py     # 数据变换
+│   │   ├── dataset.py        # Dataset class
+│   │   ├── dataloader.py     # Data loader
+│   │   └── transforms.py     # Data transformations
 │   ├── models/
 │   │   ├── __init__.py
-│   │   ├── base.py           # 基础模型类
-│   │   ├── layers.py         # 自定义层
-│   │   └── architectures.py  # 模型架构
+│   │   ├── base.py           # Base model class
+│   │   ├── layers.py         # Custom layers
+│   │   └── architectures.py  # Model architectures
 │   ├── training/
 │   │   ├── __init__.py
-│   │   ├── trainer.py        # 训练器
-│   │   ├── losses.py         # 损失函数
-│   │   └── optimizers.py     # 优化器
+│   │   ├── trainer.py        # Trainer
+│   │   ├── losses.py         # Loss functions
+│   │   └── optimizers.py     # Optimizers
 │   ├── evaluation/
 │   │   ├── __init__.py
-│   │   ├── metrics.py        # 评估指标
-│   │   └── evaluator.py      # 评估器
+│   │   ├── metrics.py        # Evaluation metrics
+│   │   └── evaluator.py      # Evaluator
 │   └── utils/
 │       ├── __init__.py
-│       ├── io.py             # 输入输出工具
-│       ├── logging.py        # 日志工具
-│       └── visualization.py  # 可视化工具
+│       ├── io.py             # I/O utilities
+│       ├── logging.py        # Logging utilities
+│       └── visualization.py  # Visualization utilities
 ├── tests/
 │   ├── unit/
 │   │   ├── test_data.py
@@ -369,26 +369,26 @@ ml-project/
 │   │   └── test_training.py
 │   └── integration/
 │       └── test_pipeline.py
-├── .dvc/                     # DVC 配置
-├── .env.example              # 环境变量模板
+├── .dvc/                     # DVC configuration
+├── .env.example              # Environment variable template
 ├── .gitignore
 ├── .pre-commit-config.yaml
-├── dvc.yaml                  # DVC 流水线
-├── Makefile                  # 常用命令
-├── pyproject.toml            # 项目配置
-├── requirements.txt          # 依赖列表
-├── requirements-dev.txt      # 开发依赖
-└── README.md                 # 项目文档
+├── dvc.yaml                  # DVC pipeline
+├── Makefile                  # Common commands
+├── pyproject.toml            # Project configuration
+├── requirements.txt          # Dependencies
+├── requirements-dev.txt      # Development dependencies
+└── README.md                 # Project documentation
 ```
 
-### 3.2 配置管理
+### 3.2 Configuration Management
 
 ```yaml
 # configs/train_config.yaml
 project:
   name: "my-ml-project"
   version: "1.0.0"
-  description: "项目描述"
+  description: "Project description"
 
 data:
   train_path: "data/processed/train.parquet"
@@ -459,7 +459,7 @@ class Config:
     
     @classmethod
     def from_yaml(cls, path: str) -> "Config":
-        """从 YAML 文件加载配置"""
+        """Load configuration from YAML file"""
         with open(path) as f:
             config_dict = yaml.safe_load(f)
         
@@ -471,54 +471,54 @@ class Config:
         )
     
     def save(self, path: str):
-        """保存配置到 YAML 文件"""
+        """Save configuration to YAML file"""
         with open(path, "w") as f:
             yaml.dump(self.__dict__, f, default_flow_style=False)
 ```
 
-### 3.3 Makefile 管理常用命令
+### 3.3 Makefile for Managing Common Commands
 
 ```makefile
 # Makefile
 .PHONY: setup data train evaluate clean
 
-# 安装依赖
+# Install dependencies
 setup:
 	pip install -r requirements.txt
 	pre-commit install
 
-# 下载和处理数据
+# Download and process data
 data:
 	python scripts/data_download.py
 	python scripts/preprocess.py
 
-# 训练模型
+# Train model
 train:
 	python scripts/train.py --config configs/train_config.yaml
 
-# 评估模型
+# Evaluate model
 evaluate:
 	python scripts/evaluate.py --config configs/eval_config.yaml
 
-# 运行测试
+# Run tests
 test:
 	pytest tests/ -v
 
-# 代码质量检查
+# Code quality checks
 lint:
 	ruff check src/ scripts/ tests/
 	mypy src/
 
-# 清理生成的文件
+# Clean generated files
 clean:
 	rm -rf data/processed/
 	rm -rf models/checkpoints/*
 	rm -rf logs/*
 
-# 完整流水线
+# Full pipeline
 all: setup data train evaluate
 
-# DVC 命令
+# DVC commands
 dvc-repro:
 	dvc repro
 
@@ -531,80 +531,80 @@ dvc-pull:
 
 ---
 
-## 4. DVC 数据版本控制
+## 4. DVC Data Version Control
 
-### 4.1 什么是 DVC
+### 4.1 What Is DVC
 
-DVC（Data Version Control）是一个开源的数据版本控制工具，专门用于机器学习项目。它解决了 ML 项目中数据和模型文件版本控制的问题。
+DVC (Data Version Control) is an open-source data version control tool specifically designed for machine learning projects. It solves the problem of versioning data and model files in ML projects.
 
 ```text
-DVC 的核心功能：
-1. 数据版本控制：像 Git 管理代码一样管理数据
-2. 流水线管理：定义和重现 ML 流水线
-3. 实验管理：跟踪和对比实验结果
-4. 远程存储：支持多种云存储后端
-5. 模型注册：管理模型版本和元数据
+DVC core features:
+1. Data version control: Manage data like Git manages code
+2. Pipeline management: Define and reproduce ML pipelines
+3. Experiment management: Track and compare experiment results
+4. Remote storage: Support for multiple cloud storage backends
+5. Model registry: Manage model versions and metadata
 ```
 
-### 4.2 DVC 安装与配置
+### 4.2 DVC Installation and Configuration
 
 ```bash
-# 安装 DVC
+# Install DVC
 pip install dvc
 
-# 安装特定存储后端
+# Install specific storage backends
 pip install dvc-s3      # AWS S3
 pip install dvc-gs      # Google Cloud Storage
 pip install dvc-azure   # Azure Blob Storage
-pip install dvc-oss     # 阿里云 OSS
+pip install dvc-oss     # Alibaba Cloud OSS
 
-# 初始化 DVC
+# Initialize DVC
 cd my-ml-project
 dvc init
 
-# 配置远程存储（以 S3 为例）
+# Configure remote storage (using S3 as example)
 dvc remote add -d storage s3://my-bucket/dvc-store
 dvc remote modify storage access_key_id YOUR_ACCESS_KEY
 dvc remote modify storage secret_access_key YOUR_SECRET_KEY
 
-# 配置阿里云 OSS
+# Configure Alibaba Cloud OSS
 dvc remote add -d oss-storage oss://my-bucket/dvc-store
 dvc remote modify oss-storage oss_key_id YOUR_KEY_ID
 dvc remote modify oss-storage oss_key_secret YOUR_KEY_SECRET
 dvc remote modify oss-storage oss_endpoint oss-cn-hangzhou.aliyuncs.com
 ```
 
-### 4.3 数据版本控制实践
+### 4.3 Data Version Control Practices
 
 ```bash
-# 添加数据文件到 DVC 跟踪
+# Add data files to DVC tracking
 dvc add data/raw/train.csv
 dvc add data/raw/test.csv
 
-# 这会创建 .dvc 文件
+# This will create .dvc files
 # data/raw/train.csv.dvc
 # data/raw/test.csv.dvc
 
-# 提交 DVC 文件到 Git
+# Commit DVC files to Git
 git add data/raw/*.dvc .gitignore
-git commit -m "添加训练和测试数据"
+git commit -m "Add training and test data"
 
-# 推送数据到远程存储
+# Push data to remote storage
 dvc push
 
-# 拉取数据
+# Pull data
 dvc pull
 
-# 查看数据版本历史
+# View data version history
 dvc dag
 git log --oneline
 
-# 切换到特定版本
+# Switch to a specific version
 git checkout v1.0
 dvc checkout
 ```
 
-### 4.4 DVC 流水线定义
+### 4.4 DVC Pipeline Definition
 
 ```yaml
 # dvc.yaml
@@ -654,37 +654,37 @@ stages:
       - logs/roc_curve.png
 ```
 
-### 4.5 实验管理
+### 4.5 Experiment Management
 
 ```bash
-# 运行实验
+# Run experiment
 dvc exp run
 
-# 查看实验历史
+# View experiment history
 dvc exp show
 
-# 对比实验
+# Compare experiments
 dvc exp diff
 
-# 创建新实验（修改参数）
+# Create new experiment (modify parameters)
 dvc exp run -S train_config.yaml:training.learning_rate=0.001
 dvc exp run -S train_config.yaml:training.batch_size=64
 
-# 命名实验
+# Name experiment
 dvc exp run --name "lr-0.001-bs-64"
 
-# 应用实验结果
+# Apply experiment results
 dvc exp apply exp-name
 
-# 删除实验
+# Remove experiment
 dvc exp remove exp-name
 ```
 
 ---
 
-## 5. ML Pipeline 与 GitHub Actions 集成
+## 5. ML Pipeline and GitHub Actions Integration
 
-### 5.1 训练流水线自动化
+### 5.1 Training Pipeline Automation
 
 ```yaml
 # .github/workflows/train.yml
@@ -836,7 +836,7 @@ jobs:
             --version ${{ github.sha }}
 ```
 
-### 5.2 模型评估流水线
+### 5.2 Model Evaluation Pipeline
 
 ```yaml
 # .github/workflows/evaluate.yml
@@ -848,7 +848,7 @@ on:
       - 'src/models/**'
       - 'configs/model_config.yaml'
   schedule:
-    - cron: '0 0 * * 0'  # 每周日运行
+    - cron: '0 0 * * 0'  # Run every Sunday
 
 jobs:
   evaluate:
@@ -892,9 +892,9 @@ jobs:
           script: |
             const fs = require('fs');
             const metrics = JSON.parse(fs.readFileSync('results/metrics.json', 'utf8'));
-            const body = `## 模型评估结果 (${{ matrix.dataset }})
+            const body = `## Model Evaluation Results (${{ matrix.dataset }})
             
-            | 指标 | 值 | 基线 | 变化 |
+            | Metric | Value | Baseline | Change |
             |------|-----|------|------|
             | Accuracy | ${metrics.accuracy} | - | - |
             | F1 Score | ${metrics.f1} | - | - |
@@ -911,9 +911,9 @@ jobs:
 
 ---
 
-## 6. 模型注册与部署
+## 6. Model Registration and Deployment
 
-### 6.1 GitHub Container Registry 模型注册
+### 6.1 GitHub Container Registry Model Registration
 
 ```python
 # scripts/register_model.py
@@ -936,13 +936,13 @@ class ModelRegistry:
         description: str = "",
         tags: list[str] = None
     ) -> dict:
-        """注册模型到模型仓库"""
+        """Register model to the model registry"""
         model_path = Path(model_path)
         
-        # 计算模型文件的哈希值
+        # Compute hash of the model file
         model_hash = self._compute_hash(model_path)
         
-        # 创建模型元数据
+        # Create model metadata
         metadata = {
             "version": version,
             "registered_at": datetime.datetime.now().isoformat(),
@@ -951,35 +951,35 @@ class ModelRegistry:
             "metrics": metrics,
             "description": description,
             "tags": tags or [],
-            "framework": "pytorch",  # 或 tensorflow, onnx 等
+            "framework": "pytorch",  # or tensorflow, onnx, etc.
             "input_format": "tensor",
             "output_format": "class_probabilities"
         }
         
-        # 保存元数据
+        # Save metadata
         version_dir = self.registry_path / version
         version_dir.mkdir(parents=True, exist_ok=True)
         
         with open(version_dir / "metadata.json", "w") as f:
             json.dump(metadata, f, indent=2)
             
-        # 创建 latest 软链接
+        # Create latest symlink
         latest_link = self.registry_path / "latest"
         if latest_link.exists():
             latest_link.unlink()
         latest_link.symlink_to(version_dir)
         
-        print(f"模型已注册: {version}")
+        print(f"Model registered: {version}")
         return metadata
         
     def get_model_info(self, version: str) -> dict:
-        """获取模型信息"""
+        """Get model information"""
         metadata_path = self.registry_path / version / "metadata.json"
         with open(metadata_path) as f:
             return json.load(f)
             
     def list_models(self) -> list[dict]:
-        """列出所有注册的模型"""
+        """List all registered models"""
         models = []
         for version_dir in self.registry_path.iterdir():
             if version_dir.is_dir() and version_dir.name != "latest":
@@ -990,7 +990,7 @@ class ModelRegistry:
         return sorted(models, key=lambda x: x["registered_at"], reverse=True)
         
     def _compute_hash(self, file_path: Path) -> str:
-        """计算文件的 SHA256 哈希值"""
+        """Compute SHA256 hash of a file"""
         sha256 = hashlib.sha256()
         with open(file_path, "rb") as f:
             for chunk in iter(lambda: f.read(8192), b""):
@@ -998,19 +998,19 @@ class ModelRegistry:
         return sha256.hexdigest()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="注册模型到模型仓库")
-    parser.add_argument("--model-path", required=True, help="模型文件路径")
-    parser.add_argument("--metrics", required=True, help="评估指标 JSON 文件")
-    parser.add_argument("--version", required=True, help="模型版本")
-    parser.add_argument("--description", default="", help="模型描述")
+    parser = argparse.ArgumentParser(description="Register model to the model registry")
+    parser.add_argument("--model-path", required=True, help="Model file path")
+    parser.add_argument("--metrics", required=True, help="Evaluation metrics JSON file")
+    parser.add_argument("--version", required=True, help="Model version")
+    parser.add_argument("--description", default="", help="Model description")
     
     args = parser.parse_args()
     
-    # 加载评估指标
+    # Load evaluation metrics
     with open(args.metrics) as f:
         metrics = json.load(f)
         
-    # 注册模型
+    # Register model
     registry = ModelRegistry()
     metadata = registry.register_model(
         model_path=args.model_path,
@@ -1022,7 +1022,7 @@ if __name__ == "__main__":
     print(json.dumps(metadata, indent=2))
 ```
 
-### 6.2 模型部署到 GitHub Packages
+### 6.2 Model Deployment to GitHub Packages
 
 ```yaml
 # .github/workflows/deploy-model.yml
@@ -1052,7 +1052,7 @@ jobs:
           
       - name: Build and push model image
         run: |
-          # 创建包含模型的 Docker 镜像
+          # Create Docker image containing the model
           docker build \
             --tag ghcr.io/${{ github.repository }}/model:${{ github.ref_name }} \
             --tag ghcr.io/${{ github.repository }}/model:latest \
@@ -1068,34 +1068,34 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# 安装依赖
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 复制模型代码
+# Copy model code
 COPY src/ src/
 COPY models/ models/
 COPY scripts/ scripts/
 
-# 复制模型文件
+# Copy model files
 ARG MODEL_VERSION
 COPY models/checkpoints/best_model.pt /app/models/best_model.pt
 
-# 复制推理脚本
+# Copy inference script
 COPY scripts/serve.py /app/serve.py
 
-# 暴露端口
+# Expose port
 EXPOSE 8000
 
-# 启动推理服务
+# Start inference service
 CMD ["python", "serve.py", "--model-path", "/app/models/best_model.pt"]
 ```
 
 ---
 
-## 7. MLflow 与 GitHub 集成
+## 7. MLflow and GitHub Integration
 
-### 7.1 MLflow 配置
+### 7.1 MLflow Configuration
 
 ```python
 # src/training/trainer_with_mlflow.py
@@ -1109,16 +1109,16 @@ class MLflowTrainer:
     def __init__(self, config):
         self.config = config
         
-        # 配置 MLflow
+        # Configure MLflow
         mlflow.set_tracking_uri(config.mlflow_tracking_uri)
         mlflow.set_experiment(config.experiment_name)
         
         self.client = MlflowClient()
         
     def train(self, model, train_loader, val_loader):
-        """训练模型并记录到 MLflow"""
+        """Train model and log to MLflow"""
         with mlflow.start_run(run_name=self.config.run_name) as run:
-            # 记录参数
+            # Log parameters
             mlflow.log_params({
                 "learning_rate": self.config.learning_rate,
                 "batch_size": self.config.batch_size,
@@ -1127,38 +1127,38 @@ class MLflowTrainer:
                 "model_architecture": self.config.model_architecture
             })
             
-            # 训练循环
+            # Training loop
             for epoch in range(self.config.epochs):
                 train_loss = self._train_epoch(model, train_loader)
                 val_loss, val_metrics = self._validate(model, val_loader)
                 
-                # 记录指标
+                # Log metrics
                 mlflow.log_metrics({
                     "train_loss": train_loss,
                     "val_loss": val_loss,
                     **val_metrics
                 }, step=epoch)
                 
-                # 保存检查点
+                # Save checkpoint
                 if epoch % self.config.save_every == 0:
                     checkpoint_path = f"checkpoints/model_epoch_{epoch}.pt"
                     torch.save(model.state_dict(), checkpoint_path)
                     mlflow.log_artifact(checkpoint_path)
                     
-            # 保存最终模型
+            # Save final model
             mlflow.pytorch.log_model(
                 model,
                 "model",
                 registered_model_name=self.config.model_name
             )
             
-            # 记录模型卡
+            # Log model card
             mlflow.log_artifact("docs/model_card.md")
             
             return run.info.run_id
             
     def _train_epoch(self, model, train_loader):
-        """训练一个 epoch"""
+        """Train for one epoch"""
         model.train()
         total_loss = 0
         
@@ -1172,7 +1172,7 @@ class MLflowTrainer:
         return total_loss / len(train_loader)
         
     def _validate(self, model, val_loader):
-        """验证模型"""
+        """Validate model"""
         model.eval()
         total_loss = 0
         all_predictions = []
@@ -1185,13 +1185,13 @@ class MLflowTrainer:
                 all_predictions.extend(predictions)
                 all_targets.extend(targets)
                 
-        # 计算评估指标
+        # Compute evaluation metrics
         metrics = self._compute_metrics(all_predictions, all_targets)
         
         return total_loss / len(val_loader), metrics
 ```
 
-### 7.2 MLflow 与 GitHub Actions 集成
+### 7.2 MLflow and GitHub Actions Integration
 
 ```yaml
 # .github/workflows/train-with-mlflow.yml
@@ -1264,9 +1264,9 @@ jobs:
 
 ---
 
-## 8. Hugging Face + GitHub 工作流
+## 8. Hugging Face + GitHub Workflow
 
-### 8.1 Hugging Face Hub 集成
+### 8.1 Hugging Face Hub Integration
 
 ```python
 # src/models/huggingface_integration.py
@@ -1281,12 +1281,12 @@ class HuggingFaceIntegration:
         self.token = token or HfFolder.get_token()
         
     def push_model(self, model, tokenizer, commit_message: str = "Update model"):
-        """推送模型到 Hugging Face Hub"""
-        # 保存模型和分词器
+        """Push model to Hugging Face Hub"""
+        # Save model and tokenizer
         model.save_pretrained("temp_model")
         tokenizer.save_pretrained("temp_model")
         
-        # 推送到 Hub
+        # Push to Hub
         self.api.upload_folder(
             folder_path="temp_model",
             repo_id=self.repo_name,
@@ -1295,13 +1295,13 @@ class HuggingFaceIntegration:
         )
         
     def load_model(self):
-        """从 Hugging Face Hub 加载模型"""
+        """Load model from Hugging Face Hub"""
         model = AutoModel.from_pretrained(self.repo_name)
         tokenizer = AutoTokenizer.from_pretrained(self.repo_name)
         return model, tokenizer
         
     def create_model_card(self, model_card_content: str):
-        """创建模型卡"""
+        """Create model card"""
         with open("README.md", "w") as f:
             f.write(model_card_content)
             
@@ -1314,7 +1314,7 @@ class HuggingFaceIntegration:
         )
 ```
 
-### 8.2 GitHub Actions 自动推送到 Hugging Face
+### 8.2 GitHub Actions Auto-Push to Hugging Face
 
 ```yaml
 # .github/workflows/push-to-huggingface.yml
@@ -1355,7 +1355,7 @@ jobs:
             --version ${{ github.ref_name }}
 ```
 
-### 8.3 使用 Hugging Face Spaces 展示模型
+### 8.3 Using Hugging Face Spaces to Showcase Models
 
 ```yaml
 # .github/workflows/deploy-to-spaces.yml
@@ -1397,15 +1397,15 @@ jobs:
 
 ---
 
-## 9. GPU Runner 与自托管 Runner
+## 9. GPU Runner and Self-Hosted Runner
 
-### 9.1 GitHub GPU Runner 配置
+### 9.1 GitHub GPU Runner Configuration
 
 ```yaml
-# 使用 GitHub 提供的 GPU Runner
+# Using GitHub-provided GPU Runner
 jobs:
   train-gpu:
-    runs-on: ubuntu-latest-gpu  # GitHub 提供的 GPU Runner
+    runs-on: ubuntu-latest-gpu  # GPU Runner provided by GitHub
     
     steps:
       - uses: actions/checkout@v4
@@ -1428,7 +1428,7 @@ jobs:
           python scripts/train.py --config configs/train_config.yaml --device cuda
 ```
 
-### 9.2 自托管 GPU Runner 设置
+### 9.2 Self-Hosted GPU Runner Setup
 
 ```yaml
 # .github/workflows/self-hosted-gpu.yml
@@ -1471,13 +1471,13 @@ jobs:
             logs/
 ```
 
-### 9.3 自托管 Runner 安装脚本
+### 9.3 Self-Hosted Runner Installation Script
 
 ```bash
 #!/bin/bash
 # setup-gpu-runner.sh
 
-# 安装必要的软件
+# Install necessary software
 sudo apt-get update
 sudo apt-get install -y \
     curl \
@@ -1488,18 +1488,18 @@ sudo apt-get install -y \
     libffi-dev \
     python3-dev
 
-# 安装 NVIDIA 驱动（如果没有）
+# Install NVIDIA driver (if not present)
 if ! command -v nvidia-smi &> /dev/null; then
     sudo apt-get install -y nvidia-driver-535
     sudo reboot
 fi
 
-# 安装 Docker
+# Install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 
-# 安装 NVIDIA Container Toolkit
+# Install NVIDIA Container Toolkit
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
 curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
@@ -1509,28 +1509,28 @@ sudo apt-get update
 sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 
-# 下载 GitHub Actions Runner
+# Download GitHub Actions Runner
 mkdir actions-runner && cd actions-runner
 curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/latest/download/actions-runner-linux-x64.tar.gz
 tar xzf actions-runner-linux-x64.tar.gz
 
-# 配置 Runner
+# Configure Runner
 ./config.sh \
     --url https://github.com/YOUR_ORG/YOUR_REPO \
     --token YOUR_TOKEN \
     --labels gpu,self-hosted,linux \
     --name gpu-runner-01
 
-# 安装为服务
+# Install as service
 sudo ./svc.sh install
 sudo ./svc.sh start
 ```
 
 ---
 
-## 10. ML 项目的 CI/CD 最佳实践
+## 10. ML Project CI/CD Best Practices
 
-### 10.1 代码质量检查
+### 10.1 Code Quality Checks
 
 ```yaml
 # .github/workflows/code-quality.yml
@@ -1570,7 +1570,7 @@ jobs:
           file: ./coverage.xml
 ```
 
-### 10.2 数据验证
+### 10.2 Data Validation
 
 ```yaml
 # .github/workflows/data-validation.yml
@@ -1617,7 +1617,7 @@ jobs:
           path: data_report.html
 ```
 
-### 10.3 模型性能测试
+### 10.3 Model Performance Testing
 
 ```python
 # tests/test_model_performance.py
@@ -1627,35 +1627,35 @@ from src.models import load_model
 from src.evaluation import ModelEvaluator
 
 class TestModelPerformance:
-    """模型性能测试"""
+    """Model performance tests"""
     
     @pytest.fixture
     def model(self):
-        """加载测试模型"""
+        """Load test model"""
         return load_model("models/checkpoints/best_model.pt")
         
     @pytest.fixture
     def test_data(self):
-        """加载测试数据"""
+        """Load test data"""
         return load_test_data("data/processed/test.parquet")
         
     def test_accuracy_threshold(self, model, test_data):
-        """测试准确率是否达到阈值"""
+        """Test if accuracy meets the threshold"""
         evaluator = ModelEvaluator(model)
         metrics = evaluator.evaluate(test_data)
         
         assert metrics["accuracy"] >= 0.95, \
-            f"准确率 {metrics['accuracy']:.4f} 低于阈值 0.95"
+            f"Accuracy {metrics['accuracy']:.4f} is below threshold 0.95"
             
     def test_inference_latency(self, model, test_data):
-        """测试推理延迟"""
+        """Test inference latency"""
         sample_input = test_data[0]["input"]
         
-        # 预热
+        # Warmup
         for _ in range(10):
             model(sample_input)
             
-        # 测量延迟
+        # Measure latency
         import time
         latencies = []
         for _ in range(100):
@@ -1667,26 +1667,26 @@ class TestModelPerformance:
         p99_latency = sorted(latencies)[98]
         
         assert avg_latency < 0.05, \
-            f"平均延迟 {avg_latency:.4f}s 超过阈值 0.05s"
+            f"Average latency {avg_latency:.4f}s exceeds threshold 0.05s"
         assert p99_latency < 0.1, \
-            f"P99延迟 {p99_latency:.4f}s 超过阈值 0.1s"
+            f"P99 latency {p99_latency:.4f}s exceeds threshold 0.1s"
             
     def test_model_size(self, model):
-        """测试模型大小"""
+        """Test model size"""
         model_size = sum(p.numel() for p in model.parameters()) * 4 / 1024 / 1024  # MB
         
         assert model_size < 500, \
-            f"模型大小 {model_size:.2f}MB 超过阈值 500MB"
+            f"Model size {model_size:.2f}MB exceeds threshold 500MB"
             
     def test_memory_usage(self, model, test_data):
-        """测试内存使用"""
+        """Test memory usage"""
         import psutil
         import os
         
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB
         
-        # 批量推理
+        # Batch inference
         for batch in test_data.batches(batch_size=32):
             model(batch["input"])
             
@@ -1694,10 +1694,10 @@ class TestModelPerformance:
         memory_increase = peak_memory - initial_memory
         
         assert memory_increase < 2000, \
-            f"内存使用增加 {memory_increase:.2f}MB 超过阈值 2000MB"
+            f"Memory usage increase {memory_increase:.2f}MB exceeds threshold 2000MB"
 ```
 
-### 10.4 完整的 CI/CD 流程
+### 10.4 Complete CI/CD Pipeline
 
 ```yaml
 # .github/workflows/ml-cicd.yml
@@ -1710,7 +1710,7 @@ on:
     branches: [main]
 
 jobs:
-  # 阶段 1: 代码质量检查
+  # Stage 1: Code quality checks
   code-quality:
     runs-on: ubuntu-latest
     steps:
@@ -1721,7 +1721,7 @@ jobs:
           ruff check .
           pytest tests/unit/ -v
 
-  # 阶段 2: 数据验证
+  # Stage 2: Data validation
   data-validation:
     runs-on: ubuntu-latest
     needs: code-quality
@@ -1730,7 +1730,7 @@ jobs:
       - name: Validate data
         run: python scripts/validate_data.py
 
-  # 阶段 3: 训练
+  # Stage 3: Training
   training:
     runs-on: ubuntu-latest-gpu
     needs: data-validation
@@ -1745,7 +1745,7 @@ jobs:
           name: trained-model
           path: models/checkpoints/
 
-  # 阶段 4: 评估
+  # Stage 4: Evaluation
   evaluation:
     runs-on: ubuntu-latest
     needs: training
@@ -1760,7 +1760,7 @@ jobs:
       - name: Performance tests
         run: pytest tests/performance/ -v
 
-  # 阶段 5: 部署
+  # Stage 5: Deployment
   deploy:
     runs-on: ubuntu-latest
     needs: evaluation
@@ -1773,74 +1773,74 @@ jobs:
 
 ---
 
-## 11. 大模型项目管理
+## 11. Large Model Project Management
 
-### 11.1 大模型项目的特殊挑战
+### 11.1 Special Challenges of Large Model Projects
 
 ```text
-大模型项目（如 LLM 微调）的特殊性：
+Special characteristics of large model projects (such as LLM fine-tuning):
 
-1. 数据规模大
-   - 训练数据可能达到 TB 级别
-   - 需要高效的数据处理流水线
-   - 数据版本管理更加复杂
+1. Large data scale
+   - Training data may reach TB level
+   - Requires efficient data processing pipelines
+   - Data version management is more complex
 
-2. 计算资源需求高
-   - 需要多 GPU 训练
-   - 训练时间可能长达数天
-   - 成本控制很重要
+2. High computational resource requirements
+   - Requires multi-GPU training
+   - Training time may span several days
+   - Cost control is important
 
-3. 模型版本管理
-   - 模型文件可能达到数十 GB
-   - 需要专门的存储方案
-   - 版本追溯很重要
+3. Model version management
+   - Model files may reach tens of GB
+   - Requires specialized storage solutions
+   - Version traceability is important
 
-4. 实验管理
-   - 需要跟踪大量超参数
-   - 实验对比分析复杂
-   - 需要自动化工具支持
+4. Experiment management
+   - Requires tracking large numbers of hyperparameters
+   - Experiment comparison analysis is complex
+   - Requires automated tool support
 ```
 
-### 11.2 大模型项目结构
+### 11.2 Large Model Project Structure
 
 ```text
 llm-project/
 ├── data/
-│   ├── raw/                  # 原始数据
-│   ├── processed/            # 处理后的数据
-│   ├── tokenized/            # 分词后的数据
-│   └── cache/                # 缓存数据
+│   ├── raw/                  # Raw data
+│   ├── processed/            # Processed data
+│   ├── tokenized/            # Tokenized data
+│   └── cache/                # Cached data
 ├── models/
-│   ├── base/                 # 基础模型
-│   ├── finetuned/            # 微调后的模型
-│   └── merged/               # 合并后的模型
+│   ├── base/                 # Base model
+│   ├── finetuned/            # Fine-tuned model
+│   └── merged/               # Merged model
 ├── configs/
-│   ├── lora_config.yaml      # LoRA 配置
-│   ├── training_config.yaml  # 训练配置
-│   └── inference_config.yaml # 推理配置
+│   ├── lora_config.yaml      # LoRA configuration
+│   ├── training_config.yaml  # Training configuration
+│   └── inference_config.yaml # Inference configuration
 ├── scripts/
-│   ├── prepare_dataset.py    # 数据准备
-│   ├── finetune.py           # 微调脚本
-│   ├── merge_adapters.py     # 合并 LoRA 权重
-│   ├── evaluate.py           # 评估脚本
-│   └── serve.py              # 推理服务
+│   ├── prepare_dataset.py    # Data preparation
+│   ├── finetune.py           # Fine-tuning script
+│   ├── merge_adapters.py     # Merge LoRA weights
+│   ├── evaluate.py           # Evaluation script
+│   └── serve.py              # Inference service
 ├── src/
 │   ├── data/
-│   │   ├── dataset.py        # 数据集类
-│   │   └── collator.py       # 数据整理器
+│   │   ├── dataset.py        # Dataset class
+│   │   └── collator.py       # Data collator
 │   ├── models/
-│   │   ├── lora.py           # LoRA 实现
-│   │   └── quantization.py   # 量化工具
+│   │   ├── lora.py           # LoRA implementation
+│   │   └── quantization.py   # Quantization tools
 │   └── training/
-│       ├── trainer.py        # 训练器
-│       └── callbacks.py      # 回调函数
+│       ├── trainer.py        # Trainer
+│       └── callbacks.py      # Callbacks
 ├── docker/
-│   ├── Dockerfile.train      # 训练容器
-│   └── Dockerfile.serve      # 推理容器
+│   ├── Dockerfile.train      # Training container
+│   └── Dockerfile.serve      # Inference container
 └── README.md
 ```
 
-### 11.3 使用 LoRA 微调大模型
+### 11.3 Fine-Tuning Large Models with LoRA
 
 ```python
 # scripts/finetune.py
@@ -1850,25 +1850,25 @@ from trl import SFTTrainer
 import torch
 
 def finetune_with_lora(config):
-    """使用 LoRA 微调大模型"""
+    """Fine-tune large model using LoRA"""
     
-    # 加载基础模型
+    # Load base model
     model = AutoModelForCausalLM.from_pretrained(
         config.base_model,
         torch_dtype=torch.float16,
         device_map="auto",
-        load_in_4bit=True  # 4-bit 量化
+        load_in_4bit=True  # 4-bit quantization
     )
     
     tokenizer = AutoTokenizer.from_pretrained(config.base_model)
     tokenizer.pad_token = tokenizer.eos_token
     
-    # 准备模型
+    # Prepare model
     model = prepare_model_for_kbit_training(model)
     
-    # 配置 LoRA
+    # Configure LoRA
     lora_config = LoraConfig(
-        r=config.lora_r,  # 秩
+        r=config.lora_r,  # rank
         lora_alpha=config.lora_alpha,
         target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
         lora_dropout=0.05,
@@ -1876,11 +1876,11 @@ def finetune_with_lora(config):
         task_type="CAUSAL_LM"
     )
     
-    # 应用 LoRA
+    # Apply LoRA
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
     
-    # 训练参数
+    # Training arguments
     training_args = TrainingArguments(
         output_dir=config.output_dir,
         num_train_epochs=config.epochs,
@@ -1899,7 +1899,7 @@ def finetune_with_lora(config):
         max_grad_norm=0.3
     )
     
-    # 创建训练器
+    # Create trainer
     trainer = SFTTrainer(
         model=model,
         args=training_args,
@@ -1911,10 +1911,10 @@ def finetune_with_lora(config):
         packing=True
     )
     
-    # 开始训练
+    # Start training
     trainer.train()
     
-    # 保存 LoRA 权重
+    # Save LoRA weights
     model.save_pretrained(config.output_dir)
     
     return model
@@ -1925,7 +1925,7 @@ if __name__ == "__main__":
     finetune_with_lora(config)
 ```
 
-### 11.4 GitHub Actions 大模型训练流水线
+### 11.4 GitHub Actions Large Model Training Pipeline
 
 ```yaml
 # .github/workflows/llm-finetune.yml
@@ -1995,39 +1995,39 @@ jobs:
 
 ---
 
-## 12. AI 安全与负责任的 AI 开发
+## 12. AI Safety and Responsible AI Development
 
-### 12.1 AI 安全检查清单
+### 12.1 AI Safety Checklist
 
 ```text
-AI 安全检查清单：
+AI Safety Checklist:
 
-1. 数据安全
-   □ 数据来源是否合法合规
-   □ 是否包含个人隐私信息
-   □ 数据是否经过脱敏处理
-   □ 数据存储是否加密
+1. Data Security
+   □ Is the data source legally compliant
+   □ Does it contain personal privacy information
+   □ Has the data been anonymized
+   □ Is the data stored in encrypted form
 
-2. 模型安全
-   □ 模型是否经过对抗性测试
-   □ 是否存在后门攻击风险
-   □ 模型输出是否经过过滤
-   □ 是否有模型水印机制
+2. Model Security
+   □ Has the model undergone adversarial testing
+   □ Is there a backdoor attack risk
+   □ Are model outputs filtered
+   □ Is there a model watermarking mechanism
 
-3. 部署安全
-   □ API 是否有访问控制
-   □ 是否有请求频率限制
-   □ 是否有输入验证
-   □ 是否有监控和告警
+3. Deployment Security
+   □ Does the API have access control
+   □ Is there request rate limiting
+   □ Is there input validation
+   □ Is there monitoring and alerting
 
-4. 合规性
-   □ 是否符合相关法规（如《生成式人工智能服务管理暂行办法》）
-   □ 是否有用户协议和隐私政策
-   □ 是否有内容审核机制
-   □ 是否有投诉处理流程
+4. Compliance
+   □ Does it comply with relevant regulations (such as the "Interim Measures for the Management of Generative Artificial Intelligence Services")
+   □ Are there user agreements and privacy policies
+   □ Is there a content moderation mechanism
+   □ Is there a complaint handling process
 ```
 
-### 12.2 模型公平性检测
+### 12.2 Model Fairness Testing
 
 ```python
 # src/evaluation/fairness.py
@@ -2035,28 +2035,28 @@ import numpy as np
 from collections import defaultdict
 
 class FairnessEvaluator:
-    """模型公平性评估器"""
+    """Model fairness evaluator"""
     
     def __init__(self, model, protected_attributes: list[str]):
         self.model = model
         self.protected_attributes = protected_attributes
         
     def evaluate(self, dataset) -> dict:
-        """评估模型公平性"""
+        """Evaluate model fairness"""
         results = {}
         
         for attr in self.protected_attributes:
-            # 按保护属性分组
+            # Group by protected attribute
             groups = self._group_by_attribute(dataset, attr)
             
-            # 计算各组的性能指标
+            # Compute performance metrics for each group
             group_metrics = {}
             for group_name, group_data in groups.items():
                 predictions = self.model.predict(group_data["features"])
                 metrics = self._compute_metrics(predictions, group_data["labels"])
                 group_metrics[group_name] = metrics
                 
-            # 计算公平性指标
+            # Compute fairness metrics
             results[attr] = {
                 "group_metrics": group_metrics,
                 "demographic_parity": self._demographic_parity(group_metrics),
@@ -2067,7 +2067,7 @@ class FairnessEvaluator:
         return results
         
     def _demographic_parity(self, group_metrics: dict) -> float:
-        """人口统计平等性"""
+        """Demographic parity"""
         positive_rates = {}
         for group, metrics in group_metrics.items():
             positive_rates[group] = metrics["positive_rate"]
@@ -2078,7 +2078,7 @@ class FairnessEvaluator:
         return min_rate / max_rate if max_rate > 0 else 1.0
         
     def _equalized_odds(self, group_metrics: dict) -> float:
-        """机会平等性"""
+        """Equalized odds"""
         tpr_values = []
         fpr_values = []
         
@@ -2092,7 +2092,7 @@ class FairnessEvaluator:
         return 1.0 - (tpr_diff + fpr_diff) / 2
         
     def _disparate_impact(self, group_metrics: dict) -> float:
-        """差异影响比"""
+        """Disparate impact ratio"""
         positive_rates = {}
         for group, metrics in group_metrics.items():
             positive_rates[group] = metrics["positive_rate"]
@@ -2101,7 +2101,7 @@ class FairnessEvaluator:
         return min(rates) / max(rates) if max(rates) > 0 else 1.0
         
     def _group_by_attribute(self, dataset, attribute: str) -> dict:
-        """按属性分组数据"""
+        """Group data by attribute"""
         groups = defaultdict(lambda: {"features": [], "labels": []})
         
         for sample in dataset:
@@ -2112,7 +2112,7 @@ class FairnessEvaluator:
         return dict(groups)
         
     def _compute_metrics(self, predictions, labels) -> dict:
-        """计算评估指标"""
+        """Compute evaluation metrics"""
         predictions = np.array(predictions)
         labels = np.array(labels)
         
@@ -2129,7 +2129,7 @@ class FairnessEvaluator:
         }
 ```
 
-### 12.3 内容安全过滤
+### 12.3 Content Safety Filtering
 
 ```python
 # src/safety/content_filter.py
@@ -2137,35 +2137,35 @@ import re
 from typing import Optional
 
 class ContentSafetyFilter:
-    """内容安全过滤器"""
+    """Content safety filter"""
     
     def __init__(self):
-        # 敏感词库（示例，实际应该使用更完整的词库）
+        # Sensitive word library (example, should use a more comprehensive library in practice)
         self.blocked_patterns = [
-            r"(暴力|血腥|色情)",
-            r"(歧视|仇恨|侮辱)",
-            r"(违法|犯罪|恐怖)",
-            r"(政治敏感词1|政治敏感词2)"
+            r"(violence|bloody|pornographic)",
+            r"(discrimination|hatred|insult)",
+            r"(illegal|crime|terrorism)",
+            r"(politically_sensitive_word1|politically_sensitive_word2)"
         ]
         
-        # 编译正则表达式
+        # Compile regular expressions
         self.compiled_patterns = [re.compile(p) for p in self.blocked_patterns]
         
     def check(self, text: str) -> tuple[bool, Optional[str]]:
-        """检查文本是否安全
+        """Check if text is safe
         
         Returns:
-            (is_safe, reason): 是否安全，不安全的原因
+            (is_safe, reason): whether it is safe, and reason if unsafe
         """
         for pattern in self.compiled_patterns:
             match = pattern.search(text)
             if match:
-                return False, f"包含敏感内容: {match.group()}"
+                return False, f"Contains sensitive content: {match.group()}"
                 
         return True, None
         
     def filter(self, text: str) -> str:
-        """过滤文本中的敏感内容"""
+        """Filter sensitive content from text"""
         filtered_text = text
         
         for pattern in self.compiled_patterns:
@@ -2174,7 +2174,7 @@ class ContentSafetyFilter:
         return filtered_text
         
     def check_model_output(self, output: str, input_text: str = "") -> dict:
-        """检查模型输出是否安全"""
+        """Check if model output is safe"""
         is_safe, reason = self.check(output)
         
         result = {
@@ -2189,7 +2189,7 @@ class ContentSafetyFilter:
         return result
 ```
 
-### 12.4 GitHub Actions 安全检查
+### 12.4 GitHub Actions Safety Check
 
 ```yaml
 # .github/workflows/ai-safety.yml
@@ -2237,89 +2237,89 @@ jobs:
 
 ---
 
-## 13. 国内 ML 开发者工具链
+## 13. Domestic ML Developer Toolchain
 
-### 13.1 国内云服务商 ML 平台
-
-```text
-主要的国内 ML 平台：
-
-1. 阿里云 - PAI (Platform for AI)
-   - 优势：功能全面，集成阿里云生态
-   - 适用场景：企业级 ML 项目
-   - 网址：https://pai.console.aliyun.com/
-
-2. 腾讯云 - TI 平台
-   - 优势：与腾讯生态集成好
-   - 适用场景：游戏、社交领域的 AI 应用
-   - 网址：https://cloud.tencent.com/product/ti
-
-3. 华为云 - ModelArts
-   - 优势：支持昇腾芯片，国产化
-   - 适用场景：政企客户、国产化需求
-   - 网址：https://www.huaweicloud.com/product/modelarts.html
-
-4. 百度智能云 - BML
-   - 优势：预置百度 AI 能力
-   - 适用场景：NLP、CV 领域应用
-   - 网址：https://cloud.baidu.com/product/bml
-
-5. 字节跳动 - 火山引擎
-   - 优势：字节内部 ML 经验沉淀
-   - 适用场景：推荐系统、内容理解
-   - 网址：https://www.volcengine.com/product/ml-platform
-```
-
-### 13.2 国内 MLOps 工具
+### 13.1 Domestic Cloud Service Provider ML Platforms
 
 ```text
-MLOps 工具对比：
+Major domestic ML platforms:
 
-1. MLflow（开源，国际）
-   - 优势：社区活跃，功能完善
-   - 劣势：中文文档少，需要自部署
-   - 适用：技术能力强的团队
+1. Alibaba Cloud - PAI (Platform for AI)
+   - Advantages: Comprehensive features, integrated with Alibaba Cloud ecosystem
+   - Use cases: Enterprise-level ML projects
+   - URL: https://pai.console.aliyun.com/
 
-2. Kubeflow（开源，国际）
-   - 优势：Kubernetes 原生，扩展性强
-   - 劣势：部署复杂，学习曲线陡
-   - 适用：大规模 ML 平台
+2. Tencent Cloud - TI Platform
+   - Advantages: Good integration with Tencent ecosystem
+   - Use cases: AI applications in gaming and social sectors
+   - URL: https://cloud.tencent.com/product/ti
 
-3. AutoDL（国内）
-   - 优势：GPU 租用便宜，操作简单
-   - 劣势：功能相对简单
-   - 适用：个人开发者、小团队
+3. Huawei Cloud - ModelArts
+   - Advantages: Supports Ascend chips, domestic production
+   - Use cases: Government and enterprise customers, domestic production requirements
+   - URL: https://www.huaweicloud.com/product/modelarts.html
 
-4. 趋动云（国内）
-   - 优势：GPU 资源丰富，性价比高
-   - 劣势：功能还在完善中
-   - 适用：需要 GPU 资源的团队
+4. Baidu Intelligent Cloud - BML
+   - Advantages: Pre-built Baidu AI capabilities
+   - Use cases: NLP, CV domain applications
+   - URL: https://cloud.baidu.com/product/bml
+
+5. ByteDance - Volcano Engine
+   - Advantages: Accumulated ML experience from ByteDance internally
+   - Use cases: Recommendation systems, content understanding
+   - URL: https://www.volcengine.com/product/ml-platform
 ```
 
-### 13.3 国内数据存储方案
+### 13.2 Domestic MLOps Tools
+
+```text
+MLOps Tool Comparison:
+
+1. MLflow (Open-source, International)
+   - Advantages: Active community, comprehensive features
+   - Disadvantages: Limited Chinese documentation, requires self-deployment
+   - Suitable for: Teams with strong technical capabilities
+
+2. Kubeflow (Open-source, International)
+   - Advantages: Kubernetes-native, highly scalable
+   - Disadvantages: Complex deployment, steep learning curve
+   - Suitable for: Large-scale ML platforms
+
+3. AutoDL (Domestic)
+   - Advantages: Affordable GPU rental, simple operation
+   - Disadvantages: Relatively simple features
+   - Suitable for: Individual developers, small teams
+
+4. QuDong Cloud (Domestic)
+   - Advantages: Rich GPU resources, cost-effective
+   - Disadvantages: Features still being improved
+   - Suitable for: Teams needing GPU resources
+```
+
+### 13.3 Domestic Data Storage Solutions
 
 ```python
-# 数据存储配置示例
+# Data storage configuration examples
 
-# 阿里云 OSS
+# Alibaba Cloud OSS
 import oss2
 
 def setup_aliyun_oss():
-    """配置阿里云 OSS"""
+    """Configure Alibaba Cloud OSS"""
     auth = oss2.Auth('your-access-key-id', 'your-access-key-secret')
     bucket = oss2.Bucket(auth, 'https://oss-cn-hangzhou.aliyuncs.com', 'your-bucket-name')
     
-    # 上传文件
+    # Upload file
     bucket.put_object('data/train.csv', open('data/train.csv', 'rb'))
     
-    # 下载文件
+    # Download file
     bucket.get_object_to_file('data/train.csv', 'downloaded_train.csv')
 
-# 腾讯云 COS
+# Tencent Cloud COS
 from qcloud_cos import CosConfig, CosS3Client
 
 def setup_tencent_cos():
-    """配置腾讯云 COS"""
+    """Configure Tencent Cloud COS"""
     config = CosConfig(
         Region='ap-guangzhou',
         SecretId='your-secret-id',
@@ -2327,25 +2327,25 @@ def setup_tencent_cos():
     )
     client = CosS3Client(config)
     
-    # 上传文件
+    # Upload file
     client.upload_file(
         Bucket='your-bucket-name',
         Key='data/train.csv',
         LocalFilePath='data/train.csv'
     )
 
-# 华为云 OBS
+# Huawei Cloud OBS
 from obs import ObsClient
 
 def setup_huawei_obs():
-    """配置华为云 OBS"""
+    """Configure Huawei Cloud OBS"""
     client = ObsClient(
         access_key_id='your-access-key-id',
         secret_access_key='your-secret-access-key',
         server='https://obs.cn-hangzhou.myhuaweicloud.com'
     )
     
-    # 上传文件
+    # Upload file
     client.putFile(
         bucketName='your-bucket-name',
         objectKey='data/train.csv',
@@ -2353,23 +2353,23 @@ def setup_huawei_obs():
     )
 ```
 
-### 13.4 DVC 国内存储配置
+### 13.4 DVC Domestic Storage Configuration
 
 ```bash
-# 配置阿里云 OSS 作为 DVC 远程存储
+# Configure Alibaba Cloud OSS as DVC remote storage
 dvc remote add -d myremote oss://my-bucket/dvc-store
 dvc remote modify myremote oss_key_id YOUR_KEY_ID
 dvc remote modify myremote oss_key_secret YOUR_KEY_SECRET
 dvc remote modify myremote oss_endpoint oss-cn-hangzhou.aliyuncs.com
 
-# 配置腾讯云 COS
+# Configure Tencent Cloud COS
 pip install dvc-cos
 dvc remote add -d myremote cos://my-bucket/dvc-store
 dvc remote modify myremote cos_secret_id YOUR_SECRET_ID
 dvc remote modify myremote cos_secret_key YOUR_SECRET_KEY
 dvc remote modify myremote cos_region ap-guangzhou
 
-# 配置华为云 OBS
+# Configure Huawei Cloud OBS
 pip install dvc-obs
 dvc remote add -d myremote obs://my-bucket/dvc-store
 dvc remote modify myremote obs_access_key_id YOUR_KEY_ID
@@ -2377,35 +2377,35 @@ dvc remote modify myremote obs_secret_access_key YOUR_SECRET_KEY
 dvc remote modify myremote obs_endpoint obs.cn-hangzhou.myhuaweicloud.com
 ```
 
-### 13.5 国内 ML 开发最佳实践
+### 13.5 Domestic ML Development Best Practices
 
 ```text
-国内 ML 开发建议：
+Domestic ML development recommendations:
 
-1. 网络优化
-   - 使用国内镜像源（清华、阿里云）
-   - 模型文件优先放在国内存储
-   - 使用 CDN 加速数据传输
+1. Network optimization
+   - Use domestic mirror sources (Tsinghua, Alibaba Cloud)
+   - Prioritize storing model files in domestic storage
+   - Use CDN to accelerate data transfer
 
-2. 合规性
-   - 遵守《数据安全法》
-   - 遵守《个人信息保护法》
-   - 遵守《生成式人工智能服务管理暂行办法》
-   - 做好数据出境安全评估
+2. Compliance
+   - Comply with the "Data Security Law"
+   - Comply with the "Personal Information Protection Law"
+   - Comply with the "Interim Measures for the Management of Generative Artificial Intelligence Services"
+   - Conduct cross-border data security assessments
 
-3. 成本控制
-   - 选择合适的 GPU 实例
-   - 使用 Spot 实例降低成本
-   - 合理规划训练任务
+3. Cost control
+   - Choose appropriate GPU instances
+   - Use Spot instances to reduce costs
+   - Plan training tasks rationally
 
-4. 团队协作
-   - 使用中文文档
-   - 建立内部知识库
-   - 定期技术分享
+4. Team collaboration
+   - Use Chinese documentation
+   - Establish internal knowledge base
+   - Regular technical sharing
 ```
 
 ```python
-# 配置国内 pip 镜像源
+# Configure domestic pip mirror source
 # ~/.pip/pip.conf
 """
 [global]
@@ -2413,39 +2413,39 @@ index-url = https://mirrors.aliyun.com/pypi/simple/
 trusted-host = mirrors.aliyun.com
 """
 
-# 配置国内 Hugging Face 镜像
+# Configure domestic Hugging Face mirror
 import os
 os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 
-# 使用镜像下载模型
+# Download model using mirror
 from transformers import AutoModel
 
 model = AutoModel.from_pretrained("bert-base-chinese")
 ```
 
-### 13.6 Makefile 国内优化配置
+### 13.6 Makefile Domestic Optimization Configuration
 
 ```makefile
-# Makefile - 国内优化版本
+# Makefile - Domestic optimized version
 
-# 配置镜像源
+# Configure mirror source
 .PHONY: setup-mirrors
 setup-mirrors:
 	pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 	pip config set install.trusted-host mirrors.aliyun.com
 	echo "export HF_ENDPOINT=https://hf-mirror.com" >> ~/.bashrc
 
-# 安装依赖（使用国内镜像）
+# Install dependencies (using domestic mirror)
 .PHONY: install
 install:
 	pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
-# 下载模型（使用镜像）
+# Download model (using mirror)
 .PHONY: download-model
 download-model:
 	HF_ENDPOINT=https://hf-mirror.com python scripts/download_model.py
 
-# 配置 DVC 远程存储（阿里云 OSS）
+# Configure DVC remote storage (Alibaba Cloud OSS)
 .PHONY: setup-dvc
 setup-dvc:
 	dvc remote add -d myremote oss://my-bucket/dvc-store
@@ -2453,7 +2453,7 @@ setup-dvc:
 	dvc remote modify myremote oss_key_secret $(OSS_KEY_SECRET)
 	dvc remote modify myremote oss_endpoint oss-cn-hangzhou.aliyuncs.com
 
-# 训练（使用国内 W&B 替代方案）
+# Train (using domestic W&B alternative)
 .PHONY: train
 train:
 	python scripts/train.py --config configs/train_config.yaml --tracker none
@@ -2461,29 +2461,29 @@ train:
 
 ---
 
-## 总结
+## Conclusion
 
-GitHub 上的机器学习工作流已经形成了一个完整的生态系统，从数据版本控制到模型部署，从实验管理到 CI/CD 自动化，都有成熟的工具和最佳实践可供参考。
+The machine learning workflow on GitHub has formed a complete ecosystem, from data version control to model deployment, from experiment management to CI/CD automation, with mature tools and best practices available for reference.
 
-**关键要点：**
+**Key Takeaways:**
 
-1. **版本控制**：使用 Git + DVC 管理代码、数据和模型
-2. **实验管理**：使用 MLflow 或 Weights & Biases 跟踪实验
-3. **自动化**：使用 GitHub Actions 构建 ML 流水线
-4. **协作**：使用 GitHub 的协作功能（Issues、PR、Code Review）
-5. **部署**：使用 GitHub Packages 和 Container Registry 部署模型
-6. **安全**：遵循 AI 安全最佳实践
+1. **Version Control**: Use Git + DVC to manage code, data, and models
+2. **Experiment Management**: Use MLflow or Weights & Biases to track experiments
+3. **Automation**: Use GitHub Actions to build ML pipelines
+4. **Collaboration**: Use GitHub's collaboration features (Issues, PR, Code Review)
+5. **Deployment**: Use GitHub Packages and Container Registry to deploy models
+6. **Security**: Follow AI safety best practices
 
-**下一步行动：**
+**Next Steps:**
 
-- 选择一个适合你项目的 ML 工具栈
-- 建立标准化的项目结构
-- 配置 CI/CD 流水线
-- 建立实验管理流程
-- 关注 AI 安全和合规性
+- Choose an ML tool stack that suits your project
+- Establish a standardized project structure
+- Configure CI/CD pipelines
+- Establish experiment management workflows
+- Pay attention to AI safety and compliance
 
 ---
 
-> **文档版本：** v1.0  
-> **最后更新：** 2025 年  
-> **作者：** GitHub 中文开发者社区
+> **Document Version:** v1.0  
+> **Last Updated:** 2025  
+> **Author:** GitHub Chinese Developer Community

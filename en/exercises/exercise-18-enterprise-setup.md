@@ -1,17 +1,17 @@
-# 练习 18：GitHub 企业配置实战
+# Exercise 18: GitHub Enterprise Setup Practice
 
-## 学习目标
+## Learning Objectives
 
-- 配置组织级策略
-- 设置分支保护
-- 配置安全功能
+- Configure organization-level policies
+- Set up branch protection
+- Configure security features
 
-## 步骤
+## Steps
 
-### 步骤 1：创建组织
+### Step 1: Create an Organization
 
 ```bash
-# 创建组织
+# Create organization
 gh api orgs \
   --method POST \
   -f login="my-org" \
@@ -19,7 +19,7 @@ gh api orgs \
   -f billing_email="admin@example.com"
 ```
 
-### 步骤 2：配置 CODEOWNERS
+### Step 2: Configure CODEOWNERS
 
 ```yaml
 # .github/CODEOWNERS
@@ -28,10 +28,10 @@ gh api orgs \
 /src/ @your-username
 ```
 
-### 步骤 3：配置分支保护
+### Step 3: Configure Branch Protection
 
 ```bash
-# 使用 API 配置分支保护
+# Use API to configure branch protection
 gh api repos/{org}/{repo}/branches/main/protection \
   --method PUT \
   -f required_status_checks='{"strict":true,"contexts":["ci/test"]}' \
@@ -39,7 +39,7 @@ gh api repos/{org}/{repo}/branches/main/protection \
   -f required_pull_request_reviews='{"required_approving_review_count":1}'
 ```
 
-### 步骤 4：配置 Dependabot
+### Step 4: Configure Dependabot
 
 ```yaml
 # .github/dependabot.yml
@@ -51,36 +51,36 @@ updates:
       interval: "weekly"
 ```
 
-### 步骤 5：配置安全警报
+### Step 5: Configure Security Alerts
 
 ```bash
-# 启用 Secret Scanning
+# Enable Secret Scanning
 gh api repos/{org}/{repo}/secret-scanning \
   --method PUT \
   -f status='enabled'
 
-# 启用 Dependabot alerts
+# Enable Dependabot alerts
 gh api repos/{org}/{repo}/vulnerability-alerts \
   --method PUT \
   -f enabled='true'
 ```
 
-## 实战任务
+## Practical Tasks
 
-1. 创建 GitHub 组织
-2. 配置 CODEOWNERS
-3. 配置分支保护规则
-4. 配置 Dependabot
-5. 启用安全功能
+1. Create a GitHub organization
+2. Configure CODEOWNERS
+3. Configure branch protection rules
+4. Configure Dependabot
+5. Enable security features
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 组织已创建
-- [ ] CODEOWNERS 已配置
-- [ ] 分支保护已启用
-- [ ] Dependabot 已配置
-- [ ] 安全功能已启用
+- [ ] Organization created
+- [ ] CODEOWNERS configured
+- [ ] Branch protection enabled
+- [ ] Dependabot configured
+- [ ] Security features enabled
 
-## 下一步
+## Next Steps
 
-继续 [练习 19：GitHub Actions 复用工作流](exercise-19-reusable-workflows.md)
+Continue to [Exercise 19: GitHub Actions Reusable Workflows](exercise-19-reusable-workflows.md)

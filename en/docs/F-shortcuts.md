@@ -91,7 +91,7 @@ GitHub Mobile app supports:
 
 ## Tips
 
-1. **Press `.` to open Web editor**: This is the most常用 shortcut, can edit code directly in browser
+1. **Press `.` to open Web editor**: This is the most commonly used shortcut, can edit code directly in browser
 2. **Press `?` for help**: Press `?` on any page to see all shortcuts for that page
 3. **`G` + `letter`**: This is quick navigation combo, can quickly jump to different pages
 

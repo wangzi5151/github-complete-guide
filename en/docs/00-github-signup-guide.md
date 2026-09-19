@@ -1,54 +1,54 @@
-# 第三章：注册 GitHub 账号
+# Chapter 3: Registering a GitHub Account
 
-## 3.1 注册前的准备
+## 3.1 Preparation Before Registration
 
-### 准备工作清单
+### Preparation Checklist
 
-在注册 GitHub 账号之前，请确保：
+Before registering a GitHub account, please make sure:
 
-- [ ] 有一个可用的邮箱地址（推荐 Gmail、Outlook）
-- [ ] 能够访问互联网
-- [ ] 准备好一个容易记住的用户名
-- [ ] 了解 GitHub 的服务条款
+- [ ] You have a usable email address (Gmail or Outlook recommended)
+- [ ] You have internet access
+- [ ] You have a username that is easy to remember
+- [ ] You understand GitHub's terms of service
 
-### 选择邮箱
+### Choosing an Email
 
-**推荐的邮箱服务：**
+**Recommended email services:**
 
-| 邮箱服务 | 优点 | 缺点 |
+| Email Service | Pros | Cons |
 |----------|------|------|
-| Gmail | 稳定，国际通用 | 需要科学上网 |
-| Outlook | 微软账号，稳定 | 界面较复杂 |
-| QQ邮箱 | 国内常用 | 可能被误判为垃圾 |
-| 163邮箱 | 国内稳定 | 可能被误判为垃圾 |
-| 企业邮箱 | 专业 | 需要企业资质 |
+| Gmail | Stable, internationally recognized | Requires VPN/proxy |
+| Outlook | Microsoft account, stable | Interface is more complex |
+| QQ Mail | Commonly used in China | May be flagged as spam |
+| 163 Mail | Stable in China | May be flagged as spam |
+| Corporate Email | Professional | Requires company credentials |
 
-**建议：** 使用 Gmail 或 Outlook，收发验证邮件更稳定。
+**Recommendation:** Use Gmail or Outlook for more stable receipt and sending of verification emails.
 
-### 选择用户名
+### Choosing a Username
 
-用户名是你在 GitHub 上的唯一标识，其他人可以通过它找到你。
+Your username is your unique identifier on GitHub, and others can find you through it.
 
-**命名规则：**
-- 只能包含字母、数字、短横线（-）
-- 不能以短横线开头或结尾
-- 不能包含空格
-- 不区分大小写（但建议使用小写）
-- 长度限制：3-39 个字符
+**Naming rules:**
+- Can only contain letters, numbers, and hyphens (-)
+- Cannot start or end with a hyphen
+- Cannot contain spaces
+- Not case-sensitive (but lowercase is recommended)
+- Length limit: 3-39 characters
 
-**命名建议：**
-- 使用真实姓名的拼音：`zhangsan`
-- 使用昵称：`js-developer`
-- 使用职业相关：`web-dev-zhang`
-- 避免使用特殊字符和数字堆砌
+**Naming suggestions:**
+- Use the pinyin of your real name: `zhangsan`
+- Use a nickname: `js-developer`
+- Use a profession-related name: `web-dev-zhang`
+- Avoid using special characters and excessive numbers
 
-## 3.2 注册流程详解
+## 3.2 Registration Process in Detail
 
-### 第 1 步：打开 GitHub 官网
+### Step 1: Open the GitHub Website
 
-1. 打开浏览器（推荐 Chrome、Edge 或 Firefox）
-2. 在地址栏输入 **https://github.com**
-3. 按回车等待页面加载
+1. Open your browser (Chrome, Edge, or Firefox recommended)
+2. Enter **https://github.com** in the address bar
+3. Press Enter and wait for the page to load
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -66,18 +66,18 @@
 └─────────────────────────────────────────────────────┘
 ```
 
-### 第 2 步：点击注册按钮
+### Step 2: Click the Sign Up Button
 
-1. 在页面右上角找到 **Sign up** 按钮
-2. 点击 **Sign up**
+1. Find the **Sign up** button in the upper right corner of the page
+2. Click **Sign up**
 
-或者直接点击页面中间的 **Sign up for GitHub** 按钮。
+Or directly click the **Sign up for GitHub** button in the middle of the page.
 
-### 第 3 步：填写邮箱
+### Step 3: Enter Your Email
 
-1. 在 **Email** 输入框中输入你的邮箱地址
-2. 确保邮箱可以正常收发邮件
-3. 点击 **Continue**
+1. Enter your email address in the **Email** input field
+2. Make sure the email can send and receive messages normally
+3. Click **Continue**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -92,14 +92,14 @@
 └─────────────────────────────────────────────┘
 ```
 
-### 第 4 步：设置密码
+### Step 4: Set a Password
 
-1. 在 **Password** 输入框中设置密码
-2. 密码要求：
-   - 至少 8 个字符
-   - 包含至少一个字母和一个数字
-   - 不能是常见的弱密码
-3. 点击 **Continue**
+1. Set a password in the **Password** input field
+2. Password requirements:
+   - At least 8 characters
+   - Must contain at least one letter and one number
+   - Cannot be a commonly used weak password
+3. Click **Continue**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -115,19 +115,19 @@
 └─────────────────────────────────────────────┘
 ```
 
-**密码安全建议：**
-- 使用大小写字母、数字和特殊字符的组合
-- 避免使用生日、姓名等容易猜到的信息
-- 不要与其他网站使用相同密码
-- 建议使用密码管理器生成和保存密码
+**Password security tips:**
+- Use a combination of uppercase letters, lowercase letters, numbers, and special characters
+- Avoid using easily guessable information like birthdays or names
+- Do not reuse passwords from other websites
+- It is recommended to use a password manager to generate and save passwords
 
-### 第 5 步：设置用户名
+### Step 5: Set a Username
 
-1. 在 **Username** 输入框中设置用户名
-2. 系统会自动检查用户名是否可用
-3. 显示绿色对勾表示可用
-4. 显示红色叉号表示已被占用
-5. 点击 **Continue**
+1. Set a username in the **Username** input field
+2. The system will automatically check if the username is available
+3. A green checkmark indicates it is available
+4. A red cross indicates it has already been taken
+5. Click **Continue**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -145,16 +145,16 @@
 └─────────────────────────────────────────────┘
 ```
 
-**用户名修改建议：**
-- 如果喜欢的用户名被占用，可以尝试添加短横线或数字
-- 例如：`zhangsan` → `zhang-san` → `zhangsan-dev`
-- 用户名修改后，之前的用户名会被释放
+**Username change suggestions:**
+- If your preferred username is taken, try adding hyphens or numbers
+- For example: `zhangsan` → `zhang-san` → `zhangsan-dev`
+- After changing your username, the previous username will be released
 
-### 第 6 步：选择接收邮件偏好
+### Step 6: Choose Email Preferences
 
-1. 询问是否接收产品更新邮件
-2. 可以选择 **Receive product updates**（推荐）或跳过
-3. 点击 **Continue**
+1. You will be asked whether to receive product update emails
+2. You can choose **Receive product updates** (recommended) or skip
+3. Click **Continue**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -167,11 +167,11 @@
 └─────────────────────────────────────────────┘
 ```
 
-### 第 7 步：完成人机验证
+### Step 7: Complete the Human Verification
 
-1. 页面会显示一个验证码
-2. 根据提示完成验证
-3. 点击 **Submit** 按钮
+1. The page will display a verification code
+2. Follow the instructions to complete the verification
+3. Click the **Submit** button
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -180,7 +180,7 @@
 │  Please solve this verification puzzle:      │
 │  ┌─────────────────────────────────────┐    │
 │  │                                     │    │
-│  │     [图片验证码区域]                  │    │
+│  │     [Image verification area]        │    │
 │  │                                     │    │
 │  └─────────────────────────────────────┘    │
 │                                             │
@@ -188,17 +188,17 @@
 └─────────────────────────────────────────────┘
 ```
 
-**验证码类型：**
-- 点击图片中的指定物品（如"请点击所有包含红绿灯的图片"）
-- 拼图验证
-- 数字输入
+**Verification code types:**
+- Click on specified objects in the image (e.g., "Click on all images containing traffic lights")
+- Puzzle verification
+- Number input
 
-### 第 8 步：验证邮箱
+### Step 8: Verify Your Email
 
-1. 打开你的邮箱（注册时使用的邮箱）
-2. 找到来自 **GitHub** 的邮件
-3. 点击邮件中的 **Verify email address** 按钮
-4. 页面会跳转回 GitHub，显示验证成功
+1. Open your email (the one you used for registration)
+2. Find the email from **GitHub**
+3. Click the **Verify email address** button in the email
+4. The page will redirect back to GitHub, showing verification success
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -210,15 +210,15 @@
 └─────────────────────────────────────────────┘
 ```
 
-**如果没有收到邮件：**
-1. 检查垃圾邮件文件夹
-2. 等待几分钟后重试
-3. 点击 **Resend email** 重新发送
+**If you did not receive the email:**
+1. Check your spam/junk folder
+2. Wait a few minutes and try again
+3. Click **Resend email** to resend
 
-### 第 9 步：选择计划
+### Step 9: Choose a Plan
 
-1. 选择 **Free** 计划（免费）
-2. 点击 **Continue for free**
+1. Select the **Free** plan (free of charge)
+2. Click **Continue for free**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -242,54 +242,54 @@
 └─────────────────────────────────────────────┘
 ```
 
-**Free 计划包含：**
-- 无限公开仓库
-- 无限私有仓库
-- 无限协作者
-- GitHub Pages（100GB 带宽/月）
-- GitHub Actions（2000 分钟/月）
-- 500MB 包存储
+**The Free plan includes:**
+- Unlimited public repositories
+- Unlimited private repositories
+- Unlimited collaborators
+- GitHub Pages (100GB bandwidth/month)
+- GitHub Actions (2,000 minutes/month)
+- 500MB package storage
 
-### 第 10 步：完成注册
+### Step 10: Complete Registration
 
-1. 填写调查问卷（可选）
-   - 你的编程经验？
-   - 你打算用 GitHub 做什么？
-2. 点击 **Submit** 按钮
-3. 注册完成，进入 GitHub 主页
+1. Fill out the survey (optional)
+   - Your programming experience?
+   - What do you plan to use GitHub for?
+2. Click the **Submit** button
+3. Registration is complete, and you will enter the GitHub homepage
 
-## 3.3 注册后的设置
+## 3.3 Post-Registration Setup
 
-### 完善个人资料
+### Completing Your Profile
 
-**操作步骤：**
+**Steps:**
 
-1. 点击右上角的头像
-2. 选择 **Settings**
-3. 在左侧菜单选择 **Public profile**
+1. Click on your avatar in the upper right corner
+2. Select **Settings**
+3. Select **Public profile** from the left menu
 
-**需要填写的信息：**
+**Information to fill in:**
 
-| 字段 | 说明 | 建议 |
+| Field | Description | Recommendation |
 |------|------|------|
-| **Name** | 你的真实姓名 | 使用真实姓名 |
-| **Bio** | 简短介绍 | 描述你的技术方向 |
-| **Location** | 你所在的城市 | 填写真实城市 |
-| **Website** | 个人网站 | 如果有的话 |
-| **Company** | 公司名称 | 可选 |
+| **Name** | Your real name | Use your real name |
+| **Bio** | Short introduction | Describe your technical focus |
+| **Location** | Your city | Enter your actual city |
+| **Website** | Personal website | If you have one |
+| **Company** | Company name | Optional |
 
-### 开启两步验证（强烈推荐）
+### Enable Two-Factor Authentication (Highly Recommended)
 
-两步验证可以大大提升账号安全性。
+Two-factor authentication can greatly improve account security.
 
-**操作步骤：**
+**Steps:**
 
-1. 点击右上角的头像
-2. 选择 **Settings**
-3. 左侧菜单选择 **Password and authentication**
-4. 点击 **Two-factor authentication** 旁边的 **Enable two-factor authentication**
+1. Click on your avatar in the upper right corner
+2. Select **Settings**
+3. Select **Password and authentication** from the left menu
+4. Click **Enable two-factor authentication** next to **Two-factor authentication**
 
-**选择验证方式：**
+**Choose a verification method:**
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -298,171 +298,171 @@
 │  Choose how you'll receive verification      │
 │  codes:                                      │
 │                                             │
-│  ● Authenticator app  ← 推荐                │
-│    使用手机 App 生成验证码                    │
+│  ● Authenticator app  ← Recommended          │
+│    Generate codes using a mobile app         │
 │                                             │
-│  ○ SMS/voice message                        │
-│    通过短信或电话接收验证码                   │
+│  ○ SMS/voice message                         │
+│    Receive codes via text message or phone    │
 │                                             │
-│  ○ Security key                             │
-│    使用硬件安全密钥                          │
+│  ○ Security key                              │
+│    Use a hardware security key               │
 │                                             │
 │              [Continue]                     │
 └─────────────────────────────────────────────┘
 ```
 
-**推荐使用 Authenticator App：**
-- 下载 Google Authenticator 或 Microsoft Authenticator
-- 扫描二维码绑定
-- 保存恢复代码（非常重要！）
+**Using an Authenticator App is recommended:**
+- Download Google Authenticator or Microsoft Authenticator
+- Scan the QR code to bind
+- Save your recovery codes (very important!)
 
-### 设置个人访问令牌（PAT）
+### Setting Up a Personal Access Token (PAT)
 
-个人访问令牌用于命令行操作 GitHub。
+Personal access tokens are used for command-line operations on GitHub.
 
-**操作步骤：**
+**Steps:**
 
-1. 点击右上角的头像
-2. 选择 **Settings**
-3. 左侧菜单选择 **Developer settings**
-4. 选择 **Personal access tokens**
-5. 点击 **Generate new token**
+1. Click on your avatar in the upper right corner
+2. Select **Settings**
+3. Select **Developer settings** from the left menu
+4. Select **Personal access tokens**
+5. Click **Generate new token**
 
-**选择权限：**
+**Select permissions:**
 
 ```
 ┌─────────────────────────────────────────────┐
 │  New personal access token (classic)         │
 │                                             │
-│  Note: [用于命令行操作     ]                 │
+│  Note: [For command-line operations     ]    │
 │                                             │
 │  Expiration: [90 days ▼]                    │
 │                                             │
 │  Select scopes:                              │
-│  ☑ repo        - 完整仓库权限               │
+│  ☑ repo        - Full repository access     │
 │  ☑ workflow    - GitHub Actions              │
-│  ☑ admin:repo_hook - 仓库钩子               │
+│  ☑ admin:repo_hook - Repository hooks       │
 │                                             │
 │           [Generate token]                  │
 └─────────────────────────────────────────────┘
 ```
 
-⚠️ **重要：** 生成后立即复制保存，关闭页面后无法再查看！
+⚠️ **Important:** Copy and save the token immediately after generation. You will not be able to view it again after closing the page!
 
-## 3.4 免费方案详解
+## 3.4 Free Plan Details
 
-### 功能对比
+### Feature Comparison
 
-| 功能 | Free | Pro | Team | Enterprise |
+| Feature | Free | Pro | Team | Enterprise |
 |------|------|-----|------|------------|
-| 公开仓库 | 无限 | 无限 | 无限 | 无限 |
-| 私有仓库 | 无限 | 无限 | 无限 | 无限 |
-| 协作者 | 无限 | 无限 | 无限 | 无限 |
-| 存储空间 | 1GB | 2GB | 2GB | 50GB |
-| GitHub Pages | 100GB/月 | 100GB/月 | 100GB/月 | 无限制 |
-| Actions | 2000分钟/月 | 3000分钟/月 | 3000分钟/月 | 50000分钟/月 |
-| Copilot | 有限 | ✅ | ✅ | ✅ |
-| 支持 | 社区 | 邮件 | 优先 | 24/7 |
+| Public repositories | Unlimited | Unlimited | Unlimited | Unlimited |
+| Private repositories | Unlimited | Unlimited | Unlimited | Unlimited |
+| Collaborators | Unlimited | Unlimited | Unlimited | Unlimited |
+| Storage | 1GB | 2GB | 2GB | 50GB |
+| GitHub Pages | 100GB/month | 100GB/month | 100GB/month | Unlimited |
+| Actions | 2,000 minutes/month | 3,000 minutes/month | 3,000 minutes/month | 50,000 minutes/month |
+| Copilot | Limited | ✅ | ✅ | ✅ |
+| Support | Community | Email | Priority | 24/7 |
 
-### 免费额度说明
+### Free Tier Limits
 
-**GitHub Actions：**
-- 每月 2000 分钟免费额度
-- Linux runner: $0.008/分钟
-- Windows runner: $0.016/分钟
-- macOS runner: $0.08/分钟
+**GitHub Actions:**
+- 2,000 free minutes per month
+- Linux runner: $0.008/minute
+- Windows runner: $0.016/minute
+- macOS runner: $0.08/minute
 
-**GitHub Pages：**
-- 每月 100GB 带宽
-- 仓库大小限制 1GB
-- 每小时最多 10 次构建
+**GitHub Pages:**
+- 100GB bandwidth per month
+- Repository size limit of 1GB
+- Maximum 10 builds per hour
 
-**GitHub Packages：**
-- 500MB 存储
-- 1GB 带宽/月
+**GitHub Packages:**
+- 500MB storage
+- 1GB bandwidth/month
 
-## 3.5 账号安全
+## 3.5 Account Security
 
-### 安全设置清单
+### Security Checklist
 
-- [ ] 开启两步验证
-- [ ] 使用强密码
-- [ ] 定期更换密码
-- [ ] 不要在公共电脑保存登录状态
-- [ ] 定期检查登录活动
-- [ ] 设置恢复选项
+- [ ] Enable two-factor authentication
+- [ ] Use a strong password
+- [ ] Change your password regularly
+- [ ] Do not save login sessions on public computers
+- [ ] Check login activity regularly
+- [ ] Set up recovery options
 
-### 检查登录活动
+### Checking Login Activity
 
-1. 进入 **Settings** → **Security log**
-2. 查看最近的登录记录
-3. 如果发现异常，立即修改密码
+1. Go to **Settings** → **Security log**
+2. Review recent login records
+3. If you find anything suspicious, change your password immediately
 
-### 设置恢复选项
+### Setting Up Recovery Options
 
-1. 添加备用邮箱
-2. 设置恢复电话号码
-3. 保存恢复代码
+1. Add a backup email
+2. Set up a recovery phone number
+3. Save your recovery codes
 
-## 3.6 常见问题
+## 3.6 Frequently Asked Questions
 
-### Q: 注册时收不到验证码怎么办？
+### Q: What should I do if I don't receive the verification code during registration?
 
-**解决方法：**
-1. 检查垃圾邮件文件夹
-2. 等待几分钟后重试
-3. 尝试使用其他邮箱
-4. 使用 Gmail 或 Outlook
+**Solutions:**
+1. Check your spam/junk folder
+2. Wait a few minutes and try again
+3. Try using a different email address
+4. Use Gmail or Outlook
 
-### Q: 用户名被占用了怎么办？
+### Q: What should I do if my username is already taken?
 
-**解决方法：**
-1. 尝试添加短横线：`zhang-san`
-2. 尝试添加后缀：`zhangsan-dev`
-3. 使用其他变体：`szhang`
+**Solutions:**
+1. Try adding a hyphen: `zhang-san`
+2. Try adding a suffix: `zhangsan-dev`
+3. Use another variation: `szhang`
 
-### Q: 可以修改用户名吗？
+### Q: Can I change my username?
 
-**可以，但需要注意：**
-1. 进入 **Settings** → **Account**
-2. 点击 **Change username**
-3. 输入新用户名
-4. 原用户名会被释放
+**Yes, but please note:**
+1. Go to **Settings** → **Account**
+2. Click **Change username**
+3. Enter the new username
+4. The previous username will be released
 
-**⚠️ 警告：** 修改用户名会影响所有仓库链接！
+**⚠️ Warning:** Changing your username will affect all repository links!
 
-### Q: 账号被限制怎么办？
+### Q: What should I do if my account is restricted?
 
-**解决方法：**
-1. 联系 GitHub 支持
-2. 提供身份验证
-3. 等待解封
+**Solutions:**
+1. Contact GitHub support
+2. Provide identity verification
+3. Wait for the restriction to be lifted
 
-### Q: 如何注销账号？
+### Q: How do I delete my account?
 
-**操作步骤：**
-1. 进入 **Settings** → **Account**
-2. 滚动到底部
-3. 点击 **Delete account**
-4. 输入用户名确认
+**Steps:**
+1. Go to **Settings** → **Account**
+2. Scroll to the bottom
+3. Click **Delete account**
+4. Enter your username to confirm
 
-⚠️ **警告：** 注销操作不可逆！
+⚠️ **Warning:** Account deletion is irreversible!
 
-## 3.7 本章小结
+## 3.7 Chapter Summary
 
-本章详细介绍了 GitHub 账号注册的完整流程，包括：
+This chapter provided a detailed walkthrough of the complete GitHub account registration process, including:
 
-- 注册前的准备
-- 详细的注册步骤
-- 注册后的必要设置
-- 免费方案详解
-- 账号安全建议
+- Preparation before registration
+- Detailed registration steps
+- Essential post-registration setup
+- Free plan details
+- Account security recommendations
 
-**关键要点：**
-- 选择可靠的邮箱服务
-- 设置强密码并开启两步验证
-- 完善个人资料
-- 了解免费方案的限制
+**Key takeaways:**
+- Choose a reliable email service
+- Set a strong password and enable two-factor authentication
+- Complete your profile
+- Understand the limitations of the free plan
 
-**下一步：**
-[配置 SSH 密钥 →](04-ssh-keys.md)
+**Next step:**
+[Configure SSH Keys →](04-ssh-keys.md)

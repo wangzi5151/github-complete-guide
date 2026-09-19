@@ -1,243 +1,243 @@
-# 练习 11：GitHub CLI 深入使用
+# Exercise 11: Advanced GitHub CLI Usage
 
-## 学习目标
+## Learning Objectives
 
-- 掌握 GitHub CLI 的高级功能
-- 学会使用 `gh` 管理仓库、Issue、PR
-- 了解 `gh` 的扩展和别名
+- Master advanced features of GitHub CLI
+- Learn to use `gh` to manage repositories, issues, and PRs
+- Understand `gh` extensions and aliases
 
-## 前置条件
+## Prerequisites
 
-确保已安装 GitHub CLI 并登录：
+Make sure GitHub CLI is installed and you are logged in:
 
 ```bash
-# 安装（macOS）
+# Install (macOS)
 brew install gh
 
-# 安装（Windows）
+# Install (Windows)
 winget install GitHub.cli
 
-# 安装（Linux）
+# Install (Linux)
 sudo apt install gh
 
-# 登录
+# Login
 gh auth login
 ```
 
-## 基础操作
+## Basic Operations
 
-### 仓库管理
+### Repository Management
 
 ```bash
-# 创建仓库
-gh repo create my-project --public --description "我的项目"
+# Create repository
+gh repo create my-project --public --description "My project"
 
-# 克隆仓库
+# Clone repository
 gh repo clone owner/repo
 
-# 列出仓库
+# List repositories
 gh repo list
 
-# 查看仓库信息
+# View repository information
 gh repo view owner/repo
 
-# 设置仓库默认分支
+# Set repository default branch
 gh repo edit owner/repo --default-branch main
 ```
 
-### Issue 管理
+### Issue Management
 
 ```bash
-# 创建 Issue
-gh issue create --title "功能请求" --body "描述你的需求"
+# Create issue
+gh issue create --title "Feature request" --body "Describe your requirement"
 
-# 从模板创建
+# Create from template
 gh issue create --template "bug_report.md"
 
-# 列出 Issue
+# List issues
 gh issue list
 
-# 查看 Issue
+# View issue
 gh issue view 123
 
-# 添加评论
-gh issue comment 123 --body "评论内容"
+# Add comment
+gh issue comment 123 --body "Comment content"
 
-# 关闭 Issue
+# Close issue
 gh issue close 123 --reason "completed"
 
-# 重新打开
+# Reopen issue
 gh issue reopen 123
 
-# 分配 Issue
+# Assign issue
 gh issue edit 123 --add-assignee username
 ```
 
-### Pull Request 管理
+### Pull Request Management
 
 ```bash
-# 创建 PR
-gh pr create --title "feat: 新功能" --body "描述"
+# Create PR
+gh pr create --title "feat: New feature" --body "Description"
 
-# 列出 PR
+# List PRs
 gh pr list
 
-# 查看 PR
+# View PR
 gh pr view 456
 
-# 检出 PR
+# Checkout PR
 gh pr checkout 456
 
-# 合并 PR
+# Merge PR
 gh pr merge 456 --merge
 
-# Squash 合并
+# Squash merge
 gh pr merge 456 --squash
 
-# Rebase 合并
+# Rebase merge
 gh pr merge 456 --rebase
 
-# 审查 PR
+# Review PR
 gh pr review 456 --approve
 
-# 请求更改
-gh pr review 456 --request-changes --body "需要修改..."
+# Request changes
+gh pr review 456 --request-changes --body "Needs modifications..."
 
-# 添加标签
+# Add label
 gh pr edit 456 --add-label "enhancement"
 ```
 
-## 高级功能
+## Advanced Features
 
-### 使用 JSON 输出
+### Using JSON Output
 
 ```bash
-# 获取 Issue 列表（JSON 格式）
+# Get issue list (JSON format)
 gh issue list --json number,title,state
 
-# 使用 jq 处理
+# Process with jq
 gh issue list --json number,title | jq '.[] | "\(.number): \(.title)"'
 
-# 获取 PR 信息
+# Get PR information
 gh pr view 456 --json title,body,author
 ```
 
-### 使用 API
+### Using the API
 
 ```bash
-# 调用 API
+# Call API
 gh api repos/owner/repo/issues
 
-# 创建 Issue
+# Create issue
 gh api repos/owner/repo/issues \
   --method POST \
-  -f title="Issue 标题" \
-  -f body="Issue 内容"
+  -f title="Issue title" \
+  -f body="Issue content"
 
-# 更新 Issue
+# Update issue
 gh api repos/owner/repo/issues/123 \
   --method PATCH \
   -f state="closed"
 ```
 
-### 别名配置
+### Alias Configuration
 
 ```bash
-# 创建别名
+# Create alias
 gh alias set prc 'pr create --fill'
 gh alias set prl 'pr list --state all'
 gh alias set iss 'issue list'
 
-# 查看所有别名
+# View all aliases
 gh alias list
 
-# 删除别名
+# Delete alias
 gh alias delete prc
 ```
 
-## 实战任务
+## Hands-On Tasks
 
-### 任务 1：管理仓库
+### Task 1: Manage a Repository
 
-1. 创建一个新仓库
-2. 添加 README 文件
-3. 设置仓库描述
-4. 添加话题标签
+1. Create a new repository
+2. Add a README file
+3. Set repository description
+4. Add topic tags
 
 ```bash
 gh repo create practice-project --public
 gh repo clone practice-project
 echo "# Practice" > README.md
-git add . && git commit -m "docs: 添加 README"
+git add . && git commit -m "docs: Add README"
 git push
-gh repo edit practice-project --description "练习项目" --add-topic "git,github,practice"
+gh repo edit practice-project --description "Practice project" --add-topic "git,github,practice"
 ```
 
-### 任务 2：管理 Issue
+### Task 2: Manage Issues
 
-1. 创建 3 个 Issue
-2. 为 Issue 添加标签
-3. 分配 Issue
-4. 关闭一个 Issue
+1. Create 3 issues
+2. Add labels to issues
+3. Assign issues
+4. Close one issue
 
 ```bash
-gh issue create --title "功能 1" --label "enhancement"
-gh issue create --title "功能 2" --label "enhancement"
+gh issue create --title "Feature 1" --label "enhancement"
+gh issue create --title "Feature 2" --label "enhancement"
 gh issue create --title "Bug 1" --label "bug"
 
 gh issue close 1 --reason "completed"
 ```
 
-### 任务 3：管理 PR
+### Task 3: Manage PRs
 
-1. 创建一个新分支
-2. 修改文件并提交
-3. 创建 PR
-4. 添加评论
-5. 合并 PR
+1. Create a new branch
+2. Modify files and commit
+3. Create a PR
+4. Add a comment
+5. Merge the PR
 
 ```bash
 git checkout -b feature/new-feature
-echo "新功能" > feature.txt
-git add . && git commit -m "feat: 添加新功能"
+echo "New feature" > feature.txt
+git add . && git commit -m "feat: Add new feature"
 git push -u origin feature/new-feature
 
-gh pr create --title "feat: 添加新功能" --body "实现了新功能"
-gh pr comment 1 --body "看起来不错"
+gh pr create --title "feat: Add new feature" --body "Implement new feature"
+gh pr comment 1 --body "Looks good"
 gh pr merge 1 --squash
 ```
 
-### 任务 4：使用扩展
+### Task 4: Use Extensions
 
 ```bash
-# 安装扩展
+# Install extension
 gh extension install dlvhdr/gh-dash
 
-# 查看已安装扩展
+# View installed extensions
 gh extension list
 
-# 使用 dash
+# Use dash
 gh dash
 ```
 
-## 高级脚本
+## Advanced Scripts
 
-### 批量操作脚本
+### Batch Operation Script
 
 ```bash
 #!/bin/bash
-# 批量关闭所有已合并的 PR
+# Batch close all merged PRs
 gh pr list --state merged --json number | \
   jq -r '.[].number' | \
   xargs -I {} gh pr close {}
 
-# 批量添加标签
+# Batch add labels
 for issue in $(gh issue list --label "needs-triage" --json number | jq -r '.[].number'); do
   gh issue edit $issue --add-label "triaged"
 done
 ```
 
-### 自动化工作流
+### Automation Workflow
 
 ```yaml
 # .github/workflows/auto-label.yml
@@ -256,31 +256,31 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 能够使用 `gh repo` 命令
-- [ ] 能够使用 `gh issue` 命令
-- [ ] 能够使用 `gh pr` 命令
-- [ ] 能够使用 JSON 输出
-- [ ] 能够使用 `gh api` 调用 API
-- [ ] 能够配置和使用别名
-- [ ] 能够安装和使用扩展
+- [ ] Able to use `gh repo` commands
+- [ ] Able to use `gh issue` commands
+- [ ] Able to use `gh pr` commands
+- [ ] Able to use JSON output
+- [ ] Able to use `gh api` to call APIs
+- [ ] Able to configure and use aliases
+- [ ] Able to install and use extensions
 
-## 常见问题
+## FAQ
 
-### Q: 如何更新 GitHub CLI？
-A: 使用 `gh extension upgrade` 更新扩展，使用包管理器更新 `gh` 本身。
+### Q: How to update GitHub CLI?
+A: Use `gh extension upgrade` to update extensions, and use the package manager to update `gh` itself.
 
-### Q: 如何配置代理？
-A: 设置环境变量：
+### Q: How to configure a proxy?
+A: Set environment variables:
 ```bash
 export HTTP_PROXY=http://proxy.example.com:8080
 export HTTPS_PROXY=http://proxy.example.com:8080
 ```
 
-### Q: 如何查看 API 速率限制？
-A: 使用 `gh api rate_limit` 查看。
+### Q: How to check API rate limits?
+A: Use `gh api rate_limit` to check.
 
-## 下一步
+## Next Steps
 
-完成本练习后，你已经掌握了 GitHub CLI 的高级用法。可以继续探索 [GitHub Actions 自动化](exercise-7-github-actions.md) 或 [参与开源项目](exercise-6-open-source.md)
+After completing this exercise, you have mastered the advanced usage of GitHub CLI. You can continue exploring [GitHub Actions Automation](exercise-7-github-actions.md) or [Contributing to Open Source](exercise-6-open-source.md)

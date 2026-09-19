@@ -1,58 +1,58 @@
-# 练习 26：创建可复用 GitHub Actions 工作流
+# Exercise 26: Creating Reusable GitHub Actions Workflows
 
-## 学习目标
+## Learning Objectives
 
-完成本练习后，你将能够：
+After completing this exercise, you will be able to:
 
-- 理解可复用工作流（Reusable Workflows）的概念和优势
-- 创建使用 `workflow_call` 触发的可复用工作流
-- 在多个工作流中调用可复用工作流
-- 传递输入参数和密钥给可复用工作流
-- 使用可复用工作流的输出值
-- 在组织范围内共享标准化的 CI/CD 流程
+- Understand the concept and advantages of reusable workflows
+- Create reusable workflows triggered by `workflow_call`
+- Call reusable workflows in multiple workflows
+- Pass input parameters and secrets to reusable workflows
+- Use output values from reusable workflows
+- Share standardized CI/CD processes across an organization
 
-## 前置条件
+## Prerequisites
 
-- 已完成练习 1-25 的相关内容
-- 拥有 GitHub 仓库且已启用 GitHub Actions
-- 了解 GitHub Actions 工作流的基本语法
-- 熟悉 YAML 格式
+- Have completed the relevant content of Exercises 1-25
+- Have a GitHub repository with GitHub Actions enabled
+- Understand the basic syntax of GitHub Actions workflows
+- Be familiar with YAML format
 
-## 背景知识
+## Background Knowledge
 
-### 什么是可复用工作流
+### What Are Reusable Workflows
 
-可复用工作流是 GitHub Actions 提供的一种机制，允许你将工作流逻辑封装为可被其他工作流调用的独立组件。这意味着你可以：
+Reusable workflows are a mechanism provided by GitHub Actions that allow you to encapsulate workflow logic as independent components that can be called by other workflows. This means you can:
 
-1. **避免重复代码**：将通用的 CI/CD 逻辑写一次，在多个仓库中使用
-2. **标准化流程**：确保团队或组织使用统一的构建、测试和部署流程
-3. **简化维护**：更新一处即可影响所有调用方
-4. **提高效率**：新项目可以快速接入成熟的 CI/CD 流程
+1. **Avoid duplicate code**: Write common CI/CD logic once and use it across multiple repositories
+2. **Standardize processes**: Ensure teams or organizations use consistent build, test, and deployment processes
+3. **Simplify maintenance**: Updating one place affects all callers
+4. **Improve efficiency**: New projects can quickly adopt mature CI/CD processes
 
-### 可复用工作流的限制
+### Limitations of Reusable Workflows
 
-- 一个可复用工作流最多可以调用 4 层嵌套的可复用工作流
-- 可复用工作流最多可以有 10 个输入参数和 10 个密钥
-- 可复用工作流最多可以有 10 个输出参数
-- 环境变量不能在可复用工作流和调用方之间共享
+- A reusable workflow can call at most 4 levels of nested reusable workflows
+- A reusable workflow can have at most 10 input parameters and 10 secrets
+- A reusable workflow can have at most 10 output parameters
+- Environment variables cannot be shared between reusable workflows and callers
 
 ---
 
-## 练习步骤
+## Exercise Steps
 
-### 第一部分：创建基础可复用工作流
+### Part 1: Creating a Basic Reusable Workflow
 
-#### 步骤 1：创建可复用工作流目录结构
+#### Step 1: Create the Reusable Workflow Directory Structure
 
-首先，在你的仓库中创建必要的目录结构：
+First, create the necessary directory structure in your repository:
 
 ```bash
 mkdir -p .github/workflows
 ```
 
-#### 步骤 2：创建 Node.js 构建的可复用工作流
+#### Step 2: Create a Reusable Node.js Build Workflow
 
-创建文件 `.github/workflows/reusable-node-build.yml`：
+Create the file `.github/workflows/reusable-node-build.yml`:
 
 ```yaml
 name: Reusable Node.js Build
@@ -61,35 +61,35 @@ on:
   workflow_call:
     inputs:
       node-version:
-        description: 'Node.js 版本'
+        description: 'Node.js version'
         required: false
         type: string
         default: '18'
       working-directory:
-        description: '工作目录'
+        description: 'Working directory'
         required: false
         type: string
         default: '.'
       run-tests:
-        description: '是否运行测试'
+        description: 'Whether to run tests'
         required: false
         type: boolean
         default: true
       build-command:
-        description: '构建命令'
+        description: 'Build command'
         required: false
         type: string
         default: 'npm run build'
     secrets:
       NPM_TOKEN:
-        description: 'NPM 发布令牌'
+        description: 'NPM publish token'
         required: false
     outputs:
       build-artifact:
-        description: '构建产物路径'
+        description: 'Build artifact path'
         value: ${{ jobs.build.outputs.artifact-path }}
       test-result:
-        description: '测试结果'
+        description: 'Test result'
         value: ${{ jobs.build.outputs.test-result }}
 
 jobs:
@@ -100,25 +100,25 @@ jobs:
       test-result: ${{ steps.test.outputs.result }}
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node-version }}
           cache: 'npm'
           cache-dependency-path: '${{ inputs.working-directory }}/package-lock.json'
 
-      - name: 安装依赖
+      - name: Install dependencies
         working-directory: ${{ inputs.working-directory }}
         run: npm ci
 
-      - name: 运行代码检查
+      - name: Run linting
         working-directory: ${{ inputs.working-directory }}
         run: npm run lint --if-present
 
-      - name: 运行测试
+      - name: Run tests
         if: ${{ inputs.run-tests }}
         id: test
         working-directory: ${{ inputs.working-directory }}
@@ -126,14 +126,14 @@ jobs:
           npm test
           echo "result=passed" >> $GITHUB_OUTPUT
 
-      - name: 构建项目
+      - name: Build project
         id: build
         working-directory: ${{ inputs.working-directory }}
         run: |
           ${{ inputs.build-command }}
           echo "artifact-path=${{ inputs.working-directory }}/dist" >> $GITHUB_OUTPUT
 
-      - name: 上传构建产物
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-output
@@ -141,9 +141,9 @@ jobs:
           retention-days: 7
 ```
 
-#### 步骤 3：创建 Python 项目的可复用工作流
+#### Step 3: Create a Reusable Python Build Workflow
 
-创建文件 `.github/workflows/reusable-python-build.yml`：
+Create the file `.github/workflows/reusable-python-build.yml`:
 
 ```yaml
 name: Reusable Python Build
@@ -152,28 +152,28 @@ on:
   workflow_call:
     inputs:
       python-version:
-        description: 'Python 版本'
+        description: 'Python version'
         required: false
         type: string
         default: '3.11'
       working-directory:
-        description: '工作目录'
+        description: 'Working directory'
         required: false
         type: string
         default: '.'
       test-command:
-        description: '测试命令'
+        description: 'Test command'
         required: false
         type: string
         default: 'pytest'
       lint-command:
-        description: '代码检查命令'
+        description: 'Linting command'
         required: false
         type: string
         default: 'ruff check .'
     secrets:
       PYPI_TOKEN:
-        description: 'PyPI 发布令牌'
+        description: 'PyPI publish token'
         required: false
 
 jobs:
@@ -181,38 +181,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
           cache: 'pip'
           cache-dependency-path: '${{ inputs.working-directory }}/requirements*.txt'
 
-      - name: 安装依赖
+      - name: Install dependencies
         working-directory: ${{ inputs.working-directory }}
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt || true
 
-      - name: 运行代码检查
+      - name: Run linting
         working-directory: ${{ inputs.working-directory }}
         run: ${{ inputs.lint-command }}
 
-      - name: 运行测试
+      - name: Run tests
         working-directory: ${{ inputs.working-directory }}
         run: ${{ inputs.test-command }}
 
-      - name: 构建包
+      - name: Build package
         working-directory: ${{ inputs.working-directory }}
         run: |
           pip install build
           python -m build
 
-      - name: 上传构建产物
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-dist
@@ -220,11 +220,11 @@ jobs:
           retention-days: 7
 ```
 
-### 第二部分：在工作流中调用可复用工作流
+### Part 2: Calling Reusable Workflows
 
-#### 步骤 4：创建调用 Node.js 可复用工作流的工作流
+#### Step 4: Create a Workflow That Calls the Node.js Reusable Workflow
 
-创建文件 `.github/workflows/ci.yml`：
+Create the file `.github/workflows/ci.yml`:
 
 ```yaml
 name: CI Pipeline
@@ -236,7 +236,7 @@ on:
     branches: [main]
 
 jobs:
-  # 调用可复用的 Node.js 构建工作流
+  # Call the reusable Node.js build workflow
   build-frontend:
     uses: ./.github/workflows/reusable-node-build.yml
     with:
@@ -247,7 +247,7 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  # 调用可复用的 Node.js 构建工作流（后端）
+  # Call the reusable Node.js build workflow (backend)
   build-backend:
     uses: ./.github/workflows/reusable-node-build.yml
     with:
@@ -256,33 +256,33 @@ jobs:
       run-tests: true
       build-command: 'npm run build'
 
-  # 使用构建产物进行部署
+  # Deploy using build artifacts
   deploy:
     needs: [build-frontend, build-backend]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: 显示构建信息
+      - name: Display build info
         run: |
-          echo "前端构建路径: ${{ needs.build-frontend.outputs.build-artifact }}"
-          echo "测试结果: ${{ needs.build-frontend.outputs.test-result }}"
+          echo "Frontend build path: ${{ needs.build-frontend.outputs.build-artifact }}"
+          echo "Test result: ${{ needs.build-frontend.outputs.test-result }}"
 
-      - name: 下载前端构建产物
+      - name: Download frontend build artifact
         uses: actions/download-artifact@v4
         with:
           name: build-output
           path: ./deploy/frontend
 
-      - name: 部署到服务器
+      - name: Deploy to server
         run: |
-          echo "部署前端和后端..."
-          # 实际部署命令
+          echo "Deploying frontend and backend..."
+          # Actual deployment commands
 ```
 
-#### 步骤 5：创建调用 Python 可复用工作流的工作流
+#### Step 5: Create a Workflow That Calls the Python Reusable Workflow
 
-创建文件 `.github/workflows/python-ci.yml`：
+Create the file `.github/workflows/python-ci.yml`:
 
 ```yaml
 name: Python CI
@@ -312,11 +312,11 @@ jobs:
       test-command: 'pytest tests/ -v'
 ```
 
-### 第三部分：跨仓库使用可复用工作流
+### Part 3: Using Reusable Workflows Across Repositories
 
-#### 步骤 6：创建组织级可复用工作流仓库
+#### Step 6: Create an Organization-Level Reusable Workflow Repository
 
-假设你有一个组织 `my-org`，创建一个专门的仓库 `shared-workflows`：
+Suppose you have an organization `my-org`, create a dedicated repository `shared-workflows`:
 
 ```
 my-org/shared-workflows/
@@ -329,9 +329,9 @@ my-org/shared-workflows/
 └── README.md
 ```
 
-#### 步骤 7：在其他仓库中调用组织级可复用工作流
+#### Step 7: Call Organization-Level Reusable Workflows from Other Repositories
 
-在其他仓库中创建 `.github/workflows/ci.yml`：
+Create `.github/workflows/ci.yml` in another repository:
 
 ```yaml
 name: CI
@@ -342,7 +342,7 @@ on:
   pull_request:
 
 jobs:
-  # 调用组织级可复用工作流
+  # Call the organization-level reusable workflow
   ci:
     uses: my-org/shared-workflows/.github/workflows/ci-node.yml@v1
     with:
@@ -351,7 +351,7 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  # 调用组织级部署工作流
+  # Call the organization-level deployment workflow
   deploy:
     needs: ci
     if: github.ref == 'refs/heads/main'
@@ -364,11 +364,11 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
-### 第四部分：高级用法
+### Part 4: Advanced Usage
 
-#### 步骤 8：创建带条件执行的可复用工作流
+#### Step 8: Create a Reusable Workflow with Conditional Execution
 
-创建文件 `.github/workflows/reusable-deploy.yml`：
+Create the file `.github/workflows/reusable-deploy.yml`:
 
 ```yaml
 name: Reusable Deploy
@@ -377,16 +377,16 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: '部署环境'
+        description: 'Deployment environment'
         required: true
         type: string
       region:
-        description: '部署区域'
+        description: 'Deployment region'
         required: false
         type: string
         default: 'us-east-1'
       dry-run:
-        description: '是否为模拟运行'
+        description: 'Whether this is a dry run'
         required: false
         type: boolean
         default: false
@@ -395,7 +395,7 @@ on:
         required: true
     outputs:
       deployment-url:
-        description: '部署 URL'
+        description: 'Deployment URL'
         value: ${{ jobs.deploy.outputs.url }}
 
 jobs:
@@ -406,31 +406,31 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 配置部署环境
+      - name: Configure deployment environment
         run: |
-          echo "部署到 ${{ inputs.environment }} 环境"
-          echo "区域: ${{ inputs.region }}"
+          echo "Deploying to ${{ inputs.environment }} environment"
+          echo "Region: ${{ inputs.region }}"
 
-      - name: 执行部署
+      - name: Execute deployment
         id: deploy
         if: ${{ !inputs.dry-run }}
         run: |
-          # 实际部署逻辑
+          # Actual deployment logic
           DEPLOY_URL="https://${{ inputs.environment }}.example.com"
           echo "url=$DEPLOY_URL" >> $GITHUB_OUTPUT
-          echo "部署完成: $DEPLOY_URL"
+          echo "Deployment complete: $DEPLOY_URL"
 
-      - name: 模拟部署
+      - name: Simulate deployment
         if: ${{ inputs.dry-run }}
-        run: echo "这是模拟运行，不执行实际部署"
+        run: echo "This is a dry run, no actual deployment"
 ```
 
-#### 步骤 9：创建矩阵策略的可复用工作流
+#### Step 9: Create a Reusable Workflow with Matrix Strategy
 
-创建文件 `.github/workflows/reusable-multi-platform.yml`：
+Create the file `.github/workflows/reusable-multi-platform.yml`:
 
 ```yaml
 name: Reusable Multi-Platform Build
@@ -439,12 +439,12 @@ on:
   workflow_call:
     inputs:
       platforms:
-        description: '目标平台列表（JSON 数组）'
+        description: 'Target platform list (JSON array)'
         required: false
         type: string
         default: '["ubuntu-latest", "windows-latest", "macos-latest"]'
       node-versions:
-        description: 'Node.js 版本列表（JSON 数组）'
+        description: 'Node.js version list (JSON array)'
         required: false
         type: string
         default: '["18", "20"]'
@@ -459,33 +459,33 @@ jobs:
         node-version: ${{ fromJson(inputs.node-versions) }}
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: npm ci
 
-      - name: 运行测试
+      - name: Run tests
         run: npm test
 
-      - name: 构建
+      - name: Build
         run: npm run build
 
-      - name: 上传产物
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.os }}-node${{ matrix.node-version }}
           path: dist/
 ```
 
-#### 步骤 10：调用矩阵可复用工作流
+#### Step 10: Call the Matrix Reusable Workflow
 
-创建文件 `.github/workflows/release.yml`：
+Create the file `.github/workflows/release.yml`:
 
 ```yaml
 name: Release
@@ -496,14 +496,14 @@ on:
       - 'v*'
 
 jobs:
-  # 多平台构建
+  # Multi-platform build
   build:
     uses: ./.github/workflows/reusable-multi-platform.yml
     with:
       platforms: '["ubuntu-latest", "windows-latest", "macos-latest"]'
       node-versions: '["18", "20", "22"]'
 
-  # 创建发布
+  # Create release
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -511,12 +511,12 @@ jobs:
       contents: write
 
     steps:
-      - name: 下载所有构建产物
+      - name: Download all build artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
-      - name: 创建 GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*
@@ -525,62 +525,62 @@ jobs:
 
 ---
 
-## 验证练习结果
+## Verify Exercise Results
 
-### 检查清单
+### Checklist
 
-完成练习后，请验证以下内容：
+After completing the exercise, verify the following:
 
-- [ ] 可复用工作流文件已创建且语法正确
-- [ ] 调用方工作流正确引用可复用工作流
-- [ ] 输入参数和密钥正确传递
-- [ ] 输出值可以被调用方访问
-- [ ] 工作流能在 GitHub Actions 中成功运行
+- [ ] Reusable workflow files are created with correct syntax
+- [ ] Caller workflows correctly reference reusable workflows
+- [ ] Input parameters and secrets are passed correctly
+- [ ] Output values can be accessed by callers
+- [ ] Workflows run successfully in GitHub Actions
 
-### 验证命令
+### Verification Commands
 
 ```bash
-# 验证 YAML 语法
+# Validate YAML syntax
 yamllint .github/workflows/*.yml
 
-# 使用 actionlint 检查工作流语法
+# Check workflow syntax with actionlint
 actionlint .github/workflows/*.yml
 
-# 在本地测试（需要安装 act）
+# Test locally (requires act)
 act workflow_call -W .github/workflows/reusable-node-build.yml
 ```
 
 ---
 
-## 进阶挑战
+## Advanced Challenges
 
-### 挑战 1：创建完整的 CI/CD 可复用工作流套件
+### Challenge 1: Create a Complete CI/CD Reusable Workflow Suite
 
-创建以下可复用工作流套件：
+Create the following reusable workflow suite:
 
 ```yaml
-# reusable-lint.yml - 代码质量检查
-# reusable-test.yml - 测试执行
-# reusable-build.yml - 构建打包
-# reusable-deploy.yml - 部署发布
-# reusable-notify.yml - 通知发送
+# reusable-lint.yml - Code quality checks
+# reusable-test.yml - Test execution
+# reusable-build.yml - Build and packaging
+# reusable-deploy.yml - Deployment and release
+# reusable-notify.yml - Notification sending
 ```
 
-### 挑战 2：实现版本化的可复用工作流
+### Challenge 2: Implement Versioned Reusable Workflows
 
-使用 Git 标签管理工作流版本：
+Use Git tags to manage workflow versions:
 
 ```yaml
-# 在调用方使用特定版本
+# Use a specific version in the caller
 uses: my-org/shared-workflows/.github/workflows/ci.yml@v1.2.0
 
-# 使用主版本标签（自动获取最新补丁）
+# Use a major version tag (automatically gets the latest patch)
 uses: my-org/shared-workflows/.github/workflows/ci.yml@v1
 ```
 
-### 挑战 3：创建动态可复用工作流
+### Challenge 3: Create Dynamic Reusable Workflows
 
-实现根据输入动态选择执行步骤的可复用工作流：
+Implement a reusable workflow that dynamically selects execution steps based on input:
 
 ```yaml
 on:
@@ -593,22 +593,22 @@ on:
 jobs:
   build:
     steps:
-      - name: 前端构建
+      - name: Frontend build
         if: inputs.build-type == 'frontend' || inputs.build-type == 'all'
         run: npm run build:frontend
 
-      - name: 后端构建
+      - name: Backend build
         if: inputs.build-type == 'backend' || inputs.build-type == 'all'
         run: npm run build:backend
 
-      - name: 移动端构建
+      - name: Mobile build
         if: inputs.build-type == 'mobile' || inputs.build-type == 'all'
         run: npm run build:mobile
 ```
 
-### 挑战 4：实现可复用工作流的自动文档生成
+### Challenge 4: Implement Automatic Documentation Generation for Reusable Workflows
 
-创建脚本自动从可复用工作流的输入、输出和密钥生成文档：
+Create a script to automatically generate documentation from reusable workflow inputs, outputs, and secrets:
 
 ```bash
 #!/bin/bash
@@ -617,10 +617,10 @@ jobs:
 for workflow in .github/workflows/reusable-*.yml; do
   echo "## $(basename $workflow .yml)"
   echo ""
-  echo "### 输入参数"
-  yq '.on.workflow_call.inputs | to_entries | .[] | "- **\(.key)**: \(.value.description) (默认: \(.value.default))"' "$workflow"
+  echo "### Input Parameters"
+  yq '.on.workflow_call.inputs | to_entries | .[] | "- **\(.key)**: \(.value.description) (default: \(.value.default))"' "$workflow"
   echo ""
-  echo "### 密钥"
+  echo "### Secrets"
   yq '.on.workflow_call.secrets | to_entries | .[] | "- **\(.key)**: \(.value.description)"' "$workflow"
   echo ""
 done
@@ -628,97 +628,97 @@ done
 
 ---
 
-## 可复用工作流设计模式与最佳实践
+## Reusable Workflow Design Patterns and Best Practices
 
-### 设计模式一：分层架构模式
+### Design Pattern 1: Layered Architecture Pattern
 
-在大型组织中，建议采用分层架构来组织可复用工作流。底层是基础工作流，负责最基础的操作，例如代码检出、环境配置和缓存管理。中间层是领域工作流，针对特定技术栈进行封装，例如前端构建工作流、后端测试工作流或数据库迁移工作流。顶层是业务工作流，组合多个领域工作流完成完整的业务流程。这种分层方式使得每一层都可以独立演化和维护，同时保证了代码的复用性和可读性。
+In large organizations, it is recommended to adopt a layered architecture to organize reusable workflows. The bottom layer consists of base workflows responsible for fundamental operations such as code checkout, environment configuration, and cache management. The middle layer consists of domain workflows tailored to specific technology stacks, such as frontend build workflows, backend test workflows, or database migration workflows. The top layer consists of business workflows that combine multiple domain workflows to complete a full business process. This layered approach allows each layer to evolve and be maintained independently while ensuring code reusability and readability.
 
-### 设计模式二：模板方法模式
+### Design Pattern 2: Template Method Pattern
 
-可复用工作流可以定义一个算法的骨架，将某些步骤的实现延迟到调用方。例如，一个通用的部署工作流可以定义检出代码、安装依赖、运行测试、构建产物、部署上线的标准流程，而具体的部署步骤可以通过输入参数动态指定。这种方式既保证了流程的一致性，又允许各个项目根据自身需求进行定制化配置。
+Reusable workflows can define the skeleton of an algorithm, deferring the implementation of certain steps to the caller. For example, a general deployment workflow can define the standard process of checking out code, installing dependencies, running tests, building artifacts, and deploying to production, while the specific deployment step can be dynamically specified through input parameters. This approach ensures process consistency while allowing each project to customize configuration based on its own requirements.
 
-### 设计模式三：策略模式
+### Design Pattern 3: Strategy Pattern
 
-通过输入参数选择不同的执行策略。例如，一个测试工作流可以根据输入参数选择单元测试策略、集成测试策略或端到端测试策略。每种策略对应不同的测试命令、环境配置和报告格式。调用方只需指定策略名称，工作流会自动选择对应的执行路径。
+Different execution strategies can be selected through input parameters. For example, a test workflow can choose a unit test strategy, integration test strategy, or end-to-end test strategy based on input parameters. Each strategy corresponds to different test commands, environment configurations, and report formats. The caller only needs to specify the strategy name, and the workflow will automatically select the corresponding execution path.
 
-### 命名规范建议
+### Naming Convention Recommendations
 
-可复用工作流的命名应当遵循清晰、一致的原则。建议使用以下命名格式：首先是用途前缀，例如 `ci` 表示持续集成、`cd` 表示持续部署、`test` 表示测试、`build` 表示构建、`deploy` 表示部署、`notify` 表示通知。其次是技术栈标识，例如 `node`、`python`、`java`、`docker` 等。最后是环境或变体标识，例如 `prod`、`staging`、`lite`、`full` 等。完整的命名示例包括 `ci-node-standard.yml`、`deploy-aws-production.yml`、`test-python-integration.yml` 等。
+The naming of reusable workflows should follow clear and consistent principles. It is recommended to use the following naming format: first is a purpose prefix, such as `ci` for continuous integration, `cd` for continuous deployment, `test` for testing, `build` for building, `deploy` for deployment, and `notify` for notifications. Next is a technology stack identifier, such as `node`, `python`, `java`, `docker`, etc. Finally is an environment or variant identifier, such as `prod`, `staging`, `lite`, `full`, etc. Complete naming examples include `ci-node-standard.yml`, `deploy-aws-production.yml`, `test-python-integration.yml`, etc.
 
-### 版本管理策略
+### Version Management Strategy
 
-对于组织级的可复用工作流，版本管理至关重要。建议使用语义化版本号，主版本号表示不兼容的重大变更，次版本号表示向后兼容的功能新增，修订号表示向后兼容的问题修正。同时，为每个主版本创建一个浮动标签，例如 `v1`、`v2`，这样调用方可以选择使用固定的精确版本或浮动的主版本。在共享工作流仓库的发布说明中详细记录每个版本的变更内容，方便团队成员了解升级的影响。
+For organization-level reusable workflows, version management is critical. It is recommended to use semantic versioning, where the major version indicates incompatible breaking changes, the minor version indicates backward-compatible new features, and the patch version indicates backward-compatible bug fixes. Additionally, create a floating tag for each major version, such as `v1`, `v2`, so that callers can choose to use a fixed exact version or a floating major version. Document the changes for each version in detail in the release notes of the shared workflow repository to help team members understand the impact of upgrades.
 
-### 安全性考虑
+### Security Considerations
 
-可复用工作流的安全性不容忽视。首先，应当限制可复用工作流的访问权限，确保只有授权的人员可以修改共享工作流。其次，在传递密钥时使用 `secrets: inherit` 要格外谨慎，只传递必要的密钥。第三，对可复用工作流的输入参数进行验证，防止注入攻击。第四，定期审查和更新共享工作流，确保使用最新的 Actions 版本和安全补丁。最后，在组织层面建立工作流审查机制，所有共享工作流的变更都需要经过代码审查和安全审查。
+The security of reusable workflows should not be overlooked. First, access to reusable workflows should be restricted to ensure only authorized personnel can modify shared workflows. Second, exercise extreme caution when using `secrets: inherit` to pass secrets, only passing necessary secrets. Third, validate input parameters of reusable workflows to prevent injection attacks. Fourth, regularly review and update shared workflows to ensure the latest Actions versions and security patches are used. Finally, establish a workflow review process at the organization level, requiring all changes to shared workflows to undergo code review and security review.
 
-### 性能优化技巧
+### Performance Optimization Tips
 
-优化可复用工作流的执行效率可以从多个方面入手。合理使用缓存机制可以显著减少依赖安装时间，建议缓存 npm、pip、Maven 等包管理器的缓存目录。使用矩阵策略并行执行任务，充分利用 GitHub Actions 提供的并发执行能力。合理设置超时时间，避免任务长时间挂起。使用条件执行跳过不必要的步骤，例如仅在特定文件变更时才运行相关测试。优化构建产物的大小，只上传必要的文件，减少上传和下载时间。
+Optimizing the execution efficiency of reusable workflows can be approached from multiple aspects. Proper use of caching mechanisms can significantly reduce dependency installation time; it is recommended to cache the cache directories of package managers such as npm, pip, and Maven. Use matrix strategies to execute tasks in parallel, fully utilizing the concurrent execution capabilities provided by GitHub Actions. Set appropriate timeout values to prevent tasks from hanging for extended periods. Use conditional execution to skip unnecessary steps, such as running relevant tests only when specific files change. Optimize the size of build artifacts by uploading only necessary files, reducing upload and download time.
 
-### 团队协作建议
+### Team Collaboration Recommendations
 
-在团队中推广可复用工作流需要制定明确的协作规范。建立工作流贡献指南，说明如何创建、测试和提交新的可复用工作流。设立工作流维护者角色，负责审查和合并工作流变更。定期组织工作流分享会，让团队成员了解可用的工作流及其使用方法。建立工作流使用反馈机制，收集使用过程中遇到的问题和改进建议。维护一份工作流目录文档，列出所有可用的可复用工作流及其用途、参数和使用示例。
+Promoting reusable workflows within a team requires establishing clear collaboration guidelines. Create a workflow contribution guide explaining how to create, test, and submit new reusable workflows. Establish workflow maintainer roles responsible for reviewing and merging workflow changes. Organize regular workflow sharing sessions to keep team members informed about available workflows and their usage. Establish a workflow usage feedback mechanism to collect issues encountered during use and improvement suggestions. Maintain a workflow catalog document listing all available reusable workflows along with their purposes, parameters, and usage examples.
 
-### 监控与告警
+### Monitoring and Alerting
 
-可复用工作流的运行状况需要持续监控。建议配置工作流运行失败的邮件或即时通讯通知。定期检查工作流的运行统计，包括成功率、平均运行时间和资源消耗。设置运行时间告警，当工作流运行时间异常增长时及时通知相关人员。分析工作流的使用情况，识别使用频率最高的工作流，优先进行优化和维护。建立工作流健康度指标体系，从可靠性、性能、安全性和可维护性等维度进行评估。
+The running status of reusable workflows needs continuous monitoring. It is recommended to configure email or instant messaging notifications for workflow run failures. Regularly check workflow run statistics, including success rates, average run times, and resource consumption. Set up run time alerts to notify relevant personnel promptly when workflow run times increase abnormally. Analyze workflow usage to identify the most frequently used workflows, prioritizing them for optimization and maintenance. Establish a workflow health metrics system to evaluate reliability, performance, security, and maintainability.
 
-### 迁移策略
+### Migration Strategy
 
-将现有的重复工作流迁移到可复用工作流需要循序渐进。首先，识别重复度最高的工作流片段，优先进行抽取。其次，创建可复用工作流并在一个试点项目中验证。第三，逐步将其他项目切换到使用可复用工作流，同时保留旧的工作流作为备份。第四，验证所有项目都正常运行后，删除旧的工作流。在整个迁移过程中，保持与团队的沟通，及时解决遇到的问题。
-
----
-
-## 常见问题
-
-### Q1：可复用工作流和复合动作有什么区别？
-
-| 特性 | 可复用工作流 | 复合动作 |
-|------|------------|---------|
-| 触发方式 | `workflow_call` | 在步骤中使用 `uses` |
-| 运行环境 | 独立的作业 | 当前作业的步骤 |
-| 可用功能 | 完整的工作流功能 | 有限的步骤功能 |
-| 适用场景 | 完整的 CI/CD 流程 | 封装多个步骤 |
-
-### Q2：如何调试可复用工作流？
-
-1. 使用 `workflow_dispatch` 手动触发测试
-2. 在工作流中添加调试输出
-3. 使用 `act` 工具本地测试
-4. 检查 GitHub Actions 的运行日志
-
-### Q3：可复用工作流支持哪些触发器？
-
-可复用工作流仅支持 `workflow_call` 作为触发器，但调用方可以使用任何触发器（push、pull_request、schedule 等）。
-
-### Q4：如何在组织中共享可复用工作流？
-
-1. 创建专门的共享工作流仓库
-2. 将仓库设为公开或允许组织访问
-3. 使用 `org/repo/.github/workflows/name.yml@ref` 格式调用
-4. 使用版本标签管理工作流版本
+Migrating existing duplicate workflows to reusable workflows requires a gradual approach. First, identify the most frequently duplicated workflow segments and prioritize extracting them. Second, create reusable workflows and validate them in a pilot project. Third, gradually switch other projects to using reusable workflows while retaining the old workflows as backups. Fourth, after verifying that all projects are running normally, delete the old workflows. Maintain communication with the team throughout the entire migration process to resolve any issues encountered promptly.
 
 ---
 
-## 延伸阅读
+## Frequently Asked Questions
 
-- [GitHub Actions: Reusing workflows 官方文档](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
+### Q1: What is the difference between reusable workflows and composite actions?
+
+| Feature | Reusable Workflows | Composite Actions |
+|---------|-------------------|-------------------|
+| Trigger | `workflow_call` | `uses` in a step |
+| Runtime | Independent job | Steps within the current job |
+| Available Features | Full workflow capabilities | Limited step capabilities |
+| Use Case | Complete CI/CD processes | Encapsulating multiple steps |
+
+### Q2: How do I debug reusable workflows?
+
+1. Use `workflow_dispatch` to manually trigger tests
+2. Add debug output in the workflow
+3. Use the `act` tool for local testing
+4. Check GitHub Actions run logs
+
+### Q3: What triggers do reusable workflows support?
+
+Reusable workflows only support `workflow_call` as the trigger, but callers can use any trigger (push, pull_request, schedule, etc.).
+
+### Q4: How do I share reusable workflows within an organization?
+
+1. Create a dedicated shared workflow repository
+2. Set the repository to public or allow organization access
+3. Call using the `org/repo/.github/workflows/name.yml@ref` format
+4. Use version tags to manage workflow versions
+
+---
+
+## Further Reading
+
+- [GitHub Actions: Reusing workflows official documentation](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
 - [Sharing workflows with your organization](https://docs.github.com/en/actions/using-workflows/sharing-workflows-secrets-and-runners-with-your-organization)
 - [Security hardening for GitHub Actions](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 
 ---
 
-## 练习总结
+## Exercise Summary
 
-通过本练习，你已经学会了：
+Through this exercise, you have learned:
 
-1. ✅ 创建使用 `workflow_call` 触发的可复用工作流
-2. ✅ 定义输入参数、密钥和输出值
-3. ✅ 在多个工作流中调用可复用工作流
-4. ✅ 跨仓库共享组织级可复用工作流
-5. ✅ 使用高级特性如矩阵策略和条件执行
+1. ✅ Create reusable workflows triggered by `workflow_call`
+2. ✅ Define input parameters, secrets, and output values
+3. ✅ Call reusable workflows in multiple workflows
+4. ✅ Share organization-level reusable workflows across repositories
+5. ✅ Use advanced features such as matrix strategies and conditional execution
 
-可复用工作流是实现 CI/CD 标准化和自动化的强大工具，建议在团队中推广使用以提高开发效率和代码质量。
+Reusable workflows are a powerful tool for implementing CI/CD standardization and automation. It is recommended to promote their use within teams to improve development efficiency and code quality.

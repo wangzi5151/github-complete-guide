@@ -1,57 +1,57 @@
-# 练习 28：配置 GitHub 安全扫描
+# Exercise 28: Configuring GitHub Security Scanning
 
-## 学习目标
+## Learning Objectives
 
-完成本练习后，你将能够：
+After completing this exercise, you will be able to:
 
-- 理解 GitHub 安全功能的整体架构
-- 配置和使用 CodeQL 进行代码扫描
-- 启用 Secret Scanning 防止密钥泄露
-- 配置 Dependabot 自动修复依赖漏洞
-- 查看和处理安全警报
-- 建立完整的安全扫描工作流
+- Understand the overall architecture of GitHub security features
+- Configure and use CodeQL for code scanning
+- Enable Secret Scanning to prevent secret leaks
+- Configure Dependabot for automatic dependency vulnerability fixes
+- View and handle security alerts
+- Build a complete security scanning workflow
 
-## 前置条件
+## Prerequisites
 
-- 拥有 GitHub 仓库（公开或私有）
-- 了解基本的安全概念
-- 熟悉 GitHub Actions 基础知识
-- 了解常见安全漏洞类型
+- Have a GitHub repository (public or private)
+- Understand basic security concepts
+- Familiar with GitHub Actions basics
+- Understand common types of security vulnerabilities
 
-## 背景知识
+## Background Knowledge
 
-### GitHub 安全功能概述
+### Overview of GitHub Security Features
 
-GitHub 提供了多层次的安全防护：
+GitHub provides multi-layered security protection:
 
-1. **Code Scanning（代码扫描）**
-   - 使用 CodeQL 分析代码漏洞
-   - 支持多种编程语言
-   - 可集成到 CI/CD 流程
+1. **Code Scanning**
+   - Uses CodeQL to analyze code vulnerabilities
+   - Supports multiple programming languages
+   - Can be integrated into CI/CD pipelines
 
-2. **Secret Scanning（密钥扫描）**
-   - 检测代码中的敏感信息
-   - 支持 100+ 种密钥格式
-   - 自动通知服务提供商
+2. **Secret Scanning**
+   - Detects sensitive information in code
+   - Supports 100+ key formats
+   - Automatically notifies service providers
 
 3. **Dependabot**
-   - 自动检测依赖漏洞
-   - 自动生成修复 PR
-   - 支持多种包管理器
+   - Automatically detects dependency vulnerabilities
+   - Automatically generates fix PRs
+   - Supports multiple package managers
 
-4. **Security Advisories（安全公告）**
-   - 私密报告漏洞
-   - 协调修复发布
+4. **Security Advisories**
+   - Privately reports vulnerabilities
+   - Coordinates fix releases
 
 ---
 
-## 练习步骤
+## Exercise Steps
 
-### 第一部分：启用 CodeQL 代码扫描
+### Part 1: Enabling CodeQL Code Scanning
 
-#### 步骤 1：创建 CodeQL 工作流
+#### Step 1: Create the CodeQL Workflow
 
-创建文件 `.github/workflows/codeql-analysis.yml`：
+Create the file `.github/workflows/codeql-analysis.yml`:
 
 ```yaml
 name: "CodeQL Analysis"
@@ -62,7 +62,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # 每周一 UTC 00:00 运行
+    # Runs every Monday at UTC 00:00
     - cron: '0 0 * * 1'
 
 permissions:
@@ -79,34 +79,34 @@ jobs:
       fail-fast: false
       matrix:
         language: ['javascript', 'python']
-        # 如果有更多语言，可以添加：
+        # If you have more languages, you can add:
         # language: ['c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript', 'python', 'ruby', 'swift']
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 初始化 CodeQL
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          # 使用安全扩展查询
+          # Use security-extended queries
           queries: security-extended
-          # 或使用全面查询
+          # Or use comprehensive queries
           # queries: security-and-quality
       
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
       
-      - name: 执行 CodeQL 分析
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
 ```
 
-#### 步骤 2：为特定语言配置构建
+#### Step 2: Configure Build for Specific Languages
 
-如果自动构建不适用，可以手动配置。创建文件 `.github/workflows/codeql-python.yml`：
+If autobuild is not applicable, you can configure manually. Create the file `.github/workflows/codeql-python.yml`:
 
 ```yaml
 name: "CodeQL Python Analysis"
@@ -130,40 +130,40 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 设置 Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
-      - name: 安装依赖
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt || true
       
-      - name: 初始化 CodeQL
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: python
           queries: security-extended
       
-      - name: 手动构建
+      - name: Manual build
         run: |
-          # 如果需要编译步骤，在这里添加
-          echo "构建完成"
+          # Add compilation steps here if needed
+          echo "Build complete"
       
-      - name: 执行 CodeQL 分析
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:python"
 ```
 
-#### 步骤 3：为 JavaScript/TypeScript 配置 CodeQL
+#### Step 3: Configure CodeQL for JavaScript/TypeScript
 
-创建文件 `.github/workflows/codeql-javascript.yml`：
+Create the file `.github/workflows/codeql-javascript.yml`:
 
 ```yaml
 name: "CodeQL JavaScript Analysis"
@@ -187,15 +187,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 初始化 CodeQL
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript-typescript
           queries: security-extended
-          # 自定义查询配置
+          # Custom query configuration
           config: |
             name: "Custom JavaScript Configuration"
             queries:
@@ -214,25 +214,25 @@ jobs:
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
       
-      - name: 执行 CodeQL 分析
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:javascript-typescript"
 ```
 
-#### 步骤 4：创建 CodeQL 配置文件
+#### Step 4: Create the CodeQL Configuration File
 
-创建文件 `.github/codeql/codeql-config.yml`：
+Create the file `.github/codeql/codeql-config.yml`:
 
 ```yaml
 name: "CodeQL Configuration"
 
-# 查询套件
+# Query suites
 queries:
   - uses: security-extended
   - uses: security-and-quality
 
-# 自定义查询
+# Custom queries
 query-filters:
   - include:
       tags:
@@ -241,7 +241,7 @@ query-filters:
   - exclude:
       id: js/unused-local-variable
 
-# 路径配置
+# Path configuration
 paths:
   - src
   - lib
@@ -260,7 +260,7 @@ paths-ignore:
   - '**/*.spec.js'
   - '**/*.spec.ts'
 
-# 自定义查询路径
+# Custom query packs
 packs:
   javascript:
     - codeql/javascript-queries
@@ -268,67 +268,67 @@ packs:
     - codeql/python-queries
 ```
 
-在工作流中使用配置文件：
+Use the configuration file in the workflow:
 
 ```yaml
-- name: 初始化 CodeQL
+- name: Initialize CodeQL
   uses: github/codeql-action/init@v3
   with:
     languages: javascript
     config-file: ./.github/codeql/codeql-config.yml
 ```
 
-### 第二部分：配置 Secret Scanning
+### Part 2: Configuring Secret Scanning
 
-#### 步骤 5：启用 Secret Scanning
+#### Step 5: Enable Secret Scanning
 
-1. 访问仓库的 Settings → Security → Code security and analysis
-2. 找到 "Secret scanning" 部分
-3. 启用以下选项：
+1. Go to the repository's Settings → Security → Code security and analysis
+2. Find the "Secret scanning" section
+3. Enable the following options:
    - Secret scanning
-   - Secret scanning push protection（推荐）
+   - Secret scanning push protection (recommended)
 
-或者通过 GitHub CLI：
+Or via GitHub CLI:
 
 ```bash
-# 启用 Secret Scanning
+# Enable Secret Scanning
 gh api -X PATCH repos/{owner}/{repo} \
   -f security_and_analysis='{"secret_scanning":{"status":"enabled"},"secret_scanning_push_protection":{"status":"enabled"}}'
 ```
 
-#### 步骤 6：创建自定义 Secret Scanning 模式
+#### Step 6: Create Custom Secret Scanning Patterns
 
-创建文件 `.github/secret_scanning.yml`：
+Create the file `.github/secret_scanning.yml`:
 
 ```yaml
-# 自定义密钥扫描模式
-# 格式：正则表达式 + 密钥类型描述
+# Custom secret scanning patterns
+# Format: regular expression + secret type description
 
 patterns:
-  # 自定义 API 密钥模式
+  # Custom API key pattern
   - name: "Custom API Key"
     regex: '(?i)api[_-]?key\s*[:=]\s*["\']?([a-zA-Z0-9]{32,})["\']?'
     confidence: high
     
-  # 自定义数据库连接字符串
+  # Custom database connection string
   - name: "Database Connection String"
     regex: '(?i)(mysql|postgresql|mongodb)://[^\s]+'
     confidence: high
     
-  # AWS 密钥模式
+  # AWS key pattern
   - name: "AWS Access Key"
     regex: 'AKIA[0-9A-Z]{16}'
     confidence: high
     
-  # 私钥模式
+  # Private key pattern
   - name: "Private Key"
     regex: '-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----'
     confidence: high
 ```
 
-#### 步骤 7：在 CI 中集成密钥检测
+#### Step 7: Integrate Secret Detection in CI
 
-创建文件 `.github/workflows/secret-detection.yml`：
+Create the file `.github/workflows/secret-detection.yml`:
 
 ```yaml
 name: Secret Detection
@@ -345,43 +345,43 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
-      - name: 安装 gitleaks
+      - name: Install gitleaks
         run: |
           wget https://github.com/gitleaks/gitleaks/releases/download/v8.18.0/gitleaks_8.18.0_linux_x64.tar.gz
           tar -xzf gitleaks_8.18.0_linux_x64.tar.gz
           sudo mv gitleaks /usr/local/bin/
       
-      - name: 运行 gitleaks
+      - name: Run gitleaks
         run: |
           gitleaks detect --source . --verbose --report-format sarif --report-path gitleaks-report.sarif
         continue-on-error: true
       
-      - name: 上传 SARIF 报告
+      - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: gitleaks-report.sarif
           category: gitleaks
       
-      - name: 检查结果
+      - name: Check results
         if: failure()
         run: |
-          echo "检测到潜在的密钥泄露！"
-          echo "请查看安全警报并修复问题。"
+          echo "Potential secret leak detected!"
+          echo "Please review security alerts and fix the issue."
           exit 1
 ```
 
-#### 步骤 8：创建 .gitignore 防止密钥提交
+#### Step 8: Create .gitignore to Prevent Secret Commits
 
-更新 `.gitignore` 文件：
+Update the `.gitignore` file:
 
 ```gitignore
-# 环境变量和密钥文件
+# Environment variables and secret files
 .env
 .env.local
 .env.*.local
@@ -391,45 +391,45 @@ jobs:
 *.p12
 *.pfx
 
-# IDE 配置（可能包含密钥）
+# IDE configuration (may contain secrets)
 .idea/
 .vscode/settings.json
 
-# 依赖目录
+# Dependency directories
 node_modules/
 vendor/
 venv/
 
-# 构建产物
+# Build artifacts
 dist/
 build/
 *.egg-info/
 
-# 日志文件
+# Log files
 *.log
 logs/
 
-# 操作系统文件
+# Operating system files
 .DS_Store
 Thumbs.db
 
-# 密钥文件
+# Secret files
 secrets/
 credentials/
 *.secret
 *.credentials
 ```
 
-### 第三部分：配置 Dependabot
+### Part 3: Configuring Dependabot
 
-#### 步骤 9：创建 Dependabot 配置文件
+#### Step 9: Create the Dependabot Configuration File
 
-创建文件 `.github/dependabot.yml`：
+Create the file `.github/dependabot.yml`:
 
 ```yaml
 version: 2
 updates:
-  # GitHub Actions 依赖
+  # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -447,7 +447,7 @@ updates:
       prefix: "ci"
       include: "scope"
   
-  # npm 依赖
+  # npm dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -464,13 +464,13 @@ updates:
     commit-message:
       prefix: "deps"
       include: "scope"
-    # 忽略特定依赖的更新
+    # Ignore specific dependency updates
     ignore:
       - dependency-name: "lodash"
         update-types: ["version-update:semver-major"]
       - dependency-name: "express"
         versions: [">=5.0.0"]
-    # 分组更新
+    # Group updates
     groups:
       development:
         dependency-type: "development"
@@ -487,7 +487,7 @@ updates:
           - "mongoose"
           - "jsonwebtoken"
   
-  # Python 依赖
+  # Python dependencies
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -519,7 +519,7 @@ updates:
           - "requests"
           - "sqlalchemy"
   
-  # Docker 依赖
+  # Docker dependencies
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
@@ -529,7 +529,7 @@ updates:
       - "dependencies"
       - "docker"
   
-  # Terraform 依赖
+  # Terraform dependencies
   - package-ecosystem: "terraform"
     directory: "/"
     schedule:
@@ -540,19 +540,19 @@ updates:
       - "terraform"
 ```
 
-#### 步骤 10：配置 Dependabot 安全更新
+#### Step 10: Configure Dependabot Security Updates
 
-在仓库设置中启用自动安全更新：
+Enable automatic security updates in the repository settings:
 
 ```bash
-# 使用 GitHub CLI 启用自动安全更新
+# Enable automatic security updates using GitHub CLI
 gh api -X PATCH repos/{owner}/{repo} \
   -f '{"security_and_analysis":{"dependabot_security_updates":{"status":"enabled"}}}'
 ```
 
-#### 步骤 11：创建 Dependabot 自动合并工作流
+#### Step 11: Create the Dependabot Auto-Merge Workflow
 
-创建文件 `.github/workflows/dependabot-auto-merge.yml`：
+Create the file `.github/workflows/dependabot-auto-merge.yml`:
 
 ```yaml
 name: Dependabot Auto Merge
@@ -570,13 +570,13 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     
     steps:
-      - name: 获取 Dependabot 元数据
+      - name: Fetch Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       
-      - name: 自动合并补丁更新
+      - name: Auto-merge patch updates
         if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: |
           gh pr merge --auto --squash "$PR_URL"
@@ -584,7 +584,7 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: 自动合并次要更新（开发依赖）
+      - name: Auto-merge minor updates (development dependencies)
         if: |
           steps.metadata.outputs.update-type == 'version-update:semver-minor' &&
           steps.metadata.outputs.dependency-type == 'development:direct'
@@ -594,7 +594,7 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: 添加审查标签
+      - name: Add review label
         if: |
           steps.metadata.outputs.update-type == 'version-update:semver-major' ||
           (steps.metadata.outputs.update-type == 'version-update:semver-minor' &&
@@ -606,11 +606,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### 第四部分：综合安全扫描工作流
+### Part 4: Comprehensive Security Scanning Workflow
 
-#### 步骤 12：创建完整的安全扫描工作流
+#### Step 12: Create a Complete Security Scanning Workflow
 
-创建文件 `.github/workflows/security-scan.yml`：
+Create the file `.github/workflows/security-scan.yml`:
 
 ```yaml
 name: Security Scan
@@ -621,7 +621,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # 每天 UTC 02:00 运行
+    # Runs daily at UTC 02:00
     - cron: '0 2 * * *'
 
 permissions:
@@ -631,7 +631,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  # 代码扫描
+  # Code scanning
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
@@ -641,10 +641,10 @@ jobs:
         language: ['javascript', 'python']
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 初始化 CodeQL
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
@@ -653,53 +653,53 @@ jobs:
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
       
-      - name: 执行 CodeQL 分析
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
   
-  # 依赖扫描
+  # Dependency scanning
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 依赖审查
+      - name: Dependency review
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
           deny-licenses: GPL-3.0, AGPL-3.0
   
-  # 密钥扫描
+  # Secret scanning
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
-      - name: 运行 trufflehog
+      - name: Run trufflehog
         uses: trufflesecurity/trufflehog@main
         with:
           extra_args: --only-verified
   
-  # SAST 扫描
+  # SAST scanning
   sast:
     name: SAST Scan
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 运行 Semgrep
+      - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
           config: >-
@@ -708,20 +708,20 @@ jobs:
             p/owasp-top-ten
             p/ci
   
-  # 容器扫描
+  # Container scanning
   container-scan:
     name: Container Scan
     runs-on: ubuntu-latest
     if: hashFiles('Dockerfile') != ''
     
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: 构建 Docker 镜像
+      - name: Build Docker image
         run: docker build -t test-image .
       
-      - name: 运行 Trivy 扫描
+      - name: Run Trivy scan
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'test-image'
@@ -729,13 +729,13 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
       
-      - name: 上传 Trivy SARIF 报告
+      - name: Upload Trivy SARIF report
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
   
-  # 安全报告
+  # Security report
   security-report:
     name: Security Report
     runs-on: ubuntu-latest
@@ -743,90 +743,90 @@ jobs:
     if: always()
     
     steps:
-      - name: 生成安全报告
+      - name: Generate security report
         run: |
-          echo "# 安全扫描报告" > security-report.md
+          echo "# Security Scan Report" > security-report.md
           echo "" >> security-report.md
-          echo "## 扫描时间: $(date)" >> security-report.md
+          echo "## Scan Time: $(date)" >> security-report.md
           echo "" >> security-report.md
-          echo "## 扫描结果" >> security-report.md
+          echo "## Scan Results" >> security-report.md
           echo "" >> security-report.md
-          echo "| 检查项 | 状态 |" >> security-report.md
+          echo "| Check | Status |" >> security-report.md
           echo "|--------|------|" >> security-report.md
           echo "| CodeQL | ${{ needs.codeql.result }} |" >> security-report.md
-          echo "| 依赖审查 | ${{ needs.dependency-review.result }} |" >> security-report.md
-          echo "| 密钥扫描 | ${{ needs.secret-scan.result }} |" >> security-report.md
+          echo "| Dependency Review | ${{ needs.dependency-review.result }} |" >> security-report.md
+          echo "| Secret Scanning | ${{ needs.secret-scan.result }} |" >> security-report.md
           echo "| SAST | ${{ needs.sast.result }} |" >> security-report.md
-          echo "| 容器扫描 | ${{ needs.container-scan.result }} |" >> security-report.md
+          echo "| Container Scan | ${{ needs.container-scan.result }} |" >> security-report.md
       
-      - name: 上传报告
+      - name: Upload report
         uses: actions/upload-artifact@v4
         with:
           name: security-report
           path: security-report.md
 ```
 
-### 第五部分：安全策略配置
+### Part 5: Security Policy Configuration
 
-#### 步骤 13：创建安全策略文件
+#### Step 13: Create the Security Policy File
 
-创建文件 `SECURITY.md`：
+Create the file `SECURITY.md`:
 
 ```markdown
-# 安全策略
+# Security Policy
 
-## 支持的版本
+## Supported Versions
 
-| 版本 | 支持状态 |
+| Version | Support Status |
 |------|---------|
-| 最新版本 | ✅ 支持 |
-| 旧版本 | ❌ 不支持 |
+| Latest version | ✅ Supported |
+| Older versions | ❌ Not supported |
 
-## 报告漏洞
+## Reporting Vulnerabilities
 
-如果您发现安全漏洞，请通过以下方式报告：
+If you discover a security vulnerability, please report it through the following methods:
 
-1. **不要**在公开的 issue 中报告安全漏洞
-2. 使用 GitHub 的私密漏洞报告功能
-3. 或者发送邮件至 security@example.com
+1. **Do not** report security vulnerabilities in public issues
+2. Use GitHub's private vulnerability reporting feature
+3. Or send an email to security@example.com
 
-### 报告内容
+### Report Content
 
-请在报告中包含：
+Please include the following in your report:
 
-- 漏洞类型
-- 受影响的版本
-- 复现步骤
-- 潜在影响
-- 修复建议（如果有）
+- Vulnerability type
+- Affected versions
+- Steps to reproduce
+- Potential impact
+- Fix recommendations (if available)
 
-### 响应时间
+### Response Time
 
-- 我们会在 48 小时内确认收到报告
-- 我们会在 7 天内提供初步评估
-- 我们会在 30 天内发布修复（如果需要）
+- We will acknowledge receipt of your report within 48 hours
+- We will provide an initial assessment within 7 days
+- We will release a fix within 30 days (if needed)
 
-## 安全最佳实践
+## Security Best Practices
 
-### 对于用户
+### For Users
 
-1. 始终使用最新版本
-2. 定期检查依赖更新
-3. 不要在代码中硬编码密钥
-4. 使用环境变量存储敏感信息
+1. Always use the latest version
+2. Regularly check for dependency updates
+3. Never hardcode secrets in code
+4. Use environment variables to store sensitive information
 
-### 对于贡献者
+### For Contributors
 
-1. 遵循安全编码规范
-2. 不要提交包含密钥的代码
-3. 使用 CodeQL 和其他工具检查代码
-4. 及时修复安全警报
+1. Follow secure coding guidelines
+2. Do not commit code containing secrets
+3. Use CodeQL and other tools to check code
+4. Fix security alerts promptly
 
-## 安全相关配置
+## Security-Related Configuration
 
-### 环境变量
+### Environment Variables
 
-使用 `.env` 文件存储本地配置，不要提交到版本控制：
+Use `.env` files for local configuration, do not commit to version control:
 
 ```
 DATABASE_URL=...
@@ -834,95 +834,95 @@ API_KEY=...
 SECRET_KEY=...
 ```
 
-### 依赖管理
+### Dependency Management
 
-使用 Dependabot 自动更新依赖，定期检查安全公告。
+Use Dependabot to automatically update dependencies and regularly check security advisories.
 ```
 
-#### 步骤 14：创建 CODEOWNERS 文件
+#### Step 14: Create the CODEOWNERS File
 
-创建文件 `.github/CODEOWNERS`：
+Create the file `.github/CODEOWNERS`:
 
 ```
-# 安全相关文件需要安全团队审查
+# Security-related files require security team review
 SECURITY.md @your-org/security-team
 .github/workflows/ @your-org/security-team
 .github/dependabot.yml @your-org/security-team
 
-# 依赖文件需要审查
+# Dependency files require review
 package.json @your-org/backend-team
 package-lock.json @your-org/backend-team
 requirements.txt @your-org/backend-team
 
-# Docker 文件需要审查
+# Docker files require review
 Dockerfile @your-org/devops-team
 docker-compose.yml @your-org/devops-team
 ```
 
 ---
 
-## 验证练习结果
+## Verifying Exercise Results
 
-### 检查清单
+### Checklist
 
-完成练习后，请验证以下内容：
+After completing the exercise, verify the following:
 
-- [ ] CodeQL 工作流已创建并能正常运行
-- [ ] Secret Scanning 已启用
-- [ ] Dependabot 配置已创建
-- [ ] 安全策略文件已创建
-- [ ] 安全扫描工作流能检测到测试漏洞
+- [ ] CodeQL workflow has been created and can run successfully
+- [ ] Secret Scanning is enabled
+- [ ] Dependabot configuration has been created
+- [ ] Security policy file has been created
+- [ ] Security scanning workflow can detect test vulnerabilities
 
-### 验证命令
+### Verification Commands
 
 ```bash
-# 检查 CodeQL 工作流语法
+# Check CodeQL workflow syntax
 actionlint .github/workflows/codeql-analysis.yml
 
-# 检查 Dependabot 配置
+# Check Dependabot configuration
 gh api repos/{owner}/{repo}/vulnerability-alerts
 
-# 手动触发安全扫描
+# Manually trigger security scan
 gh workflow run security-scan.yml
 
-# 查看安全警报
+# View security alerts
 gh api repos/{owner}/{repo}/code-scanning/alerts
 ```
 
-### 测试安全扫描
+### Testing Security Scanning
 
-创建测试文件 `test-vulnerabilities.js` 来验证扫描是否工作：
+Create a test file `test-vulnerabilities.js` to verify the scanning works:
 
 ```javascript
-// 测试 SQL 注入漏洞（仅用于测试，不要在生产代码中使用）
+// Test SQL injection vulnerability (for testing only, do not use in production code)
 function getUserData(userId) {
-  const query = "SELECT * FROM users WHERE id = " + userId;  // SQL 注入漏洞
+  const query = "SELECT * FROM users WHERE id = " + userId;  // SQL injection vulnerability
   return db.query(query);
 }
 
-// 测试 XSS 漏洞
+// Test XSS vulnerability
 function displayUserInput(input) {
-  document.getElementById("output").innerHTML = input;  // XSS 漏洞
+  document.getElementById("output").innerHTML = input;  // XSS vulnerability
 }
 
-// 测试硬编码密钥
-const API_KEY = "sk-1234567890abcdef";  // 硬编码密钥
+// Test hardcoded secret
+const API_KEY = "sk-1234567890abcdef";  // Hardcoded secret
 
-// 测试不安全的正则表达式
+// Test insecure regex
 function validateInput(input) {
-  return /^(a+)+$/.test(input);  // ReDoS 漏洞
+  return /^(a+)+$/.test(input);  // ReDoS vulnerability
 }
 ```
 
-CodeQL 应该能够检测到这些漏洞并生成警报。
+CodeQL should be able to detect these vulnerabilities and generate alerts.
 
 ---
 
-## 进阶挑战
+## Advanced Challenges
 
-### 挑战 1：自定义 CodeQL 查询
+### Challenge 1: Custom CodeQL Query
 
-创建自定义 CodeQL 查询文件 `.github/codeql/custom-query.ql`：
+Create a custom CodeQL query file `.github/codeql/custom-query.ql`:
 
 ```ql
 /**
@@ -949,26 +949,26 @@ where
 select source, "Hardcoded credential found: " + name
 ```
 
-### 挑战 2：集成第三方安全工具
+### Challenge 2: Integrate Third-Party Security Tools
 
-在工作流中集成更多安全工具：
+Integrate more security tools in the workflow:
 
 ```yaml
-- name: 运行 OWASP ZAP 扫描
+- name: Run OWASP ZAP scan
   uses: zaproxy/action-full-scan@v0.7.0
   with:
     target: 'https://your-app.example.com'
 
-- name: 运行 SonarQube 扫描
+- name: Run SonarQube scan
   uses: sonarsource/sonarcloud-github-action@master
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
 
-### 挑战 3：创建安全仪表板
+### Challenge 3: Create a Security Dashboard
 
-使用 GitHub Pages 创建安全仪表板：
+Use GitHub Pages to create a security dashboard:
 
 ```yaml
 name: Security Dashboard
@@ -982,17 +982,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 收集安全数据
+      - name: Collect security data
         run: |
-          # 获取 CodeQL 警报
-          # 获取 Dependabot 警报
-          # 生成报告
-          # 部署到 GitHub Pages
+          # Fetch CodeQL alerts
+          # Fetch Dependabot alerts
+          # Generate report
+          # Deploy to GitHub Pages
 ```
 
-### 挑战 4：实现安全门禁
+### Challenge 4: Implement a Security Gate
 
-在 PR 合并前强制通过安全检查：
+Enforce security checks before merging PRs:
 
 ```yaml
 name: Security Gate
@@ -1006,103 +1006,103 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 检查安全警报
+      - name: Check security alerts
         run: |
           ALERTS=$(gh api repos/{owner}/{repo}/code-scanning/alerts --jq '[.[] | select(.state == "open")] | length')
           
           if [ "$ALERTS" -gt 0 ]; then
-            echo "存在 $ALERTS 个未解决的安全警报"
+            echo "There are $ALERTS unresolved security alerts"
             exit 1
           fi
 ```
 
 ---
 
-## 安全扫描深度解析
+## Security Scanning In-Depth
 
-### 常见安全漏洞类型
+### Common Types of Security Vulnerabilities
 
-理解安全漏洞类型有助于更好地利用安全扫描工具。注入漏洞是最常见的安全问题之一，包括 SQL 注入、命令注入和 LDAP 注入等。攻击者通过构造恶意输入，使应用程序执行非预期的命令或查询。跨站脚本攻击允许攻击者在受害者的浏览器中执行恶意脚本，窃取会话凭证或进行钓鱼攻击。跨站请求伪造攻击利用已认证用户的身份，在用户不知情的情况下执行恶意操作。不安全的反序列化可能导致远程代码执行，攻击者通过构造恶意的序列化数据来触发漏洞。敏感数据泄露包括未加密存储密码、在日志中记录敏感信息或在错误消息中暴露系统细节。
+Understanding vulnerability types helps make better use of security scanning tools. Injection vulnerabilities are one of the most common security issues, including SQL injection, command injection, and LDAP injection. Attackers construct malicious input to make the application execute unintended commands or queries. Cross-site scripting attacks allow attackers to execute malicious scripts in a victim's browser, stealing session credentials or performing phishing attacks. Cross-site request forgery attacks exploit an authenticated user's identity to perform malicious actions without their knowledge. Insecure deserialization can lead to remote code execution, where attackers trigger vulnerabilities through crafted serialized data. Sensitive data exposure includes unencrypted password storage, logging sensitive information, or exposing system details in error messages.
 
-### 代码扫描的工作原理
+### How Code Scanning Works
 
-代码扫描工具通过静态分析技术来检测代码中的安全问题。模式匹配是最基本的检测方式，通过预定义的规则匹配已知的不安全代码模式。数据流分析追踪数据在程序中的流动路径，识别从不可信来源到敏感操作的数据流。控制流分析检查程序的执行路径，识别可能导致安全问题的代码分支。污点分析是一种高级技术，标记来自外部输入的数据为"污点"数据，追踪这些数据是否未经适当处理就到达了敏感操作点。语义分析理解代码的含义，能够检测逻辑层面的安全问题。
+Code scanning tools detect security issues through static analysis techniques. Pattern matching is the most basic detection method, using predefined rules to match known insecure code patterns. Data flow analysis tracks the flow of data through the program, identifying data flows from untrusted sources to sensitive operations. Control flow analysis examines program execution paths, identifying code branches that could lead to security issues. Taint analysis is an advanced technique that marks data from external inputs as "tainted" and tracks whether this data reaches sensitive operation points without proper handling. Semantic analysis understands the meaning of code, enabling detection of security issues at the logical level.
 
-### 密钥泄露的应急响应
+### Incident Response for Secret Leaks
 
-当检测到密钥泄露时，需要立即采取应急响应措施。第一步是立即撤销泄露的密钥，防止攻击者利用。第二步是检查泄露密钥的使用日志，确认是否已被恶意使用。第三步是生成新的密钥并更新所有使用该密钥的服务。第四步是审查代码提交历史，确认泄露的范围和时间。第五步是分析泄露原因，是人为失误还是流程缺陷。第六步是改进防护措施，例如启用推送保护、加强代码审查或使用密钥管理服务。第七步是编写事件报告，记录事件经过和改进措施，供团队学习参考。
+When a secret leak is detected, immediate incident response measures are needed. The first step is to immediately revoke the leaked key to prevent attacker exploitation. The second step is to check usage logs of the leaked key to confirm whether it has been used maliciously. The third step is to generate new keys and update all services using that key. The fourth step is to review code commit history to confirm the scope and timing of the leak. The fifth step is to analyze the cause of the leak, whether it was human error or a process deficiency. The sixth step is to improve protective measures, such as enabling push protection, strengthening code review, or using a key management service. The seventh step is to write an incident report documenting the event and improvement measures for team learning.
 
-### 依赖漏洞的风险评估
+### Risk Assessment of Dependency Vulnerabilities
 
-依赖漏洞的风险评估需要综合考虑多个因素。漏洞的严重程度可以通过 CVSS 评分来衡量，评分越高风险越大。漏洞的可利用性决定了攻击者利用该漏洞的难度，远程可利用的漏洞比本地漏洞更危险。漏洞的影响范围包括机密性影响、完整性影响和可用性影响。依赖的使用方式也很关键，开发依赖中的漏洞通常比生产依赖的风险低。漏洞是否已有公开的利用代码会显著增加风险。补丁的可用性决定了修复的紧迫性，已有修复版本的漏洞应当优先处理。
+Risk assessment of dependency vulnerabilities requires considering multiple factors. Vulnerability severity can be measured by CVSS score, with higher scores indicating greater risk. Vulnerability exploitability determines the difficulty for attackers to exploit the vulnerability, with remotely exploitable vulnerabilities being more dangerous than local ones. The impact scope of vulnerabilities includes confidentiality, integrity, and availability impacts. How dependencies are used is also critical, as vulnerabilities in development dependencies typically carry lower risk than those in production dependencies. Whether there is publicly available exploit code will significantly increase risk. Patch availability determines the urgency of remediation, with vulnerabilities that have available fixes being prioritized.
 
-### 安全左移的理念与实践
+### Shift-Left Security Philosophy and Practice
 
-安全左移是指将安全检查从开发流程的后期移到早期。传统的安全检查通常在部署前或上线后进行，发现问题时修复成本已经很高。安全左移的理念是在编码阶段就开始进行安全检查。在开发者提交代码时，集成开发环境中的安全插件可以实时检测安全问题。在代码提交时，预提交钩子可以阻止包含密钥或已知漏洞的代码被提交。在代码审查阶段，安全扫描结果可以作为审查的参考。在持续集成阶段，自动化安全扫描确保每次构建都符合安全标准。通过这种方式，安全问题能够在最早期被发现和修复，大幅降低修复成本。
+Shift-left security refers to moving security checks from later stages of the development pipeline to earlier stages. Traditional security checks are typically performed before deployment or after going live, when the cost of fixing discovered issues is already high. The shift-left philosophy aims to start security checks at the coding stage. When developers submit code, security plugins in integrated development environments can detect security issues in real-time. During code commits, pre-commit hooks can prevent code containing secrets or known vulnerabilities from being submitted. During code review, security scan results can serve as review reference. During continuous integration, automated security scanning ensures every build meets security standards. Through this approach, security issues can be discovered and fixed at the earliest stage, significantly reducing remediation costs.
 
-### 安全合规与审计
+### Security Compliance and Auditing
 
-对于企业级应用，安全合规和审计是必不可少的环节。常见的安全合规标准包括 SOC 2、ISO 27001、PCI DSS 和 GDPR 等。GitHub 的安全功能可以帮助满足这些合规要求。CodeQL 扫描结果可以作为安全审计的证据，证明代码经过了自动化安全检查。Secret Scanning 的启用记录可以证明组织采取了防止密钥泄露的措施。Dependabot 的配置和执行记录可以证明依赖管理符合安全要求。建议定期导出安全扫描报告，归档保存以备审计使用。同时建立安全事件响应流程，确保在发现安全问题时能够快速响应和处理。
+For enterprise applications, security compliance and auditing are essential. Common security compliance standards include SOC 2, ISO 27001, PCI DSS, and GDPR. GitHub's security features can help meet these compliance requirements. CodeQL scan results can serve as evidence for security audits, proving that code has undergone automated security checks. Secret Scanning enablement records can demonstrate that the organization has taken measures to prevent secret leaks. Dependabot configuration and execution records can prove that dependency management meets security requirements. It is recommended to regularly export security scan reports and archive them for audit purposes. Additionally, establish a security incident response process to ensure rapid response and handling when security issues are discovered.
 
-### 团队安全意识培训
+### Team Security Awareness Training
 
-工具只是安全防护的一部分，团队的安全意识同样重要。建议定期组织安全培训，内容包括常见的安全漏洞类型和防范措施、安全编码的最佳实践、安全工具的使用方法和安全事件的应急响应流程。建立安全冠军机制，在每个团队中培养一名安全冠军，负责推广安全实践和协助解决安全问题。创建安全知识库，收集和整理安全相关的文档、案例和最佳实践。定期进行安全演练，模拟安全事件的发现、报告和处理过程，提升团队的应急响应能力。
+Tools are only part of security protection, and team security awareness is equally important. It is recommended to regularly organize security training covering common types of security vulnerabilities and prevention measures, secure coding best practices, security tool usage, and security incident response processes. Establish a security champion program by cultivating a security champion in each team, responsible for promoting security practices and assisting in resolving security issues. Create a security knowledge base by collecting and organizing security-related documentation, case studies, and best practices. Regularly conduct security drills simulating the discovery, reporting, and handling of security incidents to improve the team's emergency response capability.
 
-### 安全度量指标
+### Security Metrics
 
-衡量安全扫描的效果需要建立一套度量指标体系。漏洞发现率衡量安全扫描工具发现的漏洞数量和类型。漏洞修复时间衡量从发现漏洞到修复完成的平均时间。误报率衡量安全扫描工具的准确性，误报率过高会影响开发效率。覆盖率衡量安全扫描覆盖的代码范围和语言类型。依赖健康度衡量项目依赖中已知漏洞的数量和严重程度。密钥泄露防护率衡量成功阻止的密钥泄露次数。建议定期统计和分析这些指标，持续改进安全扫描的配置和流程。
-
----
-
-## 常见问题
-
-### Q1：CodeQL 扫描需要多长时间？
-
-扫描时间取决于：
-- 代码库大小
-- 选择的语言数量
-- 查询复杂度
-
-通常小型项目 5-10 分钟，大型项目可能需要 30 分钟以上。
-
-### Q2：如何减少误报？
-
-1. 使用 `paths-ignore` 排除测试文件
-2. 调整查询配置
-3. 在代码中使用注释标记误报
-4. 使用自定义查询过滤
-
-### Q3：Secret Scanning 检测到误报怎么办？
-
-1. 在仓库设置中标记为 "False positive"
-2. 在 `.github/secret_scanning.yml` 中排除特定模式
-3. 使用环境变量替代硬编码
-
-### Q4：Dependabot PR 如何自动测试？
-
-1. 配置 CI 工作流在 PR 上运行
-2. 使用 `pull_request` 触发器
-3. 配置自动合并条件
+Measuring the effectiveness of security scanning requires establishing a metrics system. Vulnerability discovery rate measures the number and types of vulnerabilities found by security scanning tools. Mean time to remediation measures the average time from vulnerability discovery to fix completion. False positive rate measures the accuracy of security scanning tools, with high false positive rates impacting developer productivity. Coverage rate measures the code scope and language types covered by security scanning. Dependency health measures the number and severity of known vulnerabilities in project dependencies. Secret leak prevention rate measures the number of successfully blocked secret leaks. It is recommended to regularly track and analyze these metrics to continuously improve security scanning configuration and processes.
 
 ---
 
-## 延伸阅读
+## Frequently Asked Questions
 
-- [GitHub Advanced Security 官方文档](https://docs.github.com/en/code-security)
-- [CodeQL 文档](https://codeql.github.com/docs/)
-- [Dependabot 文档](https://docs.github.com/en/code-security/dependabot)
-- [Secret Scanning 文档](https://docs.github.com/en/code-security/secret-scanning)
+### Q1: How long does a CodeQL scan take?
+
+Scan time depends on:
+- Codebase size
+- Number of languages selected
+- Query complexity
+
+Typically small projects take 5-10 minutes, large projects may take 30 minutes or more.
+
+### Q2: How to reduce false positives?
+
+1. Use `paths-ignore` to exclude test files
+2. Adjust query configuration
+3. Use comments in code to mark false positives
+4. Use custom query filters
+
+### Q3: What if Secret Scanning detects a false positive?
+
+1. Mark as "False positive" in repository settings
+2. Exclude specific patterns in `.github/secret_scanning.yml`
+3. Use environment variables instead of hardcoding
+
+### Q4: How to automatically test Dependabot PRs?
+
+1. Configure CI workflow to run on PRs
+2. Use `pull_request` trigger
+3. Configure auto-merge conditions
 
 ---
 
-## 练习总结
+## Further Reading
 
-通过本练习，你已经学会了：
+- [GitHub Advanced Security Official Documentation](https://docs.github.com/en/code-security)
+- [CodeQL Documentation](https://codeql.github.com/docs/)
+- [Dependabot Documentation](https://docs.github.com/en/code-security/dependabot)
+- [Secret Scanning Documentation](https://docs.github.com/en/code-security/secret-scanning)
 
-1. ✅ 配置 CodeQL 进行代码扫描
-2. ✅ 启用 Secret Scanning 防止密钥泄露
-3. ✅ 配置 Dependabot 自动修复依赖漏洞
-4. ✅ 创建综合安全扫描工作流
-5. ✅ 建立安全策略和报告机制
+---
 
-安全扫描是现代软件开发的重要组成部分，建议将安全检查集成到 CI/CD 流程中，实现安全左移。
+## Exercise Summary
+
+Through this exercise, you have learned to:
+
+1. ✅ Configure CodeQL for code scanning
+2. ✅ Enable Secret Scanning to prevent secret leaks
+3. ✅ Configure Dependabot for automatic dependency vulnerability fixes
+4. ✅ Create a comprehensive security scanning workflow
+5. ✅ Establish security policy and reporting mechanisms
+
+Security scanning is an important part of modern software development. It is recommended to integrate security checks into the CI/CD pipeline to achieve shift-left security.

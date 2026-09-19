@@ -1,6 +1,6 @@
 # Git Workflow Complete Guide
 
-> This chapter详细介绍 various Git workflow patterns, helping teams choose the most suitable collaboration method.
+> This chapter provides a detailed introduction to various Git workflow patterns, helping teams choose the most suitable collaboration method.
 
 ## Table of Contents
 
@@ -29,13 +29,13 @@ Git Workflow is a set of collaboration standards and best practices based on Git
 
 ### Why Git Workflow is Needed
 
-In multi-person collaborative development, without unified workflow standards, will cause以下 problems:
+In multi-person collaborative development, without unified workflow standards, will cause the following problems:
 
-1. **Frequent code conflicts**:多人 simultaneously modifying same file, conflicts difficult to resolve
+1. **Frequent code conflicts**: Multiple people simultaneously modifying same file, conflicts difficult to resolve
 2. **Version confusion**: Cannot clearly distinguish development versions, test versions and production versions
 3. **Release difficulty**: Don't know which version can be released, which version is being tested
 4. **Rollback difficulty**: Difficult to quickly locate and rollback when problems occur
-5. **Low collaboration efficiency**: Team members各自为政, collaboration cost high
+5. **Low collaboration efficiency**: Team members work in silos, collaboration cost high
 
 ### Core Elements of Git Workflow
 
@@ -57,7 +57,7 @@ Git workflow has evolved from simple to complex:
 ```
 2005 ─── Git born
     │
-2008 ─── GitHub上线, Fork workflow appears
+2008 ─── GitHub launched, Fork workflow appears
     │
 2010 ─── Git Flow released (Vincent Driessen)
     │
@@ -78,7 +78,7 @@ Centralized Workflow is the simplest Git workflow, suitable for small teams or t
 
 ### Working Principle
 
-All developers work on同一个 branch (usually `main` or `master`), directly commit and pull code.
+All developers work on the same branch (usually `main` or `master`), directly commit and pull code.
 
 ```
 Developer A ──→ ┌─────────┐ ──→ Developer A
@@ -117,7 +117,7 @@ git push origin main
 **Advantages:**
 - Simple and easy to understand, low learning cost
 - Suitable for small teams (2-3 people)
-- Similar to SVN work方式, low migration cost
+- Similar to SVN work style, low migration cost
 - No need for complex branch management
 
 **Disadvantages:**
@@ -137,7 +137,7 @@ git push origin main
 
 #### Problem 1: Push Rejected
 
-When多人 simultaneously pushing code, may encounter push rejection:
+When multiple people simultaneously pushing code, may encounter push rejection:
 
 ```bash
 # Error message
@@ -190,12 +190,12 @@ Phase 2: Main Branch Switch (1 week)
     │
     ├─ Stop SVN commits
     ├─ All new code committed to Git
-    └─保留 SVN read-only access
+    └─ Retain SVN read-only access
 
 Phase 3: Complete Migration (After 1 week)
     │
     ├─ SVN repository set to read-only
-    ├─ Git becomes唯一 version control system
+    ├─ Git becomes the only version control system
     └─ Establish Git workflow standards
 ```
 
@@ -265,7 +265,7 @@ git push origin --delete feature/user-login
 
 ### Pull Request Workflow
 
-Pull Request (PR) is the core of feature branch workflow, it实现了:
+Pull Request (PR) is the core of feature branch workflow, it enables:
 
 1. **Code Review**: Team members can review code quality
 2. **Discussion**: Discuss and improve code
@@ -295,7 +295,7 @@ Closes #123
 ### Advantages and Disadvantages Analysis
 
 **Advantages:**
-- Each feature developed independently,不影响 each other
+- Each feature developed independently, without affecting each other
 - Supports code review, improves code quality
 - Supports parallel development of multiple features
 - Facilitates continuous integration and deployment
@@ -377,10 +377,10 @@ git branch -r --merged main | grep -v "main" | sed 's/origin\///' | xargs -n 1 g
 | Pitfall | Problem Description | Solution |
 |---------|---------------------|----------|
 | Branch lifecycle too long | Many conflicts when merging, difficult code review | Split features, short cycle development |
-| Not syncing main branch |大量 conflicts when finally merging | Regularly rebase or merge main branch |
+| Not syncing main branch | Massive conflicts when finally merging | Regularly rebase or merge main branch |
 | Lack of code review | Code quality cannot be guaranteed | Enforce PR review process |
-| Branch naming混乱 | Difficult to identify branch purpose | Unified naming standards |
-| Not deleting merged branches | Branch list混乱 | Delete branch immediately after merge
+| Branch naming chaotic | Difficult to identify branch purpose | Unified naming standards |
+| Not deleting merged branches | Branch list chaotic | Delete branch immediately after merge
 
 ---
 
@@ -540,7 +540,7 @@ git flow hotfix finish fix-payment-bug
 - Software products with fixed release cycles
 - Enterprise applications needing to maintain multiple versions
 - Large team collaborative development
-- Traditional software development模式
+- Traditional software development model
 
 ### Git Flow Practical Application Cases
 
@@ -718,7 +718,7 @@ git push origin feature/add-search
 # Create PR on GitHub, fill in description
 
 # 5. Code review and discussion
-# Team members review code,提出 modification suggestions
+# Team members review code, propose modification suggestions
 
 # 6. Fix review comments
 # ... Modify code ...
@@ -1310,7 +1310,7 @@ include:
 
 ## Trunk-Based Development
 
-Trunk-Based Development (TBD, Main干 Development) is a development model emphasizing frequent integration on main branch.
+Trunk-Based Development (TBD, Mainline Development) is a development model emphasizing frequent integration on main branch.
 
 ### Core Principles
 
@@ -1567,9 +1567,9 @@ Ideal commit frequency:
 Behaviors to avoid:
     │
     ├─ Only commit once a week
-    ├─一次性 commit thousands of lines of code
+    ├─ Commit thousands of lines of code at once
     ├─ Commit half-finished code
-    └─长时间不 push
+    └─ Not pushing for a long time
 ```
 
 #### 2. Code Review Process
@@ -1626,7 +1626,7 @@ branch_protection:
 
 ## Forking Workflow
 
-Forking Workflow is the most commonly used workflow in open source projects, also适用于 cross-team collaboration within enterprises.
+Forking Workflow is the most commonly used workflow in open source projects, also applicable to cross-team collaboration within enterprises.
 
 ### Working Principle
 
@@ -1761,7 +1761,7 @@ git push origin feature/team-b-feature
 - Open source projects
 - Cross-team collaboration
 - Projects needing strict permission control
-- Projects with external contributors参与
+- Projects with external contributor participation
 
 ### Forking Workflow Detailed Operation Guide
 
@@ -1889,7 +1889,7 @@ git push origin feature/my-feature --force-with-lease
 ### Communication
 - [ ] View existing Issues
 - [ ] View existing PRs
-- [ ] Express contribution意愿 in Issue
+- [ ] Express willingness to contribute in Issue
 - [ ] Confirm contribution direction
 ```
 
@@ -1951,7 +1951,7 @@ permissions:
 
   # Admin permission
   admin:
-    - Project负责人
+    - Project leads
     - Architects
 
   # Prohibited operations
@@ -2258,8 +2258,8 @@ refactor/database-layer
 
 1. **Use lowercase letters and hyphens**: `feature/user-login` not `feature/UserLogin`
 2. **Concise and clear**: Branch name should clearly express purpose
-3. **Include Issue number**:便于 tracking and association
-4. **Avoid special characters**: Don't use spaces, Chinese and other special characters
+3. **Include Issue number**: Convenient for tracking and association
+4. **Avoid special characters**: Don't use spaces, Chinese characters, or other special characters
 5. **Maintain consistency**: Team unified naming standards
 
 ### Branch Naming Organization Strategy
@@ -2433,7 +2433,7 @@ Angular project's commit standard, an implementation of Conventional Commits:
 ```
 <type>(<scope>): <short summary>
 │       │             │
-│       │             └─> Short description,不超过 50 characters
+│       │             └─> Short description, no more than 50 characters
 │       │
 │       └─> Impact scope (optional)
 │
@@ -2506,8 +2506,8 @@ npx husky add .husky/commit-msg 'npx --no -- commitlint --edit $1'
 ### Commit Message Best Practices
 
 1. **Use imperative mood**: `feat: add feature` not `feat: added feature`
-2. **First line不超过 50 characters**: Concise and clear
-3. **Add detailed description after blank line**: Explain why this修改 was made
+2. **First line no more than 50 characters**: Concise and clear
+3. **Add detailed description after blank line**: Explain why this change was made
 4. **Reference related Issues**: Use `Closes #123` or `Fixes #123`
 5. **One commit does one thing**: Maintain atomicity
 
@@ -2698,7 +2698,7 @@ v1.0.0-rc.2
 # Initial version
 v0.1.0
 
-# Development阶段
+# Development stage
 v0.1.0 → v0.2.0 → v0.3.0
 
 # First official version
@@ -2887,10 +2887,10 @@ __version__ = "1.2.3"
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| Version number conflict |多人 simultaneously updating version number | Use automated tools |
-| Version number rollback | Need to撤销 release | Use npm unpublish or Git tags |
+| Version number conflict | Multiple people simultaneously updating version number | Use automated tools |
+| Version number rollback | Need to revert release | Use npm unpublish or Git tags |
 | Version number inconsistency | Different files have different version numbers | Use unified version number management script |
-| Pre-release version management | Alpha/Beta/RC versions | Use pre-release version标识 |
+| Pre-release version management | Alpha/Beta/RC versions | Use pre-release version identifiers |
 
 ### Version Number Management Tool Comparison
 
@@ -3180,7 +3180,7 @@ canary_release:
 | GitHub Releases | Simple and easy to use | GitHub projects |
 | GitLab Releases | Feature-rich | GitLab projects |
 | semantic-release | Fully automated | Continuous deployment projects |
-| release-it | Flexible configuration |各类 projects |
+| release-it | Flexible configuration | Various projects |
 | lerna | Multi-package management | Monorepo projects |
 
 ---
@@ -3189,10 +3189,10 @@ canary_release:
 
 ### Causes of Conflicts
 
-1. **Same position in same file modified by多人**
+1. **Same position in same file modified by multiple people**
 2. **File deleted but someone modified it**
 3. **Binary file conflicts**
-4. **Divergence caused by长时间不 merging
+4. **Divergence caused by not merging for a long time**
 
 ### Prevention Strategies
 
@@ -3215,7 +3215,7 @@ git rebase main
 #### 2. Small Batch Commits
 
 ```bash
-# Bad practice:一次性 commit大量 modifications
+# Bad practice: Commit a large number of changes at once
 git add .
 git commit -m "Complete all features"
 
@@ -3322,7 +3322,7 @@ git rebase main
 git add .
 git rebase --continue
 
-# Or放弃 rebase
+# Or abandon rebase
 git rebase --abort
 ```
 
@@ -3455,9 +3455,9 @@ git cherry-pick <start-commit>..<end-commit>
 
 ### Communication Standards
 - Daily standup to sync progress
-- Communicate large features提前
-- Complete code review及时
-- Report problems及时
+- Communicate large features in advance
+- Complete code review in a timely manner
+- Report problems in a timely manner
 
 ### Code Standards
 - Unified code style
@@ -3488,9 +3488,9 @@ Alibaba mainly adopts **Aone Flow** workflow, which is an improved version based
 
 #### Core Features
 
-1. **Main干 development**: All development on main干 (master)
-2. **Short lifecycle feature branches**: Feature branches不超过 1-2 days
-3. **Release branches**: Pull release branches from main干 to production
+1. **Mainline development**: All development on mainline (master)
+2. **Short lifecycle feature branches**: Feature branches no more than 1-2 days
+3. **Release branches**: Pull release branches from mainline to production
 4. **Environment branches**: Separate test, pre-release, production environments
 
 #### Workflow
@@ -3561,8 +3561,8 @@ ByteDance adopts **Trunk-Based Development** primarily:
 
 #### Core Features
 
-1. **Main干 development**: All code committed to main branch
-2. **Short lifecycle branches**: Feature branches不超过 24 hours
+1. **Mainline development**: All code committed to main branch
+2. **Short lifecycle branches**: Feature branches no more than 24 hours
 3. **Feature flags**: Use feature flags to control visibility of unfinished features
 4. **Automated testing**: Complete automated testing system
 
@@ -3742,17 +3742,17 @@ git merge release-v1.2.0
 | Platform | Features | Applicable Scenarios |
 |----------|----------|---------------------|
 | Gitee (码云) | Fast domestic access, Chinese interface | Domestic teams, open source projects |
-| CODING | Tencent Cloud旗下, DevOps tool chain | Enterprise development |
-| Alibaba Cloud Codeup | Alibaba Cloud旗下, integrates with Alibaba Cloud | Alibaba Cloud users |
+| CODING | Tencent Cloud, DevOps tool chain | Enterprise development |
+| Alibaba Cloud Codeup | Alibaba Cloud, integrates with Alibaba Cloud | Alibaba Cloud users |
 | GitLab China版 | Private deployment, complete features | Large enterprises |
 
 #### 2. CI/CD Tools
 
 | Tool | Features | Applicable Scenarios |
 |------|----------|---------------------|
-| Jenkins | Open source, rich plugins |各类 projects |
-| Yunxiao | Alibaba Cloud旗下, one-stop DevOps | Alibaba Cloud users |
-| CODING CI | Tencent Cloud旗下, simple and easy to use | Tencent Cloud users |
+| Jenkins | Open source, rich plugins | Various projects |
+| Yunxiao | Alibaba Cloud, one-stop DevOps | Alibaba Cloud users |
+| CODING CI | Tencent Cloud, simple and easy to use | Tencent Cloud users |
 | GitLab CI | Integrates with GitLab | GitLab users |
 | GitHub Actions | Integrates with GitHub | GitHub users |
 
@@ -3879,7 +3879,7 @@ ci_cd:
           │ Forking      │  │ What is team size?  │
           │ Workflow     │  └─────────────────────┘
           └─────────────┘        │         │         │
-                              1-3人     3-10人     10+人
+                              1-3 people 3-10 people 10+ people
                                 │         │         │
                                 ▼         ▼         ▼
                       ┌───────────┐ ┌───────────┐ ┌───────────┐

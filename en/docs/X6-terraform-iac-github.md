@@ -1,48 +1,48 @@
-# Terraform IaC + GitHub 实践指南
+# Terraform IaC + GitHub Practical Guide
 
-> 本教程面向中国开发者，系统讲解如何使用 Terraform 实现基础设施即代码（IaC），并与 GitHub Actions 深度集成，实现基础设施的自动化管理。
+> This tutorial is designed for Chinese developers, systematically explaining how to use Terraform to implement Infrastructure as Code (IaC), and deeply integrate with GitHub Actions to achieve automated infrastructure management.
 
 ---
 
-## 目录
+## Table of Contents
 
-1. [Infrastructure as Code 概念](#1-infrastructure-as-code-概念)
-2. [Terraform 基础语法与 Provider](#2-terraform-基础语法与-provider)
+1. [Infrastructure as Code Concepts](#1-infrastructure-as-code-concepts)
+2. [Terraform Basic Syntax and Providers](#2-terraform-basic-syntax-and-providers)
 3. [Terraform + GitHub Actions CI/CD](#3-terraform--github-actions-cicd)
-4. [Terraform State 管理（远程 Backend）](#4-terraform-state-管理远程-backend)
-5. [Terraform 模块化开发](#5-terraform-模块化开发)
-6. [Terraform 与 GitHub Provider](#6-terraform-与-github-provider)
-7. [GitHub Actions Runner 部署到云厂商](#7-github-actions-runner-部署到云厂商)
-8. [多环境 Terraform 管理](#8-多环境-terraform-管理)
-9. [Terraform 安全扫描](#9-terraform-安全扫描)
-10. [Terratest 测试框架](#10-terratest-测试框架)
+4. [Terraform State Management (Remote Backend)](#4-terraform-state-management-remote-backend)
+5. [Terraform Modular Development](#5-terraform-modular-development)
+6. [Terraform and GitHub Provider](#6-terraform-and-github-provider)
+7. [Deploying GitHub Actions Runner to Cloud Providers](#7-deploying-github-actions-runner-to-cloud-providers)
+8. [Multi-Environment Terraform Management](#8-multi-environment-terraform-management)
+9. [Terraform Security Scanning](#9-terraform-security-scanning)
+10. [Terratest Testing Framework](#10-terratest-testing-framework)
 11. [OpenTofu vs Terraform](#11-opentofu-vs-terraform)
-12. [国内云厂商 Terraform Provider](#12-国内云厂商-terraform-provider)
-13. [IaC 最佳实践](#13-iac-最佳实践)
+12. [Domestic Cloud Provider Terraform Providers](#12-domestic-cloud-provider-terraform-providers)
+13. [IaC Best Practices](#13-iac-best-practices)
 
 ---
 
-## 1. Infrastructure as Code 概念
+## 1. Infrastructure as Code Concepts
 
-### 1.1 什么是 IaC
+### 1.1 What is IaC
 
-Infrastructure as Code（基础设施即代码，IaC）是一种使用代码来定义和管理基础设施的方法。通过 IaC，开发者可以用声明式的方式描述云资源（如服务器、数据库、网络等），并通过版本控制系统管理这些配置。
+Infrastructure as Code (IaC) is a method of defining and managing infrastructure using code. With IaC, developers can declaratively describe cloud resources (such as servers, databases, networks, etc.) and manage these configurations through version control systems.
 
-### 1.2 IaC 的核心优势
+### 1.2 Core Advantages of IaC
 
-| 优势 | 说明 |
-|------|------|
-| **版本控制** | 基础设施变更有完整的 Git 历史记录 |
-| **可重复性** | 相同的代码产生相同的基础设施 |
-| **自动化** | 减少手动操作，降低人为错误 |
-| **文档化** | 代码本身就是最好的文档 |
-| **协作** | 团队成员可以通过 PR 审查基础设施变更 |
-| **成本管理** | 清晰追踪资源创建和销毁 |
+| Advantage | Description |
+|-----------|-------------|
+| **Version Control** | Infrastructure changes have complete Git history |
+| **Repeatability** | The same code produces the same infrastructure |
+| **Automation** | Reduces manual operations and human errors |
+| **Documentation** | Code itself serves as the best documentation |
+| **Collaboration** | Team members can review infrastructure changes through PRs |
+| **Cost Management** | Clear tracking of resource creation and destruction |
 
-### 1.3 声明式 vs 命令式
+### 1.3 Declarative vs Imperative
 
 ```hcl
-// 声明式（Terraform）- 描述期望状态
+// Declarative (Terraform) - Describes desired state
 resource "alicloud_instance" "web" {
   instance_name = "web-server"
   image_id      = "ubuntu_22_04_x64_20G_alibase_20240101.vhd"
@@ -51,40 +51,40 @@ resource "alicloud_instance" "web" {
 ```
 
 ```bash
-# 命令式（CLI）- 描述操作步骤
+# Imperative (CLI) - Describes operational steps
 aliyun ecs CreateInstance --RegionId cn-hangzhou --InstanceName web-server
 aliyun ecs StartInstance --InstanceId i-xxx
 ```
 
-### 1.4 主流 IaC 工具对比
+### 1.4 Comparison of Mainstream IaC Tools
 
-| 工具 | 类型 | 语言 | 状态管理 | 适用场景 |
-|------|------|------|----------|----------|
-| **Terraform** | 通用 | HCL | 远程 | 多云环境 |
-| **OpenTofu** | 通用 | HCL | 远程 | Terraform 开源替代 |
-| **Pulumi** | 通用 | 多语言 | 远程 | 偏好编程语言 |
-| **AWS CDK** | AWS 专用 | 多语言 | CloudFormation | AWS 深度用户 |
-| **CloudFormation** | AWS 专用 | JSON/YAML | AWS 管理 | AWS 深度用户 |
-| **Ansible** | 配置管理 | YAML | 无 | 配置管理+简单 IaC |
+| Tool | Type | Language | State Management | Use Case |
+|------|------|----------|------------------|----------|
+| **Terraform** | General | HCL | Remote | Multi-cloud environments |
+| **OpenTofu** | General | HCL | Remote | Open-source Terraform alternative |
+| **Pulumi** | General | Multi-language | Remote | Preference for programming languages |
+| **AWS CDK** | AWS-specific | Multi-language | CloudFormation | Deep AWS users |
+| **CloudFormation** | AWS-specific | JSON/YAML | AWS-managed | Deep AWS users |
+| **Ansible** | Configuration Management | YAML | None | Config management + simple IaC |
 
-### 1.5 Terraform 生态系统
+### 1.5 Terraform Ecosystem
 
 ```
-Terraform 生态
-├── Terraform Core     # 核心引擎
-├── Providers          # 云厂商插件（阿里云、腾讯云、AWS 等）
-├── Modules            # 可复用的配置模块
-├── Registry           # 公共模块和 Provider 仓库
-├── Cloud              # Terraform Cloud/Enterprise（远程状态管理）
-├── Sentinel           # 策略即代码
-└── CDKTF              # 使用编程语言写 Terraform
+Terraform Ecosystem
+├── Terraform Core     # Core engine
+├── Providers          # Cloud provider plugins (Alibaba Cloud, Tencent Cloud, AWS, etc.)
+├── Modules            # Reusable configuration modules
+├── Registry           # Public module and provider repository
+├── Cloud              # Terraform Cloud/Enterprise (remote state management)
+├── Sentinel           # Policy as Code
+└── CDKTF              # Using programming languages to write Terraform
 ```
 
 ---
 
-## 2. Terraform 基础语法与 Provider
+## 2. Terraform Basic Syntax and Providers
 
-### 2.1 安装 Terraform
+### 2.1 Installing Terraform
 
 ```bash
 # Linux
@@ -97,31 +97,31 @@ terraform version
 brew tap hashicorp/tap
 brew install hashicorp/tap/terraform
 
-# 使用国内镜像（推荐）
-# 设置环境变量
+# Using domestic mirrors (recommended)
+# Set environment variables
 export TF_RELEASES_MIRROR=https://mirrors.tencent.com/terraform/
-# 或
+# Or
 export TF_RELEASES_MIRROR=https://releases.hashicorp.mirrors.ustc.edu.cn/
 ```
 
-### 2.2 HCL 基础语法
+### 2.2 HCL Basic Syntax
 
 ```hcl
-# 变量定义
+# Variable definition
 variable "region" {
-  description = "云厂商区域"
+  description = "Cloud provider region"
   type        = string
   default     = "cn-hangzhou"
 }
 
 variable "instance_count" {
-  description = "实例数量"
+  description = "Number of instances"
   type        = number
   default     = 2
 }
 
 variable "tags" {
-  description = "资源标签"
+  description = "Resource tags"
   type        = map(string)
   default = {
     Environment = "production"
@@ -129,7 +129,7 @@ variable "tags" {
   }
 }
 
-# 局部变量
+# Local variables
 locals {
   common_tags = merge(var.tags, {
     ManagedBy = "terraform"
@@ -139,19 +139,19 @@ locals {
   name_prefix = "${var.project}-${var.environment}"
 }
 
-# 输出
+# Outputs
 output "instance_ids" {
-  description = "实例 ID 列表"
+  description = "Instance ID list"
   value       = alicloud_instance.web[*].id
 }
 
 output "load_balancer_ip" {
-  description = "负载均衡 IP"
+  description = "Load balancer IP"
   value       = alicloud_slb.this.address
 }
 ```
 
-### 2.3 阿里云 Provider 配置
+### 2.3 Alibaba Cloud Provider Configuration
 
 ```hcl
 # main.tf
@@ -171,13 +171,13 @@ provider "alicloud" {
   access_key = var.access_key
   secret_key = var.secret_key
   
-  # 或使用环境变量
+  # Or use environment variables
   # ALICLOUD_ACCESS_KEY
   # ALICLOUD_SECRET_KEY
   # ALICLOUD_REGION
 }
 
-# 创建 VPC
+# Create VPC
 resource "alicloud_vpc" "main" {
   vpc_name   = "${local.name_prefix}-vpc"
   cidr_block = "172.16.0.0/12"
@@ -185,7 +185,7 @@ resource "alicloud_vpc" "main" {
   tags = local.common_tags
 }
 
-# 创建交换机
+# Create VSwitch
 resource "alicloud_vswitch" "main" {
   count        = 2
   vpc_id       = alicloud_vpc.main.id
@@ -196,7 +196,7 @@ resource "alicloud_vswitch" "main" {
   tags = local.common_tags
 }
 
-# 创建安全组
+# Create Security Group
 resource "alicloud_security_group" "web" {
   name   = "${local.name_prefix}-web-sg"
   vpc_id = alicloud_vpc.main.id
@@ -214,7 +214,7 @@ resource "alicloud_security_group_rule" "allow_http" {
   cidr_ip           = "0.0.0.0/0"
 }
 
-# 创建 ECS 实例
+# Create ECS instances
 resource "alicloud_instance" "web" {
   count                = var.instance_count
   instance_name        = "${local.name_prefix}-web-${count.index}"
@@ -229,7 +229,7 @@ resource "alicloud_instance" "web" {
   tags = local.common_tags
 }
 
-# 数据源
+# Data sources
 data "alicloud_zones" "available" {
   available_resource_creation = "VSwitch"
 }
@@ -241,7 +241,7 @@ data "alicloud_images" "ubuntu" {
 }
 ```
 
-### 2.4 腾讯云 Provider 配置
+### 2.4 Tencent Cloud Provider Configuration
 
 ```hcl
 terraform {
@@ -259,13 +259,13 @@ provider "tencentcloud" {
   secret_key = var.secret_key
 }
 
-# 创建 VPC
+# Create VPC
 resource "tencentcloud_vpc" "main" {
   name       = "${local.name_prefix}-vpc"
   cidr_block = "172.16.0.0/12"
 }
 
-# 创建子网
+# Create Subnet
 resource "tencentcloud_subnet" "main" {
   name              = "${local.name_prefix}-subnet"
   vpc_id            = tencentcloud_vpc.main.id
@@ -273,7 +273,7 @@ resource "tencentcloud_subnet" "main" {
   availability_zone = "ap-guangzhou-3"
 }
 
-# 创建 CVM 实例
+# Create CVM Instance
 resource "tencentcloud_instance" "web" {
   instance_name     = "${local.name_prefix}-web"
   availability_zone = "ap-guangzhou-3"
@@ -286,7 +286,7 @@ resource "tencentcloud_instance" "web" {
 }
 ```
 
-### 2.5 AWS Provider 配置（中国区）
+### 2.5 AWS Provider Configuration (China Region)
 
 ```hcl
 terraform {
@@ -299,15 +299,15 @@ terraform {
 }
 
 provider "aws" {
-  region = "cn-northwest-1"  # 宁夏区域
-  # 或 "cn-north-1"  # 北京区域
+  region = "cn-northwest-1"  # Ningxia Region
+  # Or "cn-north-1"  # Beijing Region
   
-  # 使用环境变量或 shared credentials
+  # Use environment variables or shared credentials
   # AWS_ACCESS_KEY_ID
   # AWS_SECRET_ACCESS_KEY
 }
 
-# 创建 VPC
+# Create VPC
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
@@ -318,7 +318,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-# 创建子网
+# Create Subnet
 resource "aws_subnet" "public" {
   count             = 2
   vpc_id            = aws_vpc.main.id
@@ -335,7 +335,7 @@ resource "aws_subnet" "public" {
 
 ## 3. Terraform + GitHub Actions CI/CD
 
-### 3.1 基本工作流
+### 3.1 Basic Workflow
 
 ```yaml
 name: Terraform CI/CD
@@ -413,13 +413,13 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `## Terraform Plan 输出
+            body: `## Terraform Plan Output
           
           \`\`\`hcl
           ${truncated}
           \`\`\`
           
-          *触发者: @${{ github.actor }}, Commit: \`${{ github.sha }}\`*`
+          *Triggered by: @${{ github.actor }}, Commit: \`${{ github.sha }}\`*`
           });
 
   terraform-apply:
@@ -452,7 +452,7 @@ jobs:
         ALICLOUD_REGION: cn-hangzhou
 ```
 
-### 3.2 使用 OIDC 认证（推荐）
+### 3.2 Using OIDC Authentication (Recommended)
 
 ```yaml
 name: Terraform with OIDC
@@ -480,18 +480,18 @@ jobs:
     
     - name: Configure Alibaba Cloud OIDC
       run: |
-        # 获取 GitHub OIDC Token
+        # Get GitHub OIDC Token
         OIDC_TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
           "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.aliyuncs.com" | jq -r '.value')
         
-        # 使用 STS Assume Role
+        # Use STS Assume Role
         STS_RESPONSE=$(aliyun sts AssumeRoleWithOIDC \
           --RoleArn "acs:ram::123456789:role/terraform-role" \
           --OIDCProviderArn "acs:ram::123456789:oidc-provider/github" \
           --OIDCToken "$OIDC_TOKEN" \
           --RoleSessionName "github-actions")
         
-        # 设置环境变量
+        # Set environment variables
         echo "ALICLOUD_ACCESS_KEY=$(echo $STS_RESPONSE | jq -r '.Credentials.AccessKeyId')" >> $GITHUB_ENV
         echo "ALICLOUD_SECRET_KEY=$(echo $STS_RESPONSE | jq -r '.Credentials.AccessKeySecret')" >> $GITHUB_ENV
         echo "ALICLOUD_SECURITY_TOKEN=$(echo $STS_RESPONSE | jq -r '.Credentials.SecurityToken')" >> $GITHUB_ENV
@@ -504,7 +504,7 @@ jobs:
       working-directory: terraform
 ```
 
-### 3.3 完整 CI/CD 流水线
+### 3.3 Complete CI/CD Pipeline
 
 ```yaml
 name: Terraform Full Pipeline
@@ -516,7 +516,7 @@ on:
     branches: [main]
 
 jobs:
-  # 阶段1：代码质量检查
+  # Stage 1: Code quality check
   quality:
     runs-on: ubuntu-latest
     steps:
@@ -547,7 +547,7 @@ jobs:
         directory: terraform
         framework: terraform
 
-  # 阶段2：Plan
+  # Stage 2: Plan
   plan:
     needs: quality
     runs-on: ubuntu-latest
@@ -583,7 +583,7 @@ jobs:
         path: terraform/tfplan
         retention-days: 5
 
-  # 阶段3：Apply（仅 main 分支）
+  # Stage 3: Apply (main branch only)
   apply:
     needs: plan
     if: github.ref == 'refs/heads/main' && needs.plan.outputs.has_changes == 'true'
@@ -613,16 +613,16 @@ jobs:
 
 ---
 
-## 4. Terraform State 管理（远程 Backend）
+## 4. Terraform State Management (Remote Backend)
 
-### 4.1 为什么需要远程 State
+### 4.1 Why Remote State is Needed
 
-本地 state 文件的问题：
-- 无法多人协作
-- 容易丢失
-- 无法实现状态锁定
+Problems with local state files:
+- Cannot collaborate with multiple people
+- Easy to lose
+- Cannot implement state locking
 
-### 4.2 阿里云 OSS Backend
+### 4.2 Alibaba Cloud OSS Backend
 
 ```hcl
 # backend.tf
@@ -638,10 +638,10 @@ terraform {
 }
 ```
 
-**创建 OSS Bucket 和 TableStore：**
+**Creating OSS Bucket and TableStore:**
 
 ```hcl
-# 先手动创建存储后端资源
+# Manually create storage backend resources first
 provider "alicloud" {
   region = "cn-hangzhou"
 }
@@ -664,7 +664,7 @@ resource "alicloud_oss_bucket" "terraform_state" {
   }
 }
 
-# TableStore（用于状态锁定）
+# TableStore (for state locking)
 resource "alicloud_ots_table" "terraform_lock" {
   instance_name = "terraform-state-lock"
   table_name    = "terraform_lock"
@@ -679,7 +679,7 @@ resource "alicloud_ots_table" "terraform_lock" {
 }
 ```
 
-### 4.3 腾讯云 COS Backend
+### 4.3 Tencent Cloud COS Backend
 
 ```hcl
 terraform {
@@ -693,7 +693,7 @@ terraform {
 }
 ```
 
-### 4.4 AWS S3 Backend（中国区）
+### 4.4 AWS S3 Backend (China Region)
 
 ```hcl
 terraform {
@@ -704,7 +704,7 @@ terraform {
     encrypt        = true
     dynamodb_table = "terraform-lock"
     
-    # 中国区需要特殊配置
+    # China region requires special configuration
     endpoints {
       s3 = "https://s3.cn-northwest-1.amazonaws.com.cn"
     }
@@ -712,10 +712,10 @@ terraform {
 }
 ```
 
-### 4.5 使用 GitHub Actions 管理 State
+### 4.5 Managing State with GitHub Actions
 
 ```yaml
-# 在 GitHub Actions 中安全地管理 state
+# Securely managing state in GitHub Actions
 name: Terraform State Management
 
 on:
@@ -757,16 +757,16 @@ jobs:
       working-directory: terraform
 ```
 
-### 4.6 State 迁移
+### 4.6 State Migration
 
 ```bash
-# 从本地迁移到远程 Backend
-# 1. 配置远程 Backend
-# 2. 运行 terraform init
-# 3. Terraform 会询问是否迁移 state
+# Migrate from local to remote Backend
+# 1. Configure remote Backend
+# 2. Run terraform init
+# 3. Terraform will ask whether to migrate state
 
 terraform init
-# 输出：
+# Output:
 # Initializing the backend...
 # Do you want to copy existing state to the new backend?
 #   Pre-existing state was found while migrating the previous backend to the
@@ -777,9 +777,9 @@ terraform init
 
 ---
 
-## 5. Terraform 模块化开发
+## 5. Terraform Modular Development
 
-### 5.1 模块结构
+### 5.1 Module Structure
 
 ```
 modules/
@@ -800,7 +800,7 @@ modules/
     └── README.md
 ```
 
-### 5.2 VPC 模块示例
+### 5.2 VPC Module Example
 
 ```hcl
 # modules/vpc/main.tf
@@ -838,7 +838,7 @@ resource "alicloud_nat_gateway" "this" {
 ```hcl
 # modules/vpc/variables.tf
 variable "vpc_name" {
-  description = "VPC 名称"
+  description = "VPC name"
   type        = string
 }
 
@@ -849,18 +849,18 @@ variable "cidr_block" {
 }
 
 variable "availability_zones" {
-  description = "可用区列表"
+  description = "Availability zone list"
   type        = list(string)
 }
 
 variable "enable_nat_gateway" {
-  description = "是否创建 NAT 网关"
+  description = "Whether to create NAT gateway"
   type        = bool
   default     = false
 }
 
 variable "tags" {
-  description = "资源标签"
+  description = "Resource tags"
   type        = map(string)
   default     = {}
 }
@@ -874,17 +874,17 @@ output "vpc_id" {
 }
 
 output "vswitch_ids" {
-  description = "交换机 ID 列表"
+  description = "VSwitch ID list"
   value       = alicloud_vswitch.this[*].id
 }
 
 output "nat_gateway_id" {
-  description = "NAT 网关 ID"
+  description = "NAT Gateway ID"
   value       = var.enable_nat_gateway ? alicloud_nat_gateway.this[0].id : null
 }
 ```
 
-### 5.3 使用模块
+### 5.3 Using Modules
 
 ```hcl
 # environments/production/main.tf
@@ -923,27 +923,27 @@ module "load_balancer" {
 }
 ```
 
-### 5.4 模块版本管理
+### 5.4 Module Version Management
 
 ```hcl
-# 使用 Git 仓库作为模块源
+# Using Git repository as module source
 module "vpc" {
   source = "git::https://github.com/my-org/terraform-modules.git//vpc?ref=v1.2.0"
 }
 
-# 使用 Terraform Registry
+# Using Terraform Registry
 module "vpc" {
   source  = "terraform-alicloud-modules/vpc/alicloud"
   version = "~> 1.0"
 }
 
-# 使用本地路径（开发阶段）
+# Using local path (during development)
 module "vpc" {
   source = "../../modules/vpc"
 }
 ```
 
-### 5.5 模块测试与文档
+### 5.5 Module Testing and Documentation
 
 ```hcl
 # modules/vpc/tests/vpc_test.go
@@ -975,9 +975,9 @@ func TestVpcModule(t *testing.T) {
 
 ---
 
-## 6. Terraform 与 GitHub Provider
+## 6. Terraform and GitHub Provider
 
-### 6.1 配置 GitHub Provider
+### 6.1 Configuring GitHub Provider
 
 ```hcl
 terraform {
@@ -995,10 +995,10 @@ provider "github" {
 }
 ```
 
-### 6.2 管理 GitHub 仓库
+### 6.2 Managing GitHub Repositories
 
 ```hcl
-# 创建仓库
+# Create repository
 resource "github_repository" "app" {
   name        = "my-app"
   description = "My application repository"
@@ -1012,11 +1012,11 @@ resource "github_repository" "app" {
   gitignore_template = "Go"
   license_template   = "mit"
   
-  # 分支保护
-  # 注意：需要单独使用 github_branch_protection 资源
+  # Branch protection
+  # Note: Requires separate github_branch_protection resource
 }
 
-# 分支保护规则
+# Branch protection rules
 resource "github_branch_protection" "main" {
   repository_id = github_repository.app.node_id
   pattern       = "main"
@@ -1041,10 +1041,10 @@ resource "github_branch_protection" "main" {
 }
 ```
 
-### 6.3 管理 GitHub Secrets
+### 6.3 Managing GitHub Secrets
 
 ```hcl
-# 仓库 Secrets
+# Repository Secrets
 resource "github_actions_secret" "alicloud_access_key" {
   repository      = github_repository.app.name
   secret_name     = "ALICLOUD_ACCESS_KEY"
@@ -1057,7 +1057,7 @@ resource "github_actions_secret" "alicloud_secret_key" {
   plaintext_value = var.alicloud_secret_key
 }
 
-# 环境 Secrets
+# Environment Secrets
 resource "github_repository_environment" "production" {
   repository  = github_repository.app.name
   environment = "production"
@@ -1080,23 +1080,23 @@ resource "github_actions_environment_secret" "kubeconfig" {
 }
 ```
 
-### 6.4 管理 GitHub Teams
+### 6.4 Managing GitHub Teams
 
 ```hcl
-# 创建团队
+# Create teams
 resource "github_team" "developers" {
   name        = "developers"
-  description = "开发团队"
+  description = "Development team"
   privacy     = "closed"
 }
 
 resource "github_team" "devops" {
   name        = "devops"
-  description = "DevOps 团队"
+  description = "DevOps team"
   privacy     = "closed"
 }
 
-# 团队成员
+# Team members
 resource "github_team_members" "developers" {
   team_id = github_team.developers.id
   
@@ -1111,7 +1111,7 @@ resource "github_team_members" "developers" {
   }
 }
 
-# 团队仓库权限
+# Team repository permissions
 resource "github_team_repository" "developers" {
   team_id    = github_team.developers.id
   repository = github_repository.app.name
@@ -1125,17 +1125,17 @@ resource "github_team_repository" "devops" {
 }
 ```
 
-### 6.5 管理 GitHub Actions Workflows
+### 6.5 Managing GitHub Actions Workflows
 
 ```hcl
-# 使用 GitHub Actions 变量
+# Using GitHub Actions variables
 resource "github_actions_variable" "environment" {
   repository    = github_repository.app.name
   variable_name = "DEPLOY_ENVIRONMENT"
   value         = "production"
 }
 
-# 组织级 Secrets
+# Organization-level Secrets
 resource "github_actions_organization_secret" "shared_token" {
   secret_name     = "SHARED_TOKEN"
   visibility      = "selected"
@@ -1149,17 +1149,17 @@ resource "github_actions_organization_secret" "shared_token" {
 
 ---
 
-## 7. GitHub Actions Runner 部署到云厂商
+## 7. Deploying GitHub Actions Runner to Cloud Providers
 
-### 7.1 自托管 Runner 概述
+### 7.1 Self-Hosted Runner Overview
 
-自托管 Runner 的优势：
-- 访问内网资源
-- 自定义运行环境
-- 无 GitHub 托管限制
-- 成本可控
+Advantages of self-hosted runners:
+- Access to internal network resources
+- Customizable runtime environment
+- No GitHub-hosted limitations
+- Controllable costs
 
-### 7.2 阿里云 ECS Runner
+### 7.2 Alibaba Cloud ECS Runner
 
 ```hcl
 # modules/github-runner/main.tf
@@ -1191,7 +1191,7 @@ resource "alicloud_security_group" "runner" {
   vpc_id = var.vpc_id
 }
 
-# 允许 HTTPS 出站（与 GitHub 通信）
+# Allow HTTPS egress (communication with GitHub)
 resource "alicloud_security_group_rule" "allow_https_out" {
   type              = "egress"
   ip_protocol       = "tcp"
@@ -1208,15 +1208,15 @@ resource "alicloud_security_group_rule" "allow_https_out" {
 # modules/github-runner/userdata.sh
 set -e
 
-# 安装依赖
+# Install dependencies
 apt-get update
 apt-get install -y curl jq
 
-# 创建 runner 用户
+# Create runner user
 useradd -m -s /bin/bash runner
 usermod -aG sudo runner
 
-# 下载 GitHub Actions Runner
+# Download GitHub Actions Runner
 RUNNER_VERSION="2.311.0"
 cd /home/runner
 curl -o actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -L \
@@ -1224,7 +1224,7 @@ curl -o actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -L \
 tar xzf actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
 rm actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
 
-# 配置 Runner
+# Configure Runner
 chown -R runner:runner /home/runner
 su - runner -c "./config.sh \
   --url ${repo_url} \
@@ -1234,15 +1234,15 @@ su - runner -c "./config.sh \
   --work _work \
   --unattended"
 
-# 安装为服务
+# Install as service
 ./svc.sh install runner
 ./svc.sh start
 ```
 
-### 7.3 阿里云 ACK Runner（K8s 部署）
+### 7.3 Alibaba Cloud ACK Runner (K8s Deployment)
 
 ```hcl
-# 使用 Actions Runner Controller (ARC)
+# Using Actions Runner Controller (ARC)
 resource "helm_release" "arc" {
   name       = "actions-runner-controller"
   repository = "https://actions-runner-controller.github.io/actions-runner-controller"
@@ -1263,7 +1263,7 @@ resource "helm_release" "arc" {
 ```
 
 ```yaml
-# Runner 部署配置
+# Runner deployment configuration
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
@@ -1287,7 +1287,7 @@ spec:
           memory: "4Gi"
 ```
 
-### 7.4 腾讯云 CVM Runner
+### 7.4 Tencent Cloud CVM Runner
 
 ```hcl
 resource "tencentcloud_instance" "runner" {
@@ -1307,10 +1307,10 @@ resource "tencentcloud_instance" "runner" {
 }
 ```
 
-### 7.5 Runner 自动伸缩
+### 7.5 Runner Auto Scaling
 
 ```hcl
-# 使用 ARC 的 RunnerSet 实现自动伸缩
+# Using ARC's RunnerSet for auto scaling
 resource "kubernetes_manifest" "runner_set" {
   manifest = {
     apiVersion = "actions.summerwind.dev/v1alpha1"
@@ -1324,8 +1324,8 @@ resource "kubernetes_manifest" "runner_set" {
       repository = "my-org/my-repo"
       labels = ["self-hosted", "linux"]
       
-      # 基于队列长度自动伸缩
-      # 需要配置 HorizontalRunnerAutoscaler
+      # Auto scaling based on queue length
+      # Requires configuring HorizontalRunnerAutoscaler
     }
   }
 }
@@ -1358,13 +1358,13 @@ resource "kubernetes_manifest" "autoscaler" {
 
 ---
 
-## 8. 多环境 Terraform 管理
+## 8. Multi-Environment Terraform Management
 
-### 8.1 目录结构方式
+### 8.1 Directory Structure Approach
 
 ```
 terraform/
-├── modules/                  # 共享模块
+├── modules/                  # Shared modules
 │   ├── vpc/
 │   ├── ecs/
 │   └── slb/
@@ -1390,7 +1390,7 @@ terraform/
 └── README.md
 ```
 
-**环境配置示例：**
+**Environment Configuration Example:**
 
 ```hcl
 # environments/dev/terraform.tfvars
@@ -1408,26 +1408,26 @@ instance_count = 5
 enable_monitoring = true
 ```
 
-### 8.2 Terraform Workspace 方式
+### 8.2 Terraform Workspace Approach
 
 ```bash
-# 创建工作空间
+# Create workspaces
 terraform workspace new dev
 terraform workspace new staging
 terraform workspace new production
 
-# 切换工作空间
+# Switch workspaces
 terraform workspace select production
 
-# 列出工作空间
+# List workspaces
 terraform workspace list
 
-# 显示当前工作空间
+# Show current workspace
 terraform workspace show
 ```
 
 ```hcl
-# 使用 workspace 区分环境
+# Using workspace to differentiate environments
 locals {
   env = terraform.workspace
   
@@ -1451,10 +1451,10 @@ resource "alicloud_instance" "web" {
 }
 ```
 
-### 8.3 Terragrunt 方式
+### 8.3 Terragrunt Approach
 
 ```hcl
-# terragrunt.hcl（根配置）
+# terragrunt.hcl (root configuration)
 remote_state {
   backend = "oss"
   generate = {
@@ -1497,7 +1497,7 @@ inputs = {
 }
 ```
 
-### 8.4 GitHub Actions 多环境部署
+### 8.4 GitHub Actions Multi-Environment Deployment
 
 ```yaml
 name: Terraform Multi-Environment
@@ -1553,12 +1553,12 @@ jobs:
 
 ---
 
-## 9. Terraform 安全扫描
+## 9. Terraform Security Scanning
 
 ### 9.1 tfsec
 
 ```yaml
-# 在 GitHub Actions 中使用 tfsec
+# Using tfsec in GitHub Actions
 - name: Run tfsec
   uses: aquasecurity/tfsec-action@v1.0.3
   with:
@@ -1574,20 +1574,20 @@ jobs:
     sarif_file: tfsec-results.sarif
 ```
 
-**tfsec 配置文件：**
+**tfsec Configuration File:**
 
 ```yaml
 # .tfsec/config.yml
 minimum_severity: MEDIUM
 exclude:
-  - aws-vpc-no-public-ingress-sgr  # 排除特定规则
+  - aws-vpc-no-public-ingress-sgr  # Exclude specific rules
   - alicloud-ecs-no-public-ingress-sgr
 ```
 
 ### 9.2 Checkov
 
 ```yaml
-# 在 GitHub Actions 中使用 Checkov
+# Using Checkov in GitHub Actions
 - name: Run Checkov
   uses: bridgecrewio/checkov-action@v12
   with:
@@ -1596,10 +1596,10 @@ exclude:
     output_format: json
     output_file_path: checkov-results.json
     soft_fail: false
-    skip_check: CKV_AWS_18  # 跳过特定检查
+    skip_check: CKV_AWS_18  # Skip specific checks
 ```
 
-**Checkov 配置文件：**
+**Checkov Configuration File:**
 
 ```yaml
 # .checkov.yml
@@ -1608,14 +1608,14 @@ framework:
 directory:
 - terraform
 skip-check:
-- CKV_AWS_18  # S3 访问日志
-- CKV_ALI_1   # 阿里云特定检查
+- CKV_AWS_18  # S3 access logs
+- CKV_ALI_1   # Alibaba Cloud specific checks
 ```
 
 ### 9.3 TFLint
 
 ```yaml
-# 安装和运行 TFLint
+# Installing and running TFLint
 - name: Setup TFLint
   uses: terraform-linters/setup-tflint@v4
 
@@ -1626,7 +1626,7 @@ skip-check:
   working-directory: terraform
 ```
 
-**TFLint 配置：**
+**TFLint Configuration:**
 
 ```hcl
 # .tflint.hcl
@@ -1650,7 +1650,7 @@ rule "terraform_documented_outputs" {
 }
 ```
 
-### 9.4 综合安全扫描工作流
+### 9.4 Comprehensive Security Scanning Workflow
 
 ```yaml
 name: Terraform Security Scan
@@ -1696,26 +1696,26 @@ jobs:
 
 ---
 
-## 10. Terratest 测试框架
+## 10. Terratest Testing Framework
 
-### 10.1 Terratest 简介
+### 10.1 Terratest Introduction
 
-Terratest 是 Gruntwork 开发的 Go 测试框架，用于编写基础设施的自动化测试。
+Terratest is a Go testing framework developed by Gruntwork for writing automated tests for infrastructure.
 
-### 10.2 安装
+### 10.2 Installation
 
 ```bash
-# 初始化 Go 模块
+# Initialize Go module
 cd test
 go mod init github.com/my-org/terraform-tests
 go mod tidy
 
-# 安装依赖
+# Install dependencies
 go get github.com/gruntwork-io/terratest
 go get github.com/stretchr/testify
 ```
 
-### 10.3 VPC 模块测试
+### 10.3 VPC Module Testing
 
 ```go
 // test/vpc_test.go
@@ -1745,7 +1745,7 @@ func TestVpcModule(t *testing.T) {
 
 	terraform.InitAndApply(t, terraformOptions)
 
-	// 验证输出
+	// Validate outputs
 	vpcId := terraform.Output(t, terraformOptions, "vpc_id")
 	assert.NotEmpty(t, vpcId)
 
@@ -1775,7 +1775,7 @@ func TestVpcWithNatGateway(t *testing.T) {
 }
 ```
 
-### 10.4 ECS 模块测试
+### 10.4 ECS Module Testing
 
 ```go
 // test/ecs_test.go
@@ -1796,7 +1796,7 @@ func TestEcsModule(t *testing.T) {
 		TerraformDir: "../modules/ecs",
 		Vars: map[string]interface{}{
 			"cluster_name":   "test-cluster",
-			"vpc_id":         "vpc-xxx",       // 使用实际的 VPC ID
+			"vpc_id":         "vpc-xxx",       // Use actual VPC ID
 			"vswitch_ids":    []string{"vsw-xxx"},
 			"instance_type":  "ecs.g6.large",
 			"instance_count": 2,
@@ -1806,18 +1806,18 @@ func TestEcsModule(t *testing.T) {
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 
-	// 验证实例数量
+	// Validate instance count
 	instanceIds := terraform.OutputList(t, terraformOptions, "instance_ids")
 	assert.Len(t, instanceIds, 2)
 
-	// 验证实例可访问
+	// Validate instance accessibility
 	publicIp := terraform.Output(t, terraformOptions, "public_ip")
 	url := fmt.Sprintf("http://%s", publicIp)
 	http_helper.HttpGet(t, url, nil, 200, "Welcome")
 }
 ```
 
-### 10.5 集成测试工作流
+### 10.5 Integration Test Workflow
 
 ```yaml
 name: Terraform Tests
@@ -1857,45 +1857,45 @@ jobs:
 
 ## 11. OpenTofu vs Terraform
 
-### 11.1 背景
+### 11.1 Background
 
-2023 年，HashiCorp 将 Terraform 的许可证从 MPL 2.0 更改为 BSL 1.1，引发社区创建了 OpenTofu 作为开源替代。
+In 2023, HashiCorp changed Terraform's license from MPL 2.0 to BSL 1.1, which prompted the community to create OpenTofu as an open-source alternative.
 
-### 11.2 对比
+### 11.2 Comparison
 
-| 特性 | Terraform | OpenTofu |
-|------|-----------|----------|
-| 许可证 | BSL 1.1 | MPL 2.0 |
-| 维护者 | HashiCorp | Linux Foundation |
-| 兼容性 | 原版 | 高度兼容 |
-| 模块注册表 | Terraform Registry | OpenTofu Registry |
-| 状态加密 | 不支持 | 支持 |
-| 社区 | 较大 | 增长中 |
+| Feature | Terraform | OpenTofu |
+|---------|-----------|----------|
+| License | BSL 1.1 | MPL 2.0 |
+| Maintainer | HashiCorp | Linux Foundation |
+| Compatibility | Original | Highly compatible |
+| Module Registry | Terraform Registry | OpenTofu Registry |
+| State Encryption | Not supported | Supported |
+| Community | Larger | Growing |
 
-### 11.3 迁移到 OpenTofu
+### 11.3 Migrating to OpenTofu
 
 ```bash
-# 安装 OpenTofu
+# Install OpenTofu
 curl -fsSL https://get.opentofu.org/install-opentofu.sh | bash
 
-# 或使用 Homebrew
+# Or use Homebrew
 brew install opentofu
 
-# 迁移步骤
-# 1. 备份当前 state
+# Migration steps
+# 1. Backup current state
 cp terraform.tfstate terraform.tfstate.backup
 
-# 2. 初始化 OpenTofu（兼容现有配置）
+# 2. Initialize OpenTofu (compatible with existing configurations)
 tofu init
 
-# 3. 验证状态
+# 3. Verify state
 tofu plan
 
-# 4. 确认无误后使用 tofu 命令替代 terraform
+# 4. After confirming, use tofu command instead of terraform
 tofu apply
 ```
 
-### 11.4 GitHub Actions 中使用 OpenTofu
+### 11.4 Using OpenTofu in GitHub Actions
 
 ```yaml
 name: OpenTofu CI/CD
@@ -1932,17 +1932,17 @@ jobs:
       working-directory: terraform
 ```
 
-### 11.5 OpenTofu 特有功能
+### 11.5 OpenTofu Exclusive Features
 
 ```hcl
-# OpenTofu 支持 state 加密
+# OpenTofu supports state encryption
 terraform {
   backend "s3" {
     bucket = "my-terraform-state"
     key    = "terraform.tfstate"
     region = "cn-hangzhou"
     
-    # OpenTofu 独有：state 加密
+    # OpenTofu exclusive: state encryption
     encryption {
       key_provider "pbkdf2" "my_key" {
         passphrase = var.encryption_passphrase
@@ -1958,12 +1958,12 @@ terraform {
 
 ---
 
-## 12. 国内云厂商 Terraform Provider
+## 12. Domestic Cloud Provider Terraform Providers
 
-### 12.1 阿里云 Provider
+### 12.1 Alibaba Cloud Provider
 
 ```hcl
-# 阿里云 Provider
+# Alibaba Cloud Provider
 terraform {
   required_providers {
     alicloud = {
@@ -1973,7 +1973,7 @@ terraform {
   }
 }
 
-# 常用资源
+# Common resources
 resource "alicloud_vpc" "main" { }
 resource "alicloud_vswitch" "main" { }
 resource "alicloud_instance" "main" { }
@@ -1986,10 +1986,10 @@ resource "alicloud_cdn_domain_new" "main" { }
 resource "alicloud_dns_record" "main" { }
 ```
 
-### 12.2 腾讯云 Provider
+### 12.2 Tencent Cloud Provider
 
 ```hcl
-# 腾讯云 Provider
+# Tencent Cloud Provider
 terraform {
   required_providers {
     tencentcloud = {
@@ -1999,7 +1999,7 @@ terraform {
   }
 }
 
-# 常用资源
+# Common resources
 resource "tencentcloud_vpc" "main" { }
 resource "tencentcloud_subnet" "main" { }
 resource "tencentcloud_instance" "main" { }
@@ -2012,10 +2012,10 @@ resource "tencentcloud_cdn_domain" "main" { }
 resource "tencentcloud_dns_record" "main" { }
 ```
 
-### 12.3 华为云 Provider
+### 12.3 Huawei Cloud Provider
 
 ```hcl
-# 华为云 Provider
+# Huawei Cloud Provider
 terraform {
   required_providers {
     huaweicloud = {
@@ -2025,7 +2025,7 @@ terraform {
   }
 }
 
-# 常用资源
+# Common resources
 resource "huaweicloud_vpc_v1" "main" { }
 resource "huaweicloud_vpc_subnet_v1" "main" { }
 resource "huaweicloud_compute_instance_v2" "main" { }
@@ -2038,10 +2038,10 @@ resource "huaweicloud_cdn_domain" "main" { }
 resource "huaweicloud_dns_recordset_v2" "main" { }
 ```
 
-### 12.4 多云 Provider 配置
+### 12.4 Multi-Cloud Provider Configuration
 
 ```hcl
-# 同时管理多个云厂商
+# Managing multiple cloud providers simultaneously
 provider "alicloud" {
   alias  = "hangzhou"
   region = "cn-hangzhou"
@@ -2062,14 +2062,14 @@ provider "huaweicloud" {
   region = "cn-north-4"
 }
 
-# 阿里云杭州资源
+# Alibaba Cloud Hangzhou resources
 resource "alicloud_vpc" "hangzhou" {
   provider   = alicloud.hangzhou
   vpc_name   = "hangzhou-vpc"
   cidr_block = "172.16.0.0/12"
 }
 
-# 腾讯云广州资源
+# Tencent Cloud Guangzhou resources
 resource "tencentcloud_vpc" "guangzhou" {
   provider   = tencentcloud.guangzhou
   name       = "guangzhou-vpc"
@@ -2077,14 +2077,14 @@ resource "tencentcloud_vpc" "guangzhou" {
 }
 ```
 
-### 12.5 国内 Provider 资源对照表
+### 12.5 Domestic Provider Resource Comparison Table
 
-| 资源类型 | 阿里云 | 腾讯云 | 华为云 |
-|----------|--------|--------|--------|
+| Resource Type | Alibaba Cloud | Tencent Cloud | Huawei Cloud |
+|---------------|---------------|---------------|--------------|
 | VPC | `alicloud_vpc` | `tencentcloud_vpc` | `huaweicloud_vpc_v1` |
-| 子网 | `alicloud_vswitch` | `tencentcloud_subnet` | `huaweicloud_vpc_subnet_v1` |
-| 云服务器 | `alicloud_instance` | `tencentcloud_instance` | `huaweicloud_compute_instance_v2` |
-| 负载均衡 | `alicloud_slb_load_balancer` | `tencentcloud_clb_instance` | `huaweicloud_lb_loadbalancer_v2` |
+| Subnet | `alicloud_vswitch` | `tencentcloud_subnet` | `huaweicloud_vpc_subnet_v1` |
+| Cloud Server | `alicloud_instance` | `tencentcloud_instance` | `huaweicloud_compute_instance_v2` |
+| Load Balancer | `alicloud_slb_load_balancer` | `tencentcloud_clb_instance` | `huaweicloud_lb_loadbalancer_v2` |
 | RDS | `alicloud_db_instance` | `tencentcloud_mysql_instance` | `huaweicloud_rds_instance_v3` |
 | Redis | `alicloud_redis_instance` | `tencentcloud_redis_instance` | `huaweicloud_redis_instance` |
 | OSS/COS/OBS | `alicloud_oss_bucket` | `tencentcloud_cos_bucket` | `huaweicloud_obs_bucket` |
@@ -2094,37 +2094,37 @@ resource "tencentcloud_vpc" "guangzhou" {
 
 ---
 
-## 13. IaC 最佳实践
+## 13. IaC Best Practices
 
-### 13.1 代码组织
+### 13.1 Code Organization
 
 ```
 terraform/
-├── modules/                    # 可复用模块
+├── modules/                    # Reusable modules
 │   ├── networking/
 │   ├── compute/
 │   ├── database/
 │   └── monitoring/
-├── environments/               # 环境配置
+├── environments/               # Environment configurations
 │   ├── dev/
 │   ├── staging/
 │   └── production/
-├── global/                     # 全局资源
+├── global/                     # Global resources
 │   ├── iam/
 │   ├── dns/
 │   └── terraform.tfstate.d/
-└── scripts/                    # 辅助脚本
+└── scripts/                    # Helper scripts
     ├── init-backend.sh
     └── migrate-state.sh
 ```
 
-### 13.2 命名规范
+### 13.2 Naming Conventions
 
 ```hcl
-# 资源命名规范
-# 格式：{project}-{environment}-{component}-{resource_type}
+# Resource naming convention
+# Format: {project}-{environment}-{component}-{resource_type}
 
-# 示例
+# Example
 resource "alicloud_vpc" "main" {
   vpc_name = "myapp-production-vpc"
 }
@@ -2133,7 +2133,7 @@ resource "alicloud_instance" "web" {
   instance_name = "myapp-production-web-01"
 }
 
-# 标签规范
+# Tagging convention
 locals {
   common_tags = {
     Project     = "myapp"
@@ -2145,10 +2145,10 @@ locals {
 }
 ```
 
-### 13.3 版本锁定
+### 13.3 Version Locking
 
 ```hcl
-# 使用精确版本
+# Using exact versions
 terraform {
   required_version = "= 1.7.0"
   
@@ -2160,23 +2160,23 @@ terraform {
   }
 }
 
-# 或使用版本约束
+# Or using version constraints
 terraform {
   required_version = ">= 1.5.0, < 2.0.0"
   
   required_providers {
     alicloud = {
       source  = "aliyun/alicloud"
-      version = "~> 1.220"  # 允许 1.220.x 补丁版本
+      version = "~> 1.220"  # Allows 1.220.x patch versions
     }
   }
 }
 ```
 
-### 13.4 状态管理最佳实践
+### 13.4 State Management Best Practices
 
 ```hcl
-# 1. 使用远程 Backend
+# 1. Use remote Backend
 terraform {
   backend "oss" {
     bucket = "my-terraform-state"
@@ -2184,7 +2184,7 @@ terraform {
   }
 }
 
-# 2. 启用状态加密
+# 2. Enable state encryption
 terraform {
   backend "s3" {
     bucket  = "my-terraform-state"
@@ -2193,43 +2193,43 @@ terraform {
   }
 }
 
-# 3. 使用状态锁定
-# 阿里云：使用 TableStore
-# AWS：使用 DynamoDB
-# 腾讯云：COS 自动锁定
+# 3. Use state locking
+# Alibaba Cloud: Use TableStore
+# AWS: Use DynamoDB
+# Tencent Cloud: COS automatic locking
 ```
 
-### 13.5 安全最佳实践
+### 13.5 Security Best Practices
 
 ```hcl
-# 1. 不要在代码中硬编码敏感信息
+# 1. Do not hardcode sensitive information in code
 variable "db_password" {
-  description = "数据库密码"
+  description = "Database password"
   type        = string
-  sensitive   = true  # 标记为敏感
+  sensitive   = true  # Mark as sensitive
 }
 
-# 2. 使用 Secret Manager
+# 2. Use Secret Manager
 resource "alicloud_kms_secret" "db_password" {
   secret_name = "db-password"
   secret_data = var.db_password
 }
 
-# 3. 最小权限原则
-# 为 Terraform 创建专用的 RAM 角色，只授予必要的权限
+# 3. Principle of least privilege
+# Create a dedicated RAM role for Terraform, granting only necessary permissions
 
-# 4. 使用 OIDC 认证
-# 避免使用长期 AccessKey
+# 4. Use OIDC authentication
+# Avoid using long-term AccessKey
 ```
 
-### 13.6 CI/CD 最佳实践
+### 13.6 CI/CD Best Practices
 
 ```yaml
-# 1. PR 自动 Plan
-# 2. 合并后自动 Apply
-# 3. 使用环境审批
-# 4. 保存 Plan 产物
-# 5. 添加安全扫描
+# 1. Auto Plan on PR
+# 2. Auto Apply after merge
+# 3. Use environment approval
+# 4. Save Plan artifacts
+# 5. Add security scanning
 
 name: Terraform Best Practices
 
@@ -2242,15 +2242,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    # 格式检查
+    # Format check
     - name: Terraform Format
       run: terraform fmt -check -recursive
     
-    # 安全扫描
+    # Security scan
     - name: Security Scan
       uses: aquasecurity/tfsec-action@v1.0.3
     
-    # Lint 检查
+    # Lint check
     - name: TFLint
       run: tflint --recursive
     
@@ -2258,49 +2258,49 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -out=tfplan
     
-    # 评论 PR
+    # Comment on PR
     - name: Comment Plan
       uses: actions/github-script@v7
 ```
 
-### 13.7 文档最佳实践
+### 13.7 Documentation Best Practices
 
 ```hcl
-# 1. 为每个变量添加描述
+# 1. Add description to every variable
 variable "instance_type" {
-  description = "ECS 实例类型，推荐使用 ecs.g6 系列"
+  description = "ECS instance type, recommended to use ecs.g6 series"
   type        = string
   default     = "ecs.g6.large"
 }
 
-# 2. 为每个输出添加描述
+# 2. Add description to every output
 output "vpc_id" {
-  description = "创建的 VPC ID，用于其他模块引用"
+  description = "Created VPC ID, for reference by other modules"
   value       = alicloud_vpc.main.id
 }
 
-# 3. 使用 README 文档化模块
+# 3. Document modules using README
 # modules/vpc/README.md
 
-# 4. 使用 terraform-docs 自动生成文档
+# 4. Use terraform-docs to auto-generate documentation
 ```
 
-### 13.8 成本优化
+### 13.8 Cost Optimization
 
 ```hcl
-# 1. 使用抢占式/Spot 实例
+# 1. Use preemptible/spot instances
 resource "alicloud_instance" "spot" {
   spot_strategy    = "SpotAsPriceGo"
   spot_price_limit = "0.5"
 }
 
-# 2. 自动伸缩
+# 2. Auto scaling
 resource "alicloud_ess_scaling_group" "main" {
   min_size = 1
   max_size = 10
 }
 
-# 3. 资源标签用于成本追踪
+# 3. Resource tags for cost tracking
 locals {
   cost_tags = {
     CostCenter = "engineering"
@@ -2308,29 +2308,29 @@ locals {
   }
 }
 
-# 4. 使用 terraform-cost-estimation
+# 4. Use terraform-cost-estimation
 # https://github.com/infracost/infracost
 ```
 
-### 13.9 回滚策略
+### 13.9 Rollback Strategy
 
 ```bash
-# 1. 使用版本控制回滚
+# 1. Use version control rollback
 git revert <commit-hash>
 git push
 
-# 2. 使用状态回滚
+# 2. Use state rollback
 terraform state pull > terraform.tfstate.backup
 terraform apply -target=resource.name
 
-# 3. 使用 Terraform Cloud/Enterprise 的版本化状态
+# 3. Use Terraform Cloud/Enterprise versioned state
 
-# 4. 保留足够的状态历史
+# 4. Maintain sufficient state history
 ```
 
 ---
 
-## 附录：完整项目示例
+## Appendix: Complete Project Example
 
 ```
 my-terraform-project/
@@ -2380,7 +2380,7 @@ my-terraform-project/
 └── README.md
 ```
 
-**.gitignore 文件：**
+**.gitignore File:**
 
 ```gitignore
 # Terraform
@@ -2413,22 +2413,22 @@ Thumbs.db
 
 ---
 
-## 总结
+## Summary
 
-本教程详细介绍了 Terraform IaC 与 GitHub 集成的完整实践方案，涵盖了：
+This tutorial provides a detailed guide to Terraform IaC integration with GitHub, covering:
 
-- **IaC 概念**：基础设施即代码的核心理念和优势
-- **Terraform 基础**：HCL 语法、Provider 配置、核心资源
-- **CI/CD 集成**：GitHub Actions 自动化 Plan/Apply 流程
-- **State 管理**：远程 Backend、状态锁定、加密存储
-- **模块化开发**：可复用模块设计、版本管理、测试
-- **GitHub Provider**：使用 Terraform 管理 GitHub 资源
-- **Runner 部署**：自托管 Runner 的云上部署方案
-- **多环境管理**：目录结构、Workspace、Terragrunt 等方案
-- **安全扫描**：tfsec、Checkov、TFLint 工具链
-- **Terratest**：基础设施自动化测试框架
-- **OpenTofu**：Terraform 的开源替代方案
-- **国内云厂商**：阿里云、腾讯云、华为云 Provider 详解
-- **最佳实践**：代码组织、命名规范、安全、成本优化
+- **IaC Concepts**: Core principles and advantages of Infrastructure as Code
+- **Terraform Basics**: HCL syntax, provider configuration, core resources
+- **CI/CD Integration**: GitHub Actions automated Plan/Apply workflows
+- **State Management**: Remote backends, state locking, encrypted storage
+- **Modular Development**: Reusable module design, version management, testing
+- **GitHub Provider**: Managing GitHub resources with Terraform
+- **Runner Deployment**: Cloud deployment solutions for self-hosted runners
+- **Multi-Environment Management**: Directory structures, Workspaces, Terragrunt approaches
+- **Security Scanning**: tfsec, Checkov, TFLint toolchain
+- **Terratest**: Infrastructure automated testing framework
+- **OpenTofu**: Open-source alternative to Terraform
+- **Domestic Cloud Providers**: Detailed guide to Alibaba Cloud, Tencent Cloud, Huawei Cloud providers
+- **Best Practices**: Code organization, naming conventions, security, cost optimization
 
-通过这些实践，中国开发者可以构建高效、安全、可维护的基础设施即代码体系。
+With these practices, Chinese developers can build efficient, secure, and maintainable Infrastructure as Code systems.

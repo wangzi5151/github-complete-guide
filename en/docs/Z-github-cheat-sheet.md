@@ -1,339 +1,339 @@
-# GitHub 速查表
+# GitHub Cheat Sheet
 
-> 本章提供 GitHub 常用命令和操作的快速参考。
-
----
-
-## 目录
-
-1. [Git 基础命令](#git-基础命令)
-2. [GitHub CLI 命令](#github-cli-命令)
-3. [GitHub Actions 语法](#github-actions-语法)
-4. [GitHub API 端点](#github-api-端点)
-5. [GitHub 快捷键](#github-快捷键)
-6. [GitHub Markdown 语法](#github-markdown-语法)
-7. [GitHub 配置文件](#github-配置文件)
-8. [GitHub 模板](#github-模板)
+> This chapter provides a quick reference for common GitHub commands and operations.
 
 ---
 
-## Git 基础命令
+## Table of Contents
 
-### 配置
+1. [Git Basic Commands](#git-basic-commands)
+2. [GitHub CLI Commands](#github-cli-commands)
+3. [GitHub Actions Syntax](#github-actions-syntax)
+4. [GitHub API Endpoints](#github-api-endpoints)
+5. [GitHub Keyboard Shortcuts](#github-keyboard-shortcuts)
+6. [GitHub Markdown Syntax](#github-markdown-syntax)
+7. [GitHub Configuration Files](#github-configuration-files)
+8. [GitHub Templates](#github-templates)
+
+---
+
+## Git Basic Commands
+
+### Configuration
 
 ```bash
-# 设置用户信息
+# Set user information
 git config --global user.name "Your Name"
 git config --global user.email "your@email.com"
 
-# 查看配置
+# View configuration
 git config --list
 
-# 设置默认编辑器
+# Set default editor
 git config --global core.editor "code --wait"
 
-# 设置默认分支名
+# Set default branch name
 git config --global init.defaultBranch main
 ```
 
-### 仓库操作
+### Repository Operations
 
 ```bash
-# 初始化仓库
+# Initialize repository
 git init
 
-# 克隆仓库
+# Clone repository
 git clone https://github.com/user/repo.git
 git clone git@github.com:user/repo.git
 
-# 添加远程仓库
+# Add remote repository
 git remote add origin https://github.com/user/repo.git
 
-# 查看远程仓库
+# View remote repository
 git remote -v
 
-# 更新远程仓库
+# Update remote repository
 git remote update
 
-# 删除远程仓库
+# Remove remote repository
 git remote remove origin
 ```
 
-### 分支操作
+### Branch Operations
 
 ```bash
-# 查看分支
+# View branches
 git branch
 git branch -a
 git branch -r
 
-# 创建分支
+# Create branch
 git branch feature/new-feature
 
-# 切换分支
+# Switch branch
 git checkout feature/new-feature
 
-# 创建并切换分支
+# Create and switch branch
 git checkout -b feature/new-feature
 
-# 删除分支
+# Delete branch
 git branch -d feature/new-feature
 git branch -D feature/new-feature
 
-# 重命名分支
+# Rename branch
 git branch -m old-name new-name
 
-# 合并分支
+# Merge branch
 git merge feature/new-feature
 
-# 变基分支
+# Rebase branch
 git rebase main
 ```
 
-### 提交操作
+### Commit Operations
 
 ```bash
-# 查看状态
+# View status
 git status
 
-# 添加文件
+# Add files
 git add file.txt
 git add .
 git add *.js
 
-# 提交
+# Commit
 git commit -m "commit message"
 git commit -am "commit message"
 
-# 修改最后一次提交
+# Amend last commit
 git commit --amend
 
-# 查看提交历史
+# View commit history
 git log
 git log --oneline
 git log --graph
 git log --author="Author Name"
 ```
 
-### 推送和拉取
+### Push and Pull
 
 ```bash
-# 推送
+# Push
 git push origin main
 git push -u origin main
 git push --force
 
-# 拉取
+# Pull
 git pull origin main
 git pull --rebase origin main
 
-# 获取
+# Fetch
 git fetch origin
 git fetch --all
 ```
 
-### 撤销操作
+### Undo Operations
 
 ```bash
-# 撤销工作区更改
+# Undo working directory changes
 git checkout -- file.txt
 
-# 撤销暂存
+# Undo staging
 git reset HEAD file.txt
 
-# 撤销提交
+# Undo commit
 git reset --soft HEAD~1
 git reset --hard HEAD~1
 
-# 撤销远程提交
+# Undo remote commit
 git revert commit-hash
 
-# 清理未跟踪文件
+# Clean untracked files
 git clean -fd
 ```
 
-### 标签操作
+### Tag Operations
 
 ```bash
-# 查看标签
+# View tags
 git tag
 
-# 创建标签
+# Create tag
 git tag v1.0.0
 git tag -a v1.0.0 -m "Version 1.0.0"
 
-# 推送标签
+# Push tags
 git push origin v1.0.0
 git push origin --tags
 
-# 删除标签
+# Delete tag
 git tag -d v1.0.0
 git push origin :refs/tags/v1.0.0
 ```
 
-### 储藏操作
+### Stash Operations
 
 ```bash
-# 储藏更改
+# Stash changes
 git stash
 git stash push -m "stash message"
 
-# 查看储藏
+# View stashes
 git stash list
 
-# 恢复储藏
+# Restore stash
 git stash pop
 git stash apply stash@{0}
 
-# 删除储藏
+# Delete stash
 git stash drop stash@{0}
 git stash clear
 ```
 
-## GitHub CLI 命令
+## GitHub CLI Commands
 
-### 认证
+### Authentication
 
 ```bash
-# 登录
+# Login
 gh auth login
 
-# 查看认证状态
+# View authentication status
 gh auth status
 
-# 刷新令牌
+# Refresh token
 gh auth refresh
 
-# 退出登录
+# Logout
 gh auth logout
 ```
 
-### 仓库操作
+### Repository Operations
 
 ```bash
-# 克隆仓库
+# Clone repository
 gh repo clone owner/repo
 
-# 创建仓库
+# Create repository
 gh repo create repo-name
 
-# 查看仓库
+# View repository
 gh repo view owner/repo
 
-# 编辑仓库
+# Edit repository
 gh repo edit owner/repo
 
-# 删除仓库
+# Delete repository
 gh repo delete owner/repo
 
-# Fork 仓库
+# Fork repository
 gh repo fork owner/repo
 ```
 
-### Issue 操作
+### Issue Operations
 
 ```bash
-# 创建 Issue
+# Create Issue
 gh issue create
 
-# 查看 Issue
+# View Issue
 gh issue view 123
 
-# 列出 Issue
+# List Issues
 gh issue list
 
-# 关闭 Issue
+# Close Issue
 gh issue close 123
 
-# 重新打开 Issue
+# Reopen Issue
 gh issue reopen 123
 
-# 编辑 Issue
+# Edit Issue
 gh issue edit 123
 ```
 
-### Pull Request 操作
+### Pull Request Operations
 
 ```bash
-# 创建 PR
+# Create PR
 gh pr create
 
-# 查看 PR
+# View PR
 gh pr view 123
 
-# 列出 PR
+# List PRs
 gh pr list
 
-# 合并 PR
+# Merge PR
 gh pr merge 123
 
-# 关闭 PR
+# Close PR
 gh pr close 123
 
-# 检出 PR
+# Checkout PR
 gh pr checkout 123
 
-# 审查 PR
+# Review PR
 gh pr review 123
 ```
 
-### Actions 操作
+### Actions Operations
 
 ```bash
-# 查看工作流
+# View workflows
 gh workflow list
 
-# 查看工作流运行
+# View workflow runs
 gh run list
 
-# 查看运行详情
+# View run details
 gh run view 123
 
-# 查看运行日志
+# View run logs
 gh run view 123 --log
 
-# 重新运行
+# Rerun
 gh run rerun 123
 
-# 手动触发工作流
+# Trigger workflow manually
 gh workflow run workflow-name
 ```
 
-### Release 操作
+### Release Operations
 
 ```bash
-# 创建 Release
+# Create Release
 gh release create v1.0.0
 
-# 查看 Release
+# View Release
 gh release view v1.0.0
 
-# 列出 Release
+# List Releases
 gh release list
 
-# 删除 Release
+# Delete Release
 gh release delete v1.0.0
 
-# 下载 Release 资产
+# Download Release assets
 gh release download v1.0.0
 ```
 
-### API 操作
+### API Operations
 
 ```bash
-# 调用 API
+# Call API
 gh api repos/{owner}/{repo}
 
-# 使用 GraphQL
+# Use GraphQL
 gh api graphql -f query='{ viewer { login } }'
 
-# 使用 jq 过滤
+# Filter with jq
 gh api repos/{owner}/{repo} --jq '.name'
 ```
 
-## GitHub Actions 语法
+## GitHub Actions Syntax
 
-### 工作流语法
+### Workflow Syntax
 
 ```yaml
 # .github/workflows/workflow.yml
@@ -385,62 +385,62 @@ jobs:
         run: echo $API_KEY
 ```
 
-### 常用 Actions
+### Common Actions
 
 ```yaml
-# 代码检出
+# Checkout code
 - uses: actions/checkout@v4
 
-# 设置 Node.js
+# Setup Node.js
 - uses: actions/setup-node@v4
   with:
     node-version: '18'
 
-# 设置 Python
+# Setup Python
 - uses: actions/setup-python@v4
   with:
     python-version: '3.9'
 
-# 缓存依赖
+# Cache dependencies
 - uses: actions/cache@v3
   with:
     path: ~/.npm
     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
-# 上传产物
+# Upload artifacts
 - uses: actions/upload-artifact@v3
   with:
     name: my-artifact
     path: path/to/artifact
 
-# 下载产物
+# Download artifacts
 - uses: actions/download-artifact@v3
   with:
     name: my-artifact
 
-# 创建 Release
+# Create Release
 - uses: actions/create-release@v1
   with:
     tag_name: ${{ github.ref }}
     release_name: Release ${{ github.ref }}
 
-# 部署到 GitHub Pages
+# Deploy to GitHub Pages
 - uses: peaceiris/actions-gh-pages@v3
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
     publish_dir: ./public
 ```
 
-## GitHub API 端点
+## GitHub API Endpoints
 
 ### REST API
 
 ```bash
-# 用户信息
+# User information
 GET /users/{username}
 GET /user
 
-# 仓库信息
+# Repository information
 GET /repos/{owner}/{repo}
 GET /user/repos
 
@@ -466,7 +466,7 @@ POST /repos/{owner}/{repo}/releases
 ### GraphQL API
 
 ```graphql
-# 获取用户信息
+# Get user information
 query {
   viewer {
     login
@@ -475,7 +475,7 @@ query {
   }
 }
 
-# 获取仓库信息
+# Get repository information
 query {
   repository(owner: "owner", name: "repo") {
     name
@@ -484,7 +484,7 @@ query {
   }
 }
 
-# 获取 Issue
+# Get Issues
 query {
   repository(owner: "owner", name: "repo") {
     issues(first: 10) {
@@ -497,131 +497,131 @@ query {
 }
 ```
 
-## GitHub 快捷键
+## GitHub Keyboard Shortcuts
 
-### 全局快捷键
+### Global Shortcuts
 
-| 快捷键 | 功能 |
-|--------|------|
-| `s` 或 `/` | 聚焦搜索框 |
-| `g` then `n` | 通知 |
-| `g` then `c` | 代码 |
+| Shortcut | Function |
+|----------|----------|
+| `s` or `/` | Focus search box |
+| `g` then `n` | Notifications |
+| `g` then `c` | Code |
 | `g` then `i` | Issues |
 | `g` then `p` | Pull Requests |
 | `g` then `a` | Actions |
 | `g` then `b` | Projects |
 
-### 代码查看快捷键
+### Code View Shortcuts
 
-| 快捷键 | 功能 |
-|--------|------|
-| `b` | 查看 blame |
-| `y` | 获取永久链接 |
-| `t` | 文件查找器 |
-| `l` | 跳转到行 |
-| `w` | 切换分支 |
+| Shortcut | Function |
+|----------|----------|
+| `b` | View blame |
+| `y` | Get permalink |
+| `t` | File finder |
+| `l` | Go to line |
+| `w` | Switch branch |
 
-### Issue 和 PR 快捷键
+### Issue and PR Shortcuts
 
-| 快捷键 | 功能 |
-|--------|------|
-| `c` | 创建评论 |
-| `ctrl+enter` | 提交评论 |
-| `r` | 回复评论 |
-| `l` | 添加标签 |
-| `a` | 添加指派 |
-| `m` | 添加里程碑 |
+| Shortcut | Function |
+|----------|----------|
+| `c` | Create comment |
+| `ctrl+enter` | Submit comment |
+| `r` | Reply to comment |
+| `l` | Add label |
+| `a` | Add assignee |
+| `m` | Add milestone |
 
-## GitHub Markdown 语法
+## GitHub Markdown Syntax
 
-### 基础语法
-
-```markdown
-# 标题 1
-## 标题 2
-### 标题 3
-
-**粗体**
-*斜体*
-~~删除线~~
-
-- 无序列表
-1. 有序列表
-
-[链接](https://example.com)
-![图片](image.png)
-
-> 引用
-
-`代码`
-```
-
-代码块
-```
-
-### 任务列表
+### Basic Syntax
 
 ```markdown
-- [x] 已完成任务
-- [ ] 未完成任务
+# Heading 1
+## Heading 2
+### Heading 3
+
+**Bold**
+*Italic*
+~~Strikethrough~~
+
+- Unordered list
+1. Ordered list
+
+[Link](https://example.com)
+![Image](image.png)
+
+> Blockquote
+
+`Code`
 ```
 
-### 表格
+Code block
+```
+
+### Task Lists
 
 ```markdown
-| 列1 | 列2 | 列3 |
-|-----|-----|-----|
-| 内容1 | 内容2 | 内容3 |
+- [x] Completed task
+- [ ] Incomplete task
 ```
 
-### 折叠内容
+### Tables
+
+```markdown
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Content 1 | Content 2 | Content 3 |
+```
+
+### Collapsible Content
 
 ```markdown
 <details>
-<summary>点击展开</summary>
+<summary>Click to expand</summary>
 
-隐藏的内容
+Hidden content
 
 </details>
 ```
 
-### 提示框
+### Alert Boxes
 
 ```markdown
 > [!NOTE]
-> 这是一个提示
+> This is a note
 
 > [!TIP]
-> 这是一个技巧
+> This is a tip
 
 > [!IMPORTANT]
-> 这很重要
+> This is important
 
 > [!WARNING]
-> 这是一个警告
+> This is a warning
 
 > [!CAUTION]
-> 这是一个警告
+> This is a warning
 ```
 
-## GitHub 配置文件
+## GitHub Configuration Files
 
 ### .gitignore
 
 ```gitignore
-# 环境变量
+# Environment variables
 .env
 .env.local
 
-# 依赖
+# Dependencies
 node_modules/
 vendor/
 
-# 构建产物
+# Build artifacts
 dist/
 build/
 
-# 日志
+# Logs
 *.log
 
 # IDE
@@ -674,123 +674,123 @@ jobs:
 ### .github/PULL_REQUEST_TEMPLATE.md
 
 ```markdown
-## 描述
+## Description
 
-简要描述这个 PR 的目的。
+Briefly describe the purpose of this PR.
 
-## 更改类型
+## Change Type
 
-- [ ] 新功能
-- [ ] Bug 修复
-- [ ] 文档更新
+- [ ] New feature
+- [ ] Bug fix
+- [ ] Documentation update
 
-## 检查清单
+## Checklist
 
-- [ ] 代码遵循项目规范
-- [ ] 已添加测试
-- [ ] 已更新文档
+- [ ] Code follows project conventions
+- [ ] Tests have been added
+- [ ] Documentation has been updated
 ```
 
-## GitHub 模板
+## GitHub Templates
 
-### Issue 模板
+### Issue Templates
 
-**Bug 报告**：
+**Bug Report**:
 
 ```markdown
 ---
-name: Bug 报告
-about: 报告一个 bug
+name: Bug Report
+about: Report a bug
 title: '[BUG] '
 labels: bug
 assignees: ''
 ---
 
-## 描述
+## Description
 
-简要描述 bug。
+Briefly describe the bug.
 
-## 复现步骤
+## Steps to Reproduce
 
-1. 访问 '...'
-2. 点击 '...'
-3. 看到错误
+1. Go to '...'
+2. Click on '...'
+3. See error
 
-## 预期行为
+## Expected Behavior
 
-描述你期望发生什么。
+Describe what you expected to happen.
 
-## 实际行为
+## Actual Behavior
 
-描述实际发生了什么。
+Describe what actually happened.
 
-## 环境
+## Environment
 
-- 操作系统: [例如 iOS]
-- 浏览器: [例如 chrome, safari]
-- 版本: [例如 22]
+- OS: [e.g. iOS]
+- Browser: [e.g. chrome, safari]
+- Version: [e.g. 22]
 ```
 
-**功能请求**：
+**Feature Request**:
 
 ```markdown
 ---
-name: 功能请求
-about: 建议一个新功能
+name: Feature Request
+about: Suggest a new feature
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
 ---
 
-## 描述
+## Description
 
-简要描述你想要的功能。
+Briefly describe the feature you want.
 
-## 使用场景
+## Use Case
 
-描述这个功能的使用场景。
+Describe the use case for this feature.
 
-## 建议的解决方案
+## Suggested Solution
 
-描述你建议的实现方式。
+Describe your suggested implementation.
 
-## 其他信息
+## Additional Information
 
-添加任何其他有关功能的信息。
+Add any other information about the feature.
 ```
 
-### PR 模板
+### PR Template
 
 ```markdown
-## 描述
+## Description
 
-简要描述这个 PR 的目的。
+Briefly describe the purpose of this PR.
 
-## 更改类型
+## Change Type
 
-- [ ] 新功能
-- [ ] Bug 修复
-- [ ] 文档更新
-- [ ] 代码重构
-- [ ] 性能优化
-- [ ] 测试
+- [ ] New feature
+- [ ] Bug fix
+- [ ] Documentation update
+- [ ] Code refactoring
+- [ ] Performance improvement
+- [ ] Testing
 
-## 测试
+## Testing
 
-描述如何测试这些更改。
+Describe how to test these changes.
 
-## 相关 Issue
+## Related Issue
 
-关闭 #123
+Closes #123
 
-## 检查清单
+## Checklist
 
-- [ ] 代码遵循项目规范
-- [ ] 已添加测试
-- [ ] 已更新文档
-- [ ] 已通过 CI 检查
+- [ ] Code follows project conventions
+- [ ] Tests have been added
+- [ ] Documentation has been updated
+- [ ] CI checks have passed
 ```
 
 ---
 
-**上一篇：[附录 F：GitHub 快捷键指南](F-shortcuts.md) | 下一篇：[附录 B：Git 别名配置](B-git-aliases.md)**
+**Previous: [Appendix F: GitHub Shortcuts Guide](F-shortcuts.md) | Next: [Appendix B: Git Alias Configuration](B-git-aliases.md)**
