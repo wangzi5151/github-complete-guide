@@ -1,3 +1,5 @@
+> 🌐 [中文](#chinese) | [English](#english)
+
 ```
  ╔══════════════════════════════════════════════════════════════╗
  ║                                                              ║
@@ -9,6 +11,8 @@
  ║                                                              ║
  ╚══════════════════════════════════════════════════════════════╝
 ```
+
+<a id="chinese"></a>
 
 # 🇨🇳 GitHub 中文完全指南
 
@@ -255,3 +259,251 @@ git clone https://ghproxy.com/https://github.com/wangzi5151/github-complete-guid
 ---
 
 ⭐ **如果这个项目对你有帮助，欢迎 Star 支持！**
+
+---
+
+<a id="english"></a>
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║     🇺🇸  GitHub Complete Guide (English)                      ║
+║                                                              ║
+║     Git Beginner → GitHub Basics → Actions Automation → Open Source  ║
+║                                                              ║
+║     100+ Tutorials · 30 Hands-on Exercises · 300K+ Words · Free     ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+# 🇺🇸 GitHub Complete Guide (English)
+
+> A comprehensive GitHub guide for developers: from Git/GitHub basics, to Actions, AI, DevOps, and Open Source collaboration. Includes 100+ tutorials and 30 hands-on exercises.
+
+⭐ **If this project helps you, please [Star](https://github.com/wangzi5151/github-complete-guide) to support!**
+
+---
+
+## 🚀 What Will You Learn?
+
+| Skill Area | What You'll Master |
+|------------|-------------------|
+| **Git Basics** | Version control, Branch management, Merge conflicts, Undo operations |
+| **GitHub Core** | Repository management, Issues, Pull Requests, Code Review |
+| **Automation** | GitHub Actions CI/CD, Docker deployment, Automated testing |
+| **AI / ML** | GitHub Copilot, Models API, Machine learning workflows |
+| **DevOps** | Kubernetes, Terraform, Cloud-native deployment |
+| **Open Source** | Fork workflow, Open source licenses, Community management, Technical writing |
+| **Team Collaboration** | Branch strategies, Permission management, Enterprise governance, Project management |
+
+---
+
+## 🎯 Start Here for Beginners
+
+> Don't know where to begin? Follow these 6 steps to go from zero to GitHub.
+
+| Step | What to Learn | Tutorial Link |
+|:----:|---------------|---------------|
+| 1 | What is Git? Why use version control? | [Start Learning](en/docs/00-what-is-version-control.md) |
+| 2 | What is GitHub? What can it do? | [Start Learning](en/docs/01-what-is-github.md) |
+| 3 | Install Git and register GitHub account | [Start Learning](en/docs/00-git-installation-guide.md) |
+| 4 | Create your first repository | [Start Learning](en/exercises/exercise-1-create-repo.md) |
+| 5 | Upload your first project | [Start Learning](en/docs/08-add-commit.md) |
+| 6 | Learn Pull Request collaboration | [Start Learning](en/exercises/exercise-3-pull-request.md) |
+
+📘 **Need a more complete learning path?** → See [🎯 Beginner Learning Roadmap](en/BEGINNER.md)
+
+---
+
+## 📚 Complete Tutorial Directory
+
+### Part 1: Getting Started
+- [What is GitHub?](en/docs/01-what-is-github.md)
+- [Install and Configure Git](en/docs/02-install-git.md)
+- [Register GitHub Account](en/docs/03-signup-github.md)
+- [Configure SSH Keys](en/docs/04-ssh-keys.md)
+- [Basic Git Configuration](en/docs/05-git-config.md)
+
+### Part 2: Git Core Commands
+- [How Git Works](en/docs/06-how-git-works.md)
+- [Create and Clone Repositories](en/docs/07-init-clone.md)
+- [Stage and Commit](en/docs/08-add-commit.md)
+- [View History and Diff](en/docs/09-log-diff.md)
+- [Branch Operations](en/docs/10-branching.md)
+- [Merge and Rebase](en/docs/11-merge-rebase.md)
+- [Resolve Conflicts](en/docs/12-resolve-conflicts.md)
+- [Undo Operations](en/docs/13-undo.md)
+
+### Part 3: GitHub Core Features
+- [Create and Manage Repositories](en/docs/14-create-repo.md)
+- [README and Documentation](en/docs/15-readme-docs.md)
+- [Issue Tracking](en/docs/16-issues.md)
+- [Pull Request Collaboration](en/docs/17-pull-requests.md)
+- [Code Review](en/docs/18-code-review.md)
+- [GitHub Actions Automation](en/docs/19-github-actions.md)
+- [GitHub Pages Static Sites](en/docs/20-github-pages.md)
+- [GitHub Projects Management](en/docs/21-github-projects.md)
+
+### Part 4: Collaboration and Advanced
+- [Fork and Open Source Contribution](en/docs/22-fork-contribute.md)
+- [Team Collaboration Best Practices](en/docs/23-team-collaboration.md)
+- [Git Workflows](en/docs/24-git-workflow.md)
+- [Tags and Releases](en/docs/25-tags-releases.md)
+- [GitHub CLI](en/docs/26-github-cli.md)
+- [Git LFS Large File Management](en/docs/27-git-lfs.md)
+- [Security and Permissions](en/docs/28-security-permissions.md)
+- [GitHub API and Webhooks](en/docs/29-api-webhooks.md)
+
+### Part 5: GitHub Ecosystem
+- [GitHub Copilot Introduction](en/docs/H-github-copilot.md)
+- [GitHub Copilot Advanced](en/docs/W7-copilot-advanced.md)
+- [GitHub Copilot Extensions Development](en/docs/W8-copilot-extensions-dev.md)
+- [GitHub Discussions](en/docs/I-github-discussions.md)
+- [GitHub Packages](en/docs/J-github-packages.md)
+- [GitHub Codespaces](en/docs/W2-github-codespaces.md)
+- [GitHub Mobile](en/docs/K-github-mobile.md)
+- [GitHub Sponsors](en/docs/L-github-sponsors.md)
+- [GitHub Marketplace](en/docs/N-marketplace.md)
+- [GitHub Rulesets](en/docs/W5-github-rulesets.md)
+- [GitHub Models AI/ML](en/docs/W11-github-models.md)
+- [Git Visualization Tools](en/docs/U-git-clients.md)
+
+### Part 6: Security and DevOps
+- [GitHub Security Best Practices](en/docs/O-security-best-practices.md)
+- [GitHub Advanced Security](en/docs/W10-advanced-security.md)
+- [Supply Chain Security (SLSA/SBOM)](en/docs/W13-supply-chain-security.md)
+- [GitHub API Guide](en/docs/P-github-api.md)
+- [GitHub REST/GraphQL API in Practice](en/docs/W21-api-advanced.md)
+- [GitHub Actions Advanced](en/docs/W9-actions-advanced.md)
+- [Docker + GitHub Actions Containerization](en/docs/W17-docker-actions.md)
+- [DevOps in Practice](en/docs/W15-devops.md)
+- [GitHub + Azure DevOps Integration](en/docs/W23-azure-devops.md)
+- [Database CI/CD Workflows](en/docs/W19-database-cicd.md)
+- [Feature Flags](en/docs/W20-feature-flags.md)
+
+### Part 7: Enterprise and Business
+- [GitHub Enterprise Features](en/docs/W16-github-enterprise.md)
+- [GitHub App Development Guide](en/docs/W14-github-app-dev.md)
+- [GitHub Enterprise Governance](en/docs/W25-enterprise-governance.md)
+- [GitHub Team Collaboration Standards](en/docs/W26-team-collaboration.md)
+- [GitHub Project Management](en/docs/W27-project-management.md)
+- [Monorepo Management](en/docs/W12-monorepo.md)
+- [GitHub Code Search](en/docs/W18-code-search.md)
+- [Open Source Business Models](en/docs/W22-open-source-business.md)
+- [GitHub Copilot Enterprise Training](en/docs/W24-copilot-training.md)
+- [GitHub Performance Optimization](en/docs/W28-performance.md)
+- [GitHub Open Source Guide](en/docs/W29-open-source-guide.md)
+- [GitHub Certification](en/docs/W30-certification.md)
+
+### Part 8: Practical Cases
+- [Project Case Studies](en/docs/V-practical-examples.md)
+- [Large Open Source Project Case Studies](en/docs/X13-real-world-project-case-studies.md)
+- [Bilingual README Guide](en/docs/W6-bilingual-readme.md)
+- [GitHub Education Resources](en/docs/W-education.md)
+
+### Part 9: Deep Dive Topics
+- [GitHub Copilot Complete Guide](en/docs/X1-github-copilot-complete-guide.md)
+- [Machine Learning Workflows on GitHub](en/docs/X2-ml-workflow-github.md)
+- [Frontend Developer's GitHub Workflow](en/docs/X3-frontend-github-workflow.md)
+- [Backend Developer's GitHub CI/CD Guide](en/docs/X4-backend-cicd-github.md)
+- [Kubernetes + GitHub Actions in Practice](en/docs/X5-kubernetes-github-actions.md)
+- [Terraform IaC + GitHub Practice](en/docs/X6-terraform-iac-github.md)
+- [Open Source Licenses Complete Guide](en/docs/X7-open-source-licenses-guide.md)
+- [Technical Writing Guide for GitHub](en/docs/X8-technical-writing-github.md)
+- [Mobile Developer's GitHub Guide](en/docs/X9-mobile-app-github.md)
+- [Microservices GitHub Management](en/docs/X10-microservices-github.md)
+- [Git Internals Deep Dive](en/docs/X11-git-internals-deep-dive.md)
+- [Git Performance Optimization Guide](en/docs/X12-git-performance-optimization.md)
+- [GitHub Copilot Workspace and AI Agent](en/docs/X14-github-copilot-workspace-agents.md)
+- [Open Source Project Management Guide](en/docs/Y1-open-source-project-management.md)
+
+### Part 10: Hands-on Exercises
+- [Exercise 1: Create Your First Repository](en/exercises/exercise-1-create-repo.md)
+- [Exercise 2: Branch and Merge Practice](en/exercises/exercise-2-branch-merge.md)
+- [Exercise 3: Pull Request Workflow](en/exercises/exercise-3-pull-request.md)
+- [Exercise 4: Fix Merge Conflict](en/exercises/exercise-4-fix-conflict.md)
+- [Exercise 5: Deploy Website with GitHub Pages](en/exercises/exercise-5-github-pages.md)
+- [Exercise 6: Contribute to Open Source](en/exercises/exercise-6-open-source.md)
+- [Exercise 7: Use GitHub Actions](en/exercises/exercise-7-github-actions.md)
+- [Exercise 8: Set Up GitHub Discussions](en/exercises/exercise-8-discussions.md)
+- [Exercise 9: Git Stash in Practice](en/exercises/exercise-9-stash.md)
+- [Exercise 10: Interactive Rebase in Practice](en/exercises/exercise-10-interactive-rebase.md)
+- [Exercise 11: GitHub CLI Deep Dive](en/exercises/exercise-11-github-cli.md)
+- [Exercise 12: CI/CD Pipeline in Practice](en/exercises/exercise-12-cicd-pipeline.md)
+- [Exercise 13: Docker Deployment in Practice](en/exercises/exercise-13-docker-deploy.md)
+- [Exercise 14: Security Scanning in Practice](en/exercises/exercise-14-security-scan.md)
+- [Exercise 15: Release Management in Practice](en/exercises/exercise-15-release-management.md)
+- [Exercise 16: Monorepo Management in Practice](en/exercises/exercise-16-monorepo.md)
+- [Exercise 17: China Environment Setup](en/exercises/exercise-17-china-setup.md)
+- [Exercise 18: GitHub Enterprise Setup](en/exercises/exercise-18-enterprise-setup.md)
+- [Exercise 19: GitHub Actions Reusable Workflows](en/exercises/exercise-19-reusable-workflows.md)
+- [Exercise 20: GitHub Projects Board Management](en/exercises/exercise-20-project-board.md)
+- [Exercise 21: GitHub Copilot Basics](en/exercises/exercise-21-copilot-basics.md)
+- [Exercise 22: Configure Dependabot Auto Updates](en/exercises/exercise-22-dependabot-setup.md)
+- [Exercise 23: Develop with GitHub Codespaces](en/exercises/exercise-23-codespaces-dev.md)
+- [Exercise 24: Create Issue Forms and PR Templates](en/exercises/exercise-24-issue-forms.md)
+- [Exercise 25: Git Submodules in Practice](en/exercises/exercise-25-submodules.md)
+- [Exercise 26: Create Reusable GitHub Actions Workflows](en/exercises/exercise-26-reusable-workflows.md)
+- [Exercise 27: Test AI Models with GitHub Models](en/exercises/exercise-27-github-models.md)
+- [Exercise 28: Configure GitHub Security Scanning](en/exercises/exercise-28-security-scanning.md)
+- [Exercise 29: Git LFS Large File Management](en/exercises/exercise-29-git-lfs-workflow.md)
+- [Exercise 30: Terraform + GitHub Actions Infrastructure Automation](en/exercises/exercise-30-terraform-github.md)
+- [Exercise 31: GitHub Copilot Advanced Usage](en/exercises/exercise-31-github-copilot-advanced.md)
+- [Exercise 32: GitHub Actions Matrix Strategy](en/exercises/exercise-32-github-actions-matrix.md)
+- [Exercise 33: GitHub API Integration](en/exercises/exercise-33-github-api-integration.md)
+- [Exercise 34: GitHub Security Best Practices](en/exercises/exercise-34-github-security-best-practices.md)
+- [Exercise 35: GitHub Team Collaboration](en/exercises/exercise-35-github-team-collaboration.md)
+
+### Appendix
+- [Common Commands Cheat Sheet](en/docs/A-common-commands.md)
+- [Git Alias Configuration](en/docs/B-git-aliases.md)
+- [FAQ](en/docs/C-faq.md)
+- [Recommended Learning Resources](en/docs/D-resources.md)
+- [Git and GitHub Glossary](en/docs/E-glossary.md)
+- [GitHub Keyboard Shortcuts](en/docs/F-shortcuts.md)
+- [Git Visualization Guide](en/docs/G-visual-guide.md)
+- [Troubleshooting Guide](en/docs/M-troubleshooting.md)
+- [Issue/PR Template Guide](en/docs/W3-issue-pr-templates.md)
+- [Git Submodules Guide](en/docs/W4-git-submodules.md)
+- [GitHub Cheat Sheet](en/docs/Z-github-cheat-sheet.md)
+
+---
+
+## 📖 Project Statistics
+
+| 📚 Tutorials | 🧪 Exercises | 📝 Word Count | 📁 Total Files |
+|:-------:|:-------:|:-----------:|:---------:|
+| 115+ | 35 | 310K+ | 145+ |
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# Using HTTPS (Recommended)
+git clone https://github.com/wangzi5151/github-complete-guide.git
+
+# Using SSH
+git clone git@github.com:wangzi5151/github-complete-guide.git
+
+# Using GitHub CLI
+gh repo clone wangzi5151/github-complete-guide
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see the [Contributing Guide](en/CONTRIBUTING.md) for how to participate.
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE). Feel free to use and share.
+
+## 💬 Feedback
+
+If you have any questions or suggestions, please open an [Issue](https://github.com/wangzi5151/github-complete-guide/issues).
+
+---
+
+⭐ **If this project helps you, please Star to support!**
