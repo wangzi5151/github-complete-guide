@@ -5,14 +5,14 @@
 ║                                                              ║
 ║     Git Beginner → GitHub Basics → Actions Automation → Open Source  ║
 ║                                                              ║
-║     100+ Tutorials · 30 Hands-on Exercises · 300K+ Words · Free     ║
+║     107 Tutorials · 35 Hands-on Exercises · 262,834 Chinese Characters · Free     ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
 # 🇺🇸 GitHub Complete Guide (English)
 
-> A comprehensive GitHub guide for developers: from Git/GitHub basics, to Actions, AI, DevOps, and Open Source collaboration. Includes 100+ tutorials and 30 hands-on exercises.
+> A comprehensive GitHub guide for developers: from Git/GitHub basics, to Actions, AI, DevOps, and Open Source collaboration. Includes 107 tutorials and 35 hands-on exercises (262,834 Chinese characters).
 
 ⭐ **If this project helps you, please [Star](https://github.com/wangzi5151/github-complete-guide) to support!**
 
@@ -207,7 +207,7 @@
 
 | 📚 Tutorials | 🧪 Exercises | 📝 Word Count | 📁 Total Files |
 |:-------:|:-------:|:-----------:|:---------:|
-| 115+ | 35 | 310K+ | 145+ |
+| 107 | 35 | 262,834 | 303 |
 
 ---
 

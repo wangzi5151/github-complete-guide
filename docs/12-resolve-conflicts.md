@@ -2105,4 +2105,4 @@ git add file.txt && git commit -m "merge"
 
 ---
 
-[返回目录](#目录) | [上一章：分支管理与工作流](./11-branching-workflows.md) | [下一章：高级 Git 技巧](./13-advanced-git.md)
+[返回目录](#目录) | [上一章：合并与变基](./11-merge-rebase.md) | [下一章：撤销操作](./13-undo.md)

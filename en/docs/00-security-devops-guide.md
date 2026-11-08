@@ -473,4 +473,4 @@ This chapter covered GitHub security and DevOps practices, including:
 - Automation is the core of DevOps
 
 **Next Steps:**
-[Hands-on Exercise →](exercises/exercise-1-create-repo.md)
+[Hands-on Exercise →](../exercises/exercise-1-create-repo.md)

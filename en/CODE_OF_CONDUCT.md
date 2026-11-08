@@ -47,4 +47,4 @@ This Code of Conduct is adapted from the [Contributor Covenant](https://www.cont
 
 ## License
 
-This Code of Conduct is licensed under the [MIT License](LICENSE).
+This Code of Conduct is licensed under the [MIT License](../LICENSE).

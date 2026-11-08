@@ -473,4 +473,4 @@ Add any other information about the issue.
 
 ---
 
-**Previous: [Exercise 34: GitHub Security Best Practices](exercise-34-github-security-best-practices.md) | Next: [Exercise 36: GitHub Advanced Features](exercise-36-github-advanced-features.md)**
+**Previous: [Exercise 34: GitHub Security Best Practices](exercise-34-github-security-best-practices.md) | Next: [GitHub Advanced Features Guide](../docs/00-advanced-features-guide.md)**

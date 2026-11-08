@@ -20,14 +20,26 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      
+
     - name: Setup Pages
       uses: actions/configure-pages@v4
-      
+
+    - name: Generate searchable index
+      run: python3 scripts/build_index.py
+
+    - name: Assemble static site
+      run: |
+        mkdir -p _site
+        cp index.html _site/
+        cp *.md LICENSE _site/
+        cp -r docs exercises en _site/
+        rm -rf _site/en/.github
+        touch _site/.nojekyll
+
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: '.'
+        path: '_site'
 
   deploy:
     environment:

@@ -213,4 +213,4 @@ url: https://your-domain.com
 
 ---
 
-**上一篇：[GitHub REST/GraphQL API 实战](W21-api-advanced.md) | 下一篇：[练习 12：CI/CD 流水线实战](exercise-12-cicd-pipeline.md)**
+**上一篇：[GitHub REST/GraphQL API 实战](W21-api-advanced.md) | 下一篇：[练习 12：CI/CD 流水线实战](../exercises/exercise-12-cicd-pipeline.md)**

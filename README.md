@@ -7,7 +7,7 @@
  ║                                                              ║
  ║     Git 小白 → GitHub 入门 → Actions 自动化 → 开源贡献        ║
  ║                                                              ║
- ║     100+ 篇教程 · 30 个实战练习 · 30 万字 · 完全免费           ║
+ ║     107 篇教程 · 35 个实战练习 · 262,834 汉字 · 完全免费           ║
  ║                                                              ║
  ╚══════════════════════════════════════════════════════════════╝
 ```
@@ -16,7 +16,7 @@
 
 # 🇨🇳 GitHub 中文完全指南
 
-> 面向中文开发者的 GitHub 完全指南：从 Git/GitHub 入门，到 Actions、AI、DevOps、开源协作，包含 100+ 篇教程与 30 个实战练习。
+> 面向中文开发者的 GitHub 完全指南：从 Git/GitHub 入门，到 Actions、AI、DevOps、开源协作，包含 107 篇教程与 35 个实战练习，共 262,834 个汉字。
 
 ⭐ **如果这个项目帮助了你，欢迎 [Star](https://github.com/wangzi5151/github-complete-guide) 支持！**
 
@@ -219,7 +219,7 @@
 
 | 📚 教程 | 🧪 练习 | 📝 中文字数 | 📁 总文件 |
 |:-------:|:-------:|:-----------:|:---------:|
-| 115+ 篇 | 35 个 | 31 万+ | 145+ 个 |
+| 107 篇 | 35 个 | 262,834 | 303 个 |
 
 ---
 
@@ -271,7 +271,7 @@ git clone https://ghproxy.com/https://github.com/wangzi5151/github-complete-guid
 ║                                                              ║
 ║     Git Beginner → GitHub Basics → Actions Automation → Open Source  ║
 ║                                                              ║
-║     100+ Tutorials · 30 Hands-on Exercises · 300K+ Words · Free     ║
+║     107 Tutorials · 35 Hands-on Exercises · 262,834 Chinese Characters · Free     ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
@@ -473,7 +473,7 @@ git clone https://ghproxy.com/https://github.com/wangzi5151/github-complete-guid
 
 | 📚 Tutorials | 🧪 Exercises | 📝 Word Count | 📁 Total Files |
 |:-------:|:-------:|:-----------:|:---------:|
-| 115+ | 35 | 310K+ | 145+ |
+| 107 | 35 | 262,834 | 303 |
 
 ---
 

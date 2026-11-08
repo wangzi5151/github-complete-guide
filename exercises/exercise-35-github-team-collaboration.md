@@ -473,4 +473,4 @@ jobs:
 
 ---
 
-**上一篇：[练习 34：GitHub 安全最佳实践](exercise-34-github-security-best-practices.md) | 下一篇：[练习 36：GitHub 高级功能](exercise-36-github-advanced-features.md)**
+**上一篇：[练习 34：GitHub 安全最佳实践](exercise-34-github-security-best-practices.md) | 下一篇：[GitHub 高级功能](../docs/00-advanced-features-guide.md)**

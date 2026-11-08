@@ -473,4 +473,4 @@ jobs:
 - 自动化是 DevOps 的核心
 
 **下一步：**
-[实战练习 →](exercises/exercise-1-create-repo.md)
+[实战练习 →](../exercises/exercise-1-create-repo.md)

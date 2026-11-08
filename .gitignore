@@ -24,6 +24,11 @@ yarn-error.log*
 dist/
 build/
 out/
+_site/
+
+# Python
+__pycache__/
+*.pyc
 
 # Environment variables
 .env

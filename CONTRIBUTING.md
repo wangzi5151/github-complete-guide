@@ -55,6 +55,22 @@
 - 保持格式一致
 - 正确使用代码块
 
+## 本地检查
+
+提交 Pull Request 前请在仓库根目录运行以下零依赖检查（CI 也会执行）：
+
+```bash
+python3 scripts/check_links.py      # 相对链接检查
+python3 scripts/check_stats.py      # README 统计与仓库实际数据一致性
+python3 scripts/build_index.py      # 重新生成 index.html
+python3 scripts/build_index.py --check
+python3 -m py_compile scripts/*.py
+```
+
+- 新增/改名文档后，请同步更新 `README.md` 与 `en/README.md` 的统计表，并重新生成 `index.html`。
+- 相对链接应指向真实存在的文件；教程中演示“虚构项目 README”的占位链接由 `scripts/check_links.py` 的示例白名单处理。
+- GitHub Pages 由 `scripts/build_index.py` 生成可搜索的 `index.html`，部署工作流会复制 Markdown 到 `_site`。
+
 ## 提交信息规范
 
 使用 [Conventional Commits](https://www.conventionalcommits.org/) 规范：

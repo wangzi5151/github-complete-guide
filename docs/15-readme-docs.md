@@ -1981,4 +1981,4 @@ result = instance.process(data)
 
 ---
 
-[⬅️ 上一章：GitHub Actions CI/CD](14-github-actions.md) | [下一章：开源项目运营 ➡️](16-open-source-operations.md)
+[⬅️ 上一章：创建和管理仓库](14-create-repo.md) | [下一章：Issue 追踪 ➡️](16-issues.md)
